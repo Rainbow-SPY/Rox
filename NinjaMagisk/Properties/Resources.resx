@@ -1,0 +1,328 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="aria2c" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\aria2c.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>简体中文</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>1.2.0</value>
+  </data>
+  <data name="Author" xml:space="preserve">
+    <value>Rainbow SPY</value>
+  </data>
+  <data name="Copyright" xml:space="preserve">
+    <value>Copyright (C) Rainbow-SPY 2019-2025 , All rights reserved</value>
+  </data>
+  <data name="Protect" xml:space="preserve">
+    <value>NinjaMagisk Common Interface Libraries</value>
+  </data>
+  <data name="_FILE_EXIST" xml:space="preserve">
+    <value>文件存在</value>
+  </data>
+  <data name="_FILE_EXIST_PATH" xml:space="preserve">
+    <value>文件已保存到</value>
+  </data>
+  <data name="_RES_FILE_NOT_FIND" xml:space="preserve">
+    <value>资源文件不存在或未嵌入</value>
+  </data>
+  <data name="_CANNOT_WRITE_LOGFILE" xml:space="preserve">
+    <value>无法写入日志文件</value>
+  </data>
+  <data name="_CLEAR_LOGFILE" xml:space="preserve">
+    <value>清空日志文件</value>
+  </data>
+  <data name="_CANNOT_CLEAR_LOGFILE" xml:space="preserve">
+    <value>无法清空日志文件</value>
+  </data>
+  <data name="_GET_OUTPUT_DIRECTORY" xml:space="preserve">
+    <value>获取输出目录</value>
+  </data>
+  <data name="_GET_OUTPUT_NAME" xml:space="preserve">
+    <value>获取输出文件名称</value>
+  </data>
+  <data name="_CREATE_DIRECTORY" xml:space="preserve">
+    <value>创建目录</value>
+  </data>
+  <data name="_GET_DIRECTORY" xml:space="preserve">
+    <value>获取目录</value>
+  </data>
+  <data name="_NOTAVAILABLE_NETWORK" xml:space="preserve">
+    <value>网络不可用</value>
+  </data>
+  <data name="_NOTAVAILABLE_NETWORK_TIPS" xml:space="preserve">
+    <value>网络不可用, 是否执行步骤?</value>
+  </data>
+  <data name="_TIPS" xml:space="preserve">
+    <value>提示</value>
+  </data>
+  <data name="_ERROR" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="_WARNING" xml:space="preserve">
+    <value>警告</value>
+  </data>
+  <data name="_GET_URL" xml:space="preserve">
+    <value>获取下载链接</value>
+  </data>
+  <data name="_GET_TEMP" xml:space="preserve">
+    <value>获取临时文件夹</value>
+  </data>
+  <data name="_REGEX_GET_FILE" xml:space="preserve">
+    <value>正则表达式匹配文件</value>
+  </data>
+  <data name="_GET_FILES_IN_DIRECTORY" xml:space="preserve">
+    <value>获取文件夹内所有文件</value>
+  </data>
+  <data name="_GET_SYSTEM_BIT" xml:space="preserve">
+    <value>获取系统位数</value>
+  </data>
+  <data name="_FINDING_HTML_DOWNLOAD_LINK" xml:space="preserve">
+    <value>解析html页面文件</value>
+  </data>
+  <data name="_FIND_HTML_CODE" xml:space="preserve">
+    <value>获取html元素</value>
+  </data>
+  <data name="_SECURITY_RUNNING" xml:space="preserve">
+    <value>安全软件运行中, 请关闭</value>
+  </data>
+  <data name="_PROCESS_STARTED" xml:space="preserve">
+    <value>进程已启动</value>
+  </data>
+  <data name="_CANNOT_DISENABLE_HIBERNATE" xml:space="preserve">
+    <value>无法禁用/启用休眠</value>
+  </data>
+  <data name="_DISENABLE_HIBERNATE" xml:space="preserve">
+    <value>已禁用/启用休眠</value>
+  </data>
+  <data name="_CANNOT_ENABLE_HIGHPOWERCFG" xml:space="preserve">
+    <value>无法启用卓越性能</value>
+  </data>
+  <data name="_ENABLE_HIGHPOWERCFG" xml:space="preserve">
+    <value>已启用卓越性能</value>
+  </data>
+  <data name="_CANNOT_DISABLE_SECURITY_CENTER" xml:space="preserve">
+    <value>无法禁用Windows安全中心</value>
+  </data>
+  <data name="_CANNOT_ENABLE_SECURITY_CENTER" xml:space="preserve">
+    <value>无法启用Windows安全中心</value>
+  </data>
+  <data name="_DISABLE_SECURITY_CENTER" xml:space="preserve">
+    <value>已禁用Windows安全中心</value>
+  </data>
+  <data name="_ENABLE_SECURITY_CENTER" xml:space="preserve">
+    <value>已启用Windows安全中心</value>
+  </data>
+  <data name="_WRITE_REGISTRY" xml:space="preserve">
+    <value>写入注册表</value>
+  </data>
+  <data name="_CANNOT_DISABLE_WINDOWS_UPDATER" xml:space="preserve">
+    <value>无法禁用Windows更新</value>
+  </data>
+  <data name="_CANNOT_ENABLE_WINDOWS_UPDATER" xml:space="preserve">
+    <value>无法启用Windows更新</value>
+  </data>
+  <data name="_DISABLE_WINDOWS_UPDATER" xml:space="preserve">
+    <value>已禁用Windows更新</value>
+  </data>
+  <data name="_ENABLE_WINDOWS_UPDATER" xml:space="preserve">
+    <value>已启用Windows更新</value>
+  </data>
+  <data name="_ACTIVE_WINDOWS" xml:space="preserve">
+    <value>Windows已激活</value>
+  </data>
+  <data name="_CANNOT_ACTIVE_WINDOWS" xml:space="preserve">
+    <value>无法激活Windows</value>
+  </data>
+  <data name="_SUCESS_WRITE_REGISTRY" xml:space="preserve">
+    <value>注册表已成功写入</value>
+  </data>
+  <data name="_WRITE_REGISTRY_FAILED" xml:space="preserve">
+    <value>写入注册表时出错</value>
+  </data>
+  <data name="_GET_ARIA2C_ARGS" xml:space="preserve">
+    <value>获取aria2c参数集</value>
+  </data>
+  <data name="_GET_ARIA2C_PATH" xml:space="preserve">
+    <value>获取aria2c文件路径</value>
+  </data>
+  <data name="_GET_ARIA2C_EXITCODE" xml:space="preserve">
+    <value>获取aria2c退出码</value>
+  </data>
+  <data name="_ENABLE_ARIA2C_LOG_OUTPUT" xml:space="preserve">
+    <value>启用aria2c日志输出</value>
+  </data>
+  <data name="_DISABLE_ARIA2C_LOG_OUTPUT" xml:space="preserve">
+    <value>禁用aria2c日志输出</value>
+  </data>
+  <data name="_DOWNLOADING_FILE" xml:space="preserve">
+    <value>正在下载文件</value>
+  </data>
+  <data name="_DOWNLOADING_COMPLETE" xml:space="preserve">
+    <value>下载完成</value>
+  </data>
+  <data name="_DOWNLOADING_FAILED" xml:space="preserve">
+    <value>下载失败</value>
+  </data>
+  <data name="_GET_64_LINK" xml:space="preserve">
+    <value>获取64位程序下载链接</value>
+  </data>
+  <data name="_GET_32_LINK" xml:space="preserve">
+    <value>获取32位程序下载链接</value>
+  </data>
+  <data name="_GET_RM_NAME" xml:space="preserve">
+    <value>获取项目资源清单</value>
+  </data>
+  <data name="_GET_RM_OBJ" xml:space="preserve">
+    <value>获取资源数据</value>
+  </data>
+  <data name="_NEW_RM" xml:space="preserve">
+    <value>创建ResourceManager实例</value>
+  </data>
+  <data name="VC" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\VC.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="_FILE_WRITING" xml:space="preserve">
+    <value>正在写入文件</value>
+  </data>
+  <data name="_PROCESS_EXITED" xml:space="preserve">
+    <value>进程已退出</value>
+  </data>
+  <data name="_GET_HTML" xml:space="preserve">
+    <value>获取html页面文件</value>
+  </data>
+  <data name="_64" xml:space="preserve">
+    <value>64位</value>
+  </data>
+  <data name="_32" xml:space="preserve">
+    <value>32位</value>
+  </data>
+  <data name="_GET_FILE" xml:space="preserve">
+    <value>获取文件</value>
+  </data>
+  <data name="_WAIT_DOWNLOADING" xml:space="preserve">
+    <value>等待下载完成</value>
+  </data>
+  <data name="_RETRY_DOWNLOAD" xml:space="preserve">
+    <value>重试下载</value>
+  </data>
+</root>
