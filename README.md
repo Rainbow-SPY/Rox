@@ -92,7 +92,7 @@ NinjaMagisk.Software.DownloadAssistant.ModuleDownloader(Module module);
 > [!WARNING]
 > 使用时请注意,在无网络的情况下,`MessageBox`会弹出提示询问是否进行下一步操作.
 > 
-> Visual++运行库产品来自MicroSoftware,© MicroSoftware 2025,作者未对程序和DLL进行修改.作者仅提供方法脚本,对使用者进行的任何操作均不承担任何责任,特此声明.
+> Visual++运行库产品来自Microsoft,© Microsoft 2025,作者未对程序和DLL进行修改.作者仅提供方法脚本,对使用者进行的任何操作均不承担任何责任,特此声明.
 >
 > `7-zip` 产品来自[ww.7-zip.org](www.7-zip.org),Copyright (C) 2024 Igor Pavlov.作者未对此进行任何修改,遵循 GNU LGPL license.作者仅提供方法脚本,对使用者进行的任何操作均不承担任何责任,特此声明.
 
