@@ -375,6 +375,7 @@ namespace NinjaMagisk
                 EasiCamera,
                 SeewoService,
                 WeChat,
+                ToDesk,
             };
             public static void Downloader(string url, string Downloadvocation)
             {
@@ -477,13 +478,13 @@ namespace NinjaMagisk
                 CheckFile($"{Directory.GetCurrentDirectory()}\\bin\\aria2c.exe");
                 if (!log)
                 {
-                    WriteLog(LogLevel.Info, $"{_ENABLE_ARIA2C_LOG_OUTPUT}");
-                    arg = $"-x 100 -d \"{Downloadvocation}\" -q \"{url}\" -o \"{outputName}\"";
+                    WriteLog(LogLevel.Info, $"{_DISABLE_ARIA2C_LOG_OUTPUT}");
+                    arg = $"-x 16 -d \"{Downloadvocation}\" -q \"{url}\" -o \"{outputName}\"";
                 }
                 else
                 {
-                    WriteLog(LogLevel.Info, $"{_DISABLE_ARIA2C_LOG_OUTPUT}");
-                    arg = $"-x 100 -d \"{Downloadvocation}\" -l \"{Directory.GetCurrentDirectory()}\\aria2c.log\" \"{url}\" -o \"{outputName}\"";
+                    WriteLog(LogLevel.Info, $"{_ENABLE_ARIA2C_LOG_OUTPUT}");
+                    arg = $"-x 16 -d \"{Downloadvocation}\" -l \"{Directory.GetCurrentDirectory()}\\aria2c.log\" \"{url}\" -o \"{outputName}\"";
                 }
                 /* -x 线程数, 修改版可以上限1000线程
                  * -d, --dir=<DIR>  存储下载文件的目录。
@@ -706,7 +707,6 @@ namespace NinjaMagisk
                     const int maxRetries = 3;
                     const int checkInterval = 2000; // 2秒
                     const int timeout = 60000;      // 60秒
-                                                    // 下载页面
                     var downloadvocation = $"{Directory.GetCurrentDirectory()}\\temp";
                     Downloader("https://pc.weixin.qq.com", downloadvocation, true);
                     var html = File.ReadAllText($"{downloadvocation}\\index.html");
@@ -716,7 +716,7 @@ namespace NinjaMagisk
                     bool is64Bit = Environment.Is64BitOperatingSystem;
                     string systemBit;
                     // 获取下载链接（合并32/64位处理）
-                    string downloadLink = GetDownloadLink(html, !is64Bit);
+                    string downloadLink = GetWeChatDownloadLink(html, !is64Bit);
                     if (is64Bit)
                     {
                         systemBit = _64;
@@ -765,7 +765,6 @@ namespace NinjaMagisk
                             WriteLog(LogLevel.Warning, $"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
                         }
                     }
-
                     if (!downloadSuccess)
                     {
                         WriteLog(LogLevel.Error, $"{_DOWNLOADING_FAILED}: {retryCount}/{maxRetries}");
@@ -810,8 +809,61 @@ namespace NinjaMagisk
                         WriteLog(LogLevel.Error, $"{_DOWNLOADING_FAILED}: SeewoService");
                     }
                 }
+                if (app == App.ToDesk)
+                {
+                    const string targetFile = "ToDeskSetup.exe";
+                    const int maxRetries = 3;
+                    const int checkInterval = 2000;
+                    const int timeout = 60000;
+                    var downloadvocation = $"{Directory.GetCurrentDirectory()}\\temp";
+                    Downloader("https://www.todesk.com/download.html", downloadvocation, true);
+                    var html = File.ReadAllText($"{downloadvocation}\\download.html");
+                    WriteLog(LogLevel.Info, $"{_GET_HTML}: {downloadvocation}\\download.html");
+                    WriteLog(LogLevel.Info, $"{_GET_HTML}: {html}");
+                    string downloadLink = GetToDeskDownlaodLink(html);
+                    WriteLog(LogLevel.Info, $"{_GET_URL}: {downloadLink}");
+                    bool downloadSuccess = false;
+                    int retryCount = 0;
+
+                    while (!downloadSuccess && retryCount < maxRetries)
+                    {
+                        Downloader(downloadLink, folderPath,"ToDeskSetup.exe",true);
+                        var checkTimer = new Stopwatch();
+                        checkTimer.Start();
+                        while (checkTimer.ElapsedMilliseconds < timeout)
+                        {
+                            var files = Directory.GetFiles(folderPath, targetFile);
+                            WriteLog(LogLevel.Info, $"{_GET_FILES_IN_DIRECTORY}: {folderPath}");
+                            if (files.Any())
+                            {
+                                WriteLog(LogLevel.Info, $"{_GET_FILE}: {files.First()}");
+                                var newFile = files.First();
+                                downloadSuccess = true;
+                                Process process = new Process();
+                                process.StartInfo.FileName = newFile;
+                                process.Start();
+                                WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {process.Id}");
+                                process.WaitForExit();
+                                WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {process.ExitCode}");
+                                process.Close();
+                                break;
+                            }
+                            WriteLog(LogLevel.Info, $"{_WAIT_DOWNLOADING}... waiting {checkTimer.ElapsedMilliseconds / 1000} second");
+                            Thread.Sleep(checkInterval);
+                        }
+                        if (!downloadSuccess)
+                        {
+                            retryCount++;
+                            WriteLog(LogLevel.Warning, $"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
+                        }
+                    }
+                    if (!downloadSuccess)
+                    {
+                        WriteLog(LogLevel.Error, $"{_DOWNLOADING_FAILED}: {retryCount}/{maxRetries}");
+                    }
+                }
             }
-            internal static string GetDownloadLink(string htmlContent, bool is32Bit = false)
+            internal static string GetWeChatDownloadLink(string htmlContent, bool is32Bit = false)
             {
                 var doc = new HtmlAgilityPack.HtmlDocument();
                 doc.LoadHtml(htmlContent);
@@ -819,6 +871,14 @@ namespace NinjaMagisk
                 var node = is32Bit
                     ? doc.DocumentNode.SelectSingleNode("//a[@id='x86' and contains(@class,'download-item')]")
                     : doc.DocumentNode.SelectSingleNode("//a[@id='downloadButton' and contains(@class,'download-button')]");
+                return node?.GetAttributeValue("href", null);
+            }
+            internal static string GetToDeskDownlaodLink(string htmlContent)
+            {
+                var doc = new HtmlAgilityPack.HtmlDocument();
+                doc.LoadHtml(htmlContent);
+                // 精确匹配元素
+                var node = doc.DocumentNode.SelectSingleNode("//div[@class='win_download']/a[@class='btn' and starts-with(@href,'https://')]");
                 return node?.GetAttributeValue("href", null);
             }
             internal static void Download(string[] url)
