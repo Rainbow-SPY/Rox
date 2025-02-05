@@ -13,7 +13,11 @@ using static NinjaMagisk.LogLibraries;
 ```
 
 ```csharp
-using static NinjaMagisk.Soft;
+using static NinjaMagisk.Software;
+```
+
+```csharp
+using static NinjaMagisk.Windows;
 ```
 
 ## 所有方法
@@ -65,11 +69,11 @@ NinjaMagisk.LogLibries.ClearFile(string filePath);
 > 此处使用了aria2c库,作者遵循GPL 2.0协议,内容为未修改或修改过的程序,均为在[Github - aria2/aria2](github.com/aria2/ari2)上下载.作者仅提供方法脚本,对使用者进行的任何操作均不承担任何责任,特此声明.
 
 ```JavaScript
-NinjaMagisk.Soft.DownloadAssistant.Downloader(string url);
-NinjaMagisk.Soft.DownloadAssistant.Downloader(string url,string Downloadvocation);
-NinjaMagisk.Soft.DownloadAssistant.Downloader(string url,string Downloadvocation,bool log);
-NinjaMagisk.Soft.DownloadAssistant.Downloader(string url,string Downloadvocation,string outputName);
-NinjaMagisk.Soft.DownloadAssistant.Downloader(string url,string Downloadvocation,string outputName,bool log);
+NinjaMagisk.Software.DownloadAssistant.Downloader(string url);
+NinjaMagisk.Software.DownloadAssistant.Downloader(string url,string Downloadvocation);
+NinjaMagisk.Software.DownloadAssistant.Downloader(string url,string Downloadvocation,bool log);
+NinjaMagisk.Software.DownloadAssistant.Downloader(string url,string Downloadvocation,string outputName);
+NinjaMagisk.Software.DownloadAssistant.Downloader(string url,string Downloadvocation,string outputName,bool log);
 ```
 **`url` 下载链接**
 
@@ -82,13 +86,13 @@ NinjaMagisk.Soft.DownloadAssistant.Downloader(string url,string Downloadvocation
 ### 模块下载
 
 ```JavaScript
-NinjaMagisk.Soft.DownloadAssistant.ModuleDownloader(Module module);
+NinjaMagisk.Software.DownloadAssistant.ModuleDownloader(Module module);
 ```
 
 > [!WARNING]
 > 使用时请注意,在无网络的情况下,`MessageBox`会弹出提示询问是否进行下一步操作.
 > 
-> Visual++运行库产品来自Microsoft,© Microsoft 2025,作者未对程序和DLL进行修改.作者仅提供方法脚本,对使用者进行的任何操作均不承担任何责任,特此声明.
+> Visual++运行库产品来自MicroSoftware,© MicroSoftware 2025,作者未对程序和DLL进行修改.作者仅提供方法脚本,对使用者进行的任何操作均不承担任何责任,特此声明.
 >
 > `7-zip` 产品来自[ww.7-zip.org](www.7-zip.org),Copyright (C) 2024 Igor Pavlov.作者未对此进行任何修改,遵循 GNU LGPL license.作者仅提供方法脚本,对使用者进行的任何操作均不承担任何责任,特此声明.
 
@@ -102,14 +106,16 @@ NinjaMagisk.Soft.DownloadAssistant.ModuleDownloader(Module module);
 ### 应用下载
 
 ```JavaScript
-NinjaMagisk.Soft.DownloadAssistant.ApplicationDownloader(App app);
+NinjaMagisk.Software.DownloadAssistant.ApplicationDownloader(App app);
 ```
-**`App`可用枚举:** `EasiNote5`,`EasiCamera`,`SeewoService`,`WeChat`.
+**`App`可用枚举:** `EasiNote5`,`EasiCamera`,`SeewoService`,`WeChat`,`ToDesk`.
 
 > [!WARNING]
 > 请注意! `EasiNote5`,`EasiCamera`,`SeewoService`产品来自广州视源电子科技股份有限公司,Copyright © 2023 seewo. All Rights Reserved. Shirui Electronics.作者只提供了直链下载链接,未对产品做出任何修改行为.作者仅提供方法脚本,对使用者进行的任何操作均不承担任何责任,特此声明.
 >
 > `WeChat`产品来自腾讯公司,Copyright © 1998-2025 Tencent All Rights Reserved.作者只提供了网页链接,未对产品做出任何修改.
+>
+> `ToDesk`产品来自海南有趣科技有限公司, Copyright © 海南有趣科技有限公司 版权所有 ,作者只提供了直链下载链接,未对产品做出任何修改行为.作者仅提供方法脚本,对使用者进行的任何操作均不承担任何责任,特此声明.
 
 > [!NOTE]
 > 请注意!文件会保存在 `%USERPROFILLE%\Appdata\Local\Temp`文件夹内
@@ -120,12 +126,12 @@ NinjaMagisk.Soft.DownloadAssistant.ApplicationDownloader(App app);
 > 此举未对火绒安全软件和360安全软件的任意进程、程序，组件、驱动做出任何修改、抹黑、分发,仅对相关进程检测提示防止安全软件误杀其他程序或组件.作者仅提供方法脚本,对使用者进行的任何操作均不承担任何责任,特此声明.
 
 ```javascript
-NinjaMagisk.Soft.AntiSecurity.Anti360Security();
-NinjaMagisk.Soft.AntiSecurity.AntiHuoRongSecurity();
+NinjaMagisk.Software.AntiSecurity.Anti360Security();
+NinjaMagisk.Software.AntiSecurity.AntiHuoRongSecurity();
 ```
 > 示例:
 > ```javascript
-> if (NinjaMagisk.Soft.AntiSecurity.Anti360Security())
+> if (NinjaMagisk.Software.AntiSecurity.Anti360Security())
 > {
 >    return true;
 > }
