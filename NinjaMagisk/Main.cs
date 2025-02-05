@@ -617,7 +617,7 @@ namespace NinjaMagisk
                     {
                         return;
                     }
-                }
+                }\
                 if (app == App.EasiNote5)
                 {
                     const string pattern = @"EasiNoteSetup_\d+(\.\d+)*_seewo\.exe";
