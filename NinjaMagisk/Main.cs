@@ -302,7 +302,7 @@ namespace NinjaMagisk
         internal static readonly string _GET_FILE = GetLocalizedString("_GET_FILE");
         internal static readonly string _WAIT_DOWNLOADING = GetLocalizedString("_WAIT_DOWNLOADING");
         internal static readonly string _RETRY_DOWNLOAD = GetLocalizedString("_RETRY_DOWNLOAD");
-        internal static string lang = System.Globalization.CultureInfo.InstalledUICulture.Name.ToString();
+        //internal static string lang = System.Globalization.CultureInfo.InstalledUICulture.Name.ToString();
         internal static string GetLocalizedString(string key)
         {
             return ResourceHelper.GetString(key, System.Globalization.CultureInfo.InstalledUICulture.Name.ToString());
@@ -379,7 +379,7 @@ namespace NinjaMagisk
             public static void Downloader(string url, string Downloadvocation)
             {
                 CheckFile($"{Directory.GetCurrentDirectory()}\\bin\\aria2c.exe");
-                string arg = $"-x 16 -d \"{Downloadvocation}\" -q \"{url}\"";
+                string arg = $"-x 16 -d \"{Downloadvocation}\" \"{url}\"";
                 /* -x 线程数, 修改版可以上限1000线程
                  * -d, --dir=<DIR>  存储下载文件的目录。
                  * -l, --log=<LOG>  日志文件的文件名。如果指定了``-，则日志将写入``stdout。如果指定了空字符串(“”)，或者省略了此选项，则根本不会将日志写入磁盘。
@@ -387,7 +387,7 @@ namespace NinjaMagisk
                  * -q, --quiet      静默下载
                  */
                 Process p = new Process();
-                p.StartInfo.FileName = "aria2c";
+                p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
                 p.StartInfo.Arguments = arg;
                 WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
                 p.Start();
@@ -411,13 +411,13 @@ namespace NinjaMagisk
                 CheckFile($"{Directory.GetCurrentDirectory()}\\bin\\aria2c.exe");
                 if (!log)
                 {
-                    WriteLog(LogLevel.Info, $"{_ENABLE_ARIA2C_LOG_OUTPUT}");
-                    arg = $"-x 16 -d \"{Downloadvocation}\" -q \"{url}\"";
+                    WriteLog(LogLevel.Info, $"{_DISABLE_ARIA2C_LOG_OUTPUT}");
+                    arg = $"-x 16 -d \"{Downloadvocation}\" \"{url}\"";
                 }
                 else
                 {
-                    WriteLog(LogLevel.Info, $"{_DISABLE_ARIA2C_LOG_OUTPUT}");
-                    arg = $"-x 16 -d \"{Downloadvocation}\" -l \"{Directory.GetCurrentDirectory()}\\aria2c.log\"-q \"{url}\"";
+                    WriteLog(LogLevel.Info, $"{_ENABLE_ARIA2C_LOG_OUTPUT}");
+                    arg = $"-x 16 -d \"{Downloadvocation}\" -l \"{Directory.GetCurrentDirectory()}\\aria2c.log\" \"{url}\"";
                 }
                 /* -d, --dir=<DIR>  存储下载文件的目录。
                  * -l, --log=<LOG>  日志文件的文件名。如果指定了``-，则日志将写入``stdout。如果指定了空字符串(“”)，或者省略了此选项，则根本不会将日志写入磁盘。
@@ -425,7 +425,7 @@ namespace NinjaMagisk
                  * -q, --quiet      静默下载
                  */
                 Process p = new Process();
-                p.StartInfo.FileName = "aria2c";
+                p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
                 p.StartInfo.Arguments = arg;
                 WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
                 p.Start();
@@ -445,7 +445,7 @@ namespace NinjaMagisk
             }
             public static void Downloader(string url, string Downloadvocation, string outputName)
             {
-                string arg = $"-x 16 -d \"{Downloadvocation}\" -q \"{url}\" -o \"{outputName}\"";
+                string arg = $"-x 16 -d \"{Downloadvocation}\" \"{url}\" -o \"{outputName}\"";
                 CheckFile($"{Directory.GetCurrentDirectory()}\\bin\\aria2c.exe");
                 /* -d, --dir=<DIR>  存储下载文件的目录。
                  * -l, --log=<LOG>  日志文件的文件名。如果指定了``-，则日志将写入``stdout。如果指定了空字符串(“”)，或者省略了此选项，则根本不会将日志写入磁盘。
@@ -453,7 +453,7 @@ namespace NinjaMagisk
                  * -q, --quiet      静默下载
                  */
                 Process p = new Process();
-                p.StartInfo.FileName = "aria2c";
+                p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
                 p.StartInfo.Arguments = arg;
                 WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
                 p.Start();
@@ -483,7 +483,7 @@ namespace NinjaMagisk
                 else
                 {
                     WriteLog(LogLevel.Info, $"{_DISABLE_ARIA2C_LOG_OUTPUT}");
-                    arg = $"-x 100 -d \"{Downloadvocation}\" -l \"{Directory.GetCurrentDirectory()}\\aria2c.log\"-q \"{url}\" -o \"{outputName}\"";
+                    arg = $"-x 100 -d \"{Downloadvocation}\" -l \"{Directory.GetCurrentDirectory()}\\aria2c.log\" \"{url}\" -o \"{outputName}\"";
                 }
                 /* -x 线程数, 修改版可以上限1000线程
                  * -d, --dir=<DIR>  存储下载文件的目录。
@@ -492,7 +492,7 @@ namespace NinjaMagisk
                  * -q, --quiet      静默下载
                  */
                 Process p = new Process();
-                p.StartInfo.FileName = "aria2c";
+                p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
                 p.StartInfo.Arguments = arg;
                 WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
                 p.Start();
@@ -707,8 +707,10 @@ namespace NinjaMagisk
                     const int checkInterval = 2000; // 2秒
                     const int timeout = 60000;      // 60秒
                                                     // 下载页面
-                    Downloader("https://pc.weixin.qq.com", temp);
-                    var html = File.ReadAllText($"{temp}\\index.html");
+                    var downloadvocation = $"{Directory.GetCurrentDirectory()}\\temp";
+                    Downloader("https://pc.weixin.qq.com", downloadvocation, true);
+                    var html = File.ReadAllText($"{downloadvocation}\\index.html");
+                    WriteLog(LogLevel.Info, $"{_GET_HTML}: {downloadvocation}\\index.html");
                     WriteLog(LogLevel.Info, $"{_GET_HTML}: {html}");
                     // 根据系统架构确定要下载的链接
                     bool is64Bit = Environment.Is64BitOperatingSystem;
@@ -743,7 +745,15 @@ namespace NinjaMagisk
                             if (files.Any())
                             {
                                 WriteLog(LogLevel.Info, $"{_GET_FILE}: {files.First()}");
+                                var newFile = files.First();
                                 downloadSuccess = true;
+                                Process process = new Process();
+                                process.StartInfo.FileName = newFile;
+                                process.Start();
+                                WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {process.Id}");
+                                process.WaitForExit();
+                                WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {process.ExitCode}");
+                                process.Close();
                                 break;
                             }
                             WriteLog(LogLevel.Info, $"{_WAIT_DOWNLOADING}... waiting {checkTimer.ElapsedMilliseconds / 1000} second");
@@ -822,7 +832,7 @@ namespace NinjaMagisk
                     * -q, --quiet      静默下载
                     */
                     Process p = new Process();
-                    p.StartInfo.FileName = Directory.GetCurrentDirectory() + "\\bin\\aria2c";
+                    p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
                     p.StartInfo.Arguments = arg;
                     WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
                     p.StartInfo.CreateNoWindow = true;
@@ -851,7 +861,7 @@ namespace NinjaMagisk
                 * -q, --quiet      静默下载
                 */
                 Process p = new Process();
-                p.StartInfo.FileName = Directory.GetCurrentDirectory() + "\\bin\\aria2c";
+                p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
                 p.StartInfo.Arguments = arg;
                 WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
                 p.StartInfo.CreateNoWindow = true;
@@ -881,7 +891,7 @@ namespace NinjaMagisk
                     * -q, --quiet      静默下载
                     */
                     Process p = new Process();
-                    p.StartInfo.FileName = Directory.GetCurrentDirectory() + "\\bin\\aria2c";
+                    p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
                     p.StartInfo.Arguments = arg;
                     WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
                     p.StartInfo.CreateNoWindow = true;
@@ -910,7 +920,7 @@ namespace NinjaMagisk
                 * -q, --quiet      静默下载
                 */
                 Process p = new Process();
-                p.StartInfo.FileName = Directory.GetCurrentDirectory() + "\\bin\\aria2c";
+                p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
                 p.StartInfo.Arguments = arg;
                 WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
                 p.StartInfo.CreateNoWindow = true;
