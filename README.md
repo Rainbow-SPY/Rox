@@ -1,7 +1,15 @@
 # NinjaMagisk 动态链接库
 NinjaMagisk 是使用C# .NET Framework 4.7.2 编写, 使用 Microsoft Visual Studio 2022 编译的跨平台动态链接库
 
-## 全局引用方法
+## 目录
+
+1. [全局引用方法](#1-全局引用方法)
+2. [控制台打印彩色日志](#2-控制台打印彩色日志)
+3. [写入日志](#3-写入日志)
+4. [清空日志](#4-清空日志)
+
+
+## 1. 全局引用方法
 
 NinjaMagisk 给出了多种方法
 ```csharp
@@ -20,11 +28,7 @@ using static NinjaMagisk.Software;
 using static NinjaMagisk.Windows;
 ```
 
-## 所有方法
-
-<!-- 这里使用javascript只是为了方便可视化代码-->
-
-### 控制台打印彩色日志
+## 2. 控制台打印彩色日志
 
 <!-- 这里使用javascript只是为了方便可视化代码-->
 
@@ -42,13 +46,13 @@ NinjaMagisk.LogLibries.WriteLog(LogLevel loglevel,string message);
 
 **`LogKind` 可用枚举:** `Process`,`Task`,`Service`,`Rgistry`,`Network`,`PowerShell`,`Form`,`System`,`Thread`.
 
-### 写入日志
+### 写入日志到文件
 ```javascript
 NinjaMagisk.LogLibries.LogToFile(LogLevel loglevel,LogKind logkind, string message);
 NinjaMagisk.LogLibries.LogToFile(LogLevel loglevel, string message);
 ```
-> [!NOTE]
-> 调用此方法时,会在当前目录下创建`Assistant.log`日志文件,并会以下格式写入文件
+调用此方法时,会在当前目录下创建`Assistant.log`日志文件,并会以下格式写入文件
+
 > ```javascript
 > $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{logkind}] [{logLevel}]: {message}";
 > ```
@@ -57,14 +61,14 @@ NinjaMagisk.LogLibries.LogToFile(LogLevel loglevel, string message);
 **`LogLevel` 可用枚举:** `Info`,`Warning`,`Error`.
 
 **`LogKind` 可用枚举:** `Process`,`Task`,`Service`,`Rgistry`,`Network`,`PowerShell`,`Form`,`System`,`Thread`.
-### 清空日志
+## 4. 清空日志
 ```javascript
 NinjaMagisk.LogLibries.ClearFile(string filePath);
 ```
 > [!NOTE]
 > 调用此方法时,请确保`filePath`的文件路径有效,否则会提示`$"fail to clear log file: {ex.Message}"`
 
-### 高速下载
+## 5. 高速下载
 > [!WARNING]
 > 此处使用了aria2c库,作者遵循GPL 2.0协议,内容为未修改或修改过的程序,均为在[Github - aria2/aria2](github.com/aria2/ari2)上下载.作者仅提供方法脚本,对使用者进行的任何操作均不承担任何责任,特此声明.
 
@@ -83,7 +87,7 @@ NinjaMagisk.Software.DownloadAssistant.Downloader(string url,string Downloadvoca
 
 **`outputName` 文件的输出名称:** 下载完后会以`outputName`为命名储存在`Downloadvocation`文件夹内.
 
-### 模块下载
+## 6. 模块下载
 
 ```JavaScript
 NinjaMagisk.Software.DownloadAssistant.ModuleDownloader(Module module);
@@ -103,7 +107,7 @@ NinjaMagisk.Software.DownloadAssistant.ModuleDownloader(Module module);
 > 
 > 当您使用`DownloadAssistant.ModuleDownlaoder(DownloadAssistan.Nodule.zip)`时,请注意! 此文件会保存在`$"{Directory.GetCurrentDirectory()}\\bin"`文件夹内.
 
-### 应用下载
+## 7. 应用下载
 
 ```JavaScript
 NinjaMagisk.Software.DownloadAssistant.ApplicationDownloader(App app);
@@ -120,7 +124,7 @@ NinjaMagisk.Software.DownloadAssistant.ApplicationDownloader(App app);
 > [!NOTE]
 > 请注意!文件会保存在 `%USERPROFILLE%\Appdata\Local\Temp`文件夹内
 
-### 安全软件检测
+## 8. 安全软件检测
 
 > [!WARNING]
 > 此举未对火绒安全软件和360安全软件的任意进程、程序，组件、驱动做出任何修改、抹黑、分发,仅对相关进程检测提示防止安全软件误杀其他程序或组件.作者仅提供方法脚本,对使用者进行的任何操作均不承担任何责任,特此声明.
@@ -144,7 +148,7 @@ NinjaMagisk.Software.AntiSecurity.AntiHuoRongSecurity();
 返回`true`即代表`360Tray.exe`或`HipsTray.exe`正在运行.
 返回`false`即代表`360Tray.exe`或`HipsTray.exe`未运行.
 
-### 网络可用性检查
+## 网络可用性检查
 
 ```javascript
 NinjaMagisk.Network.IsNetworkAvailable();
@@ -167,7 +171,7 @@ NinjaMagisk.Network.IsNetworkAvailable();
 返回`true`即代表网络可用.
 返回`false`即代表网络不可用.
 
-### 启用/禁用休眠
+## 启用/禁用休眠
 
 ```javascript
 NinjaMagisk.Windows.Hibernate.Enable(); //启用休眠
@@ -175,7 +179,7 @@ NinjaMagisk.Windows.Hibernate.Disable(); //禁用休眠
 ```
 通过向`powercfg.exe`发送`"/hibernate {on/off}"`指令实现操作.
 
-### 启用卓越性能
+## 启用卓越性能
 
 > [!WARNING]
 > 此操作需要性能较高配置的电脑,此操作执行后可能会存在耗电过快等情况,较低配置的电脑启用后可能会出现卡顿等问题,建议非高配电脑请使用`高性能`电源方案,请谨慎选择!作者仅提供方法脚本,对使用者进行的任何操作均不承担任何责任,特此声明.
@@ -185,7 +189,7 @@ NinjaMagisk.Windows.EnableHighPowercfg();
 ```
 通过向`powercfg.exe`发送`"-duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61"` GUID 指令实现操作.
 
-### 启用/禁用Windows 安全中心与Windows Defender
+## 启用/禁用Windows 安全中心与Windows Defender
 
 > [!WARNING]
 > 此操作会禁用Windows Defender防间谍软件和实时监控等行为,计算机安全系数会下降.
@@ -201,7 +205,7 @@ NinjaMagisk.Windows.WindowsSecurityCenter.Disable() //禁用Windows 安全中心
 > [!NOTE]
 > 在第三方安全软件(非Windows Defender)运行时,执行步骤后,MessageBox会提示您需要关闭安全软件以进行下一步操作
 
-### 启用/禁用 Windows Update
+## 启用/禁用 Windows Update
 
 > [!WARNING]
 > 此操作会禁用Windows 更新,您将无法接收到最新的更新和补丁.
@@ -217,7 +221,7 @@ NinjaMagisk.Windows.WindowsUpdate.Disable() //禁用Windows 更新
 > [!NOTE]
 > 在第三方安全软件(非Windows Defender)运行时,执行步骤后,MessageBox会提示您需要关闭安全软件以进行下一步操作
 
-### 激活 Windows
+## 激活 Windows
 
 > [!WARNING]
 > 此操作会使用第三方程序激活Windows,如果您是正版用户,请不要使用此方法.
@@ -232,7 +236,7 @@ NinjaMagisk.Windows.ActiveWindows();
 > [!NOTE]
 > 在第三方安全软件(非Windows Defender)运行时,执行步骤后,MessageBox会提示您需要关闭安全软件以进行下一步操作
 
-### 写入注册表
+## 写入注册表
 
 > [!WARNING]
 > 此方法仅操作注册表读取写入,未对Microsoft Windows操作系统的任何其他组件、驱动、程序、进程做出任何修改,作者仅提供方法脚本,对使用者进行的任何操作均不承担任何责任,特此声明.
@@ -251,7 +255,7 @@ NinjaMagisk.Registry.Write(string keyPath,string valueName,RegistryValueKind val
 
 **`valueData`:设定注册表项内数据**
 
-### ChatGPT API引用
+## ChatGPT API引用
 
 > [!WARNING]
 > 此方法仅操作API发送请求,未对OpenAI公司旗下的任何其他组件、程序和人工智能产品做出任何修改,作者仅提供方法脚本,对使用者进行的任何操作均不承担任何责任,特此声明.
@@ -263,7 +267,7 @@ NinjaMagisk.AI.ChatGPT.Chat(string text,string api);
 
 **`api`: OpenAI Platform 网站申请的API**
 
-### DeepSeek API引用
+## DeepSeek API引用
 
 > [!WARNING]
 > 此方法仅操作API发送请求,未对DeepSeek公司旗下的任何其他组件、程序和人工智能产品做出任何修改,作者仅提供方法脚本,对使用者进行的任何操作均不承担任何责任,特此声明.
@@ -276,7 +280,7 @@ NinjaMagisk.AI.DeepSeek.Chat(string text,string api);
 
 **`api`: DeepSeek Platform 网站申请的API**
 
-### AES加密/解密
+## AES加密/解密
 
 > [!WARNING]
 > 请妥善保管好您的`IV`算法初始化向量和您的`Key`密钥.
@@ -291,7 +295,7 @@ NinjaMagisk.AESEncryption.Encrypt(string cipherText, byte[] Key /*256-bit*/ , by
 
 **`IV`: AES加密/解密初始化向量(128位)**
 
-### 文件属性修改
+## 文件属性修改
 
 ```javascript
 NinjaMagisk.File.Attrib(string path, AtOp Key, bool Switch);
