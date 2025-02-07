@@ -4,11 +4,15 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Resources;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using static NinjaMagisk.LogLibraries;
 using static NinjaMagisk.Software;
@@ -51,7 +55,6 @@ namespace NinjaMagisk
     }
     public class LogLibraries
     {
-
         public static Action<LogLevel, string> LogToUi { get; set; }
         public enum LogLevel
         {
@@ -169,9 +172,9 @@ namespace NinjaMagisk
             try
             {
                 // 如果日志文件不存在，则创建
-                if (!File.Exists(logFilePath))
+                if (!System.IO.File.Exists(logFilePath))
                 {
-                    File.Create(logFilePath).Close();
+                    System.IO.File.Create(logFilePath).Close();
                 }
 
                 // 以追加方式写入日志内容
@@ -195,9 +198,9 @@ namespace NinjaMagisk
             try
             {
                 // 如果日志文件不存在，则创建
-                if (!File.Exists(logFilePath))
+                if (!System.IO.File.Exists(logFilePath))
                 {
-                    File.Create(logFilePath).Close();
+                    System.IO.File.Create(logFilePath).Close();
                 }
 
                 // 以追加方式写入日志内容
@@ -312,7 +315,7 @@ namespace NinjaMagisk
         {
             private static void CheckFile(string filePath)
             {
-                if (File.Exists(filePath))
+                if (System.IO.File.Exists(filePath))
                 {
                     WriteLog(LogLevel.Info, $"{_GET_ARIA2C_PATH}: {filePath}");
                     Assembly assembly = Assembly.GetExecutingAssembly();
@@ -352,7 +355,7 @@ namespace NinjaMagisk
                         WriteLog(LogLevel.Info, $"{_GET_OUTPUT_NAME}: {outputDirectory}");
                         // 写入文件，确保保存为二进制数据
                         WriteLog(LogLevel.Info, $"{_FILE_WRITING}");
-                        File.WriteAllBytes(outputFilePath, aria2cExeData);
+                        System.IO.File.WriteAllBytes(outputFilePath, aria2cExeData);
                         WriteLog(LogLevel.Info, $"aria2c.exe {_FILE_EXIST_PATH} {outputFilePath}");
                     }
                     else
@@ -552,7 +555,7 @@ namespace NinjaMagisk
                     "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/resource/7-zip/7za.exe",
                     "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/resource/7-zip/7zxa.dll",
                     };
-                    if (!File.Exists(Directory.GetCurrentDirectory() + "\\bin\\7zxa.dll"))
+                    if (!System.IO.File.Exists(Directory.GetCurrentDirectory() + "\\bin\\7zxa.dll"))
                     {
                         WriteLog(LogLevel.Info, $"{_GET_URL} {url}");
                         Download(url);
@@ -593,7 +596,7 @@ namespace NinjaMagisk
                         string outputFilePath = Path.Combine(outputDirectory, "VC++.exe");
                         WriteLog(LogLevel.Info, $"{_GET_OUTPUT_DIRECTORY}: {outputDirectory}");
                         // 写入文件，确保保存为二进制数据
-                        File.WriteAllBytes(outputFilePath, VC);
+                        System.IO.File.WriteAllBytes(outputFilePath, VC);
                         WriteLog(LogLevel.Info, $"VC++.exe {_FILE_EXIST_PATH}: {outputFilePath}");
                     }
                     else
@@ -654,7 +657,7 @@ namespace NinjaMagisk
                         {
                             retryCount++;
                             WriteLog(LogLevel.Warning, $"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
-                            Directory.GetFiles(folderPath).ToList().ForEach(File.Delete); // 清理残留文件
+                            Directory.GetFiles(folderPath).ToList().ForEach(System.IO.File.Delete); // 清理残留文件
                         }
                     }
                     if (!downloadSuccess)
@@ -693,7 +696,7 @@ namespace NinjaMagisk
                         {
                             retryCount++;
                             WriteLog(LogLevel.Warning, $"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
-                            Directory.GetFiles(folderPath).ToList().ForEach(File.Delete);
+                            Directory.GetFiles(folderPath).ToList().ForEach(System.IO.File.Delete);
                         }
                     }
                     if (!downloadSuccess)
@@ -709,7 +712,7 @@ namespace NinjaMagisk
                     const int timeout = 60000;      // 60秒
                     var downloadvocation = $"{Directory.GetCurrentDirectory()}\\temp";
                     Downloader("https://pc.weixin.qq.com", downloadvocation, true);
-                    var html = File.ReadAllText($"{downloadvocation}\\index.html");
+                    var html = System.IO.File.ReadAllText($"{downloadvocation}\\index.html");
                     WriteLog(LogLevel.Info, $"{_GET_HTML}: {downloadvocation}\\index.html");
                     WriteLog(LogLevel.Info, $"{_GET_HTML}: {html}");
                     // 根据系统架构确定要下载的链接
@@ -801,7 +804,7 @@ namespace NinjaMagisk
                         {
                             retryCount++;
                             WriteLog(LogLevel.Warning, $"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
-                            Directory.GetFiles(folderPath).ToList().ForEach(File.Delete);
+                            Directory.GetFiles(folderPath).ToList().ForEach(System.IO.File.Delete);
                         }
                     }
                     if (!downloadSuccess)
@@ -817,7 +820,7 @@ namespace NinjaMagisk
                     const int timeout = 60000;
                     var downloadvocation = $"{Directory.GetCurrentDirectory()}\\temp";
                     Downloader("https://www.todesk.com/download.html", downloadvocation, true);
-                    var html = File.ReadAllText($"{downloadvocation}\\download.html");
+                    var html = System.IO.File.ReadAllText($"{downloadvocation}\\download.html");
                     WriteLog(LogLevel.Info, $"{_GET_HTML}: {downloadvocation}\\download.html");
                     WriteLog(LogLevel.Info, $"{_GET_HTML}: {html}");
                     string downloadLink = GetToDeskDownlaodLink(html);
@@ -827,7 +830,7 @@ namespace NinjaMagisk
 
                     while (!downloadSuccess && retryCount < maxRetries)
                     {
-                        Downloader(downloadLink, folderPath,"ToDeskSetup.exe",true);
+                        Downloader(downloadLink, folderPath, "ToDeskSetup.exe", true);
                         var checkTimer = new Stopwatch();
                         checkTimer.Start();
                         while (checkTimer.ElapsedMilliseconds < timeout)
@@ -1342,6 +1345,213 @@ namespace NinjaMagisk
                 }
             }
             return value;
+        }
+    }
+    public class AI// AI
+    {
+        public class DeepSeek
+        {
+            // ==================== API配置区（后期可修改） ====================
+            private const string ApiUrl = "https://api.deepseek.com/v1/chat/completions"; // DeepSeek API的URL
+            public string Model { get; set; } = "default"; // 默认模型
+            public static async Task Chat(string text, string api)
+            {
+                try
+                {
+                    using (HttpClient client = new HttpClient())
+                    {
+                        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {api}");
+                        var requestBody = new
+                        {
+                            model = "deepseek-chat",
+                            messages = new[]
+                            {
+                            new { role = "user", content = text }
+                        }
+                        };
+                        string json = Newtonsoft.Json.JsonConvert.SerializeObject(requestBody);
+                        var content = new StringContent(json, Encoding.UTF8, "application/json");
+                        WriteLog(LogLevel.Info, "发送请求..." + text);
+                        HttpResponseMessage response = await client.PostAsync(ApiUrl, content);
+                        string responseJson = await response.Content.ReadAsStringAsync();
+                        WriteLog(LogLevel.Info, "收到响应...");
+                        if (response.IsSuccessStatusCode)
+                        {
+                            var responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(responseJson);
+                            string answer = responseObject.choices[0].message.content;
+                            WriteLog(LogLevel.Info, $"回答: {answer}");
+                        }
+                        else
+                        {
+                            WriteLog(LogLevel.Error, $"错误: {responseJson}");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    WriteLog(LogLevel.Error, $"异常: {ex.Message}");
+                }
+            }
+        }
+        public class ChatGPT
+        {
+            // ==================== API配置区（后期可修改） ====================
+            private const string ApiUrl = "https://api.openai.com/v1/chat/completions"; // OpenAI API的URL
+            public string Model { get; set; } = "gpt-3.5-turbo"; // 默认模型
+            public static async Task Chat(string text, string apiKey)
+            {
+                try
+                {
+                    using (HttpClient client = new HttpClient())
+                    {
+                        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
+                        var requestBody = new
+                        {
+                            model = "gpt-4o-mini", // 模型名称
+                            messages = new[]
+                            {
+                                new { role = "user", content = text }
+                            }
+                        };
+                        string json = Newtonsoft.Json.JsonConvert.SerializeObject(requestBody);
+                        var content = new StringContent(json, Encoding.UTF8, "application/json");
+                        WriteLog(LogLevel.Info, "发送请求..." + text);
+                        HttpResponseMessage response = await client.PostAsync(ApiUrl, content);
+                        string responseJson = await response.Content.ReadAsStringAsync();
+                        WriteLog(LogLevel.Info, "收到响应...");
+                        if (response.IsSuccessStatusCode)
+                        {
+                            var responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(responseJson);
+                            string answer = responseObject.choices[0].message.content;
+                            WriteLog(LogLevel.Info, $"回答: {answer}");
+                        }
+                        else
+                        {
+                            WriteLog(LogLevel.Error, $"错误: {responseJson}");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    WriteLog(LogLevel.Error, $"异常: {ex.Message}");
+                }
+            }
+        }
+    }
+    public class AESEncryption
+    {
+        public static string Encrypt(string plainText, byte[] Key/*256-bit*/, byte[] IV/*128-bit*/)
+        {
+            using (Aes aesAlg = Aes.Create())
+            {
+                aesAlg.Key = Key;
+                aesAlg.IV = IV;
+
+                ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
+
+                using (var msEncrypt = new System.IO.MemoryStream())
+                {
+                    using (var csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                    {
+                        using (var swEncrypt = new System.IO.StreamWriter(csEncrypt))
+                        {
+                            swEncrypt.Write(plainText);
+                        }
+                        return Convert.ToBase64String(msEncrypt.ToArray());
+                    }
+                }
+            }
+        }// 加密方法
+        public static string Decrypt(string cipherText, byte[] Key/*256-bit*/, byte[] IV/*128-bit*/)
+        {
+            using (Aes aesAlg = Aes.Create())
+            {
+                aesAlg.Key = Key;
+                aesAlg.IV = IV;
+
+                ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+
+                using (var msDecrypt = new System.IO.MemoryStream(Convert.FromBase64String(cipherText)))
+                {
+                    using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                    {
+                        using (var srDecrypt = new System.IO.StreamReader(csDecrypt))
+                        {
+                            return srDecrypt.ReadToEnd();
+                        }
+                    }
+                }
+            }
+        }// 解密方法
+    }
+    public class File
+    {
+        public enum AtOp
+        {
+            Readonly,
+            System,
+            Hidden,
+            Archive,
+        }
+        public void Attrib(string path, AtOp Key, bool Switch)
+        {
+            string key;
+            if (Switch)
+            {
+                key = "+";
+            }
+            else
+            {
+                key = "-";
+            }
+            if (Key == AtOp.Readonly)
+            {
+                string arg = $"{key}r";
+                Process process = new Process();
+                process.StartInfo.FileName = "attrib";
+                process.StartInfo.Arguments = $"{arg} {path}";
+                process.Start();
+                WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {process.Id}");
+                process.WaitForExit();
+                WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {process.ExitCode}");
+                process.Close();
+            }
+            if (Key == AtOp.System)
+            {
+                string arg = $"{key}s";
+                Process process = new Process();
+                process.StartInfo.FileName = "attrib";
+                process.StartInfo.Arguments = $"{arg} {path}";
+                process.Start();
+                WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {process.Id}");
+                process.WaitForExit();
+                WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {process.ExitCode}");
+                process.Close();
+            }
+            if (Key == AtOp.Hidden)
+            {
+                string arg = $"{key}h";
+                Process process = new Process();
+                process.StartInfo.FileName = "attrib";
+                process.StartInfo.Arguments = $"{arg} {path}";
+                process.Start();
+                WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {process.Id}");
+                process.WaitForExit();
+                WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {process.ExitCode}");
+                process.Close();
+            }
+            if (Key == AtOp.Archive)
+            {
+                string arg = $"{key}a";
+                Process process = new Process();
+                process.StartInfo.FileName = "attrib";
+                process.StartInfo.Arguments = $"{arg} {path}";
+                process.Start();
+                WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {process.Id}");
+                process.WaitForExit();
+                WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {process.ExitCode}");
+                process.Close();
+            }
         }
     }
 }
