@@ -250,3 +250,57 @@ NinjaMagisk.Registry.Write(string keyPath,string valueName,RegistryValueKind val
 **`valueType`:设定注册表项内数据类型**
 
 **`valueData`:设定注册表项内数据**
+
+### ChatGPT API引用
+
+> [!WARNING]
+> 此方法仅操作API发送请求,未对OpenAI公司旗下的任何其他组件、程序和人工智能产品做出任何修改,作者仅提供方法脚本,对使用者进行的任何操作均不承担任何责任,特此声明.
+
+```javascript
+NinjaMagisk.AI.ChatGPT.Chat(string text,string api);
+```
+**`text`: 向 `api.openai.com/v1/completions` 发送的请求**
+
+**`api`: OpenAI Platform 网站申请的API**
+
+### DeepSeek API引用
+
+> [!WARNING]
+> 此方法仅操作API发送请求,未对DeepSeek公司旗下的任何其他组件、程序和人工智能产品做出任何修改,作者仅提供方法脚本,对使用者进行的任何操作均不承担任何责任,特此声明.
+
+```JavaScript
+NinjaMagisk.AI.DeepSeek.Chat(string text,string api);
+```
+
+**`text`: 向 `api.deepseek.com/v1/completions` 发送的请求**
+
+**`api`: DeepSeek Platform 网站申请的API**
+
+### AES加密/解密
+
+> [!WARNING]
+> 请妥善保管好您的`IV`算法初始化向量和您的`Key`密钥.
+
+```javascript
+NinjaMagisk.AESEncryption.Decrypt(string cipherText, byte[] Key /*256-bit*/ , byte[] IV /*128-bit*/ );
+NinjaMagisk.AESEncryption.Encrypt(string cipherText, byte[] Key /*256-bit*/ , byte[] IV /*128-bit*/ );
+```
+**`cipherText`: 要加密/解密的文本**
+
+**`key`: AES加密/解密密钥(256位)**
+
+**`IV`: AES加密/解密初始化向量(128位)**
+
+### 文件属性修改
+
+```javascript
+NinjaMagisk.File.Attrib(string path, AtOp Key, bool Switch);
+```
+
+**`path`: 文件的路径**
+
+**`AtOp`(Attrib Option) 可用枚举:** `System`(设置文件为系统文件),`Hidden`(设置文件为受保护的隐藏文件),`Readonly`(设置文件为只读),`Archive`(设置文件为可存档文件).
+
+**`Key`: 文件属性**
+
+**`Switch`: 启用或取消属性:** 设置为`true`时,给出的命令为`+r`(示例);设置为`false`时,给出的命令为`-r`(示例.
