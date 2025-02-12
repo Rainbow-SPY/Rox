@@ -298,9 +298,6 @@
   <data name="_NEW_RM" xml:space="preserve">
     <value>创建ResourceManager实例</value>
   </data>
-  <data name="VC" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\VC.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="_FILE_WRITING" xml:space="preserve">
     <value>正在写入文件</value>
   </data>

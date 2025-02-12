@@ -665,16 +665,6 @@ namespace NinjaMagisk.Interface.Properties {
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
-        /// </summary>
-        public static byte[] VC {
-            get {
-                object obj = ResourceManager.GetObject("VC", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 1.2.0 的本地化字符串。
         /// </summary>
         public static string Version {

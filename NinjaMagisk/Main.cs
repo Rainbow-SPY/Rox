@@ -555,7 +555,7 @@ namespace NinjaMagisk
                     "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/resource/7-zip/7za.exe",
                     "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/resource/7-zip/7zxa.dll",
                     };
-                    if (!System.IO.File.Exists(Directory.GetCurrentDirectory() + "\\bin\\7zxa.dll"))
+                    if (!System.IO.File.Exists($"{Directory.GetCurrentDirectory()}\\bin\\7zxa.dll"))
                     {
                         WriteLog(LogLevel.Info, $"{_GET_URL} {url}");
                         Download(url);
@@ -568,42 +568,61 @@ namespace NinjaMagisk
                 }
                 if (module == Module.VC)
                 {
-                    // 获取当前正在执行的类库的程序集
-                    Assembly assembly = Assembly.GetExecutingAssembly();
-                    WriteLog(LogLevel.Info, $"{_GET_RM_NAME}");
-                    // 假设aria2c.exe是嵌入在"Namespace.Resources"命名空间中的
-                    string resourceName = "NinjaMagisk.Interface.Properties.Resources"; // 替换为你的资源路径
-
-                    // 创建 ResourceManager 实例
-                    ResourceManager rm = new ResourceManager(resourceName, assembly);
-                    WriteLog(LogLevel.Info, $"{_NEW_RM}");
-                    // 从资源中获取aria2c.exe文件的字节数据
-                    byte[] VC = (byte[])rm.GetObject("VC");
-                    WriteLog(LogLevel.Info, $"{_GET_RM_OBJ}");
-                    if (VC != null)
+                    string[] url =
                     {
-                        var temp = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\Temp";
-                        WriteLog(LogLevel.Info, $"{_GET_TEMP}: {temp}");
-                        string outputDirectory = temp;
-                        WriteLog(LogLevel.Info, $"{_GET_OUTPUT_DIRECTORY}: {outputDirectory}");
-                        // 检查并创建目录
-                        if (!Directory.Exists(outputDirectory))
-                        {
-                            Directory.CreateDirectory(outputDirectory);
-                            WriteLog(LogLevel.Info, $"{_CREATE_DIRECTORY}: {outputDirectory}");
-                        }
-                        // 保存文件路径
-                        string outputFilePath = Path.Combine(outputDirectory, "VC++.exe");
-                        WriteLog(LogLevel.Info, $"{_GET_OUTPUT_DIRECTORY}: {outputDirectory}");
-                        // 写入文件，确保保存为二进制数据
-                        System.IO.File.WriteAllBytes(outputFilePath, VC);
-                        WriteLog(LogLevel.Info, $"VC++.exe {_FILE_EXIST_PATH}: {outputFilePath}");
+                        "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/main/VC.zip.001",
+                        "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/main/VC.zip.002",
+                        "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/main/VC.zip.003",
+                        "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/main/VC.zip.004",
+                        "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/main/VC.zip.005",
+                        "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/main/VC.zip.006",
+                        "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/main/VC.zip.007",
+                        "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/main/VC.zip.008"
+                    };
+                    if (!System.IO.File.Exists($"{Directory.GetCurrentDirectory()}\\bin\\VC.zip.001"))
+                    {
+                        WriteLog(LogLevel.Info, $"{_GET_URL} {url}");
+                        Download(url);
                     }
                     else
                     {
-                        WriteLog(LogLevel.Error, $"{_RES_FILE_NOT_FIND}");
+                        WriteLog(LogLevel.Info, $"{_FILE_EXIST}: {Directory.GetCurrentDirectory()}\\bin\\VC.zip.001");
                     }
-
+                    Thread.Sleep(3000);
+                    if (System.IO.File.Exists($"{Directory.GetCurrentDirectory()}\\bin\\VC.zip.008"))
+                    {
+                        var temp = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\Temp";
+                        WriteLog(LogLevel.Info, $"{_GET_TEMP} {temp}");
+                        DownloadAssistant.ModuleDownloader(Module.zip);
+                        Process p = new Process();
+                        p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\7za";
+                        p.StartInfo.Arguments = $" x {Directory.GetCurrentDirectory()}\\bin\\VC.zip.001 -o{temp}";
+                        p.Start();
+                        p.WaitForExit();
+                        p.Close();
+                        if (p.ExitCode != 0)
+                        {
+                            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED} {p.ExitCode}");
+                        }
+                        else
+                        {
+                            WriteLog(LogLevel.Error, $"{_PROCESS_EXITED} {p.ExitCode}");
+                        }
+                        Process w = new Process();
+                        w.StartInfo.FileName = $"{temp}\\VC.exe";
+                        w.Start();
+                        w.WaitForExit();
+                        w.Close();
+                        if (w.ExitCode != 0)
+                        {
+                            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED} {w.ExitCode}");
+                        }
+                        else
+                        {
+                            WriteLog(LogLevel.Error, $"{_PROCESS_EXITED} {w.ExitCode}");
+                        }
+                        return;
+                    }
                 }
             }
             public static void ApplicationDownloader(App app)
@@ -914,6 +933,7 @@ namespace NinjaMagisk
                     }
                     p.Close();
                 }
+                return;
             }
             internal static void Download(string url)
             {
