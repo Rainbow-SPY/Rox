@@ -11,7 +11,7 @@ NinjaMagisk 是使用C# .NET Framework 4.7.2 编写, 使用 Microsoft Visual Stu
 6. [Windows系统相关配置](#6-Windows系统相关配置)
 7. [AI](#7-AI)
 8. [文件](#8-文件)
-
+9. [Windows身份验证](#9-Windows身份验证)
 
 ## 1. 全局引用方法
 
@@ -284,4 +284,14 @@ NinjaMagisk.File.Attrib(string path, AtOp Key, bool Switch);
 
 * **`Key`: 文件属性**
 
-* **`Switch`: 启用或取消属性:** 设置为`true`时,给出的命令为`+r`(示例);设置为`false`时,给出的命令为`-r`(示例.
+* **`Switch`: 启用或取消属性:** 设置为`true`时,给出的命令为`+r`(示例);设置为`false`时,给出的命令为`-r`(示例).
+
+## 9. Windows 身份验证
+
+```javascript
+NinjaMagisk.Windows.Authentication();
+```
+
+使用原生自带的Windows 安全中心身份验证UI验证用户名密码,暂不支持生物验证.
+
+当验证成功时,返回`true`,取消操作则为`false`.
