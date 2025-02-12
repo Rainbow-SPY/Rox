@@ -262,8 +262,8 @@ NinjaMagisk.AI.DeepSeek.Chat(string text,string api);
 > 请妥善保管好您的`IV`算法初始化向量和您的`Key`密钥.
 
 ```javascript
-NinjaMagisk.AESEncryption.Decrypt(string cipherText, byte[] Key /*256-bit*/ , byte[] IV /*128-bit*/ );
-NinjaMagisk.AESEncryption.Encrypt(string cipherText, byte[] Key /*256-bit*/ , byte[] IV /*128-bit*/ );
+NinjaMagisk.AESEncryption.Decrypt(string cipherText, byte[] Key /*256-bit*/ , byte[] IV /*128-bit*/ );//解密
+NinjaMagisk.AESEncryption.Encrypt(string cipherText, byte[] Key /*256-bit*/ , byte[] IV /*128-bit*/ );//加密
 ```
 * **`cipherText`: 要加密/解密的文本**
 
