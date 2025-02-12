@@ -121,7 +121,7 @@
     <value>English (United States)</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>1.2.0</value>
+    <value>1.5.0</value>
   </data>
   <data name="Author" xml:space="preserve">
     <value>Rainbow SPY</value>
@@ -317,5 +317,38 @@
   </data>
   <data name="_RETRY_DOWNLOAD" xml:space="preserve">
     <value>Retry download</value>
+  </data>
+  <data name="_LOGIN_ERROR_USER_OR_PASSWORD" xml:space="preserve">
+    <value>Login error or password</value>
+  </data>
+  <data name="_ENTER_CREDENTIALS" xml:space="preserve">
+    <value>Enter your credentials</value>
+  </data>
+  <data name="_LOGIN_VERIFY" xml:space="preserve">
+    <value>Verify your identity</value>
+  </data>
+  <data name="_LOGIN_VERIFY_ERROR" xml:space="preserve">
+    <value>Validation failed</value>
+  </data>
+  <data name="_ERROR_CODE" xml:space="preserve">
+    <value>Error code</value>
+  </data>
+  <data name="_SUCCESS_VERIFY" xml:space="preserve">
+    <value>Verification successful</value>
+  </data>
+  <data name="_CANCEL_OP" xml:space="preserve">
+    <value>User canceled action</value>
+  </data>
+  <data name="_UNKNOW_ERROR" xml:space="preserve">
+    <value>Unknown Error</value>
+  </data>
+  <data name="_ANSWER" xml:space="preserve">
+    <value>answer</value>
+  </data>
+  <data name="_SEND_REQUEST" xml:space="preserve">
+    <value>Send request</value>
+  </data>
+  <data name="_GET_RESPONSE" xml:space="preserve">
+    <value>Get Response</value>
   </data>
 </root>

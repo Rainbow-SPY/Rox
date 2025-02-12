@@ -88,6 +88,24 @@ namespace NinjaMagisk.Interface.Properties {
         }
         
         /// <summary>
+        ///   查找类似 answer 的本地化字符串。
+        /// </summary>
+        internal static string _ANSWER {
+            get {
+                return ResourceManager.GetString("_ANSWER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 User canceled action 的本地化字符串。
+        /// </summary>
+        internal static string _CANCEL_OP {
+            get {
+                return ResourceManager.GetString("_CANCEL_OP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Cannot activate Windows 的本地化字符串。
         /// </summary>
         internal static string _CANNOT_ACTIVE_WINDOWS {
@@ -286,11 +304,29 @@ namespace NinjaMagisk.Interface.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Enter your credentials 的本地化字符串。
+        /// </summary>
+        internal static string _ENTER_CREDENTIALS {
+            get {
+                return ResourceManager.GetString("_ENTER_CREDENTIALS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Error 的本地化字符串。
         /// </summary>
         internal static string _ERROR {
             get {
                 return ResourceManager.GetString("_ERROR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Error code 的本地化字符串。
+        /// </summary>
+        internal static string _ERROR_CODE {
+            get {
+                return ResourceManager.GetString("_ERROR_CODE", resourceCulture);
             }
         }
         
@@ -439,6 +475,15 @@ namespace NinjaMagisk.Interface.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Get Response 的本地化字符串。
+        /// </summary>
+        internal static string _GET_RESPONSE {
+            get {
+                return ResourceManager.GetString("_GET_RESPONSE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Get project resource manifest 的本地化字符串。
         /// </summary>
         internal static string _GET_RM_NAME {
@@ -480,6 +525,33 @@ namespace NinjaMagisk.Interface.Properties {
         internal static string _GET_URL {
             get {
                 return ResourceManager.GetString("_GET_URL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Login error or password 的本地化字符串。
+        /// </summary>
+        internal static string _LOGIN_ERROR_USER_OR_PASSWORD {
+            get {
+                return ResourceManager.GetString("_LOGIN_ERROR_USER_OR_PASSWORD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Verify your identity 的本地化字符串。
+        /// </summary>
+        internal static string _LOGIN_VERIFY {
+            get {
+                return ResourceManager.GetString("_LOGIN_VERIFY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Validation failed 的本地化字符串。
+        /// </summary>
+        internal static string _LOGIN_VERIFY_ERROR {
+            get {
+                return ResourceManager.GetString("_LOGIN_VERIFY_ERROR", resourceCulture);
             }
         }
         
@@ -565,6 +637,24 @@ namespace NinjaMagisk.Interface.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Send request 的本地化字符串。
+        /// </summary>
+        internal static string _SEND_REQUEST {
+            get {
+                return ResourceManager.GetString("_SEND_REQUEST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Verification successful 的本地化字符串。
+        /// </summary>
+        internal static string _SUCCESS_VERIFY {
+            get {
+                return ResourceManager.GetString("_SUCCESS_VERIFY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Registry successfully written 的本地化字符串。
         /// </summary>
         internal static string _SUCESS_WRITE_REGISTRY {
@@ -579,6 +669,15 @@ namespace NinjaMagisk.Interface.Properties {
         internal static string _TIPS {
             get {
                 return ResourceManager.GetString("_TIPS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Unknown Error 的本地化字符串。
+        /// </summary>
+        internal static string _UNKNOW_ERROR {
+            get {
+                return ResourceManager.GetString("_UNKNOW_ERROR", resourceCulture);
             }
         }
         
@@ -655,7 +754,7 @@ namespace NinjaMagisk.Interface.Properties {
         }
         
         /// <summary>
-        ///   查找类似 1.2.0 的本地化字符串。
+        ///   查找类似 1.5.0 的本地化字符串。
         /// </summary>
         internal static string Version {
             get {

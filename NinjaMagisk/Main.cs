@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Resources;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -305,6 +306,17 @@ namespace NinjaMagisk
         internal static readonly string _GET_FILE = GetLocalizedString("_GET_FILE");
         internal static readonly string _WAIT_DOWNLOADING = GetLocalizedString("_WAIT_DOWNLOADING");
         internal static readonly string _RETRY_DOWNLOAD = GetLocalizedString("_RETRY_DOWNLOAD");
+        internal static readonly string _ERROR_CODE = GetLocalizedString("_ERROR_CODE");
+        internal static readonly string _LOGIN_ERROR_USER_OR_PASSWORD = GetLocalizedString("_LOGIN_ERROR_USER_OR_PASSWORD");
+        internal static readonly string _LOGIN_VERIFY = GetLocalizedString("_LOGIN_VERIFY");
+        internal static readonly string _CANCEL_OP = GetLocalizedString("_CANCEL_OP");
+        internal static readonly string _UNKNOW_ERROR = GetLocalizedString("_UNKNOW_ERROR");
+        internal static readonly string _GET_RESPONSE = GetLocalizedString("_GET_RESPONSE");
+        internal static readonly string _ANSWER = GetLocalizedString("_ANSWER");
+        internal static readonly string _SEND_REQUEST = GetLocalizedString("_SEND_REQUEST");
+        internal static readonly string _LOGIN_VERIFY_ERROR = GetLocalizedString("_LOGIN_VERIFY_ERROR");
+        internal static readonly string _ENTER_CREDENTIALS = GetLocalizedString("_ENTER_CREDENTIALS");
+        internal static readonly string _SUCCESS_VERIFY = GetLocalizedString("_SUCCESS_VERITY");
         //internal static string lang = System.Globalization.CultureInfo.InstalledUICulture.Name.ToString();
         internal static string GetLocalizedString(string key)
         {
@@ -596,10 +608,9 @@ namespace NinjaMagisk
                         DownloadAssistant.ModuleDownloader(Module.zip);
                         Process p = new Process();
                         p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\7za";
-                        p.StartInfo.Arguments = $" x {Directory.GetCurrentDirectory()}\\bin\\VC.zip.001 -o{temp}";
+                        p.StartInfo.Arguments = $" x -y {Directory.GetCurrentDirectory()}\\bin\\VC.zip.001 -o{temp}";
                         p.Start();
                         p.WaitForExit();
-                        p.Close();
                         if (p.ExitCode != 0)
                         {
                             WriteLog(LogLevel.Info, $"{_PROCESS_EXITED} {p.ExitCode}");
@@ -608,11 +619,11 @@ namespace NinjaMagisk
                         {
                             WriteLog(LogLevel.Error, $"{_PROCESS_EXITED} {p.ExitCode}");
                         }
+                        p.Close();
                         Process w = new Process();
                         w.StartInfo.FileName = $"{temp}\\VC.exe";
                         w.Start();
                         w.WaitForExit();
-                        w.Close();
                         if (w.ExitCode != 0)
                         {
                             WriteLog(LogLevel.Info, $"{_PROCESS_EXITED} {w.ExitCode}");
@@ -621,6 +632,7 @@ namespace NinjaMagisk
                         {
                             WriteLog(LogLevel.Error, $"{_PROCESS_EXITED} {w.ExitCode}");
                         }
+                        w.Close();
                         return;
                     }
                 }
@@ -1086,24 +1098,6 @@ namespace NinjaMagisk
     }
     public class Windows
     {
-        //public enum AppxPackages
-        //{
-        //    MailAndCalendar,  // 邮件和日历
-        //    Xbox,             // Xbox
-        //    Camera,           // 相机
-        //    GetStarted,       // 使用技巧
-        //    Skype,            // Skype
-        //    People,           // 人脉
-        //    StickyNotes,      // Sticky Notes
-        //    OneNote,          // OneNote
-        //    Solitaire,        // Microsoft Solitaire Collection
-        //    Paint3D,          // 画图3D
-        //    MixedReality,     // 混合现实门户
-        //    GetHelp,          // 获取帮助
-        //    GrooveMusic,      // Groove音乐
-        //    Maps,             // 地图
-        //    Cortana           // Cortana
-        //}
         public class Hibernate
         {
             public static void Enable()
@@ -1331,6 +1325,149 @@ namespace NinjaMagisk
                 WriteLog(LogLevel.Error, $"{_CANNOT_ACTIVE_WINDOWS}: {exception}");
             }
         }
+        #region Windows身份验证
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        private struct CREDUI_INFO
+        {
+            public int cbSize;
+            public IntPtr hwndParent;
+            public string pszMessageText;
+            public string pszCaptionText;
+            public IntPtr hbmBanner;
+        }
+        [DllImport("ole32.dll", CharSet = CharSet.Unicode)]
+        private static extern void CoTaskMemFree(IntPtr ptr);
+        [DllImport("credui.dll", CharSet = CharSet.Unicode)]
+        private static extern int CredUIPromptForWindowsCredentials(
+                ref CREDUI_INFO pUiInfo,
+                int dwAuthError,
+                ref uint pulAuthPackage,
+                IntPtr pvInAuthBuffer,
+                uint ulInAuthBufferSize,
+                out IntPtr ppvOutAuthBuffer,
+                out uint pulOutAuthBufferSize,
+                ref bool pfSave,
+                int dwFlags);
+        [DllImport("credui.dll", CharSet = CharSet.Unicode)]
+        private static extern bool CredUnPackAuthenticationBuffer(
+            int dwFlags,
+            IntPtr pAuthBuffer,
+            uint cbAuthBuffer,
+            StringBuilder pszUserName,
+            ref int pcchMaxUserName,
+            StringBuilder pszDomainName,
+            ref int pcchMaxDomainName,
+            StringBuilder pszPassword,
+            ref int pcchMaxPassword);
+        // 导入 LogonUser API
+        [DllImport("advapi32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        private static extern bool LogonUser(
+            string lpszUsername,
+            string lpszDomain,
+            string lpszPassword,
+            int dwLogonType,
+            int dwLogonProvider,
+            out IntPtr phToken);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool CloseHandle(IntPtr hObject);
+        // 验证用户名和密码
+        public static bool Authentication()
+        {
+            CREDUI_INFO credUI = new CREDUI_INFO
+            {
+                cbSize = Marshal.SizeOf(typeof(CREDUI_INFO)),
+                pszCaptionText = _LOGIN_VERIFY,
+                pszMessageText = _ENTER_CREDENTIALS,
+                hwndParent = IntPtr.Zero,
+                hbmBanner = IntPtr.Zero
+            };
+            bool isAuthenticated = false;
+            bool userCancelled = false;
+            do
+            {
+                uint authPackage = 0;
+                IntPtr outCredBuffer;
+                uint outCredBufferSize;
+                bool save = false;
+
+                int result = CredUIPromptForWindowsCredentials(
+                    ref credUI,
+                    0,
+                    ref authPackage,
+                    IntPtr.Zero,
+                    0,
+                    out outCredBuffer,
+                    out outCredBufferSize,
+                    ref save,
+                    0x1); // CREDUIWIN_GENERIC
+
+                if (result == 0)
+                {
+                    int maxUserName = 100;
+                    int maxDomainName = 100;
+                    int maxPassword = 100;
+                    StringBuilder userName = new StringBuilder(maxUserName);
+                    StringBuilder domainName = new StringBuilder(maxDomainName);
+                    StringBuilder password = new StringBuilder(maxPassword);
+
+                    if (CredUnPackAuthenticationBuffer(0, outCredBuffer, outCredBufferSize, userName, ref maxUserName, domainName, ref maxDomainName, password, ref maxPassword))
+                    {
+                        // 验证用户名和密码
+                        IntPtr userToken;
+                        bool isValid = LogonUser(
+                            userName.ToString(),
+                            domainName.ToString(),
+                            password.ToString(),
+                            2, // LOGON32_LOGON_INTERACTIVE
+                            0, // LOGON32_PROVIDER_DEFAULT
+                            out userToken);
+                        string ExtraMessage;
+                        if (isValid)
+                        {
+                            isAuthenticated = true;
+                            CloseHandle(userToken);
+                            MessageBox.Show(_SUCCESS_VERIFY, _TIPS, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            // 验证失败，显示错误提示
+                            int errorCode = Marshal.GetLastWin32Error();
+                            if (errorCode == 1326)
+                            {
+                                ExtraMessage = _LOGIN_ERROR_USER_OR_PASSWORD;
+                            }
+                            else
+                            {
+                                ExtraMessage = _UNKNOW_ERROR;
+                            }
+                            MessageBox.Show($"{_LOGIN_VERIFY_ERROR}（{_ERROR_CODE}：{errorCode} {ExtraMessage}）", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        // 调用验证方法
+                    }
+                    CoTaskMemFree(outCredBuffer);
+                }
+                else
+                {
+                    userCancelled = true;
+                }
+            }
+            while (!isAuthenticated && !userCancelled); // 未成功且未取消时循环
+            if (isAuthenticated)
+            {
+                // 执行后续操作（例如打开受保护的功能）
+                WriteLog(LogLevel.Info, _SUCCESS_VERIFY);
+                return true;
+            }
+            else
+            {
+                WriteLog(LogLevel.Info, _CANCEL_OP);
+                return false;
+            }
+        }//Windows安全中心身份验证
+        #endregion
     }
     public class Registry
     {
@@ -1391,25 +1528,25 @@ namespace NinjaMagisk
                         };
                         string json = Newtonsoft.Json.JsonConvert.SerializeObject(requestBody);
                         var content = new StringContent(json, Encoding.UTF8, "application/json");
-                        WriteLog(LogLevel.Info, "发送请求..." + text);
+                        WriteLog(LogLevel.Info, $"{_SEND_REQUEST}...{text}");
                         HttpResponseMessage response = await client.PostAsync(ApiUrl, content);
                         string responseJson = await response.Content.ReadAsStringAsync();
-                        WriteLog(LogLevel.Info, "收到响应...");
+                        WriteLog(LogLevel.Info, _GET_RESPONSE);
                         if (response.IsSuccessStatusCode)
                         {
                             var responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(responseJson);
                             string answer = responseObject.choices[0].message.content;
-                            WriteLog(LogLevel.Info, $"回答: {answer}");
+                            WriteLog(LogLevel.Info, $"{_ANSWER}: {answer}");
                         }
                         else
                         {
-                            WriteLog(LogLevel.Error, $"错误: {responseJson}");
+                            WriteLog(LogLevel.Error, $"{_ERROR}: {responseJson}");
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    WriteLog(LogLevel.Error, $"异常: {ex.Message}");
+                    WriteLog(LogLevel.Error, $"{_ERROR}: {ex.Message}");
                 }
             }
         }
@@ -1435,25 +1572,25 @@ namespace NinjaMagisk
                         };
                         string json = Newtonsoft.Json.JsonConvert.SerializeObject(requestBody);
                         var content = new StringContent(json, Encoding.UTF8, "application/json");
-                        WriteLog(LogLevel.Info, "发送请求..." + text);
+                        WriteLog(LogLevel.Info, $"{_SEND_REQUEST}...{text}");
                         HttpResponseMessage response = await client.PostAsync(ApiUrl, content);
                         string responseJson = await response.Content.ReadAsStringAsync();
-                        WriteLog(LogLevel.Info, "收到响应...");
+                        WriteLog(LogLevel.Info, _GET_RESPONSE);
                         if (response.IsSuccessStatusCode)
                         {
                             var responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(responseJson);
                             string answer = responseObject.choices[0].message.content;
-                            WriteLog(LogLevel.Info, $"回答: {answer}");
+                            WriteLog(LogLevel.Info, $"{_ANSWER}: {answer}");
                         }
                         else
                         {
-                            WriteLog(LogLevel.Error, $"错误: {responseJson}");
+                            WriteLog(LogLevel.Error, $"{_ERROR} : {responseJson}");
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    WriteLog(LogLevel.Error, $"异常: {ex.Message}");
+                    WriteLog(LogLevel.Error, $"{_ERROR} : {ex.Message}");
                 }
             }
         }
