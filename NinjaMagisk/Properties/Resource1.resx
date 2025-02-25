@@ -351,4 +351,22 @@
   <data name="_GET_RESPONSE" xml:space="preserve">
     <value>Get Response</value>
   </data>
+  <data name="_LATEST_VERSION" xml:space="preserve">
+    <value>Latest version</value>
+  </data>
+  <data name="_UNSUPPORT_PLATFORM" xml:space="preserve">
+    <value>Unsupported platforms</value>
+  </data>
+  <data name="_JSON_PARSING_FAILED" xml:space="preserve">
+    <value>Parsing JSON failed</value>
+  </data>
+  <data name="_NEW_VERSION_AVAILABLE" xml:space="preserve">
+    <value>New version available</value>
+  </data>
+  <data name="_NON_NEW_VER" xml:space="preserve">
+    <value>The current version is the latest.</value>
+  </data>
+  <data name="_CURRENT_VER" xml:space="preserve">
+    <value>The current version</value>
+  </data>
 </root>

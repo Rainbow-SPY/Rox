@@ -12,6 +12,7 @@ NinjaMagisk 是使用C# .NET Framework 4.7.2 编写, 使用 Microsoft Visual Stu
 7. [AI](#7-AI)
 8. [文件](#8-文件)
 9. [Windows身份验证](#9-Windows身份验证)
+10. [检查更新模块](#10-检查更新模块)
 
 ## 1. 全局引用方法
 
@@ -262,13 +263,11 @@ NinjaMagisk.AI.DeepSeek.Chat(string text,string api);
 > 请妥善保管好您的`IV`算法初始化向量和您的`Key`密钥.
 
 ```javascript
-NinjaMagisk.AESEncryption.Decrypt(string cipherText, byte[] Key /*256-bit*/ , byte[] IV /*128-bit*/ );//解密
-NinjaMagisk.AESEncryption.Encrypt(string cipherText, byte[] Key /*256-bit*/ , byte[] IV /*128-bit*/ );//加密
+NinjaMagisk.File.AESEncryption.Decrypt(string cipherText, byte[] Key /*256-bit*/ , byte[] IV /*128-bit*/ );//解密
+NinjaMagisk.File.AESEncryption.Encrypt(string cipherText, byte[] Key /*256-bit*/ , byte[] IV /*128-bit*/ );//加密
 ```
 * **`cipherText`: 要加密/解密的文本**
-
 * **`key`: AES加密/解密密钥(256位)**
-
 * **`IV`: AES加密/解密初始化向量(128位)**
 <br>
 
@@ -279,12 +278,29 @@ NinjaMagisk.File.Attrib(string path, AtOp Key, bool Switch);
 ```
 
 * **`path`: 文件的路径**
-
 * **`AtOp`(Attrib Option) 可用枚举:** `System`(设置文件为系统文件),`Hidden`(设置文件为受保护的隐藏文件),`Readonly`(设置文件为只读),`Archive`(设置文件为可存档文件).
-
 * **`Key`: 文件属性**
-
 * **`Switch`: 启用或取消属性:** 设置为`true`时,给出的命令为`+r`(示例);设置为`false`时,给出的命令为`-r`(示例).
+
+### MD5哈希值验证
+```javascript
+NinjaMagisk.File.CheckFileHash(string filePath, string expectedMD5);
+```
+
+* **`filePath`: 文件路径**
+* **`expectedMD5`: 期望的MD5哈希值**
+* **返回值: 文件的MD5哈希值**
+* **返回类型: `bool`**
+* **返回值: 文件的MD5哈希值与期望的MD5哈希值相同时,返回`true`,反之则为`false`.**
+
+### 获取文件哈希值
+```javascript
+NinjaMagisk.File.CalculateMD5(string filePath);
+```
+
+* **`filePath`: 文件路径**
+* **返回值: 文件的MD5哈希值**
+* **返回类型: `string`**
 
 ## 9. Windows 身份验证
 
@@ -295,3 +311,60 @@ NinjaMagisk.Windows.Authentication();
 使用原生自带的Windows 安全中心身份验证UI验证用户名密码,暂不支持生物验证.
 
 当验证成功时,返回`true`,取消操作则为`false`.
+
+## 10. 检查更新模块
+
+### 检查更新
+```javascript
+await NinjaMagisk.Update.CheckUpdate(string CheckUpdateUrl,Platform platform);
+```
+
+* **`CheckUpdateUrl`: 检查更新的API链接**
+* **`Platform`可用枚举:** `Github`,`Gitee`.
+
+ Github API规定的Release最新发行版查询地址为`https://api/github.com/repos/{用户名}/{仓库}/releases/latest`
+
+ Gitee API规定的Release最新发行版查询地址为`https://gitee.com/api/v5/repos/{用户名}/{仓库}/releases/latest`
+
+ 返回的json中包含了最新发行版的信息，包括版本号、发布时间、下载地址等 例如,最新的版本号为 "tag_name": "v1.4","name": "新版本发布...."
+
+ 当检测出新版本时,会返回`true`,反之则为`false`,当Json解析错误时也会返回`false`.
+ ___
+ ### 自动更新
+ ```javascript
+
+ ```
+
+
+
+该方法用于自动更新程序,通过云端下载更新文件并自动更新
+           
+规定 更新文件为 `Update_{version}.zip` ,并且在压缩包内包含了 `update.ini` 和 `filehash.ini` 文件,以及更新文件     
+* **\{version}** 为版本号
+```
+ 压缩包文件目录:  
+    Update_{version}.zip       // 更新文件压缩包    
+    ├── update.ini             // 更新信息    
+    ├── filehash.ini           // 文件哈希值        
+    └── #(update files)        // 更新文件 
+```
+
+ 规定 ``update.ini`` 规格:
+```
+    1 > version = ""                              // 版本号     
+    2 > type = [Release / HotFix / bugFix]        // 更新类型       
+    3 > description = ""                          // 更新说明        
+    4 > updatefilecount = ""                      // 更新文件数量       
+    5 > hashurl = ""                              // 哈希值文件下载地址       
+    6 > hash = ""                                 // 文件数量 
+```
+ 规定 ``filehash.ini`` 规格:
+```
+    > {fileName},{fileHash}         
+示例: 
+    1 > Library.dll,4CC1ED4D70DFC8A7455822EC8339D387
+    2 > Library.pdb,FDFA7596701DCC2E96D462DBC35E7823
+```           
+      
+
+

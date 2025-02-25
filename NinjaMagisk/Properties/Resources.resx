@@ -355,4 +355,22 @@
   <data name="_GET_RESPONSE" xml:space="preserve">
     <value>收到响应</value>
   </data>
+  <data name="_LATEST_VERSION" xml:space="preserve">
+    <value>最新版本</value>
+  </data>
+  <data name="_UNSUPPORT_PLATFORM" xml:space="preserve">
+    <value>不支持的平台</value>
+  </data>
+  <data name="_JSON_PARSING_FAILED" xml:space="preserve">
+    <value>解析 Json 失败</value>
+  </data>
+  <data name="_NEW_VERSION_AVAILABLE" xml:space="preserve">
+    <value>新版本可用</value>
+  </data>
+  <data name="_NON_NEW_VER" xml:space="preserve">
+    <value>当前版本为最新版本</value>
+  </data>
+  <data name="_CURRENT_VER" xml:space="preserve">
+    <value>当前版本</value>
+  </data>
 </root>

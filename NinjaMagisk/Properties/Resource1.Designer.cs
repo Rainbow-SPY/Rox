@@ -205,6 +205,15 @@ namespace NinjaMagisk.Interface.Properties {
         }
         
         /// <summary>
+        ///   查找类似 The current version 的本地化字符串。
+        /// </summary>
+        internal static string _CURRENT_VER {
+            get {
+                return ResourceManager.GetString("_CURRENT_VER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Disable aria2c log output 的本地化字符串。
         /// </summary>
         internal static string _DISABLE_ARIA2C_LOG_OUTPUT {
@@ -529,6 +538,24 @@ namespace NinjaMagisk.Interface.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Parsing JSON failed 的本地化字符串。
+        /// </summary>
+        internal static string _JSON_PARSING_FAILED {
+            get {
+                return ResourceManager.GetString("_JSON_PARSING_FAILED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Latest version 的本地化字符串。
+        /// </summary>
+        internal static string _LATEST_VERSION {
+            get {
+                return ResourceManager.GetString("_LATEST_VERSION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Login error or password 的本地化字符串。
         /// </summary>
         internal static string _LOGIN_ERROR_USER_OR_PASSWORD {
@@ -561,6 +588,24 @@ namespace NinjaMagisk.Interface.Properties {
         internal static string _NEW_RM {
             get {
                 return ResourceManager.GetString("_NEW_RM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 New version available 的本地化字符串。
+        /// </summary>
+        internal static string _NEW_VERSION_AVAILABLE {
+            get {
+                return ResourceManager.GetString("_NEW_VERSION_AVAILABLE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The current version is the latest. 的本地化字符串。
+        /// </summary>
+        internal static string _NON_NEW_VER {
+            get {
+                return ResourceManager.GetString("_NON_NEW_VER", resourceCulture);
             }
         }
         
@@ -678,6 +723,15 @@ namespace NinjaMagisk.Interface.Properties {
         internal static string _UNKNOW_ERROR {
             get {
                 return ResourceManager.GetString("_UNKNOW_ERROR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Unsupported platforms 的本地化字符串。
+        /// </summary>
+        internal static string _UNSUPPORT_PLATFORM {
+            get {
+                return ResourceManager.GetString("_UNSUPPORT_PLATFORM", resourceCulture);
             }
         }
         

@@ -205,6 +205,15 @@ namespace NinjaMagisk.Interface.Properties {
         }
         
         /// <summary>
+        ///   查找类似 当前版本 的本地化字符串。
+        /// </summary>
+        public static string _CURRENT_VER {
+            get {
+                return ResourceManager.GetString("_CURRENT_VER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 禁用aria2c日志输出 的本地化字符串。
         /// </summary>
         public static string _DISABLE_ARIA2C_LOG_OUTPUT {
@@ -529,6 +538,24 @@ namespace NinjaMagisk.Interface.Properties {
         }
         
         /// <summary>
+        ///   查找类似 解析 Json 失败 的本地化字符串。
+        /// </summary>
+        public static string _JSON_PARSING_FAILED {
+            get {
+                return ResourceManager.GetString("_JSON_PARSING_FAILED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 最新版本 的本地化字符串。
+        /// </summary>
+        public static string _LATEST_VERSION {
+            get {
+                return ResourceManager.GetString("_LATEST_VERSION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 登录失败: 用户名未知或密码错误。 的本地化字符串。
         /// </summary>
         public static string _LOGIN_ERROR_USER_OR_PASSWORD {
@@ -561,6 +588,24 @@ namespace NinjaMagisk.Interface.Properties {
         public static string _NEW_RM {
             get {
                 return ResourceManager.GetString("_NEW_RM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 新版本可用 的本地化字符串。
+        /// </summary>
+        public static string _NEW_VERSION_AVAILABLE {
+            get {
+                return ResourceManager.GetString("_NEW_VERSION_AVAILABLE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 当前版本为最新版本 的本地化字符串。
+        /// </summary>
+        public static string _NON_NEW_VER {
+            get {
+                return ResourceManager.GetString("_NON_NEW_VER", resourceCulture);
             }
         }
         
@@ -678,6 +723,15 @@ namespace NinjaMagisk.Interface.Properties {
         public static string _UNKNOW_ERROR {
             get {
                 return ResourceManager.GetString("_UNKNOW_ERROR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 不支持的平台 的本地化字符串。
+        /// </summary>
+        public static string _UNSUPPORT_PLATFORM {
+            get {
+                return ResourceManager.GetString("_UNSUPPORT_PLATFORM", resourceCulture);
             }
         }
         
