@@ -620,11 +620,11 @@ namespace NinjaMagisk
                         p.WaitForExit();
                         if (p.ExitCode != 0)
                         {
-                            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED} {p.ExitCode}");
+                            WriteLog(LogLevel.Error, $"{_PROCESS_EXITED} {p.ExitCode}");
                         }
                         else
                         {
-                            WriteLog(LogLevel.Error, $"{_PROCESS_EXITED} {p.ExitCode}");
+                            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED} {p.ExitCode}");
                         }
                         p.Close();
                         Process w = new Process();
@@ -633,11 +633,11 @@ namespace NinjaMagisk
                         w.WaitForExit();
                         if (w.ExitCode != 0)
                         {
-                            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED} {w.ExitCode}");
+                            WriteLog(LogLevel.Error, $"{_PROCESS_EXITED} {w.ExitCode}");
                         }
                         else
                         {
-                            WriteLog(LogLevel.Error, $"{_PROCESS_EXITED} {w.ExitCode}");
+                            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED} {w.ExitCode}");
                         }
                         w.Close();
                         return;
@@ -2089,6 +2089,22 @@ Update_{ version}.zip          // 更新文件压缩包
             }
             process.Close();
             return false;
+        }
+    }
+    public class Config
+    {
+        public static string ReadConfig(string iniPath,string HeadText)
+        {
+            string[] Texts = System.IO.File.ReadAllLines(iniPath);
+            foreach (string Text in Texts)
+            {
+                if (Text.Contains(HeadText))
+                {
+                    string[] part2 = Text.Split('=');
+                    return part2[1].Trim();
+                }
+            }
+            return null;
         }
     }
 }
