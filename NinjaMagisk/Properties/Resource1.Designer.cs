@@ -88,6 +88,15 @@ namespace NinjaMagisk.Interface.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Add new line 的本地化字符串。
+        /// </summary>
+        internal static string _ADD_NEW_LINE {
+            get {
+                return ResourceManager.GetString("_ADD_NEW_LINE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 answer 的本地化字符串。
         /// </summary>
         internal static string _ANSWER {
@@ -646,6 +655,15 @@ namespace NinjaMagisk.Interface.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Read file 的本地化字符串。
+        /// </summary>
+        internal static string _READ_FILE {
+            get {
+                return ResourceManager.GetString("_READ_FILE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Regex match file 的本地化字符串。
         /// </summary>
         internal static string _REGEX_GET_FILE {
@@ -736,6 +754,15 @@ namespace NinjaMagisk.Interface.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Update line string 的本地化字符串。
+        /// </summary>
+        internal static string _UPDATE_LINE {
+            get {
+                return ResourceManager.GetString("_UPDATE_LINE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Wait downloading complete 的本地化字符串。
         /// </summary>
         internal static string _WAIT_DOWNLOADING {
@@ -750,6 +777,15 @@ namespace NinjaMagisk.Interface.Properties {
         internal static string _WARNING {
             get {
                 return ResourceManager.GetString("_WARNING", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Write file 的本地化字符串。
+        /// </summary>
+        internal static string _WRITE_FILE {
+            get {
+                return ResourceManager.GetString("_WRITE_FILE", resourceCulture);
             }
         }
         

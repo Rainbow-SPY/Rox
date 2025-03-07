@@ -373,4 +373,16 @@
   <data name="_CURRENT_VER" xml:space="preserve">
     <value>当前版本</value>
   </data>
+  <data name="_ADD_NEW_LINE" xml:space="preserve">
+    <value>添加新行</value>
+  </data>
+  <data name="_UPDATE_LINE" xml:space="preserve">
+    <value>更新行值</value>
+  </data>
+  <data name="_READ_FILE" xml:space="preserve">
+    <value>读取文件</value>
+  </data>
+  <data name="_WRITE_FILE" xml:space="preserve">
+    <value>写入文件</value>
+  </data>
 </root>

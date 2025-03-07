@@ -369,4 +369,16 @@
   <data name="_CURRENT_VER" xml:space="preserve">
     <value>The current version</value>
   </data>
+  <data name="_ADD_NEW_LINE" xml:space="preserve">
+    <value>Add new line</value>
+  </data>
+  <data name="_UPDATE_LINE" xml:space="preserve">
+    <value>Update line string</value>
+  </data>
+  <data name="_READ_FILE" xml:space="preserve">
+    <value>Read file</value>
+  </data>
+  <data name="_WRITE_FILE" xml:space="preserve">
+    <value>Write file</value>
+  </data>
 </root>

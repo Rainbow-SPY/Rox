@@ -1,8 +1,9 @@
 ﻿using Microsoft.Win32;
-using Newtonsoft.Json.Linq;
 using NinjaMagisk.Interface.Properties;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -16,16 +17,30 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static NinjaMagisk.LocalizedString;
 using static NinjaMagisk.LogLibraries;
-using static NinjaMagisk.Software;
+using static NinjaMagisk.Text;
 namespace NinjaMagisk
 {
+    /// <summary>
+    /// 根据语言获取资源文件
+    /// </summary>
     internal class ResourceHelper
     {
+        /// <summary>
+        /// 判断是否为简体中文
+        /// </summary>
+        /// <param name="lang"></param>
+        /// <returns>语言字符串</returns>
         private static bool IsChineseSimple(string lang)
         {
             return lang == "zh-CN" || lang == "zh-CHS";
         }
+        /// <summary>
+        /// 获取资源管理器
+        /// </summary>
+        /// <param name="lang"></param>
+        /// <returns>指定语言文件的资源管理器</returns>
         private static ResourceManager GetResourceManager(string lang)
         {
             if (IsChineseSimple(lang))
@@ -39,6 +54,12 @@ namespace NinjaMagisk
                 return new ResourceManager("NinjaMagisk.Interface.Properties.Resource1", typeof(Resource1).Assembly);
             }
         }
+        /// <summary>
+        /// 获取字符串资源
+        /// </summary>
+        /// <param name="key">自定义字段</param>
+        /// <param name="lang">语言代码</param>
+        /// <returns>指定语言文件中的字符串</returns>
         internal static string GetString(string key, string lang)
         {
             try
@@ -55,31 +76,87 @@ namespace NinjaMagisk
             }
         }
     }
+    /// <summary>
+    /// 日志类库,在控制台输出日志并记录到文件
+    /// </summary>
     public class LogLibraries
     {
         public static Action<LogLevel, string> LogToUi { get; set; }
+        /// <summary>
+        /// 日志等级,分为Info,Error,Warning
+        /// </summary>
         public enum LogLevel
         {
+            /// <summary>
+            /// 信息
+            /// </summary>
             Info,
+            /// <summary>
+            /// 错误
+            /// </summary>
             Error,
+            /// <summary>
+            /// 警告
+            /// </summary>
             Warning
         }
+        /// <summary>
+        /// 日志类型,分为Form,Thread,Process,Service,Task,System,PowerShell,Registry,Network
+        /// </summary>
         public enum LogKind
         {
+            /// <summary>
+            /// 窗体  
+            /// </summary>
             Form,
+            /// <summary>
+            /// 线程
+            /// </summary>
             Thread,
+            /// <summary>
+            /// 进程
+            /// </summary>
             Process,
+            /// <summary>
+            /// 服务
+            /// </summary>
             Service,
+            /// <summary>
+            /// 任务
+            /// </summary>
             Task,
+            /// <summary>
+            /// 系统
+            /// </summary>
             System,
+            /// <summary>
+            /// PowerShell
+            /// </summary>
             PowerShell,
+            /// <summary>
+            /// 注册表
+            /// </summary>
             Registry,
+            /// <summary>
+            /// 网络
+            /// </summary>
             Network,
         }
         // 定义日志文件名和路径（当前目录下的 Assistant.log 文件）
+        /// <summary>
+        /// 日志文件名
+        /// </summary>
         private static readonly string logFileName = "Assistant.log";
+        /// <summary>
+        /// 日志文件路径
+        /// </summary>
         private static readonly string logFilePath = Path.Combine(Directory.GetCurrentDirectory(), logFileName);
-        //
+        /// <summary>
+        /// 根据日志等级和日志类型向文件写入日志,并在控制台输出日志,并记录到文件
+        /// </summary>
+        /// <param name="logLevel">日志等级</param>
+        /// <param name="logKind">日志类型</param>
+        /// <param name="message">消息</param>
         public static void WriteLog(LogLevel logLevel, LogKind logKind, string message)
         {
             // 在写日志之前先检查并处理文件重命名
@@ -94,7 +171,6 @@ namespace NinjaMagisk
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.Write($"{message}\n");
                 Console.ResetColor();
-
             }
             else if (logLevel == LogLevel.Error)
             {
@@ -127,6 +203,11 @@ namespace NinjaMagisk
             // 记录日志到文件
             LogToFile(logLevel, message);
         }
+        /// <summary>
+        /// 根据日志等级向文件写入日志,并在控制台输出日志,并记录到文件
+        /// </summary>
+        /// <param name="logLevel">日志等级</param>
+        /// <param name="message">消息</param>
         public static void WriteLog(LogLevel logLevel, string message)
         {
             // 在写日志之前先检查并处理文件
@@ -166,6 +247,11 @@ namespace NinjaMagisk
             // 记录日志到文件
             LogToFile(logLevel, message);
         }
+        /// <summary>
+        /// 根据日志等级记录日志到文件
+        /// </summary>
+        /// <param name="logLevel">日志等级</param>
+        /// <param name="message">消息</param>
         public static void LogToFile(LogLevel logLevel, string message)
         {
             // 创建日志信息
@@ -192,6 +278,12 @@ namespace NinjaMagisk
                 Console.ResetColor();
             }
         }
+        /// <summary>
+        /// 根据日志等级和日志类型记录日志到文件
+        /// </summary>
+        /// <param name="logLevel"></param>
+        /// <param name="logkind"></param>
+        /// <param name="message"></param>
         public static void LogToFile(LogLevel logLevel, LogKind logkind, string message)
         {
             // 创建日志信息
@@ -218,6 +310,10 @@ namespace NinjaMagisk
                 Console.ResetColor();
             }
         }
+        /// <summary>
+        /// 清空日志文件
+        /// </summary>
+        /// <param name="filePath"></param>
         public static void ClearFile(string filePath)
         {
             try
@@ -238,7 +334,10 @@ namespace NinjaMagisk
             }
         }
     }
-    public class Software
+    /// <summary>
+    /// 本地化字符串,根据语言获取资源文件,并提供本地化字符串
+    /// </summary>
+    public class LocalizedString
     {
         internal static string Language = GetLocalizedString("Language");
         internal static readonly string Version = GetLocalizedString("Version");
@@ -324,271 +423,387 @@ namespace NinjaMagisk
         internal static readonly string _NEW_VERSION_AVAILABLE = GetLocalizedString("_NEW_VERSION_AVAILABLE");
         internal static readonly string _NON_NEW_VER = GetLocalizedString("_NON_NEW_VER");
         internal static readonly string _CURRENT_VER = GetLocalizedString("_CURRENT_VER");
+        internal static readonly string _ADD_NEW_LINE = GetLocalizedString("_ADD_NEW_LINE");
+        internal static readonly string _UPDATE_LINE = GetLocalizedString("_UPDATE_LINE");
+        internal static readonly string _READ_FILE = GetLocalizedString("_READ_FILE");
+        internal static readonly string _WRITE_FILE = GetLocalizedString("_WRITE_FILE");
         //internal static string lang = System.Globalization.CultureInfo.InstalledUICulture.Name.ToString();
+        /// <summary>
+        /// 获取本地化字符串
+        /// </summary>
+        /// <param name="key">字符串常量</param>
+        /// <returns>指定语言文件中的字符串</returns>
         internal static string GetLocalizedString(string key)
         {
             return ResourceHelper.GetString(key, System.Globalization.CultureInfo.InstalledUICulture.Name.ToString());
         }
-
-        public class DownloadAssistant
+    }
+    /// <summary>
+    /// 检测特定安全软件是否在运行
+    /// </summary>
+    public class AntiSecurity
+    {
+        /// <summary>
+        /// 检测360安全卫士是否在运行
+        /// </summary>
+        /// <returns>运行返回 <see langword="true"></see> 未运行返回 <see langword="false"></see></returns>
+        public static bool Anti360Security()
         {
-            private static void CheckFile(string filePath)
+            Process[] processes = Process.GetProcessesByName("360Tray");
+            if (processes.Length > 0)
             {
-                if (System.IO.File.Exists(filePath))
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// 检测火绒安全软件是否在运行
+        /// </summary>
+        /// <returns> 运行返回 <see langword="true"></see> 未运行返回 <see langword="false"></see></returns>
+        public static bool AntiHuoRongSecurity()
+        {
+            Process[] processes = Process.GetProcessesByName("HipsTray");
+            if (processes.Length > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+    /// <summary>
+    /// 下载助手,处理下载任务
+    /// </summary>
+    public class DownloadAssistant
+    {
+        /// <summary>
+        /// 检查 filePath 是否存在,不存在则从资源中提取
+        /// </summary>
+        /// <param name="filePath">文件路径</param>
+        private static void CheckFile(string filePath)
+        {
+            if (System.IO.File.Exists(filePath))
+            {
+                WriteLog(LogLevel.Info, $"{_GET_ARIA2C_PATH}: {filePath}");
+                Assembly assembly = Assembly.GetExecutingAssembly();
+                foreach (var resource in assembly.GetManifestResourceNames())
                 {
-                    WriteLog(LogLevel.Info, $"{_GET_ARIA2C_PATH}: {filePath}");
-                    Assembly assembly = Assembly.GetExecutingAssembly();
-                    foreach (var resource in assembly.GetManifestResourceNames())
+                    WriteLog(LogLevel.Info, $"{_GET_RM_NAME}: {resource}");
+                }
+                return;
+            }
+            else
+            {
+                // 获取当前正在执行的类库的程序集
+                Assembly assembly = Assembly.GetExecutingAssembly();
+
+                // 假设aria2c.exe是嵌入在"Namespace.Resources"命名空间中的
+
+                string resourceName = "NinjaMagisk.Interface.Properties.Resources"; // 替换为你的资源路径
+
+                // 创建 ResourceManager 实例
+                ResourceManager rm = new ResourceManager(resourceName, assembly);
+                WriteLog(LogLevel.Info, $"{_NEW_RM}");
+                // 从资源中获取aria2c.exe文件的字节数据
+                byte[] aria2cExeData = (byte[])rm.GetObject("aria2c");
+                WriteLog(LogLevel.Info, $"{_GET_RM_OBJ}: VC");
+                if (aria2cExeData != null)
+                {
+                    // 将文件保存到当前目录
+                    string outputDirectory = Path.Combine(Directory.GetCurrentDirectory(), "bin");
+                    // 检查并创建目录
+                    if (!Directory.Exists(outputDirectory))
                     {
-                        WriteLog(LogLevel.Info, $"{_GET_RM_NAME}: {resource}");
+                        Directory.CreateDirectory(outputDirectory);
+                        WriteLog(LogLevel.Info, $"{_CREATE_DIRECTORY}");
                     }
+                    WriteLog(LogLevel.Info, $"{_GET_OUTPUT_DIRECTORY}: {outputDirectory}");
+                    // 保存文件路径
+                    string outputFilePath = Path.Combine(outputDirectory, "aria2c.exe");
+                    WriteLog(LogLevel.Info, $"{_GET_OUTPUT_NAME}: {outputDirectory}");
+                    // 写入文件，确保保存为二进制数据
+                    WriteLog(LogLevel.Info, $"{_FILE_WRITING}");
+                    System.IO.File.WriteAllBytes(outputFilePath, aria2cExeData);
+                    WriteLog(LogLevel.Info, $"aria2c.exe {_FILE_EXIST_PATH} {outputFilePath}");
+                }
+                else
+                {
+                    WriteLog(LogLevel.Error, $"{_RES_FILE_NOT_FIND}");
+                }
+            }
+        }
+        /// <summary>
+        /// 定义下载相关模块选项
+        /// </summary>
+        public enum Module
+        {
+            /// <summary>
+            /// 7-zip
+            /// </summary>
+            zip,
+            /// <summary>
+            /// Visual C++ Redistributable
+            /// </summary>
+            VC,
+            /// <summary>
+            /// Windows Update Blocker
+            /// </summary>
+            Wub,
+            /// <summary>
+            /// Windows KMS Activator
+            /// </summary>
+            Activator,
+        }
+        /// <summary>
+        /// 定义下载相关应用选项
+        /// </summary>
+        public enum App
+        {
+            //             Edge,
+            /// <summary>
+            /// 希沃白板  5
+            /// </summary>
+            EasiNote5,
+            /// <summary>
+            /// 希沃视频展台
+            /// </summary>
+            EasiCamera,
+            /// <summary>
+            /// 希沃服务
+            /// </summary>
+            SeewoService,
+            /// <summary>
+            /// 微信
+            /// </summary>
+            WeChat,
+            /// <summary>
+            /// ToDesk远程控制
+            /// </summary>
+            ToDesk,
+        };
+        /// <summary>
+        /// 用于从指定的 URL 下载文件到指定的目录，使用 aria2c 工具并支持多线程下载
+        /// </summary>
+        /// <param name="url">指定下载链接</param>
+        /// <param name="Downloadvocation">下载位置</param>
+        public static void Downloader(string url, string Downloadvocation)
+        {
+            CheckFile($"{Directory.GetCurrentDirectory()}\\bin\\aria2c.exe");
+            string arg = $"-x 16 -d \"{Downloadvocation}\" \"{url}\"";
+            /* -x 线程数, 修改版可以上限1000线程
+             * -d, --dir=<DIR>  存储下载文件的目录。
+             * -l, --log=<LOG>  日志文件的文件名。如果指定了``-，则日志将写入``stdout。如果指定了空字符串(“”)，或者省略了此选项，则根本不会将日志写入磁盘。
+             * -o, --out=<FILE> 下载文件的文件名。它始终是相对于 --dir 选项中给定的目录。使用 --force-sequential 选项时，此选项将被忽略。
+             * -q, --quiet      静默下载
+             */
+            Process p = new Process();
+            p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
+            p.StartInfo.Arguments = arg;
+            WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
+            p.Start();
+            WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {p.Id}");
+            WriteLog(LogLevel.Info, $"{_DOWNLOADING_FILE}...");
+            p.WaitForExit();
+            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {p.ExitCode}");
+            if (p.ExitCode != 0)
+            {
+                LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
+            }
+            else
+            {
+                WriteLog(LogLevel.Info, $"{_DOWNLOADING_COMPLETE}");
+            }
+            p.Close();
+        }
+        /// <summary>
+        /// 用于从指定的 URL 下载文件到指定的目录，使用 aria2c 工具并支持多线程下载
+        /// </summary>
+        /// <param name="url"> 指定下载链接</param>
+        /// <param name="Downloadvocation"> 下载位置</param>
+        /// <param name="log"> 是否记录日志</param>
+        public static void Downloader(string url, string Downloadvocation, bool log)
+        {
+            string arg;
+            CheckFile($"{Directory.GetCurrentDirectory()}\\bin\\aria2c.exe");
+            if (!log)
+            {
+                WriteLog(LogLevel.Info, $"{_DISABLE_ARIA2C_LOG_OUTPUT}");
+                arg = $"-x 16 -d \"{Downloadvocation}\" \"{url}\"";
+            }
+            else
+            {
+                WriteLog(LogLevel.Info, $"{_ENABLE_ARIA2C_LOG_OUTPUT}");
+                arg = $"-x 16 -d \"{Downloadvocation}\" -l \"{Directory.GetCurrentDirectory()}\\aria2c.log\" \"{url}\"";
+            }
+            /* -d, --dir=<DIR>  存储下载文件的目录。
+             * -l, --log=<LOG>  日志文件的文件名。如果指定了``-，则日志将写入``stdout。如果指定了空字符串(“”)，或者省略了此选项，则根本不会将日志写入磁盘。
+             * -o, --out=<FILE> 下载文件的文件名。它始终是相对于 --dir 选项中给定的目录。使用 --force-sequential 选项时，此选项将被忽略。
+             * -q, --quiet      静默下载
+             */
+            Process p = new Process();
+            p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
+            p.StartInfo.Arguments = arg;
+            WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
+            p.Start();
+            WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {p.Id}");
+            WriteLog(LogLevel.Info, $"{_DOWNLOADING_FILE}...");
+            p.WaitForExit();
+            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {p.ExitCode}");
+            if (p.ExitCode != 0)
+            {
+                LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
+            }
+            else
+            {
+                WriteLog(LogLevel.Info, $"{_DOWNLOADING_COMPLETE}");
+            }
+            p.Close();
+        }
+        /// <summary>
+        /// 用于从指定的 URL 下载文件到指定的目录，使用 aria2c 工具并支持多线程下载
+        /// </summary>
+        /// <param name="url"> 指定下载链接</param>
+        /// <param name="Downloadvocation"> 下载位置</param>
+        /// <param name="outputName"> 输出文件名</param>
+        public static void Downloader(string url, string Downloadvocation, string outputName)
+        {
+            string arg = $"-x 16 -d \"{Downloadvocation}\" \"{url}\" -o \"{outputName}\"";
+            CheckFile($"{Directory.GetCurrentDirectory()}\\bin\\aria2c.exe");
+            /* -d, --dir=<DIR>  存储下载文件的目录。
+             * -l, --log=<LOG>  日志文件的文件名。如果指定了``-，则日志将写入``stdout。如果指定了空字符串(“”)，或者省略了此选项，则根本不会将日志写入磁盘。
+             * -o, --out=<FILE> 下载文件的文件名。它始终是相对于 --dir 选项中给定的目录。使用 --force-sequential 选项时，此选项将被忽略。
+             * -q, --quiet      静默下载
+             */
+            Process p = new Process();
+            p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
+            p.StartInfo.Arguments = arg;
+            WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
+            p.Start();
+            WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {p.Id}");
+            WriteLog(LogLevel.Info, $"{_DOWNLOADING_FILE}...");
+            p.WaitForExit();
+            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {p.ExitCode}");
+            if (p.ExitCode != 0)
+            {
+                LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
+            }
+            else
+            {
+                WriteLog(LogLevel.Info, $"{_DOWNLOADING_COMPLETE}");
+            }
+            p.Close();
+        }
+        /// <summary>
+        /// 用于从指定的 URL 下载文件到指定的目录，使用 aria2c 工具并支持多线程下载
+        /// </summary>
+        /// <param name="url"> 指定下载链接</param> 
+        /// <param name="Downloadvocation"> 下载位置</param>
+        /// <param name="outputName"> 输出文件名</param>
+        /// <param name="log"> 是否记录日志</param>
+        public static void Downloader(string url, string Downloadvocation, string outputName, bool log)
+        {
+            string arg;
+            CheckFile($"{Directory.GetCurrentDirectory()}\\bin\\aria2c.exe");
+            if (!log)
+            {
+                WriteLog(LogLevel.Info, $"{_DISABLE_ARIA2C_LOG_OUTPUT}");
+                arg = $"-x 16 -d \"{Downloadvocation}\" -q \"{url}\" -o \"{outputName}\"";
+            }
+            else
+            {
+                WriteLog(LogLevel.Info, $"{_ENABLE_ARIA2C_LOG_OUTPUT}");
+                arg = $"-x 16 -d \"{Downloadvocation}\" -l \"{Directory.GetCurrentDirectory()}\\aria2c.log\" \"{url}\" -o \"{outputName}\"";
+            }
+            /* -x 线程数, 修改版可以上限1000线程
+             * -d, --dir=<DIR>  存储下载文件的目录。
+             * -l, --log=<LOG>  日志文件的文件名。如果指定了``-，则日志将写入``stdout。如果指定了空字符串(“”)，或者省略了此选项，则根本不会将日志写入磁盘。
+             * -o, --out=<FILE> 下载文件的文件名。它始终是相对于 --dir 选项中给定的目录。使用 --force-sequential 选项时，此选项将被忽略。
+             * -q, --quiet      静默下载
+             */
+            Process p = new Process();
+            p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
+            p.StartInfo.Arguments = arg;
+            WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
+            p.Start();
+            WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {p.Id}");
+            WriteLog(LogLevel.Info, $"{_DOWNLOADING_FILE}...");
+            p.WaitForExit();
+            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {p.ExitCode}");
+            if (p.ExitCode != 0)
+            {
+                LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
+            }
+            else
+            {
+                WriteLog(LogLevel.Info, $"{_DOWNLOADING_COMPLETE}");
+            }
+            p.Close();
+        }
+        /// <summary>
+        /// 用于下载指定模块的相关文件，并在网络不可用时提示用户
+        /// </summary>
+        /// <param name="module"> 指定下载模块</param>
+        public static void ModuleDownloader(Module module)
+        {
+            string filePath = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c.exe";
+            CheckFile(filePath);
+            if (!NinjaMagisk.Network.IsNetworkAvailable())
+            {
+                DialogResult dialogResult = MessageBox.Show($"{_NOTAVAILABLE_NETWORK_TIPS}", $"{_TIPS}! {_NOTAVAILABLE_NETWORK}", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                if (dialogResult == DialogResult.No)
+                {
                     return;
                 }
-                else
-                {
-                    // 获取当前正在执行的类库的程序集
-                    Assembly assembly = Assembly.GetExecutingAssembly();
-
-                    // 假设aria2c.exe是嵌入在"Namespace.Resources"命名空间中的
-                    string resourceName = "NinjaMagisk.Interface.Properties.Resources"; // 替换为你的资源路径
-
-                    // 创建 ResourceManager 实例
-                    ResourceManager rm = new ResourceManager(resourceName, assembly);
-                    WriteLog(LogLevel.Info, $"{_NEW_RM}");
-                    // 从资源中获取aria2c.exe文件的字节数据
-                    byte[] aria2cExeData = (byte[])rm.GetObject("aria2c");
-                    WriteLog(LogLevel.Info, $"{_GET_RM_OBJ}: VC");
-                    if (aria2cExeData != null)
-                    {
-                        // 将文件保存到当前目录
-                        string outputDirectory = Path.Combine(Directory.GetCurrentDirectory(), "bin");
-                        // 检查并创建目录
-                        if (!Directory.Exists(outputDirectory))
-                        {
-                            Directory.CreateDirectory(outputDirectory);
-                            WriteLog(LogLevel.Info, $"{_CREATE_DIRECTORY}");
-                        }
-                        WriteLog(LogLevel.Info, $"{_GET_OUTPUT_DIRECTORY}: {outputDirectory}");
-                        // 保存文件路径
-                        string outputFilePath = Path.Combine(outputDirectory, "aria2c.exe");
-                        WriteLog(LogLevel.Info, $"{_GET_OUTPUT_NAME}: {outputDirectory}");
-                        // 写入文件，确保保存为二进制数据
-                        WriteLog(LogLevel.Info, $"{_FILE_WRITING}");
-                        System.IO.File.WriteAllBytes(outputFilePath, aria2cExeData);
-                        WriteLog(LogLevel.Info, $"aria2c.exe {_FILE_EXIST_PATH} {outputFilePath}");
-                    }
-                    else
-                    {
-                        WriteLog(LogLevel.Error, $"{_RES_FILE_NOT_FIND}");
-                    }
-                }
             }
-            public enum Module
+            if (module == Module.Wub)
             {
-                zip,
-                VC,
-                Wub,
-                Activator,
-            }
-            public enum App
-            {
-                //             Edge,
-                EasiNote5,
-                EasiCamera,
-                SeewoService,
-                WeChat,
-                ToDesk,
-            };
-            public static void Downloader(string url, string Downloadvocation)
-            {
-                CheckFile($"{Directory.GetCurrentDirectory()}\\bin\\aria2c.exe");
-                string arg = $"-x 16 -d \"{Downloadvocation}\" \"{url}\"";
-                /* -x 线程数, 修改版可以上限1000线程
-                 * -d, --dir=<DIR>  存储下载文件的目录。
-                 * -l, --log=<LOG>  日志文件的文件名。如果指定了``-，则日志将写入``stdout。如果指定了空字符串(“”)，或者省略了此选项，则根本不会将日志写入磁盘。
-                 * -o, --out=<FILE> 下载文件的文件名。它始终是相对于 --dir 选项中给定的目录。使用 --force-sequential 选项时，此选项将被忽略。
-                 * -q, --quiet      静默下载
-                 */
-                Process p = new Process();
-                p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
-                p.StartInfo.Arguments = arg;
-                WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
-                p.Start();
-                WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {p.Id}");
-                WriteLog(LogLevel.Info, $"{_DOWNLOADING_FILE}...");
-                p.WaitForExit();
-                WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {p.ExitCode}");
-                if (p.ExitCode != 0)
+                string[] url =
                 {
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
-                }
-                else
-                {
-                    WriteLog(LogLevel.Info, $"{_DOWNLOADING_COMPLETE}");
-                }
-                p.Close();
-            }
-            public static void Downloader(string url, string Downloadvocation, bool log)
-            {
-                string arg;
-                CheckFile($"{Directory.GetCurrentDirectory()}\\bin\\aria2c.exe");
-                if (!log)
-                {
-                    WriteLog(LogLevel.Info, $"{_DISABLE_ARIA2C_LOG_OUTPUT}");
-                    arg = $"-x 16 -d \"{Downloadvocation}\" \"{url}\"";
-                }
-                else
-                {
-                    WriteLog(LogLevel.Info, $"{_ENABLE_ARIA2C_LOG_OUTPUT}");
-                    arg = $"-x 16 -d \"{Downloadvocation}\" -l \"{Directory.GetCurrentDirectory()}\\aria2c.log\" \"{url}\"";
-                }
-                /* -d, --dir=<DIR>  存储下载文件的目录。
-                 * -l, --log=<LOG>  日志文件的文件名。如果指定了``-，则日志将写入``stdout。如果指定了空字符串(“”)，或者省略了此选项，则根本不会将日志写入磁盘。
-                 * -o, --out=<FILE> 下载文件的文件名。它始终是相对于 --dir 选项中给定的目录。使用 --force-sequential 选项时，此选项将被忽略。
-                 * -q, --quiet      静默下载
-                 */
-                Process p = new Process();
-                p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
-                p.StartInfo.Arguments = arg;
-                WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
-                p.Start();
-                WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {p.Id}");
-                WriteLog(LogLevel.Info, $"{_DOWNLOADING_FILE}...");
-                p.WaitForExit();
-                WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {p.ExitCode}");
-                if (p.ExitCode != 0)
-                {
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
-                }
-                else
-                {
-                    WriteLog(LogLevel.Info, $"{_DOWNLOADING_COMPLETE}");
-                }
-                p.Close();
-            }
-            public static void Downloader(string url, string Downloadvocation, string outputName)
-            {
-                string arg = $"-x 16 -d \"{Downloadvocation}\" \"{url}\" -o \"{outputName}\"";
-                CheckFile($"{Directory.GetCurrentDirectory()}\\bin\\aria2c.exe");
-                /* -d, --dir=<DIR>  存储下载文件的目录。
-                 * -l, --log=<LOG>  日志文件的文件名。如果指定了``-，则日志将写入``stdout。如果指定了空字符串(“”)，或者省略了此选项，则根本不会将日志写入磁盘。
-                 * -o, --out=<FILE> 下载文件的文件名。它始终是相对于 --dir 选项中给定的目录。使用 --force-sequential 选项时，此选项将被忽略。
-                 * -q, --quiet      静默下载
-                 */
-                Process p = new Process();
-                p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
-                p.StartInfo.Arguments = arg;
-                WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
-                p.Start();
-                WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {p.Id}");
-                WriteLog(LogLevel.Info, $"{_DOWNLOADING_FILE}...");
-                p.WaitForExit();
-                WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {p.ExitCode}");
-                if (p.ExitCode != 0)
-                {
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
-                }
-                else
-                {
-                    WriteLog(LogLevel.Info, $"{_DOWNLOADING_COMPLETE}");
-                }
-                p.Close();
-            }
-            public static void Downloader(string url, string Downloadvocation, string outputName, bool log)
-            {
-                string arg;
-                CheckFile($"{Directory.GetCurrentDirectory()}\\bin\\aria2c.exe");
-                if (!log)
-                {
-                    WriteLog(LogLevel.Info, $"{_DISABLE_ARIA2C_LOG_OUTPUT}");
-                    arg = $"-x 16 -d \"{Downloadvocation}\" -q \"{url}\" -o \"{outputName}\"";
-                }
-                else
-                {
-                    WriteLog(LogLevel.Info, $"{_ENABLE_ARIA2C_LOG_OUTPUT}");
-                    arg = $"-x 16 -d \"{Downloadvocation}\" -l \"{Directory.GetCurrentDirectory()}\\aria2c.log\" \"{url}\" -o \"{outputName}\"";
-                }
-                /* -x 线程数, 修改版可以上限1000线程
-                 * -d, --dir=<DIR>  存储下载文件的目录。
-                 * -l, --log=<LOG>  日志文件的文件名。如果指定了``-，则日志将写入``stdout。如果指定了空字符串(“”)，或者省略了此选项，则根本不会将日志写入磁盘。
-                 * -o, --out=<FILE> 下载文件的文件名。它始终是相对于 --dir 选项中给定的目录。使用 --force-sequential 选项时，此选项将被忽略。
-                 * -q, --quiet      静默下载
-                 */
-                Process p = new Process();
-                p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
-                p.StartInfo.Arguments = arg;
-                WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
-                p.Start();
-                WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {p.Id}");
-                WriteLog(LogLevel.Info, $"{_DOWNLOADING_FILE}...");
-                p.WaitForExit();
-                WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {p.ExitCode}");
-                if (p.ExitCode != 0)
-                {
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
-                }
-                else
-                {
-                    WriteLog(LogLevel.Info, $"{_DOWNLOADING_COMPLETE}");
-                }
-                p.Close();
-            }
-            public static void ModuleDownloader(Module module)
-            {
-                string filePath = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c.exe";
-                CheckFile(filePath);
-                if (!NinjaMagisk.Network.IsNetworkAvailable())
-                {
-                    DialogResult dialogResult = MessageBox.Show($"{_NOTAVAILABLE_NETWORK_TIPS}", $"{_TIPS}! {_NOTAVAILABLE_NETWORK}", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                    if (dialogResult == DialogResult.No)
-                    {
-                        return;
-                    }
-                }
-                if (module == Module.Wub)
-                {
-                    string[] url =
-                    {
                     "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/resource/Wub_x64.exe",
                     "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/resource/Wub.ini",
                     "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/resource/Wubx32.exe",
                     "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/resource/Wubx32.ini",
                     };
-                    WriteLog(LogLevel.Info, $"{_GET_URL} {url}");
-                    Download(url);
-                    return;
-                }
-                if (module == Module.Activator)
-                {
-                    string url = "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/resource/HEU_KMS_Activator_v19.6.0.exe";
-                    WriteLog(LogLevel.Info, $"{_GET_URL} {url}");
-                    Download(url);
-                    return;
-                }
+                WriteLog(LogLevel.Info, $"{_GET_URL} {url}");
+                Download(url);
+                return;
+            }
+            if (module == Module.Activator)
+            {
+                string url = "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/resource/HEU_KMS_Activator_v19.6.0.exe";
+                WriteLog(LogLevel.Info, $"{_GET_URL} {url}");
+                Download(url);
+                return;
+            }
 
-                if (module == Module.zip)
+            if (module == Module.zip)
+            {
+                string[] url =
                 {
-                    string[] url =
-                    {
                     "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/resource/7-zip/7za.dll",
                     "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/resource/7-zip/7za.exe",
                     "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/resource/7-zip/7zxa.dll",
                     };
-                    if (!System.IO.File.Exists($"{Directory.GetCurrentDirectory()}\\bin\\7zxa.dll"))
-                    {
-                        WriteLog(LogLevel.Info, $"{_GET_URL} {url}");
-                        Download(url);
-                    }
-                    else
-                    {
-                        WriteLog(LogLevel.Info, $"{_FILE_EXIST}: {Directory.GetCurrentDirectory()}\\bin\\7zxa.dll");
-                    }
-                    return;
-                }
-                if (module == Module.VC)
+                if (!System.IO.File.Exists($"{Directory.GetCurrentDirectory()}\\bin\\7zxa.dll"))
                 {
-                    string[] url =
-                    {
+                    WriteLog(LogLevel.Info, $"{_GET_URL} {url}");
+                    Download(url);
+                }
+                else
+                {
+                    WriteLog(LogLevel.Info, $"{_FILE_EXIST}: {Directory.GetCurrentDirectory()}\\bin\\7zxa.dll");
+                }
+                return;
+            }
+            if (module == Module.VC)
+            {
+                string[] url =
+                {
                         "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/main/VC.zip.001",
                         "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/main/VC.zip.002",
                         "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/main/VC.zip.003",
@@ -598,365 +813,379 @@ namespace NinjaMagisk
                         "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/main/VC.zip.007",
                         "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/main/VC.zip.008"
                     };
-                    if (!System.IO.File.Exists($"{Directory.GetCurrentDirectory()}\\bin\\VC.zip.001"))
-                    {
-                        WriteLog(LogLevel.Info, $"{_GET_URL} {url}");
-                        Download(url);
-                    }
-                    else
-                    {
-                        WriteLog(LogLevel.Info, $"{_FILE_EXIST}: {Directory.GetCurrentDirectory()}\\bin\\VC.zip.001");
-                    }
-                    Thread.Sleep(3000);
-                    if (System.IO.File.Exists($"{Directory.GetCurrentDirectory()}\\bin\\VC.zip.008"))
-                    {
-                        var temp = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\Temp";
-                        WriteLog(LogLevel.Info, $"{_GET_TEMP} {temp}");
-                        DownloadAssistant.ModuleDownloader(Module.zip);
-                        Process p = new Process();
-                        p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\7za";
-                        p.StartInfo.Arguments = $" x -y {Directory.GetCurrentDirectory()}\\bin\\VC.zip.001 -o{temp}";
-                        p.Start();
-                        p.WaitForExit();
-                        if (p.ExitCode != 0)
-                        {
-                            WriteLog(LogLevel.Error, $"{_PROCESS_EXITED} {p.ExitCode}");
-                        }
-                        else
-                        {
-                            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED} {p.ExitCode}");
-                        }
-                        p.Close();
-                        Process w = new Process();
-                        w.StartInfo.FileName = $"{temp}\\VC.exe";
-                        w.Start();
-                        w.WaitForExit();
-                        if (w.ExitCode != 0)
-                        {
-                            WriteLog(LogLevel.Error, $"{_PROCESS_EXITED} {w.ExitCode}");
-                        }
-                        else
-                        {
-                            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED} {w.ExitCode}");
-                        }
-                        w.Close();
-                        return;
-                    }
-                }
-            }
-            public static void ApplicationDownloader(App app)
-            {
-                var temp = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\Temp\\NinjaMagisk";
-                WriteLog(LogLevel.Info, $"{System.Globalization.CultureInfo.InstalledUICulture.Name}");
-                WriteLog(LogLevel.Info, $"{GetLocalizedString("_GET_TEMP")}");
-                string folderPath = $"{temp}";
-                string filePath = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c.exe";
-                CheckFile(filePath);
-                if (!NinjaMagisk.Network.IsNetworkAvailable())
+                if (!System.IO.File.Exists($"{Directory.GetCurrentDirectory()}\\bin\\VC.zip.001"))
                 {
-                    DialogResult dialogResult = MessageBox.Show($"{_NOTAVAILABLE_NETWORK_TIPS}", $"{_TIPS}", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                    if (dialogResult == DialogResult.No)
-                    {
-                        return;
-                    }
+                    WriteLog(LogLevel.Info, $"{_GET_URL} {url}");
+                    Download(url);
                 }
-                if (app == App.EasiNote5)
+                else
                 {
-                    const string pattern = @"EasiNoteSetup_\d+(\.\d+)*_seewo\.exe";
-                    const int maxRetries = 3;
-                    const int checkInterval = 2000;
-                    const int timeout = 60000;
-                    string url = "https://e.seewo.com/download/file?code=EasiNote5";
-                    bool downloadSuccess = false;
-                    int retryCount = 0;
-                    Regex regex = new Regex(pattern);
-
-                    while (!downloadSuccess && retryCount < maxRetries)
-                    {
-                        AppDownload(url, folderPath);
-                        var checkTimer = new Stopwatch();
-                        checkTimer.Start();
-                        while (checkTimer.ElapsedMilliseconds < timeout)
-                        {
-                            var files = Directory.GetFiles(folderPath)
-                                        .Where(f => regex.IsMatch(Path.GetFileName(f)))
-                                        .ToArray();
-                            WriteLog(LogLevel.Info, $"{_GET_DIRECTORY}: {folderPath}");
-                            if (files.Any())
-                            {
-                                WriteLog(LogLevel.Info, $"{_REGEX_GET_FILE}: {Path.GetFileName(files.First())}");
-                                downloadSuccess = true;
-                                break;
-                            }
-                            WriteLog(LogLevel.Info, $"{_WAIT_DOWNLOADING}... {checkTimer.ElapsedMilliseconds / 1000}s");
-                            Thread.Sleep(checkInterval);
-                        }
-                        if (!downloadSuccess)
-                        {
-                            retryCount++;
-                            WriteLog(LogLevel.Warning, $"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
-                            Directory.GetFiles(folderPath).ToList().ForEach(System.IO.File.Delete); // 清理残留文件
-                        }
-                    }
-                    if (!downloadSuccess)
-                    {
-                        WriteLog(LogLevel.Error, $"{_DOWNLOADING_FAILED}: EasiNote5");
-                    }
+                    WriteLog(LogLevel.Info, $"{_FILE_EXIST}: {Directory.GetCurrentDirectory()}\\bin\\VC.zip.001");
                 }
-                if (app == App.EasiCamera)
+                Thread.Sleep(3000);
+                if (System.IO.File.Exists($"{Directory.GetCurrentDirectory()}\\bin\\VC.zip.008"))
                 {
-                    const string targetPrefix = "EasiCameraSetup_";
-                    const int maxRetries = 3;
-                    const int checkInterval = 2000;
-                    const int timeout = 60000;
-                    string url = "https://e.seewo.com/download/file?code=EasiCamera";
-                    bool downloadSuccess = false;
-                    int retryCount = 0;
-                    while (!downloadSuccess && retryCount < maxRetries)
-                    {
-                        AppDownload(url, folderPath);
-                        var checkTimer = new Stopwatch();
-                        checkTimer.Start();
-                        while (checkTimer.ElapsedMilliseconds < timeout)
-                        {
-                            var files = Directory.GetFiles(folderPath, $"{targetPrefix}*.exe");
-                            WriteLog(LogLevel.Info, $"{_GET_DIRECTORY}: {folderPath}");
-                            if (files.Any())
-                            {
-                                WriteLog(LogLevel.Info, $"{_GET_FILE}: {Path.GetFileName(files.First())}");
-                                downloadSuccess = true;
-                                break;
-                            }
-                            WriteLog(LogLevel.Info, $"{_WAIT_DOWNLOADING}... {checkTimer.ElapsedMilliseconds / 1000}s");
-                            Thread.Sleep(checkInterval);
-                        }
-                        if (!downloadSuccess)
-                        {
-                            retryCount++;
-                            WriteLog(LogLevel.Warning, $"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
-                            Directory.GetFiles(folderPath).ToList().ForEach(System.IO.File.Delete);
-                        }
-                    }
-                    if (!downloadSuccess)
-                    {
-                        WriteLog(LogLevel.Error, $"{_DOWNLOADING_FAILED}: EasiCamera");
-                    }
-                }
-                if (app == App.WeChat)
-                {
-                    const string targetFile = "WeChatSetup.exe";
-                    const int maxRetries = 3;
-                    const int checkInterval = 2000; // 2秒
-                    const int timeout = 60000;      // 60秒
-                    var downloadvocation = $"{Directory.GetCurrentDirectory()}\\temp";
-                    Downloader("https://pc.weixin.qq.com", downloadvocation, true);
-                    var html = System.IO.File.ReadAllText($"{downloadvocation}\\index.html");
-                    WriteLog(LogLevel.Info, $"{_GET_HTML}: {downloadvocation}\\index.html");
-                    WriteLog(LogLevel.Info, $"{_GET_HTML}: {html}");
-                    // 根据系统架构确定要下载的链接
-                    bool is64Bit = Environment.Is64BitOperatingSystem;
-                    string systemBit;
-                    // 获取下载链接（合并32/64位处理）
-                    string downloadLink = GetWeChatDownloadLink(html, !is64Bit);
-                    if (is64Bit)
-                    {
-                        systemBit = _64;
-                        WriteLog(LogLevel.Info, $"{_GET_64_LINK}: {downloadLink}");
-                    }
-                    else
-                    {
-                        systemBit = _32;
-                        WriteLog(LogLevel.Info, $"{_GET_32_LINK}: {downloadLink}");
-                    }
-                    WriteLog(LogLevel.Info, $"{_GET_SYSTEM_BIT}: {systemBit}");
-                    // 下载主逻辑
-                    bool downloadSuccess = false;
-                    int retryCount = 0;
-                    while (!downloadSuccess && retryCount < maxRetries)
-                    {
-                        // 执行下载
-                        Downloader(downloadLink, folderPath);
-                        // 检查文件是否下载成功
-                        var checkTimer = new Stopwatch();
-                        checkTimer.Start();
-                        while (checkTimer.ElapsedMilliseconds < timeout)
-                        {
-                            var files = Directory.GetFiles(folderPath, targetFile);
-                            WriteLog(LogLevel.Info, $"{_GET_FILES_IN_DIRECTORY}: {folderPath}");
-                            if (files.Any())
-                            {
-                                WriteLog(LogLevel.Info, $"{_GET_FILE}: {files.First()}");
-                                var newFile = files.First();
-                                downloadSuccess = true;
-                                Process process = new Process();
-                                process.StartInfo.FileName = newFile;
-                                process.Start();
-                                WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {process.Id}");
-                                process.WaitForExit();
-                                WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {process.ExitCode}");
-                                process.Close();
-                                break;
-                            }
-                            WriteLog(LogLevel.Info, $"{_WAIT_DOWNLOADING}... waiting {checkTimer.ElapsedMilliseconds / 1000} second");
-                            Thread.Sleep(checkInterval);
-                        }
-                        if (!downloadSuccess)
-                        {
-                            retryCount++;
-                            WriteLog(LogLevel.Warning, $"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
-                        }
-                    }
-                    if (!downloadSuccess)
-                    {
-                        WriteLog(LogLevel.Error, $"{_DOWNLOADING_FAILED}: {retryCount}/{maxRetries}");
-                    }
-                }
-                if (app == App.SeewoService)
-                {
-                    const string targetPrefix = "SeewoServiceSetup_";
-                    const int maxRetries = 3;
-                    const int checkInterval = 2000;
-                    const int timeout = 60000;
-                    string url = "https://e.seewo.com/download/file?code=SeewoServiceSetup";
-                    bool downloadSuccess = false;
-                    int retryCount = 0;
-                    while (!downloadSuccess && retryCount < maxRetries)
-                    {
-                        AppDownload(url, folderPath);
-                        var checkTimer = new Stopwatch();
-                        checkTimer.Start();
-                        while (checkTimer.ElapsedMilliseconds < timeout)
-                        {
-                            var files = Directory.GetFiles(folderPath, $"{targetPrefix}*.exe");
-                            WriteLog(LogLevel.Info, $"{_GET_DIRECTORY}: {folderPath}");
-                            if (files.Any())
-                            {
-                                WriteLog(LogLevel.Info, $"{_GET_FILE}: {Path.GetFileName(files.First())}");
-                                downloadSuccess = true;
-                                break;
-                            }
-                            WriteLog(LogLevel.Info, $"{_WAIT_DOWNLOADING}... {checkTimer.ElapsedMilliseconds / 1000}s");
-                            Thread.Sleep(checkInterval);
-                        }
-                        if (!downloadSuccess)
-                        {
-                            retryCount++;
-                            WriteLog(LogLevel.Warning, $"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
-                            Directory.GetFiles(folderPath).ToList().ForEach(System.IO.File.Delete);
-                        }
-                    }
-                    if (!downloadSuccess)
-                    {
-                        WriteLog(LogLevel.Error, $"{_DOWNLOADING_FAILED}: SeewoService");
-                    }
-                }
-                if (app == App.ToDesk)
-                {
-                    const string targetFile = "ToDeskSetup.exe";
-                    const int maxRetries = 3;
-                    const int checkInterval = 2000;
-                    const int timeout = 60000;
-                    var downloadvocation = $"{Directory.GetCurrentDirectory()}\\temp";
-                    Downloader("https://www.todesk.com/download.html", downloadvocation, true);
-                    var html = System.IO.File.ReadAllText($"{downloadvocation}\\download.html");
-                    WriteLog(LogLevel.Info, $"{_GET_HTML}: {downloadvocation}\\download.html");
-                    WriteLog(LogLevel.Info, $"{_GET_HTML}: {html}");
-                    string downloadLink = GetToDeskDownlaodLink(html);
-                    WriteLog(LogLevel.Info, $"{_GET_URL}: {downloadLink}");
-                    bool downloadSuccess = false;
-                    int retryCount = 0;
-
-                    while (!downloadSuccess && retryCount < maxRetries)
-                    {
-                        Downloader(downloadLink, folderPath, "ToDeskSetup.exe", true);
-                        var checkTimer = new Stopwatch();
-                        checkTimer.Start();
-                        while (checkTimer.ElapsedMilliseconds < timeout)
-                        {
-                            var files = Directory.GetFiles(folderPath, targetFile);
-                            WriteLog(LogLevel.Info, $"{_GET_FILES_IN_DIRECTORY}: {folderPath}");
-                            if (files.Any())
-                            {
-                                WriteLog(LogLevel.Info, $"{_GET_FILE}: {files.First()}");
-                                var newFile = files.First();
-                                downloadSuccess = true;
-                                Process process = new Process();
-                                process.StartInfo.FileName = newFile;
-                                process.Start();
-                                WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {process.Id}");
-                                process.WaitForExit();
-                                WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {process.ExitCode}");
-                                process.Close();
-                                break;
-                            }
-                            WriteLog(LogLevel.Info, $"{_WAIT_DOWNLOADING}... waiting {checkTimer.ElapsedMilliseconds / 1000} second");
-                            Thread.Sleep(checkInterval);
-                        }
-                        if (!downloadSuccess)
-                        {
-                            retryCount++;
-                            WriteLog(LogLevel.Warning, $"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
-                        }
-                    }
-                    if (!downloadSuccess)
-                    {
-                        WriteLog(LogLevel.Error, $"{_DOWNLOADING_FAILED}: {retryCount}/{maxRetries}");
-                    }
-                }
-            }
-            internal static string GetWeChatDownloadLink(string htmlContent, bool is32Bit = false)
-            {
-                var doc = new HtmlAgilityPack.HtmlDocument();
-                doc.LoadHtml(htmlContent);
-                // 精确匹配元素
-                var node = is32Bit
-                    ? doc.DocumentNode.SelectSingleNode("//a[@id='x86' and contains(@class,'download-item')]")
-                    : doc.DocumentNode.SelectSingleNode("//a[@id='downloadButton' and contains(@class,'download-button')]");
-                return node?.GetAttributeValue("href", null);
-            }
-            internal static string GetToDeskDownlaodLink(string htmlContent)
-            {
-                var doc = new HtmlAgilityPack.HtmlDocument();
-                doc.LoadHtml(htmlContent);
-                // 精确匹配元素
-                var node = doc.DocumentNode.SelectSingleNode("//div[@class='win_download']/a[@class='btn' and starts-with(@href,'https://')]");
-                return node?.GetAttributeValue("href", null);
-            }
-            internal static void Download(string[] url)
-            {
-                foreach (string ul in url)
-                {
-                    string arg = $"-x 16 --check-certificate=false -l \"{Directory.GetCurrentDirectory()}\\temp\\aria2c.log\" -d \"{Directory.GetCurrentDirectory()}\\bin\" {ul}";
-                    /* -d, --dir=<DIR>  存储下载文件的目录。
-                    * -l, --log=<LOG>  日志文件的文件名。如果指定了``-，则日志将写入``stdout。如果指定了空字符串(“”)，或者省略了此选项，则根本不会将日志写入磁盘。
-                    * -o, --out=<FILE> 下载文件的文件名。它始终是相对于 --dir 选项中给定的目录。使用 --force-sequential 选项时，此选项将被忽略。
-                    * -q, --quiet      静默下载
-                    */
+                    var temp = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\Temp";
+                    WriteLog(LogLevel.Info, $"{_GET_TEMP} {temp}");
+                    DownloadAssistant.ModuleDownloader(Module.zip);
                     Process p = new Process();
-                    p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
-                    p.StartInfo.Arguments = arg;
-                    WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
-                    p.StartInfo.CreateNoWindow = true;
+                    p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\7za";
+                    p.StartInfo.Arguments = $" x -y {Directory.GetCurrentDirectory()}\\bin\\VC.zip.001 -o{temp}";
                     p.Start();
-                    WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {p.Id}");
-                    WriteLog(LogLevel.Info, $"{_DOWNLOADING_FILE}...");
                     p.WaitForExit();
-                    WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {p.ExitCode}");
                     if (p.ExitCode != 0)
                     {
-                        LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
+                        WriteLog(LogLevel.Error, $"{_PROCESS_EXITED} {p.ExitCode}");
                     }
                     else
                     {
-                        WriteLog(LogLevel.Info, $"{_DOWNLOADING_COMPLETE}");
+                        WriteLog(LogLevel.Info, $"{_PROCESS_EXITED} {p.ExitCode}");
                     }
                     p.Close();
+                    Process w = new Process();
+                    w.StartInfo.FileName = $"{temp}\\VC.exe";
+                    w.Start();
+                    w.WaitForExit();
+                    if (w.ExitCode != 0)
+                    {
+                        WriteLog(LogLevel.Error, $"{_PROCESS_EXITED} {w.ExitCode}");
+                    }
+                    else
+                    {
+                        WriteLog(LogLevel.Info, $"{_PROCESS_EXITED} {w.ExitCode}");
+                    }
+                    w.Close();
+                    return;
+                }
+            }
+        }
+        /// <summary>
+        /// 用于下载指定应用的相关文件，并在网络不可用时提示用户
+        /// </summary>
+        /// <param name="app"> 指定下载应用</param>
+        public static void ApplicationDownloader(App app)
+        {
+            var temp = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\Temp\\NinjaMagisk";
+            WriteLog(LogLevel.Info, $"{GetLocalizedString("_GET_TEMP")}");
+            string folderPath = $"{temp}";
+            string filePath = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c.exe";
+            CheckFile(filePath);
+            if (!NinjaMagisk.Network.IsNetworkAvailable())
+            {
+                DialogResult dialogResult = MessageBox.Show($"{_NOTAVAILABLE_NETWORK_TIPS}", $"{_TIPS}", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                if (dialogResult == DialogResult.No)
+                {
+                    return;
                 }
                 return;
             }
-            internal static void Download(string url)
+            if (app == App.EasiNote5)
             {
-                string arg = $"-x 16 -s 16 --check-certificate=false -l \"{Directory.GetCurrentDirectory()}\\temp\\aria2c.log\" -d {Directory.GetCurrentDirectory()}\\bin {url}";
+                const string pattern = @"EasiNoteSetup_\d+(\.\d+)*_seewo\.exe";
+                const int maxRetries = 3;
+                const int checkInterval = 2000;
+                const int timeout = 60000;
+                string url = "https://e.seewo.com/download/file?code=EasiNote5";
+                bool downloadSuccess = false;
+                int retryCount = 0;
+                Regex regex = new Regex(pattern);
+
+                while (!downloadSuccess && retryCount < maxRetries)
+                {
+                    AppDownload(url, folderPath);
+                    var checkTimer = new Stopwatch();
+                    checkTimer.Start();
+                    while (checkTimer.ElapsedMilliseconds < timeout)
+                    {
+                        var files = Directory.GetFiles(folderPath)
+                                    .Where(f => regex.IsMatch(Path.GetFileName(f)))
+                                    .ToArray();
+                        WriteLog(LogLevel.Info, $"{_GET_DIRECTORY}: {folderPath}");
+                        if (files.Any())
+                        {
+                            WriteLog(LogLevel.Info, $"{_REGEX_GET_FILE}: {Path.GetFileName(files.First())}");
+                            downloadSuccess = true;
+                            break;
+                        }
+                        WriteLog(LogLevel.Info, $"{_WAIT_DOWNLOADING}... {checkTimer.ElapsedMilliseconds / 1000}s");
+                        Thread.Sleep(checkInterval);
+                    }
+                    if (!downloadSuccess)
+                    {
+                        retryCount++;
+                        WriteLog(LogLevel.Warning, $"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
+                        Directory.GetFiles(folderPath).ToList().ForEach(System.IO.File.Delete); // 清理残留文件
+                    }
+                }
+                if (!downloadSuccess)
+                {
+                    WriteLog(LogLevel.Error, $"{_DOWNLOADING_FAILED}: EasiNote5");
+                }
+            }
+            if (app == App.EasiCamera)
+            {
+                const string targetPrefix = "EasiCameraSetup_";
+                const int maxRetries = 3;
+                const int checkInterval = 2000;
+                const int timeout = 60000;
+                string url = "https://e.seewo.com/download/file?code=EasiCamera";
+                bool downloadSuccess = false;
+                int retryCount = 0;
+                while (!downloadSuccess && retryCount < maxRetries)
+                {
+                    AppDownload(url, folderPath);
+                    var checkTimer = new Stopwatch();
+                    checkTimer.Start();
+                    while (checkTimer.ElapsedMilliseconds < timeout)
+                    {
+                        var files = Directory.GetFiles(folderPath, $"{targetPrefix}*.exe");
+                        WriteLog(LogLevel.Info, $"{_GET_DIRECTORY}: {folderPath}");
+                        if (files.Any())
+                        {
+                            WriteLog(LogLevel.Info, $"{_GET_FILE}: {Path.GetFileName(files.First())}");
+                            downloadSuccess = true;
+                            break;
+                        }
+                        WriteLog(LogLevel.Info, $"{_WAIT_DOWNLOADING}... {checkTimer.ElapsedMilliseconds / 1000}s");
+                        Thread.Sleep(checkInterval);
+                    }
+                    if (!downloadSuccess)
+                    {
+                        retryCount++;
+                        WriteLog(LogLevel.Warning, $"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
+                        Directory.GetFiles(folderPath).ToList().ForEach(System.IO.File.Delete);
+                    }
+                }
+                if (!downloadSuccess)
+                {
+                    WriteLog(LogLevel.Error, $"{_DOWNLOADING_FAILED}: EasiCamera");
+                }
+            }
+            if (app == App.WeChat)
+            {
+                const string targetFile = "WeChatSetup.exe";
+                const int maxRetries = 3;
+                const int checkInterval = 2000; // 2秒
+                const int timeout = 60000;      // 60秒
+                var downloadvocation = $"{Directory.GetCurrentDirectory()}\\temp";
+                Downloader("https://pc.weixin.qq.com", downloadvocation, true);
+                var html = System.IO.File.ReadAllText($"{downloadvocation}\\index.html");
+                WriteLog(LogLevel.Info, $"{_GET_HTML}: {downloadvocation}\\index.html");
+                // 根据系统架构确定要下载的链接
+                bool is64Bit = Environment.Is64BitOperatingSystem;
+                string systemBit;
+                // 获取下载链接（合并32/64位处理）
+                string downloadLink = GetWeChatDownloadLink(html, !is64Bit);
+                if (is64Bit)
+                {
+                    systemBit = _64;
+                    WriteLog(LogLevel.Info, $"{_GET_64_LINK}: {downloadLink}");
+                }
+                else
+                {
+                    systemBit = _32;
+                    WriteLog(LogLevel.Info, $"{_GET_32_LINK}: {downloadLink}");
+                }
+                WriteLog(LogLevel.Info, $"{_GET_SYSTEM_BIT}: {systemBit}");
+                // 下载主逻辑
+                bool downloadSuccess = false;
+                int retryCount = 0;
+                while (!downloadSuccess && retryCount < maxRetries)
+                {
+                    // 执行下载
+                    Downloader(downloadLink, folderPath);
+                    // 检查文件是否下载成功
+                    var checkTimer = new Stopwatch();
+                    checkTimer.Start();
+                    while (checkTimer.ElapsedMilliseconds < timeout)
+                    {
+                        var files = Directory.GetFiles(folderPath, targetFile);
+                        WriteLog(LogLevel.Info, $"{_GET_FILES_IN_DIRECTORY}: {folderPath}");
+                        if (files.Any())
+                        {
+                            WriteLog(LogLevel.Info, $"{_GET_FILE}: {files.First()}");
+                            var newFile = files.First();
+                            downloadSuccess = true;
+                            Process process = new Process();
+                            process.StartInfo.FileName = newFile;
+                            process.Start();
+                            WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {process.Id}");
+                            process.WaitForExit();
+                            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {process.ExitCode}");
+                            process.Close();
+                            break;
+                        }
+                        WriteLog(LogLevel.Info, $"{_WAIT_DOWNLOADING}... waiting {checkTimer.ElapsedMilliseconds / 1000} second");
+                        Thread.Sleep(checkInterval);
+                    }
+                    if (!downloadSuccess)
+                    {
+                        retryCount++;
+                        WriteLog(LogLevel.Warning, $"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
+                    }
+                }
+                if (!downloadSuccess)
+                {
+                    WriteLog(LogLevel.Error, $"{_DOWNLOADING_FAILED}: {retryCount}/{maxRetries}");
+                }
+            }
+            if (app == App.SeewoService)
+            {
+                const string targetPrefix = "SeewoServiceSetup_";
+                const int maxRetries = 3;
+                const int checkInterval = 2000;
+                const int timeout = 60000;
+                string url = "https://e.seewo.com/download/file?code=SeewoServiceSetup";
+                bool downloadSuccess = false;
+                int retryCount = 0;
+                while (!downloadSuccess && retryCount < maxRetries)
+                {
+                    AppDownload(url, folderPath);
+                    var checkTimer = new Stopwatch();
+                    checkTimer.Start();
+                    while (checkTimer.ElapsedMilliseconds < timeout)
+                    {
+                        var files = Directory.GetFiles(folderPath, $"{targetPrefix}*.exe");
+                        WriteLog(LogLevel.Info, $"{_GET_DIRECTORY}: {folderPath}");
+                        if (files.Any())
+                        {
+                            WriteLog(LogLevel.Info, $"{_GET_FILE}: {Path.GetFileName(files.First())}");
+                            downloadSuccess = true;
+                            break;
+                        }
+                        WriteLog(LogLevel.Info, $"{_WAIT_DOWNLOADING}... {checkTimer.ElapsedMilliseconds / 1000}s");
+                        Thread.Sleep(checkInterval);
+                    }
+                    if (!downloadSuccess)
+                    {
+                        retryCount++;
+                        WriteLog(LogLevel.Warning, $"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
+                        Directory.GetFiles(folderPath).ToList().ForEach(System.IO.File.Delete);
+                    }
+                }
+                if (!downloadSuccess)
+                {
+                    WriteLog(LogLevel.Error, $"{_DOWNLOADING_FAILED}: SeewoService");
+                }
+            }
+            if (app == App.ToDesk)
+            {
+                const string targetFile = "ToDeskSetup.exe";
+                const int maxRetries = 3;
+                const int checkInterval = 2000;
+                const int timeout = 60000;
+                var downloadvocation = $"{Directory.GetCurrentDirectory()}\\temp";
+                Downloader("https://www.todesk.com/download.html", downloadvocation, true);
+                var html = System.IO.File.ReadAllText($"{downloadvocation}\\download.html");
+                WriteLog(LogLevel.Info, $"{_GET_HTML}: {downloadvocation}\\download.html");
+                string downloadLink = GetToDeskDownlaodLink(html);
+                WriteLog(LogLevel.Info, $"{_GET_URL}: {downloadLink}");
+                bool downloadSuccess = false;
+                int retryCount = 0;
+
+                while (!downloadSuccess && retryCount < maxRetries)
+                {
+                    Downloader(downloadLink, folderPath, "ToDeskSetup.exe", true);
+                    var checkTimer = new Stopwatch();
+                    checkTimer.Start();
+                    while (checkTimer.ElapsedMilliseconds < timeout)
+                    {
+                        var files = Directory.GetFiles(folderPath, targetFile);
+                        WriteLog(LogLevel.Info, $"{_GET_FILES_IN_DIRECTORY}: {folderPath}");
+                        if (files.Any())
+                        {
+                            WriteLog(LogLevel.Info, $"{_GET_FILE}: {files.First()}");
+                            var newFile = files.First();
+                            downloadSuccess = true;
+                            Process process = new Process();
+                            process.StartInfo.FileName = newFile;
+                            process.Start();
+                            WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {process.Id}");
+                            process.WaitForExit();
+                            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {process.ExitCode}");
+                            process.Close();
+                            break;
+                        }
+                        WriteLog(LogLevel.Info, $"{_WAIT_DOWNLOADING}... waiting {checkTimer.ElapsedMilliseconds / 1000} second");
+                        Thread.Sleep(checkInterval);
+                    }
+                    if (!downloadSuccess)
+                    {
+                        retryCount++;
+                        WriteLog(LogLevel.Warning, $"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
+                    }
+                }
+                if (!downloadSuccess)
+                {
+                    WriteLog(LogLevel.Error, $"{_DOWNLOADING_FAILED}: {retryCount}/{maxRetries}");
+                }
+            }
+        }
+        /// <summary>
+        /// 用于从给定的 HTML 内容中提取微信下载链接，支持选择 32 位或 64 位版本。
+        /// </summary>
+        /// <param name="htmlContent"> HTML 内容</param>
+        /// <param name="is32Bit"> 是否选择 32 位版本</param>
+        /// <returns> 返回微信下载链接</returns>
+        internal static string GetWeChatDownloadLink(string htmlContent, bool is32Bit = false)
+        {
+            //var doc = new HtmlAgilityPack.HtmlDocument();
+            //doc.LoadHtml(htmlContent);
+            //// 精确匹配元素
+            //var node = is32Bit
+            //    ? doc.DocumentNode.SelectSingleNode("//a[@id='x86' and contains(@class,'download-item')]")
+            //    : doc.DocumentNode.SelectSingleNode("//a[@id='downloadButton' and contains(@class,'download-button')]");
+            //return node?.GetAttributeValue("href", null);
+            string pattern;
+            if (is32Bit)
+            {
+                pattern = @"<a\s+id=""x86""\s+class=""download-item x86_tips""\s+href=""([^""]+)""";
+            }
+            else
+            {
+                pattern = @"<a\s+[^>]*class=""download-button""\s+[^>]*href=""([^""]+)""";
+            }
+
+            Match match = Regex.Match(htmlContent, pattern);
+            if (match.Success)
+            {
+                return match.Groups[1].Value; // 返回 href 属性的值
+            }
+
+            return null; // 如果没有匹配到，返回 null
+        }
+        /// <summary>
+        /// 用于从给定的 HTML 内容中提取 ToDesk 下载链接
+        /// </summary>
+        /// <param name="htmlContent"> HTML 内容</param>
+        /// <returns> 返回 ToDesk 下载链接</returns>
+        internal static string GetToDeskDownlaodLink(string htmlContent)
+        {
+            //var doc = new HtmlAgilityPack.HtmlDocument();
+            //doc.LoadHtml(htmlContent);
+            //// 精确匹配元素
+            //var node = doc.DocumentNode.SelectSingleNode("//div[@class='win_download']/a[@class='btn' and starts-with(@href,'https://')]");
+            //return node?.GetAttributeValue("href", null);
+            // 正则表达式匹配 <div class="win_download"> 下的 <a> 标签，并且 href 以 https:// 开头
+            string pattern = @"<div\s+class=""win_download""[^>]*>\s*<a\s+[^>]*href=""([^""]+)""";
+
+            Match match = Regex.Match(htmlContent, pattern);
+            if (match.Success)
+            {
+                return match.Groups[1].Value; // 返回 href 属性的值
+            }
+
+            return null; // 如果没有匹配到，返回 null
+        }
+        /// <summary>
+        /// 用于下载指定的 URL 链接
+        /// </summary>
+        /// <param name="url"> 指定多个下载链接</param>
+        internal static void Download(string[] url)
+        {
+            foreach (string ul in url)
+            {
+                string arg = $" - x 16 --check-certificate=false -l \"{Directory.GetCurrentDirectory()}\\temp\\aria2c.log\" -d \"{Directory.GetCurrentDirectory()}\\bin\" {ul}";
                 /* -d, --dir=<DIR>  存储下载文件的目录。
                 * -l, --log=<LOG>  日志文件的文件名。如果指定了``-，则日志将写入``stdout。如果指定了空字符串(“”)，或者省略了此选项，则根本不会将日志写入磁盘。
                 * -o, --out=<FILE> 下载文件的文件名。它始终是相对于 --dir 选项中给定的目录。使用 --force-sequential 选项时，此选项将被忽略。
@@ -982,40 +1211,50 @@ namespace NinjaMagisk
                 }
                 p.Close();
             }
-            public static void AppDownload(string[] url, string location)
+            return;
+        }
+        /// <summary>
+        /// 用于下载指定的 URL 链接
+        /// </summary>
+        /// <param name="url"> 指定下载链接</param>
+        internal static void Download(string url)
+        {
+            string arg = $"-x 16 -s 16 --check-certificate=false -l \"{Directory.GetCurrentDirectory()}\\temp\\aria2c.log\" -d {Directory.GetCurrentDirectory()}\\bin {url}";
+            /* -d, --dir=<DIR>  存储下载文件的目录。
+            * -l, --log=<LOG>  日志文件的文件名。如果指定了``-，则日志将写入``stdout。如果指定了空字符串(“”)，或者省略了此选项，则根本不会将日志写入磁盘。
+            * -o, --out=<FILE> 下载文件的文件名。它始终是相对于 --dir 选项中给定的目录。使用 --force-sequential 选项时，此选项将被忽略。
+            * -q, --quiet      静默下载
+            */
+            Process p = new Process();
+            p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
+            p.StartInfo.Arguments = arg;
+            WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
+            p.StartInfo.CreateNoWindow = true;
+            p.Start();
+            WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {p.Id}");
+            WriteLog(LogLevel.Info, $"{_DOWNLOADING_FILE}...");
+            p.WaitForExit();
+            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {p.ExitCode}");
+            if (p.ExitCode != 0)
             {
-                foreach (string ul in url)
-                {
-                    string arg = $"-x 16 --check-certificate=false -l \"{Directory.GetCurrentDirectory()}\\temp\\aria2c.log\" -d \"{location}\" {ul}";
-                    /* -d, --dir=<DIR>  存储下载文件的目录。
-                    * -l, --log=<LOG>  日志文件的文件名。如果指定了``-，则日志将写入``stdout。如果指定了空字符串(“”)，或者省略了此选项，则根本不会将日志写入磁盘。
-                    * -o, --out=<FILE> 下载文件的文件名。它始终是相对于 --dir 选项中给定的目录。使用 --force-sequential 选项时，此选项将被忽略。
-                    * -q, --quiet      静默下载
-                    */
-                    Process p = new Process();
-                    p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
-                    p.StartInfo.Arguments = arg;
-                    WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
-                    p.StartInfo.CreateNoWindow = true;
-                    p.Start();
-                    WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {p.Id}");
-                    WriteLog(LogLevel.Info, $"{_DOWNLOADING_FILE}...");
-                    p.WaitForExit();
-                    WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {p.ExitCode}");
-                    if (p.ExitCode != 0)
-                    {
-                        LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
-                    }
-                    else
-                    {
-                        WriteLog(LogLevel.Info, $"{_DOWNLOADING_COMPLETE}");
-                    }
-                    p.Close();
-                }
+                LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
             }
-            public static void AppDownload(string url, string location)
+            else
             {
-                string arg = $"-x 16 -s 16 --check-certificate=false -l \"{Directory.GetCurrentDirectory()}\\temp\\aria2c.log\" -d {location} {url}";
+                WriteLog(LogLevel.Info, $"{_DOWNLOADING_COMPLETE}");
+            }
+            p.Close();
+        }
+        /// <summary>
+        /// 用于从指定的 URL 下载应用程序到指定的目录，使用 aria2c 工具并支持多线程下载
+        /// </summary>
+        /// <param name="url"> 指定多个下载链接</param>
+        /// <param name="location"> 下载位置</param>
+        public static void AppDownload(string[] url, string location)
+        {
+            foreach (string ul in url)
+            {
+                string arg = $"-x 16 --check-certificate=false -l \"{Directory.GetCurrentDirectory()}\\temp\\aria2c.log\" -d \"{location}\" {ul}";
                 /* -d, --dir=<DIR>  存储下载文件的目录。
                 * -l, --log=<LOG>  日志文件的文件名。如果指定了``-，则日志将写入``stdout。如果指定了空字符串(“”)，或者省略了此选项，则根本不会将日志写入磁盘。
                 * -o, --out=<FILE> 下载文件的文件名。它始终是相对于 --dir 选项中给定的目录。使用 --force-sequential 选项时，此选项将被忽略。
@@ -1042,35 +1281,43 @@ namespace NinjaMagisk
                 p.Close();
             }
         }
-        public class AntiSecurity
+        /// <summary>
+        /// 用于从指定的 URL 下载应用程序到指定的目录，使用 aria2c 工具并支持多线程下载
+        /// </summary>
+        /// <param name="url"> 指定下载链接</param>
+        /// <param name="location"> 下载位置</param>
+        public static void AppDownload(string url, string location)
         {
-            public static bool Anti360Security()
+            string arg = $"-x 16 -s 16 --check-certificate=false -l \"{Directory.GetCurrentDirectory()}\\temp\\aria2c.log\" -d {location} {url}";
+            /* -d, --dir=<DIR>  存储下载文件的目录。
+            * -l, --log=<LOG>  日志文件的文件名。如果指定了``-，则日志将写入``stdout。如果指定了空字符串(“”)，或者省略了此选项，则根本不会将日志写入磁盘。
+            * -o, --out=<FILE> 下载文件的文件名。它始终是相对于 --dir 选项中给定的目录。使用 --force-sequential 选项时，此选项将被忽略。
+            * -q, --quiet      静默下载
+            */
+            Process p = new Process();
+            p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
+            p.StartInfo.Arguments = arg;
+            WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
+            p.StartInfo.CreateNoWindow = true;
+            p.Start();
+            WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {p.Id}");
+            WriteLog(LogLevel.Info, $"{_DOWNLOADING_FILE}...");
+            p.WaitForExit();
+            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {p.ExitCode}");
+            if (p.ExitCode != 0)
             {
-                Process[] processes = Process.GetProcessesByName("360Tray");
-                if (processes.Length > 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
             }
-            public static bool AntiHuoRongSecurity()
+            else
             {
-                Process[] processes = Process.GetProcessesByName("HipsTray");
-                if (processes.Length > 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-
+                WriteLog(LogLevel.Info, $"{_DOWNLOADING_COMPLETE}");
             }
+            p.Close();
         }
     }
+    /// <summary>
+    /// 网络相关操作
+    /// </summary>
     public class Network
     {
         /// <summary>
@@ -1103,18 +1350,34 @@ namespace NinjaMagisk
             }
         }
     }
+    /// <summary>
+    /// Windows 相关操作
+    /// </summary>
     public class Windows
     {
+        /// <summary>
+        /// 一个用于启用和禁用系统休眠功能的类，提供了静态方法 <see cref="Enable"/>和<see cref="Disable"/>来控制休眠状态。
+        /// </summary>
         public class Hibernate
         {
+            /// <summary>
+            /// 启用系统休眠功能。
+            /// </summary>
             public static void Enable()
             {
                 Switch("on");
             }
+            /// <summary>
+            /// 禁用系统休眠功能。
+            /// </summary>
             public static void Disable()
             {
                 Switch("off");
             }
+            /// <summary>
+            /// 用于启用或禁用系统休眠功能。
+            /// </summary>
+            /// <param name="key"> 指定启用或禁用休眠功能的关键字。</param>
             static void Switch(string key)
             {
                 Process Sleep = new Process();
@@ -1134,6 +1397,9 @@ namespace NinjaMagisk
                 }
             }
         }//休眠
+        /// <summary>
+        /// 用于通过调用 <see langword="powercfg"/> 命令来启用卓越性能电源配置方案，并记录相关的进程信息和执行结果。
+        /// </summary>
         public void EnableHighPowercfg()
         {
             Process p = new Process();
@@ -1152,17 +1418,29 @@ namespace NinjaMagisk
                 WriteLog(LogLevel.Info, LogKind.Process, $"{_ENABLE_HIGHPOWERCFG}");
             }
         }//卓越性能电源方案
+        /// <summary>
+        /// 用于启用或禁用 Windows 安全中心的功能，并在操作过程中处理与安全软件的冲突
+        /// </summary>
         public class WindowsSecurityCenter//Windows安全中心
         {
+            /// <summary>
+            /// 启用 Windows 安全中心
+            /// </summary>
             public static void Enable()
             {
                 Switch(0);
             }
+            /// <summary>
+            /// 禁用 Windows 安全中心
+            /// </summary>
             public static void Disable()
             {
                 Switch(1);
-
             }
+            /// <summary>
+            /// 用于启用或禁用 Windows 安全中心的功能
+            /// </summary>
+            /// <param name="value"> 指定启用或禁用 Windows 安全中心的值</param>
             static void Switch(int value)
             {
                 while (AntiSecurity.Anti360Security() || AntiSecurity.AntiHuoRongSecurity())
@@ -1214,16 +1492,30 @@ namespace NinjaMagisk
                 }
             }//开关
         }
+        /// <summary>
+        /// 用于启用或禁用 Windows 更新服务，并在操作过程中处理与安全软件的冲突
+        /// </summary>
         public class WindowsUpdate//Windows更新服务
         {
+            /// <summary>
+            /// 启用 Windows 更新服务
+            /// </summary>
             public static void Enable()
             {
                 Switch("/E");
             }
+            /// <summary>
+            /// 禁用 Windows 更新服务
+            /// </summary>
             public static void Disable()
             {
                 Switch("/D");
             }
+            /// <summary>
+            /// 用于启用或禁用 Windows 更新服务
+            /// </summary>
+            /// <param name="value"> 指定启用或禁用 Windows 更新服务的值</param>
+            /// <returns> 返回启用或禁用 Windows 更新服务的字符串</returns>
             private static string IsEnable(string value)
             {
                 if (value == "/D")
@@ -1236,6 +1528,11 @@ namespace NinjaMagisk
                 }
                 return null;
             }
+            /// <summary>
+            /// 用于处理启用或禁用 Windows 更新服务的错误
+            /// </summary>
+            /// <param name="value"></param>
+            /// <returns></returns>
             private static string ErrorEnable(string value)
             {
                 if (value == "/D")
@@ -1248,6 +1545,10 @@ namespace NinjaMagisk
                 }
                 return null;
             }
+            /// <summary>
+            /// 用于启用或禁用 Windows 更新服务
+            /// </summary>
+            /// <param name="value"> 指定启用或禁用 Windows 更新服务的值</param>
             static void Switch(string value)
             {
                 while (AntiSecurity.Anti360Security() || AntiSecurity.AntiHuoRongSecurity())
@@ -1295,6 +1596,9 @@ namespace NinjaMagisk
                 }
             }//开关
         }
+        /// <summary>
+        /// 用于激活 Windows 系统，首先检查安全软件的状态，然后启动指定的激活程序。
+        /// </summary>
         public void ActiveWindows()//Windows激活
         {
             while (AntiSecurity.Anti360Security() || AntiSecurity.AntiHuoRongSecurity())
@@ -1381,6 +1685,11 @@ namespace NinjaMagisk
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool CloseHandle(IntPtr hObject);
         // 验证用户名和密码
+
+        /// <summary>
+        /// 用于显示一个凭据提示框以验证用户身份。
+        /// </summary>
+        /// <returns> <see langword="true"/> 表示验证成功，<see langword="false"/> 表示验证失败。</returns>
         public static bool Authentication()
         {
             CREDUI_INFO credUI = new CREDUI_INFO
@@ -1396,8 +1705,6 @@ namespace NinjaMagisk
             do
             {
                 uint authPackage = 0;
-                IntPtr outCredBuffer;
-                uint outCredBufferSize;
                 bool save = false;
 
                 int result = CredUIPromptForWindowsCredentials(
@@ -1406,8 +1713,8 @@ namespace NinjaMagisk
                     ref authPackage,
                     IntPtr.Zero,
                     0,
-                    out outCredBuffer,
-                    out outCredBufferSize,
+                    out IntPtr outCredBuffer,
+                    out uint outCredBufferSize,
                     ref save,
                     0x1); // CREDUIWIN_GENERIC
 
@@ -1423,14 +1730,13 @@ namespace NinjaMagisk
                     if (CredUnPackAuthenticationBuffer(0, outCredBuffer, outCredBufferSize, userName, ref maxUserName, domainName, ref maxDomainName, password, ref maxPassword))
                     {
                         // 验证用户名和密码
-                        IntPtr userToken;
                         bool isValid = LogonUser(
                             userName.ToString(),
                             domainName.ToString(),
                             password.ToString(),
                             2, // LOGON32_LOGON_INTERACTIVE
                             0, // LOGON32_PROVIDER_DEFAULT
-                            out userToken);
+                            out IntPtr userToken);
                         string ExtraMessage;
                         if (isValid)
                         {
@@ -1476,8 +1782,18 @@ namespace NinjaMagisk
         }//Windows安全中心身份验证
         #endregion
     }
+    /// <summary>
+    /// 用于处理注册表操作
+    /// </summary>
     public class Registry
     {
+        /// <summary>
+        /// 用于写入注册表项的值
+        /// </summary>
+        /// <param name="keyPath"> 注册表项路径</param>
+        /// <param name="valueName"> 注册表项名称</param>
+        /// <param name="valueType"> 注册表项类型</param>
+        /// <param name="valueData"> 注册表项数据</param>
         public static void Write(string keyPath, string valueName, RegistryValueKind valueType, object valueData)
         {
             try
@@ -1497,6 +1813,12 @@ namespace NinjaMagisk
                 LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"{_WRITE_REGISTRY_FAILED}: {ex.Message}");
             }
         }
+        /// <summary>
+        /// 用于读取注册表项的值
+        /// </summary>
+        /// <param name="keyName"> 注册表项路径</param>
+        /// <param name="valueName"> 注册表项名称</param>
+        /// <returns> 返回注册表项的值</returns>
         internal static string GetRegistryValue(string keyName, string valueName)
         {
             string value = "";
@@ -1511,13 +1833,31 @@ namespace NinjaMagisk
             return value;
         }
     }
+    /// <summary>
+    /// 一个包含AI聊天功能的类，提供与 APl 交互的能力,
+    /// </summary>
     public class AI// AI
     {
+        /// <summary>
+        /// 用于与 DeepSeek API 进行聊天交互的类，提供了配置 API URL 和发送消息的功能。
+        /// </summary>
         public class DeepSeek
         {
             // ==================== API配置区（后期可修改） ====================
+            /// <summary>
+            /// DeepSeek API的URL
+            /// </summary>
             private const string ApiUrl = "https://api.deepseek.com/v1/chat/completions"; // DeepSeek API的URL
+            /// <summary>
+            /// 表示模型的名称，默认为 <see langword="default"/>
+            /// </summary>
             public string Model { get; set; } = "default"; // 默认模型
+            /// <summary>
+            /// 用于与 DeepSeek API 进行聊天交互
+            /// </summary>
+            /// <param name="text"> 要发送的消息</param>
+            /// <param name="api"> DeepSeek API的密钥</param>
+            /// <returns></returns>
             public static async Task Chat(string text, string api)
             {
                 try
@@ -1533,7 +1873,7 @@ namespace NinjaMagisk
                             new { role = "user", content = text }
                         }
                         };
-                        string json = Newtonsoft.Json.JsonConvert.SerializeObject(requestBody);
+                        string json = Json.SerializeObject(requestBody);
                         var content = new StringContent(json, Encoding.UTF8, "application/json");
                         WriteLog(LogLevel.Info, $"{_SEND_REQUEST}...{text}");
                         HttpResponseMessage response = await client.PostAsync(ApiUrl, content);
@@ -1541,7 +1881,7 @@ namespace NinjaMagisk
                         WriteLog(LogLevel.Info, _GET_RESPONSE);
                         if (response.IsSuccessStatusCode)
                         {
-                            var responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(responseJson);
+                            var responseObject = Text.Json.DeserializeObject<dynamic>(responseJson);
                             string answer = responseObject.choices[0].message.content;
                             WriteLog(LogLevel.Info, $"{_ANSWER}: {answer}");
                         }
@@ -1557,11 +1897,26 @@ namespace NinjaMagisk
                 }
             }
         }
+        /// <summary>
+        /// 用于与 OpenAI API 进行聊天交互的类，提供了配置 API URL 和发送消息的功能。
+        /// </summary>
         public class ChatGPT
         {
             // ==================== API配置区（后期可修改） ====================
+            /// <summary>
+            /// OpenAI API的URL
+            /// </summary>
             private const string ApiUrl = "https://api.openai.com/v1/chat/completions"; // OpenAI API的URL
+            /// <summary>
+            /// 表示模型的名称，默认为 <see langword="gpt-3.5-turbo"/>
+            /// </summary>
             public string Model { get; set; } = "gpt-3.5-turbo"; // 默认模型
+            /// <summary>
+            /// 用于与 OpenAI API 进行聊天交互
+            /// </summary>
+            /// <param name="text"> 要发送的消息</param>
+            /// <param name="apiKey"> OpenAI API的密钥</param>
+            /// <returns></returns>
             public static async Task Chat(string text, string apiKey)
             {
                 try
@@ -1577,7 +1932,7 @@ namespace NinjaMagisk
                                 new { role = "user", content = text }
                             }
                         };
-                        string json = Newtonsoft.Json.JsonConvert.SerializeObject(requestBody);
+                        string json = Text.Json.SerializeObject(requestBody);
                         var content = new StringContent(json, Encoding.UTF8, "application/json");
                         WriteLog(LogLevel.Info, $"{_SEND_REQUEST}...{text}");
                         HttpResponseMessage response = await client.PostAsync(ApiUrl, content);
@@ -1585,7 +1940,7 @@ namespace NinjaMagisk
                         WriteLog(LogLevel.Info, _GET_RESPONSE);
                         if (response.IsSuccessStatusCode)
                         {
-                            var responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(responseJson);
+                            var responseObject = Text.Json.DeserializeObject<dynamic>(responseJson);
                             string answer = responseObject.choices[0].message.content;
                             WriteLog(LogLevel.Info, $"{_ANSWER}: {answer}");
                         }
@@ -1602,10 +1957,23 @@ namespace NinjaMagisk
             }
         }
     }
+    /// <summary>
+    /// 用于处理文件操作
+    /// </summary>
     public class File
     {
+        /// <summary>
+        /// 用于处理文件的加密和解密操作
+        /// </summary>
         public class AESEncryption
         {
+            /// <summary>
+            /// 用于使用指定的 256 位密钥和 128 位初始化向量对给定的明文字符串进行 AES 加密，并返回加密后的字符串。
+            /// </summary>
+            /// <param name="plainText"> 要加密的明文字符串</param>
+            /// <param name="Key"> 256位密钥</param>
+            /// <param name="IV"> 128位初始化向量</param>
+            /// <returns> 返回加密后的字符串</returns>
             public static string Encrypt(string plainText, byte[] Key/*256-bit*/, byte[] IV/*128-bit*/)
             {
                 using (Aes aesAlg = Aes.Create())
@@ -1628,6 +1996,13 @@ namespace NinjaMagisk
                     }
                 }
             }// 加密方法
+            /// <summary>
+            /// 用于使用指定的 256 位密钥和 128  位初始化向量对给定的密文字符串进行 AES 解密，并返回解密后的字符串。
+            /// </summary>
+            /// <param name="cipherText"> 要解密的密文字符串</param>
+            /// <param name="Key"> 256位密钥</param>
+            /// <param name="IV"> 128位初始化向量</param>
+            /// <returns> 返回解密后的字符串</returns>
             public static string Decrypt(string cipherText, byte[] Key/*256-bit*/, byte[] IV/*128-bit*/)
             {
                 using (Aes aesAlg = Aes.Create())
@@ -1650,6 +2025,9 @@ namespace NinjaMagisk
                 }
             }// 解密方法
         }
+        /// <summary>
+        /// 定义了文件的厘性选项，包括只读、系统、隐藏和归档。
+        /// </summary>
 
         public enum AtOp
         {
@@ -1658,6 +2036,12 @@ namespace NinjaMagisk
             Hidden,
             Archive,
         }
+        /// <summary>
+        /// 用于设置文件的属性
+        /// </summary>
+        /// <param name="path"> 文件路径</param>
+        /// <param name="Key"> 属性选项</param>
+        /// <param name="Switch"> 开关</param>
         public void Attrib(string path, AtOp Key, bool Switch)
         {
             string key;
@@ -1718,6 +2102,12 @@ namespace NinjaMagisk
                 process.Close();
             }
         }
+        /// <summary>
+        /// 用于检查文件的哈希值是否与预期的哈希值匹配
+        /// </summary>
+        /// <param name="filePath"> 文件路径</param>
+        /// <param name="expectedMD5"> 预期的MD5哈希值</param>
+        /// <returns> 如果哈希值匹配，则返回 <see langword="true"/>，否则返回 <see langword="false"/></returns>
         public static bool CheckFileHash(string filePath, string expectedMD5)
         {
             try
@@ -1762,10 +2152,695 @@ namespace NinjaMagisk
                 }
             }
         }
-
     }
+    /// <summary>
+    /// 用于文本处理
+    /// </summary>
+    public class Text
+    {
+        /// <summary>
+        /// 用于读取和写入配置文件的类，提供了静态方法 <see cref="ReadConfig"/> 和 <see cref="WriteConfig"/> 来处理指定路径的配置文件
+        /// </summary>
+        public class Config
+        {
+            /// <summary>
+            /// 用于从指定的INI文件中读取与给定头文本匹配的配置值,
+            /// </summary>
+            /// <param name="iniPath"> INI文件路径</param>
+            /// <param name="HeadText"> 头文本</param>
+            /// <returns> 返回与头文本匹配的配置值</returns>    
+            public static string ReadConfig(string iniPath, string HeadText)
+            {
+                string[] Texts = System.IO.File.ReadAllLines(iniPath);
+                foreach (string Text in Texts)
+                {
+                    if (Text.Contains(HeadText))
+                    {
+                        string[] part = Text.Split('=');
+                        return part[1].Trim();
+                    }
+                }
+                return null;
+            }
+            /// <summary>
+            /// 用于将指定的值写入指定的INI文件中，如果文件不存在，则创建文件并写入头部和值
+            /// </summary>
+            /// <param name="iniPath"> INI文件路径</param>
+            /// <param name="HeadText"> 头文本</param>
+            /// <param name="Value"> 值</param>
+            public static void WriteConfig(string iniPath, string HeadText, string Value)
+            {
+                // 如果文件不存在，创建文件并写入头部和值
+                if (!System.IO.File.Exists(iniPath))
+                {
+                    System.IO.File.Exists(iniPath);
+                    return;
+                }
+
+                // 读取文件的所有行
+                string[] lines = System.IO.File.ReadAllLines(iniPath);
+                WriteLog(LogLevel.Info, $"{_READ_FILE}: {iniPath}");
+                bool found = false;
+
+                // 遍历每一行，查找是否有匹配的头部
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    if (lines[i].StartsWith(HeadText))
+                    {
+                        // 如果找到匹配的头部，替换该行的值\
+                        WriteLog(LogLevel.Info, $"{_UPDATE_LINE}: {HeadText} = {Value}");
+                        lines[i] = $"{HeadText} = {Value}";
+                        found = true;
+                        break;
+                    }
+                }
+
+                // 如果没有找到匹配的头部，追加一行
+                if (!found)
+                {
+                    WriteLog(LogLevel.Info, $"{_ADD_NEW_LINE}: {HeadText} = {Value}");
+                    Array.Resize(ref lines, lines.Length + 1);
+                    lines[lines.Length - 1] = $"{HeadText} = {Value}";
+                }
+
+                // 将修改后的内容写回文件
+                System.IO.File.WriteAllLines(iniPath, lines);
+                WriteLog(LogLevel.Info, $"{_WRITE_FILE}: {iniPath}");
+            }
+        }
+        /// <summary>
+        /// 用于处理JSON格式的文本
+        /// </summary>
+        public class Json
+        {
+            /// <summary>
+            /// 用于将对象序列化为JSON字符串
+            /// </summary>
+            public class JObject : DynamicObject
+            {
+                /// <summary>
+                /// 用于存储JSON对象的属性
+                /// </summary>
+                private readonly Dictionary<string, object> _properties;
+                /// <summary>
+                /// 初始化一个新的JSON对象,并创造一个空的属性字典
+                /// </summary>
+                public JObject()
+                {
+                    _properties = new Dictionary<string, object>();
+                }
+                /// <summary>
+                /// 获取或设置指定键的属性
+                /// </summary>
+                /// <param name="key"> 键</param>
+                /// <returns> 返回属性值</returns>
+                public object this[string key]
+                {
+                    get => _properties.ContainsKey(key) ? _properties[key] : null;
+                    set => _properties[key] = value;
+                }
+                /// <summary>
+                /// 用于将字符串格式的 <see cref="Json"/> 对象解析为 <see cref="JObject"/> 实例
+                /// </summary>
+                /// <param name="json"> JSON对象</param>
+                /// <returns></returns>
+                /// <exception cref="FormatException"> 无效的JSON对象格式</exception>
+                /// <exception cref="NotSupportedException"> 不支持的JSON值</exception>
+                public static JObject Parse(string json)
+                {
+                    var result = new JObject();
+                    json = json.Trim();
+
+                    if (!json.StartsWith("{") || !json.EndsWith("}"))
+                    {
+                        throw new FormatException("Invalid JSON object format.");
+                    }
+
+                    json = json.Substring(1, json.Length - 2).Trim();
+
+                    if (string.IsNullOrEmpty(json))
+                    {
+                        return result;
+                    }
+                    
+                    var pairs = SplitJson(json, ',');
+                    foreach (var pair in pairs)
+                    {
+                        var keyValue = SplitJson(pair, ':');
+                        if (keyValue.Length != 2)
+                        {
+                            throw new FormatException("Invalid JSON object format.");
+                        }
+
+                        string key = keyValue[0].Trim().Trim('"');
+                        string value = keyValue[1].Trim();
+
+                        if (value.StartsWith("{") && value.EndsWith("}"))
+                        {
+                            result[key] = Parse(value); // 嵌套对象
+                        }
+                        else if (value.StartsWith("[") && value.EndsWith("]"))
+                        {
+                            result[key] = ParseArray(value); // 数组
+                        }
+                        else if (value.StartsWith("\"") && value.EndsWith("\""))
+                        {
+                            result[key] = value.Trim('"'); // 字符串
+                        }
+                        else if (value == "true" || value == "false")
+                        {
+                            result[key] = bool.Parse(value); // 布尔值
+                        }
+                        else if (Regex.IsMatch(value, @"^-?\d+(\.\d+)?$"))
+                        {
+                            result[key] = ParseNumber(value); // 数字
+                        }
+                        else if (value == "null")
+                        {
+                            result[key] = null; // null
+                        }
+                        else
+                        {
+                            throw new NotSupportedException($"Unsupported JSON value: {value}");
+                        }
+                    }
+
+                    return result;
+                }
+                /// <summary>
+                /// 用于解析 <see cref="Json"/> 字符串并将其转换为对象列表，支持嵌套对象和数组的处理。
+                /// </summary>
+                /// <param name="json"> JSON数组</param>
+                /// <returns> 返回JSON数组</returns>
+                /// <exception cref="NotSupportedException"> 不支持的JSON值</exception>
+                private static List<object> ParseArray(string json)
+                {
+                    var result = new List<object>();
+                    json = json.Substring(1, json.Length - 2).Trim();
+
+                    if (string.IsNullOrEmpty(json))
+                    {
+                        return result;
+                    }
+
+                    var items = SplitJson(json, ',');
+                    foreach (var item in items)
+                    {
+                        if (item.StartsWith("{") && item.EndsWith("}"))
+                        {
+                            result.Add(Parse(item)); // 嵌套对象
+                        }
+                        else if (item.StartsWith("[") && item.EndsWith("]"))
+                        {
+                            result.Add(ParseArray(item)); // 嵌套数组
+                        }
+                        else if (item.StartsWith("\"") && item.EndsWith("\""))
+                        {
+                            result.Add(item.Trim('"')); // 字符串
+                        }
+                        else if (item == "true" || item == "false")
+                        {
+                            result.Add(bool.Parse(item)); // 布尔值
+                        }
+                        else if (Regex.IsMatch(item, @"^-?\d+(\.\d+)?$"))
+                        {
+                            result.Add(ParseNumber(item)); // 数字
+                        }
+                        else if (item == "null")
+                        {
+                            result.Add(null); // null
+                        }
+                        else
+                        {
+                            throw new NotSupportedException($"Unsupported JSON value: {item}");
+                        }
+                    }
+
+                    return result;
+                }
+                /// <summary>
+                /// 将<see cref="Json"/>数字字符串解析为数字
+                /// </summary>
+                /// <param name="value"> <see cref="Json"/>数字字符串</param>
+                /// <returns> 返回数字</returns>
+                private static object ParseNumber(string value)
+                {
+                    if (value.Contains("."))
+                    {
+                        return double.Parse(value);
+                    }
+                    else
+                    {
+                        return long.Parse(value);
+                    }
+                }
+                /// <summary>
+                /// 将<see cref="Json"/>字符串分割为数组
+                /// </summary>
+                /// <param name="json"> <see cref="Json"/>字符串</param>
+                /// <param name="separator"> 分隔符</param>
+                /// <returns> 返回数组</returns>
+                private static string[] SplitJson(string json, char separator)
+                {
+                    var result = new List<string>();
+                    int depth = 0;
+                    int start = 0;
+
+                    for (int i = 0; i < json.Length; i++)
+                    {
+                        char c = json[i];
+                        if (c == '{' || c == '[')
+                        {
+                            depth++;
+                        }
+                        else if (c == '}' || c == ']')
+                        {
+                            depth--;
+                        }
+                        else if (c == separator && depth == 0)
+                        {
+                            result.Add(json.Substring(start, i - start));
+                            start = i + 1;
+                        }
+                    }
+
+                    if (start < json.Length)
+                        result.Add(json.Substring(start));
+
+                    return result.ToArray();
+                }
+                /// <summary>
+                /// 用于尝试获取指定名称的成员，如果存在则返回该成员的值
+                /// </summary>
+                /// <param name="binder"> 绑定器</param>
+                /// <param name="result"> 结果</param>
+                /// <returns> 如果成功，则返回 <see langword="true"/>，否则返回 <see langword="false"/></returns>
+                public override bool TryGetMember(GetMemberBinder binder, out object result)
+                {
+                    if (_properties.ContainsKey(binder.Name))
+                    {
+                        result = _properties[binder.Name];
+                        return true;
+                    }
+
+                    result = null;
+                    return false;
+                }
+                /// <summary>
+                /// 用于设置动态成员的值，并返回一个指示操作是否成功的布尔值
+                /// </summary>
+                /// <param name="binder"> 绑定器</param>
+                /// <param name="value"> 值</param>
+                /// <returns> 如果成功，则返回 <see langword="true"/>，否则返回 <see langword="false"/></returns>
+                public override bool TrySetMember(SetMemberBinder binder, object value)
+                {
+                    _properties[binder.Name] = value;
+                    return true;
+                }
+            }
+            /// <summary>
+            /// 用于将 <see cref="Json"/> 字符串反序列化为指定类型的对象
+            /// </summary>
+            /// <typeparam name="T"> 对象类型</typeparam>
+            /// <param name="json"> <see cref="Json"/>字符串</param>
+            /// <returns>   返回对象</returns>
+            // 支持泛型反序列化
+            public static T DeserializeObject<T>(string json) where T : new()
+            {
+                var jsonObject = ParseJson(json);
+                return MapJsonToObject<T>(jsonObject);
+            }
+            /// <summary>
+            /// 用于将给定的对象序列化为 <see cref="Json"/> 字符串
+            /// </summary>
+            /// <param name="obj"> 对象</param>
+            /// <returns> 返回 <see cref="Json"/> 字符串</returns>
+            /// <exception cref="NotSupportedException"> 不支持的JSON值</exception>
+            public static string SerializeObject(object obj)
+            {
+                if (obj == null)
+                    return "null";
+
+                Type type = obj.GetType();
+
+                if (type == typeof(string) || type == typeof(char))
+                    return $"\"{EscapeString(obj.ToString())}\"";
+
+                if (type.IsPrimitive || type == typeof(decimal))
+                    return obj.ToString().ToLower(); // 处理数字和布尔值
+
+                if (type.IsEnum)
+                    return $"\"{obj}\"";
+
+                if (type.IsArray || (type.IsGenericType && typeof(IEnumerable<>).IsAssignableFrom(type.GetGenericTypeDefinition())))
+                {
+                    var sb = new StringBuilder("[");
+                    var enumerable = obj as System.Collections.IEnumerable;
+                    bool first = true;
+                    foreach (var item in enumerable)
+                    {
+                        if (!first)
+                            sb.Append(",");
+                        sb.Append(SerializeObject(item));
+                        first = false;
+                    }
+                    sb.Append("]");
+                    return sb.ToString();
+                }
+
+                if (type.IsClass || type.IsValueType)
+                {
+                    var sb = new StringBuilder("{");
+                    var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                    bool first = true;
+                    foreach (var property in properties)
+                    {
+                        if (!first)
+                            sb.Append(",");
+                        sb.Append($"\"{property.Name}\":{Json.SerializeObject(property.GetValue(obj))}");
+                        first = false;
+                    }
+                    sb.Append("}");
+                    return sb.ToString();
+                }
+
+                throw new NotSupportedException($"Type {type.Name} is not supported for serialization.");
+            }
+            /// <summary>
+            /// 用于将字符串中的特殊字符转换为 <see cref="Json"/> 格式的转义字符,
+            /// </summary>
+            /// <param name="str"> 字符串</param>
+            /// <returns>  返回转义后的字符串</returns>
+            private static string EscapeString(string str)
+            {
+                return str.Replace("\\", "\\\\")
+                          .Replace("\"", "\\\"")
+                          .Replace("\b", "\\b")
+                          .Replace("\f", "\\f")
+                          .Replace("\n", "\\n")
+                          .Replace("\r", "\\r")
+                          .Replace("\t", "\\t");
+            }
+
+            // 支持非泛型反序列化（返回 dynamic）
+            /// <summary>
+            /// 用于将 <see cref="Json"/> 字符串反序列化为动态对象
+            /// </summary>
+            /// <param name="json"> <see cref="Json"/> 字符串</param>
+            /// <returns> 返回动态对象</returns>
+            public static dynamic DeserializeObject(string json)
+            {
+                return ParseJson(json);
+            }
+            /// <summary>
+            /// 用于将字符串格式的 <see cref="Json"/> 对象解析为 <see cref="JObject"/> 实例
+            /// </summary>
+            /// <param name="json"> <see cref="Json"/> 对象</param>
+            /// <returns> 返回 <see cref="JObject"/> 实例</returns>
+            /// <exception cref="FormatException"></exception>
+            /// <exception cref="NotSupportedException"></exception>
+            private static Dictionary<string, object> ParseJson(string json)
+            {
+                json = json.Trim();
+                if (!json.StartsWith("{") || !json.EndsWith("}"))
+                {
+                    throw new FormatException("Invalid JSON object format.");
+                }
+
+                var result = new Dictionary<string, object>();
+                json = json.Substring(1, json.Length - 2).Trim();
+
+                if (string.IsNullOrEmpty(json))
+                {
+                    return result;
+                }
+
+                var pairs = SplitJson(json, ',');
+                foreach (var pair in pairs)
+                {
+                    var keyValue = SplitJson(pair, ':');
+                    if (keyValue.Length != 2)
+                    {
+                        throw new FormatException("Invalid JSON object format.");
+                    }
+
+                    string key = keyValue[0].Trim().Trim('"');
+                    string value = keyValue[1].Trim();
+
+                    if (value.StartsWith("{") && value.EndsWith("}"))
+                    {
+                        result[key] = ParseJson(value); // 嵌套对象
+                    }
+                    else if (value.StartsWith("[") && value.EndsWith("]"))
+                    {
+                        result[key] = ParseJsonArray(value); // 数组
+                    }
+                    else if (value.StartsWith("\"") && value.EndsWith("\""))
+                    {
+                        result[key] = value.Trim('"'); // 字符串
+                    }
+                    else if (value == "true" || value == "false")
+                    {
+                        result[key] = bool.Parse(value); // 布尔值
+                    }
+                    else if (Regex.IsMatch(value, @"^-?\d+(\.\d+)?$"))
+                    {
+                        result[key] = ParseNumber(value); // 数字
+                    }
+                    else if (value == "null")
+                    {
+                        result[key] = null; // null
+                    }
+                    else
+                    {
+                        throw new NotSupportedException($"Unsupported JSON value: {value}");
+                    }
+                }
+
+                return result;
+            }
+            /// <summary>
+            /// 用于解析 <see cref="Json"/> 字符串并将其转换为对象列表，支持嵌套对象和数组的处理。
+            /// </summary>
+            /// <param name="json"> <see cref="Json"/> 字符串</param>
+            /// <returns> 返回对象列表</returns>
+            /// <exception cref="NotSupportedException"> 不支持的JSON值</exception>
+            private static List<object> ParseJsonArray(string json)
+            {
+                var result = new List<object>();
+                json = json.Substring(1, json.Length - 2).Trim();
+
+                if (string.IsNullOrEmpty(json))
+                {
+                    return result;
+                }
+
+                var items = SplitJson(json, ',');
+                foreach (var item in items)
+                {
+                    if (item.StartsWith("{") && item.EndsWith("}"))
+                    {
+                        result.Add(ParseJson(item)); // 嵌套对象
+                    }
+                    else if (item.StartsWith("[") && item.EndsWith("]"))
+                    {
+                        result.Add(ParseJsonArray(item)); // 嵌套数组
+                    }
+                    else if (item.StartsWith("\"") && item.EndsWith("\""))
+                    {
+                        result.Add(item.Trim('"')); // 字符串
+                    }
+                    else if (item == "true" || item == "false")
+                    {
+                        result.Add(bool.Parse(item)); // 布尔值
+                    }
+                    else if (Regex.IsMatch(item, @"^-?\d+(\.\d+)?$"))
+                    {
+                        result.Add(ParseNumber(item)); // 数字
+                    }
+                    else if (item == "null")
+                    {
+                        result.Add(null); // null
+                    }
+                    else
+                    {
+                        throw new NotSupportedException($"Unsupported JSON value: {item}");
+                    }
+                }
+
+                return result;
+            }
+            /// <summary>
+            /// 将 <see cref="Json"/>  数字字符串解析为数字
+            /// </summary>
+            /// <param name="value"> <see cref="Json"/> 数字字符串</param>
+            /// <returns> 返回数字</returns>
+            private static object ParseNumber(string value)
+            {
+                if (value.Contains("."))
+                {
+                    return double.Parse(value);
+                }
+                else
+                {
+                    return long.Parse(value);
+                }
+            }
+            /// <summary>
+            /// 将 <see cref="Json"/> 字符串分割为数组
+            /// </summary>
+            /// <param name="json"> <see cref="Json"/> 字符串</param>
+            /// <param name="separator"> 分隔符</param>
+            /// <returns> 返回数组</returns>
+            private static string[] SplitJson(string json, char separator)
+            {
+                var result = new List<string>();
+                int depth = 0;
+                int start = 0;
+
+                for (int i = 0; i < json.Length; i++)
+                {
+                    char c = json[i];
+                    if (c == '{' || c == '[')
+                    {
+                        depth++;
+                    }
+                    else if (c == '}' || c == ']')
+                    {
+                        depth--;
+                    }
+                    else if (c == separator && depth == 0)
+                    {
+                        result.Add(json.Substring(start, i - start));
+                        start = i + 1;
+                    }
+                }
+
+                if (start < json.Length)
+                {
+                    result.Add(json.Substring(start));
+                }
+
+                return result.ToArray();
+            }
+            /// <summary>
+            /// 将 <see cref="Json"/> 字符串转换为指定类型的对象
+            /// </summary>
+            /// <typeparam name="T"> 对象类型</typeparam>
+            /// <param name="jsonObject"> <see cref="Json"/> 对象</param>
+            /// <returns> 返回对象</returns>
+            private static T MapJsonToObject<T>(Dictionary<string, object> jsonObject) where T : new()
+            {
+                var result = new T();
+                var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+                foreach (var property in properties)
+                {
+                    if (jsonObject.ContainsKey(property.Name))
+                    {
+                        var value = jsonObject[property.Name];
+                        if (value != null)
+                        {
+                            if (property.PropertyType == typeof(string))
+                            {
+                                property.SetValue(result, value.ToString());
+                            }
+                            else if (property.PropertyType == typeof(int))
+                            {
+                                property.SetValue(result, Convert.ToInt32(value));
+                            }
+                            else if (property.PropertyType == typeof(long))
+                            {
+                                property.SetValue(result, Convert.ToInt64(value));
+                            }
+                            else if (property.PropertyType == typeof(double))
+                            {
+                                property.SetValue(result, Convert.ToDouble(value));
+                            }
+                            else if (property.PropertyType == typeof(bool))
+                            {
+                                property.SetValue(result, Convert.ToBoolean(value));
+                            }
+                            else if (property.PropertyType.IsEnum)
+                            {
+                                property.SetValue(result, Enum.Parse(property.PropertyType, value.ToString()));
+                            }
+                            else if (property.PropertyType.IsClass || property.PropertyType.IsValueType)
+                            {
+                                var nestedObject = MapJsonToObject(property.PropertyType, value as Dictionary<string, object>);
+                                property.SetValue(result, nestedObject);
+                            }
+                        }
+                    }
+                }
+
+                return result;
+            }
+            /// <summary>
+            /// 用于将 <see cref="Json"/> 对象映射到指定类型的实例，支持根据性名称从字典中提取值并设置到相应的属性。
+            /// </summary>
+            /// <param name="type"> 类型</param>
+            /// <param name="jsonObject"> <see cref="Json"/> 对象</param>
+            /// <returns> 返回对象</returns>
+            private static object MapJsonToObject(Type type, Dictionary<string, object> jsonObject)
+            {
+                var result = Activator.CreateInstance(type);
+                var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+                foreach (var property in properties)
+                {
+                    if (jsonObject.ContainsKey(property.Name))
+                    {
+                        var value = jsonObject[property.Name];
+                        if (value != null)
+                        {
+                            if (property.PropertyType == typeof(string))
+                            {
+                                property.SetValue(result, value.ToString());
+                            }
+                            else if (property.PropertyType == typeof(int))
+                            {
+                                property.SetValue(result, Convert.ToInt32(value));
+                            }
+                            else if (property.PropertyType == typeof(long))
+                            {
+                                property.SetValue(result, Convert.ToInt64(value));
+                            }
+                            else if (property.PropertyType == typeof(double))
+                            {
+                                property.SetValue(result, Convert.ToDouble(value));
+                            }
+                            else if (property.PropertyType == typeof(bool))
+                            {
+                                property.SetValue(result, Convert.ToBoolean(value));
+                            }
+                            else if (property.PropertyType.IsEnum)
+                            {
+                                property.SetValue(result, Enum.Parse(property.PropertyType, value.ToString()));
+                            }
+                            else if (property.PropertyType.IsClass || property.PropertyType.IsValueType)
+                            {
+                                var nestedObject = MapJsonToObject(property.PropertyType, value as Dictionary<string, object>);
+                                property.SetValue(result, nestedObject);
+                            }
+                        }
+                    }
+                }
+
+                return result;
+            }
+        }
+    }
+    /// <summary>
+    /// 用于更新软件
+    /// </summary>
     public class Update
     {
+        /// <summary>
+        /// 用于根据加载状态创建或更新一个批处理文件，以便在 NinjaMagisk 自动更新过程中执行特定命令
+        /// </summary>
+        /// <param name="Loading"> 加载状态</param>
+        /// <param name="code"> 命令</param>
         private static void BatchWriter(bool Loading, string code)
         {
             string batPath = $"{Directory.GetCurrentDirectory()}\\temp\\update.bat";
@@ -1792,6 +2867,12 @@ namespace NinjaMagisk
             }
             return;
         }
+        /// <summary>
+        /// 用于检查更新, 比较两个版本号字符串并返回更新的版本或指示版本相同
+        /// </summary>
+        /// <param name="version1"> 版本1</param>
+        /// <param name="version2"> 版本2</param>
+        /// <returns> 返回更新的版本或指示版本相同</returns>
         internal static string NewerVersions(string version1, string version2)
         {
             // 将版本号按小数点分割成数组
@@ -1821,12 +2902,30 @@ namespace NinjaMagisk
             // 如果所有部分都相同，则版本号相同
             return "same";
         }
+        /// <summary>
+        /// 发送HTTP请求的HttpClient实例
+        /// </summary>
         private static readonly HttpClient _httpClient = new HttpClient();
+        /// <summary>
+        /// 用于检查更新的平台
+        /// </summary>
         public enum Platform
         {
+            /// <summary>
+            /// Github
+            /// </summary>
             Github,
+            /// <summary>
+            /// Gitee
+            /// </summary>
             Gitee,
         }
+        /// <summary>
+        /// 用于检查更新
+        /// </summary>
+        /// <param name="CheckUpdateUrl"> 检查更新的URL</param>
+        /// <param name="platform"> 平台</param>
+        /// <returns> 如果有新版本可用，则返回 <see langword="true"/>，否则返回 <see langword="false"/></returns>
         public static async Task<bool> CheckUpdate(string CheckUpdateUrl, Platform platform)
         {
             /* Github API规定的Release最新发行版查询地址为       https://api/github.com/repos/{用户名}/{仓库}/releases/latest
@@ -1841,15 +2940,15 @@ namespace NinjaMagisk
                 var (TagName, Name) = ExtractTagAndName(jsonResponse, platform);
                 WriteLog(LogLevel.Info, $"{_LATEST_VERSION}: {TagName} - {Name}");
                 string[] strings = TagName.Split('v');
-                string res = NewerVersions(Software.Version, strings[1]);
-                if (res == "same" || res == Software.Version)
+                string res = NewerVersions(LocalizedString.Version, strings[1]);
+                if (res == "same" || res == LocalizedString.Version)
                 {
                     WriteLog(LogLevel.Info, _NON_NEW_VER);
                     return false;
                 }
                 else
                 {
-                    WriteLog(LogLevel.Info, $"{_NEW_VERSION_AVAILABLE}: {res} {_CURRENT_VER}: {Software.Version}");
+                    WriteLog(LogLevel.Info, $"{_NEW_VERSION_AVAILABLE}: {res} {_CURRENT_VER}: {LocalizedString.Version}");
                     return true;
                 }
             }
@@ -1859,6 +2958,11 @@ namespace NinjaMagisk
                 return false;
             }
         }
+        /// <summary>
+        /// 用于从指定的URL获取<see cref="Json"/> 数据,并在请求失败时返回<see langword="null"/>
+        /// </summary>
+        /// <param name="url"> URL</param>
+        /// <returns> 返回<see cref="Json"/>字符串</returns>
         private static async Task<string> FetchJsonFromUrl(string url)
         {
             try
@@ -1879,12 +2983,18 @@ namespace NinjaMagisk
                 return null;
             }
         }
+        /// <summary>
+        /// 用于提取标签和名称
+        /// </summary>
+        /// <param name="json">  <see cref="Json"/> 格式的数据</param>
+        /// <param name="platform"> 平台</param>
+        /// <returns> 返回标签和名称</returns>
         private static (string TagName, string Name) ExtractTagAndName(string json, Platform platform)
         {
             try
             {
                 // 解析 JSON
-                JObject jsonObject = JObject.Parse(json);
+                Json.JObject jsonObject = Json.JObject.Parse(json);
 
                 // 提取 tag_name
                 string tagName = jsonObject["tag_name"]?.ToString();
@@ -1940,7 +3050,10 @@ Update_{ version}.zip          // 更新文件压缩包
     1 > Library.dll,4CC1ED4D70DFC8A7455822EC8339D387
     2 > Library.pdb, FDFA7596701DCC2E96D462DBC35E7823
 ```           
-*/
+        */
+        /// <summary>
+        /// 用于处理应用程序的自我更新，包括创建更新目录和选择更新文件。
+        /// </summary>
         public static void SelfUpdater()
         {
             try
@@ -2040,8 +3153,12 @@ Update_{ version}.zip          // 更新文件压缩包
                 WriteLog(LogLevel.Error, $"{_ERROR}: {ex.Message}");
             }
         }
-
-
+        /// <summary>
+        /// 用于提取更新文件
+        /// </summary>
+        /// <param name="path"> 更新文件的储存路径</param>
+        /// <param name="UpdateFile"> 更新文件</param>  
+        /// <returns></returns>
         private static string ExtractUpdateFiles(string path, string UpdateFile)
         {
             Process process = new Process();
@@ -2060,6 +3177,11 @@ Update_{ version}.zip          // 更新文件压缩包
             }
             return null;
         }
+        /// <summary>
+        /// 用于检查压缩包中是否包含指定的文件
+        /// </summary>
+        /// <param name="UpdateFile"> 更新文件</param>
+        /// <returns> 如果包含指定的文件，则返回 <see langword="true"/>，否则返回 <see langword="false"/></returns>
         private static bool CheckFilesInArchive(string UpdateFile)
         {
             string[] filesToCheck = { "update.ini", "filehash.ini" };
@@ -2089,22 +3211,6 @@ Update_{ version}.zip          // 更新文件压缩包
             }
             process.Close();
             return false;
-        }
-    }
-    public class Config
-    {
-        public static string ReadConfig(string iniPath,string HeadText)
-        {
-            string[] Texts = System.IO.File.ReadAllLines(iniPath);
-            foreach (string Text in Texts)
-            {
-                if (Text.Contains(HeadText))
-                {
-                    string[] part2 = Text.Split('=');
-                    return part2[1].Trim();
-                }
-            }
-            return null;
         }
     }
 }
