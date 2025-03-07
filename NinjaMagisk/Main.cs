@@ -2229,12 +2229,12 @@ namespace NinjaMagisk
             }
         }
         /// <summary>
-        /// 用于处理JSON格式的文本
+        /// 用于处理 <see cref="Json"/> 格式的文本
         /// </summary>
         public class Json
         {
             /// <summary>
-            /// 用于将对象序列化为JSON字符串
+            /// 表示和操作 <see cref="Json"/> 对象的动态类
             /// </summary>
             public class JObject : DynamicObject
             {

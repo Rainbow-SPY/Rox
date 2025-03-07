@@ -1,5 +1,7 @@
 # NinjaMagisk 动态链接库
 NinjaMagisk 是一个使用 C# .NET Framework 4.7.2 编写，并使用 Microsoft Visual Studio 2022 编译的跨平台动态链接库。它提供了多种功能模块，包括日志记录、文件操作、网络检查、Windows 系统配置、AI 集成等。
+
+> c2db0e9 提交中在`Main.cs`中对全方法进行了\<summary\>注释添加,详情可以查看在Github 上的 [Main.cs](https://github.com/Rainbow-SPY/NinjaMagisk/blob/master/NinjaMagisk/Main.cs)
 ## 目录
 
 1. [全局引用方法](#1-全局引用方法)
@@ -12,7 +14,7 @@ NinjaMagisk 是一个使用 C# .NET Framework 4.7.2 编写，并使用 Microsoft
 8. [文件](#8-文件)
 9. [Windows身份验证](#9-Windows身份验证)
 10. [检查更新模块](#10-检查更新模块)
-11. [配置文件](#11-配置文件)
+11. [文本类处理](#11-文本类处理)
 
 ## 1. 全局引用方法
 
@@ -21,7 +23,6 @@ NinjaMagisk 提供了多种引用方式，您可以根据需求选择合适的�
 ```csharp
 using NinjaMagisk;
 using static NinjaMagisk.LogLibraries;
-using static NinjaMagisk.Software;
 using static NinjaMagisk.Windows;
 ```
 ## 2. 日志
@@ -60,11 +61,11 @@ NinjaMagisk.LogLibries.ClearFile(string filePath);
 > 使用时请注意,在无网络的情况下,`MessageBox`会弹出提示询问是否进行下一步操作.
 
 ```csharp
-NinjaMagisk.Software.DownloadAssistant.Downloader(string url);
-NinjaMagisk.Software.DownloadAssistant.Downloader(string url,string Downloadvocation);
-NinjaMagisk.Software.DownloadAssistant.Downloader(string url,string Downloadvocation,bool log);
-NinjaMagisk.Software.DownloadAssistant.Downloader(string url,string Downloadvocation,string outputName);
-NinjaMagisk.Software.DownloadAssistant.Downloader(string url,string Downloadvocation,string outputName,bool log);
+NinjaMagisk.DownloadAssistant.Downloader(string url);
+NinjaMagisk.DownloadAssistant.Downloader(string url,string Downloadvocation);
+NinjaMagisk.DownloadAssistant.Downloader(string url,string Downloadvocation,bool log);
+NinjaMagisk.DownloadAssistant.Downloader(string url,string Downloadvocation,string outputName);
+NinjaMagisk.DownloadAssistant.Downloader(string url,string Downloadvocation,string outputName,bool log);
 ```
 * **`url`:** 下载链接
 
@@ -81,7 +82,7 @@ NinjaMagisk.Software.DownloadAssistant.Downloader(string url,string Downloadvoca
 ### 模块下载
 
 ```csharp
-NinjaMagisk.Software.DownloadAssistant.ModuleDownloader(Module module);
+NinjaMagisk.DownloadAssistant.ModuleDownloader(Module module);
 ```
 
 * **`Module`可用枚举:** `zip`,`VC`.
@@ -94,7 +95,7 @@ NinjaMagisk.Software.DownloadAssistant.ModuleDownloader(Module module);
 ### 应用下载
 
 ```csharp
-NinjaMagisk.Software.DownloadAssistant.ApplicationDownloader(App app);
+NinjaMagisk.DownloadAssistant.ApplicationDownloader(App app);
 ```
 * **`App`可用枚举:** `EasiNote5`,`EasiCamera`,`SeewoService`,`WeChat`,`ToDesk`.
 
@@ -103,8 +104,8 @@ NinjaMagisk.Software.DownloadAssistant.ApplicationDownloader(App app);
 ## 4. 安全软件检测
 
 ```csharp
-NinjaMagisk.Software.AntiSecurity.Anti360Security();
-NinjaMagisk.Software.AntiSecurity.AntiHuoRongSecurity();
+NinjaMagisk.AntiSecurity.Anti360Security();
+NinjaMagisk.AntiSecurity.AntiHuoRongSecurity();
 ```
 
 * **返回值:** `true` 表示安全软件正在运行，`false` 表示未运行。
@@ -293,14 +294,16 @@ ___
     1 > Library.dll,4CC1ED4D70DFC8A7455822EC8339D387
     2 > Library.pdb,FDFA7596701DCC2E96D462DBC35E7823
 ```           
-## 11. 配置文件
-### 读取配置文件
+## 11. 文本类处理
+### 读取 / 写入配置文件
 ```csharp
-NinjaMagisk.Config.ReadConfig(string iniPath,string HeadText); //读取配置文件
+NinjaMagisk.Text.Config.ReadConfig(string iniPath,string HeadText); //读取配置文件
+NinjaMagisk.Text.Config.WriteConfig(string iniPath,string HeadText,string Value); //写入配置文件
 ```
 
 * **`iniPath`:** 配置文件路径
 * **`HeadText`:** 配置文件头部文本
+* **`Value`:** 配置的值
 * **返回类型:** `string`
 * **返回值:** 返回配置文件头部文本对应的值
 ___
@@ -310,3 +313,23 @@ ___
     2> HeadText2 = value2
     3> HeadText3 = value3
 ```
+___
+### Json反序列化
+```csharp
+NinjaMagisk.Text.Json.DeserializeObject<T>(string json);
+NinjaMagisk.Text.Json.DeserializeObject(string json);
+```
+
+* **`json`:** Json字符串*
+* **返回类型:** `<T>`  `<dynamic>`
+* **返回值:** 返回反序列化后的对象
+> 注： `<dynamic>` 已经包含在 DeserializeObject(string json) 方法中，因为返回类型是 `<dynamic>`，所以不需要额外的方法。
+___
+### Json序列化
+```csharp
+NinjaMagisk.Text.Json.SerializeObject(object obj);
+```
+
+* **`obj`:** 对象
+* **返回类型:** `string`
+* **返回值:** 返回序列化后的Json字符串
