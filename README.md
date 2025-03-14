@@ -15,6 +15,7 @@ NinjaMagisk 是一个使用 C# .NET Framework 4.7.2 编写，并使用 Microsoft
 9. [Windows身份验证](#9-Windows身份验证)
 10. [检查更新模块](#10-检查更新模块)
 11. [文本类处理](#11-文本类处理)
+12. [API查询](#12-API查询)
 
 ## 1. 全局引用方法
 
@@ -333,3 +334,13 @@ NinjaMagisk.Text.Json.SerializeObject(object obj);
 * **`obj`:** 对象
 * **返回类型:** `string`
 * **返回值:** 返回序列化后的Json字符串
+## 12. API查询
+
+### Steam个人信息查询
+```csharp
+NinjaMagisk.API.SteamUserData(string steamID);
+```
+
+* **`steamID`:** SteamID,通常以7656为开头
+* **返回类型:** `string`,`int`
+* **返回值:** 返回Steam用户信息
