@@ -1,4 +1,5 @@
-# NinjaMagisk 动态链接库
+![Icon](NinjaMagisk/Icon+Text.png)
+___
 NinjaMagisk 是一个使用 C# .NET Framework 4.7.2 编写，并使用 Microsoft Visual Studio 2022 编译的跨平台动态链接库。它提供了多种功能模块，包括日志记录、文件操作、网络检查、Windows 系统配置、AI 集成等。
 
 > [c2db0e9](https://github.com/Rainbow-SPY/NinjaMagisk/commit/c2fb0e9658cb6b951103b7c13369571f59944bd7#diff-9e1b2aa1e49fe5dd1128cc48315650e9479900b2facf0770776ba9705b07a514) 提交中在`Main.cs`中对全方法进行了\<summary\>注释添加,详情可以查看在Github 上的 [Main.cs](https://github.com/Rainbow-SPY/NinjaMagisk/blob/master/NinjaMagisk/Main.cs)
