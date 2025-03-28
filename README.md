@@ -106,8 +106,8 @@ NinjaMagisk.DownloadAssistant.ApplicationDownloader(App app);
 ## 4. 安全软件检测
 
 ```csharp
-NinjaMagisk.AntiSecurity.Anti360Security();
-NinjaMagisk.AntiSecurity.AntiHuoRongSecurity();
+NinjaMagisk.Security.Anti360Security();
+NinjaMagisk.Security.AntiHuoRongSecurity();
 ```
 
 * **返回值:** `true` 表示安全软件正在运行，`false` 表示未运行。
@@ -138,8 +138,8 @@ NinjaMagisk.Windows.EnableHighPowercfg(); //启用卓越性能
 ### 启用/禁用Windows 安全中心与Windows Defender
 
 ```csharp
-NinjaMagisk.Windows.WindowsSecurityCenter.Enable() //启用
-NinjaMagisk.Windows.WindowsSecurityCenter.Disable() //禁用
+NinjaMagisk.Security.WindowsSecurityCenter.Enable() //启用
+NinjaMagisk.Security.WindowsSecurityCenter.Disable() //禁用
 ```
 ### 启用/禁用 Windows Update
 
@@ -156,7 +156,7 @@ NinjaMagisk.Windows.ActiveWindows(); //激活Windows
 ### 写入注册表
 
 ```csharp
-NinjaMagisk.Registry.Write(string keyPath,string valueName,RegistryValueKind valueType,object valueData);
+NinjaMagisk.Registry.Write(string keyPath,string valueName,object valueData,RegistryValueKind valueType);
 ```
 
 * **`keyPath`: 设定注册表路径**
@@ -268,7 +268,7 @@ ___
  ```
  * **返回类型:** `MessageBox`
  ___
-规定 更新文件为 `Update_{version}.zip` ,并且在压缩包内包含了 `update.ini` 和 `filehash.ini` 文件,以及更新文件     
+规定 在压缩包内包含了 `update.ini` 和 `filehash.ini` 文件,以及更新文件     
 ___
 规定 `Update_{version}.zip` 规格:
 ```
@@ -342,6 +342,6 @@ NinjaMagisk.Text.Json.SerializeObject(object obj);
 NinjaMagisk.API.SteamUserData(string steamID);
 ```
 
-* **`steamID`:** SteamID,通常以7656为开头
-* **返回类型:** `string`,`int`
-* **返回值:** 返回Steam用户信息
+* **`steamID`:** SteamID,支持SteamID3,ID64,个人主页链接,自定义URL,好友代码
+* **返回类型:** `Json`
+* **返回值:** 返回Steam用户信息(可等待)
