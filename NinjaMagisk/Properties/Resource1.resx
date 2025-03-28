@@ -381,4 +381,13 @@
   <data name="_WRITE_FILE" xml:space="preserve">
     <value>Write file</value>
   </data>
+  <data name="_WINDOWS_UPDATER_DISABLED" xml:space="preserve">
+    <value>Windows Updater disabled</value>
+  </data>
+  <data name="_WINDOWS_UPDATER_ENABLED" xml:space="preserve">
+    <value>Windows Updater enabled</value>
+  </data>
+  <data name="_READ_REGISTRY_FAILED" xml:space="preserve">
+    <value>Read registry failed</value>
+  </data>
 </root>

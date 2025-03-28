@@ -420,6 +420,9 @@ namespace NinjaMagisk
         internal static readonly string _UPDATE_LINE = GetLocalizedString("_UPDATE_LINE");
         internal static readonly string _READ_FILE = GetLocalizedString("_READ_FILE");
         internal static readonly string _WRITE_FILE = GetLocalizedString("_WRITE_FILE");
+        internal static readonly string _WINDOWS_UPDATER_DISABLED = GetLocalizedString("_WINDOWS_UPDATER_DISABLED");
+        internal static readonly string _WINDOWS_UPDATER_ENABLED = GetLocalizedString("_WINDOWS_UPDATER_ENABLED");
+        internal static readonly string _READ_REGISTRY_FAILED = GetLocalizedString("_READ_REGISTRY_FAILED");
         //internal static string lang = System.Globalization.CultureInfo.InstalledUICulture.Name.ToString();
         /// <summary>
         /// 获取本地化字符串
@@ -434,7 +437,7 @@ namespace NinjaMagisk
     /// <summary>
     /// 检测特定安全软件是否在运行
     /// </summary>
-    public class AntiSecurity
+    public class Security
     {
         /// <summary>
         /// 检测360安全卫士是否在运行
@@ -468,31 +471,28 @@ namespace NinjaMagisk
                 return false;
             }
         }
+        public class WindowsSecurity
+        {
+            public static void Enable()
+            {
+                Windows.WindowsSecurityCenter.Enable();
+            }
+
+            public static void Disable()
+            {
+                Windows.WindowsSecurityCenter.Disable();
+            }
+        }
     }
     /// <summary>
     /// 网络相关操作
     /// </summary>
     public class Network
     {
-        //public readonly HttpClient _httpClient;
-
-        //public Network(HttpClient httpClient)
-        //{
-        //    _httpClient = httpClient;
-        //}
-
-        //public async Task<T> GetAsync<T>(string url)
-        //{
-        //    var response = await _httpClient.GetAsync(url);
-
-        //    if (!response.IsSuccessStatusCode)
-        //    {
-        //        throw new HttpRequestException($"GET request failed with status code {response.StatusCode}");
-        //    }
-
-        //    var responseContent = await response.Content.ReadAsStringAsync();
-        //    return Json.DeserializeObject(responseContent);
-        //}
+        /// <summary>
+        /// 检查网络是否可用
+        /// </summary>
+        /// <returns> 可用返回 <see langword="true"></see> 不可用返回 <see langword="false"></see></returns>
         public static bool IsNetworkAvailable()
         {
             try
@@ -514,7 +514,28 @@ namespace NinjaMagisk
             catch
             {
                 // 发生异常视为无网络
-                WriteLog(LogLevel.Info, $"{_NOTAVAILABLE_NETWORK}");
+                WriteLog(LogLevel.Warning, $"{_NOTAVAILABLE_NETWORK}");
+                return false;
+            }
+        }
+        /// <summary>
+        /// 检查网络是否可用
+        /// </summary>
+        /// <param name="ip"> IP地址</param>
+        /// <returns> 可用返回 <see langword="true"></see> 不可用返回 <see langword="false"></see></returns>
+        public static bool Ping(string ip)
+        {
+            try
+            {
+                using (var ping = new Ping())
+                {
+                    PingReply reply = ping.Send(ip, 120);
+                    return reply.Status == IPStatus.Success ? true : false;
+                }
+            }
+            catch
+            {
+                WriteLog(LogLevel.Warning, $"{_NOTAVAILABLE_NETWORK}");
                 return false;
             }
         }
@@ -532,7 +553,7 @@ namespace NinjaMagisk
         /// <param name="valueName"> 注册表项名称</param>
         /// <param name="valueType"> 注册表项类型</param>
         /// <param name="valueData"> 注册表项数据</param>
-        public static void Write(string keyPath, string valueName, RegistryValueKind valueType, object valueData)
+        public static void Write(string keyPath, string valueName, object valueData, RegistryValueKind valueType)
         {
             try
             {
@@ -1021,6 +1042,28 @@ namespace NinjaMagisk
         /// <summary>
         /// 用于从指定的URL获取<see cref="Json"/> 数据,并在请求失败时返回<see langword="null"/>
         /// </summary>
+        /// <param name="CheckUpdateUrl"></param>
+        /// <param name="platform"></param>
+        /// <returns></returns>
+        public static string GetUpdateJson(string CheckUpdateUrl, Platform platform)
+        {
+            try
+            {
+                string jsonResponse = FetchJsonFromUrl(CheckUpdateUrl).Result;
+                var (TagName, Name) = ExtractTagAndName(jsonResponse, platform);
+                WriteLog(LogLevel.Info, $"{_LATEST_VERSION}: {TagName} - {Name}");
+                string strings1 = $"{TagName};{Name}";
+                return strings1;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString());
+                return null;
+            }
+        }
+        /// <summary>
+        /// 用于从指定的URL获取<see cref="Json"/> 数据,并在请求失败时返回<see langword="null"/>
+        /// </summary>
         /// <param name="url"> URL</param>
         /// <returns> 返回<see cref="Json"/>字符串</returns>
         private static async Task<string> FetchJsonFromUrl(string url)
@@ -1081,7 +1124,7 @@ namespace NinjaMagisk
             }
         }
         /*        
-    规定 更新文件为 `Update_{version}.zip` ,并且在压缩包内包含了 `update.ini` 和 `filehash.ini` 文件,以及更新文件
+    规定 在压缩包内包含了 `update.ini` 和 `filehash.ini` 文件,以及更新文件
 
     {version} 为版本号
 

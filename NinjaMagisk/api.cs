@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -15,7 +16,7 @@ namespace NinjaMagisk
         /// <summary>
         /// 查询Steam用户信息
         /// </summary>
-        /// <param name="SteamID">SteamID,通常以7656为开头</param>
+        /// <param name="SteamID">支持SteamID3,ID64,个人主页链接,自定义URL,好友代码</param>
         /// <returns><see cref="SteamType"/> 格式的 <see cref="Text.Json"/> 文本</returns>
         public static async Task<SteamType> SteamUserData(string SteamID)
         {
@@ -26,41 +27,43 @@ namespace NinjaMagisk
             }
             // 创建HttpClient实例
             var httpClient = new HttpClient();
-            bool httpSteam = false;
+            bool httpSteam = false; 
             bool ID64Steam = false;
             bool ID3Steam = false;
-            bool CustomURLSteam = false;
-            if (SteamID.StartsWith("http"))
+            bool FriendCodeSteam = false;
+            bool CustomSteam = false;
+            if (SteamID.StartsWith("http")) //个人主页
             {
                 httpSteam = true;
             }
-            else if (SteamID.StartsWith("7656"))
+            else if (SteamID.StartsWith("7656")) //SteamID64
             {
                 ID64Steam = true;
             }
-            else if (SteamID.Length == 10)
+            else if (SteamID.StartsWith("[U:")) //SteamID3
             {
                 ID3Steam = true;
             }
-            else
+            else if (SteamID.All(char.IsDigit)) //好友代码
             {
-                CustomURLSteam = true;
+                FriendCodeSteam = true;
+            }
+            else //自定义ID
+            {
+                CustomSteam = true;
             }
 
             if (httpSteam) //解析个人主页
             {
-                // 正则表达式匹配 17 位数字
-                Match match = Regex.Match(SteamID, @"\/profiles\/(\d{17})");
-                if (match.Success)
+                string SteamID64 = ExtractSteamID(SteamID);
+                if (SteamID64 != null)
                 {
-                    // 返回匹配的 17 位数字
-                    string id3 = match.Groups[1].Value;
-                    if (id3.Length != 17)
-                    {
-                        MessageBox.Show("SteamID64不满足17位唯一标识符!\n\n请和开发者联系修复", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return null;
-                    }
-                    return await SendQueryMessage(id3, httpClient);
+                    return await SendQueryMessage(SteamID64, httpClient); //解析SteamID64
+                }
+                else
+                {
+                    MessageBox.Show("无法解析SteamID64", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return null;
                 }
             }
             if (ID64Steam) //解析SteamID64
@@ -70,29 +73,62 @@ namespace NinjaMagisk
                     MessageBox.Show("SteamID64不满足17位唯一标识符!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return null;
                 }
-                return await SendQueryMessage(SteamID, httpClient);
+                return await SendQueryMessage(SteamID, httpClient); //解析SteamID64
             }
-            if (ID3Steam)
+            if (FriendCodeSteam)//解析好友代码
             {
-                if (SteamID.Length != 10)
+                return await SendQueryMessage($"[U:1:{SteamID}]", httpClient); //解析好友代码
+            }
+            if (ID3Steam)//解析SteamID3
+            {
+                return await SendQueryMessage(SteamID, httpClient); //解析SteamID3
+            }
+            if (CustomSteam)//解析自定义ID
+            {
+                return await SendQueryMessage(SteamID, httpClient); //解析自定义ID
+            }
+            return null;//返回空值
+        }
+        /// <summary>
+        /// 向api发送请求获取 <see cref="Text.Json"/> 文本
+        /// </summary>
+        /// <param name="url"> 支持SteamID3,ID64,个人主页链接,自定义URL,好友代码</param>
+        /// <returns> <see cref="SteamType"/> 格式的 <see cref="Text.Json"/> 文本</returns>
+        static string ExtractSteamID(string url)
+        {
+            // 正则表达式匹配自定义 ID
+            string customIdPattern = @"\/id\/([^\/]+)";
+            // 正则表达式匹配 17 位数字 ID
+            string numericIdPattern = @"\/profiles\/(\d{17})";
+
+            // 尝试匹配自定义 ID
+            Match customIdMatch = Regex.Match(url, customIdPattern);
+            if (customIdMatch.Success)
+            {
+                return customIdMatch.Groups[1].Value; // 返回自定义 ID
+            }
+
+            // 尝试匹配 17 位数字 ID
+            Match numericIdMatch = Regex.Match(url, numericIdPattern);
+            if (numericIdMatch.Success)
+            {
+                if (numericIdMatch.Groups[1].Value.Length != 17)
                 {
-                    MessageBox.Show("SteamID3不满足10位唯一标识符!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("SteamID64不满足17位唯一标识符!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return null;
                 }
-                return await SendQueryMessage(SteamID, httpClient);
+                return numericIdMatch.Groups[1].Value; // 返回 17 位数字 ID
             }
-            if (CustomURLSteam)
-            {
-                return await SendQueryMessage(SteamID, httpClient);
-            }
+
+            // 如果未匹配到任何 ID，返回 null
             return null;
         }
         /// <summary>
         /// 向api发送请求获取 <see cref="Text.Json"/> 文本
         /// </summary>
-        /// <param name="SteamID"></param>
-        /// <param name="httpClient"></param>
-        /// <returns>返回 <see cref="SteamType"/> 格式的 <see cref="Text.Json"/> 文本</returns>
+        /// <param name="SteamID"> 支持SteamID3,ID64,个人主页链接,自定义URL,好友代码</param>
+        /// <param name="httpClient"> HttpClient实例</param>
+        /// <returns> <see cref="SteamType"/> 格式的 <see cref="Text.Json"/> 文本</returns>
         private static async Task<SteamType> SendQueryMessage(string SteamID, HttpClient httpClient)
         {
             try
@@ -180,6 +216,11 @@ namespace NinjaMagisk
             }
         }
         #region Steam Get Json Process
+        /// <summary>
+        /// 压缩 <see cref="Text.Json"/> 字符串
+        /// </summary>
+        /// <param name="json"> <see cref="Text.Json"/> 字符串</param>
+        /// <returns> 压缩后的 <see cref="Text.Json"/> 字符串</returns>
         private static string CompressJson(string json)
         {
             var result = new StringBuilder();
@@ -235,6 +276,12 @@ namespace NinjaMagisk
         }
 
         // 检查当前字符是否属于日期时间字段
+        /// <summary>
+        /// 检查当前字符是否属于日期时间字段
+        /// </summary>
+        /// <param name="json"> <see cref="Text.Json"/> 字符串</param>
+        /// <param name="index"> 当前字符索引</param>
+        /// <returns> 是否在日期时间字段中</returns>
         private static bool IsDateTimeField(string json, int index)
         {
             // 检查当前字符是否在日期时间字段中
@@ -254,23 +301,65 @@ namespace NinjaMagisk
         }
         // 自定义类型，用于反序列化 JSON 数据
         /// <summary>
-        /// 
+        /// Steam用户信息
         /// </summary>
         public class SteamType
         {
+            /// <summary>
+            /// 返回值
+            /// </summary>
             public int code { get; set; }
+            /// <summary>
+            /// Steam社区状态
+            /// </summary>
             public string communitystate { get; set; }
+            /// <summary>
+            /// SteamID3
+            /// </summary>
             public string steamID { get; set; }
+            /// <summary>
+            /// SteamID3
+            /// </summary>
             public string steamID3 { get; set; }
+            /// <summary>
+            /// SteamID64
+            /// </summary>
             public string steamID64 { get; set; }
+            /// <summary>
+            /// Steam用户名
+            /// </summary>
             public string username { get; set; }
+            /// <summary>
+            /// Steam真实姓名
+            /// </summary>
             public string realname { get; set; }
+            /// <summary>
+            /// Steam个人主页
+            /// </summary>
             public string profileurl { get; set; }
+            /// <summary>
+            /// Steam头像
+            /// </summary>
             public string avatar { get; set; }
+            /// <summary>
+            /// Steam账号创建日期
+            /// </summary>
             public string accountcreationdate { get; set; }
+            /// <summary>
+            /// Steam最后登出日期
+            /// </summary>
             public string lastlogoff { get; set; }
+            /// <summary>
+            /// Steam账号绑定区域
+            /// </summary>
             public string location { get; set; }
+            /// <summary>
+            /// Steam在线状态
+            /// </summary>
             public string onlinestatus { get; set; }
+            /// <summary>
+            /// Steam好友代码
+            /// </summary>
             public string friendcode => steamID3.Split(':')[2].TrimEnd(']');
         }
         #endregion

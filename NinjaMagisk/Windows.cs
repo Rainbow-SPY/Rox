@@ -16,215 +16,596 @@ namespace NinjaMagisk
     public class Windows
     {
         /// <summary>
-        /// 显示/隐藏文件拓展名
+        /// Windows 资源管理器操作 及 桌面相关操作
         /// </summary>
-        /// <param name="Switch">显示/隐藏文件拓展名</param>
-        public static void ShowFileExtension(bool Switch)
-        {
-            string keyPath = @"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced";
-            using (var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(keyPath))
-            {
-                if (Switch)
-                {
-                    key.SetValue("HideFileExt", 0, RegistryValueKind.DWord); // 显示扩展名
-                    return;
-                }
-                else
-                {
-                    key.SetValue("HideFileExt", 1, RegistryValueKind.DWord); // 隐藏扩展名
-                    return;
-                }
-            }
-        }
-        /// <summary>
-        /// 显示/隐藏被隐藏的文件和系统文件
-        /// </summary>
-        /// <param name="Switch">显示/隐藏被隐藏的文件和系统文件</param>
-        public static void ShowHiddenFile(bool Switch)
-        {
-            string keyPath = @"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced";
-            using (var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(keyPath))
-            {
-                if (Switch)
-                {
-                    key.SetValue("Hidden", 1, RegistryValueKind.DWord); // 显示隐藏文件
-                    //key.SetValue("ShowSuperHidden", 1, RegistryValueKind.DWord); // 显示系统文件
-                    return;
-                }
-                else
-                {
-                    key.SetValue("Hidden", 0, RegistryValueKind.DWord); // 隐藏隐藏文件
-                    //key.SetValue("ShowSuperHidden", 0, RegistryValueKind.DWord); // 隐藏系统文件
-                    return;
-                }
-            }
-        }
-        /// <summary>
-        /// 向桌面添加系统位置快捷方式
-        /// </summary>
-        public class AddDesktopLink
+        public class Explorer
         {
             /// <summary>
-            /// 添加/移除"此电脑"图标
+            /// 显示/隐藏文件拓展名
             /// </summary>
-            /// <param name="Switch">指定添加或移除的图标</param>
-            public static void AddThisPC(bool Switch)
+            /// <param name="Switch">显示/隐藏文件拓展名</param>
+            public static void ShowFileExtension(bool Switch)
             {
-                string script;
-                if (Switch)
+                string keyPath = @"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced";
+                using (RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(keyPath))
                 {
-                    script = @"
+                    key.SetValue("HideFileExt", Switch ? 0 : 1, RegistryValueKind.DWord); // 显示扩展名
+                    WriteLog(LogLevel.Info, _SUCESS_WRITE_REGISTRY + keyPath);
+                    RefreshExplorer();
+                    return;
+                }
+            } //0显示 1隐藏
+            /// <summary>
+            /// 显示/隐藏被隐藏的文件和系统文件
+            /// </summary>
+            /// <param name="Switch">显示/隐藏被隐藏的文件和系统文件</param>
+            public static void ShowHiddenFile(bool Switch)
+            {
+                string keyPath = @"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced";
+                using (var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(keyPath))
+                {
+                    if (Switch)
+                    {
+                        key.SetValue("Hidden", 1, RegistryValueKind.DWord); // 显示隐藏文件
+                                                                            //key.SetValue("ShowSuperHidden", 1, RegistryValueKind.DWord); // 显示系统文件
+                        WriteLog(LogLevel.Info, _SUCESS_WRITE_REGISTRY + keyPath);
+                        RefreshExplorer();
+                        return;
+                    }
+                    else
+                    {
+                        key.SetValue("Hidden", 0, RegistryValueKind.DWord); // 隐藏隐藏文件
+                                                                            //key.SetValue("ShowSuperHidden", 0, RegistryValueKind.DWord); // 隐藏系统文件
+                        WriteLog(LogLevel.Info, _SUCESS_WRITE_REGISTRY + keyPath);
+                        RefreshExplorer();
+                        return;
+                    }
+                }
+            } //0隐藏 1显示
+            /// <summary>
+            /// 设置文件夹的可见性
+            /// </summary>
+            /// <param name="registryPath"> 注册表位置</param>
+            /// <param name="visibility"> 可见性</param>
+            private static void SetFolderVisibility(string registryPath, string visibility)
+            {
+                try
+                {
+                    Registry.Write(registryPath, "ThisPCPolicy", visibility, RegistryValueKind.String);
+                    WriteLog(LogLevel.Info, $"成功设置 {registryPath} 的可见性为 {visibility}");
+                }
+                catch (Exception ex)
+                {
+                    WriteLog(LogLevel.Error, $"设置 {registryPath} 的可见性时出错: {ex.Message}");
+                }
+            }
+            #region 刷新资源管理器
+            // 导入 Windows API
+            [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+            private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+            [DllImport("user32.dll", SetLastError = true)]
+            private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+
+            [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+            private static extern IntPtr SendMessageTimeout(
+                IntPtr hWnd,
+                uint Msg,
+                IntPtr wParam,
+                string lParam,
+                uint fuFlags,
+                uint uTimeout,
+                out IntPtr lpdwResult);
+
+            // 定义消息常量
+            private const uint WM_COMMAND = 0x0111;
+            private const int SC_REFRESH = 0xF720;
+            private const uint WM_SETTINGCHANGE = 0x001A;
+            private const uint SMTO_ABORTIFHUNG = 0x0002;
+            private const int HWND_BROADCAST = 0xFFFF;
+
+            /// <summary>
+            /// 综合刷新方法：刷新资源管理器窗口、桌面，并通知系统设置已更改
+            /// </summary>
+            public static void RefreshExplorer()
+            {
+                try
+                {
+                    // 1. 刷新已打开的资源管理器窗口
+                    RefreshExplorerWindows();
+
+                    // 2. 刷新桌面
+                    RefreshDesktop();
+
+                    // 3. 通知系统设置已更改
+                    NotifySettingChange();
+
+                    WriteLog(LogLevel.Info, "资源管理器、桌面和系统设置已刷新。");
+                }
+                catch (Exception ex)
+                {
+                    WriteLog(LogLevel.Error, $"刷新过程中出错: {ex.Message}");
+                }
+            }
+
+            /// <summary>
+            /// 刷新已打开的资源管理器窗口
+            /// </summary>
+            private static void RefreshExplorerWindows()
+            {
+                try
+                {
+                    // 查找所有 Explorer 窗口
+                    Process[] explorerProcesses = Process.GetProcessesByName("explorer");
+                    foreach (var process in explorerProcesses)
+                    {
+                        IntPtr hWnd = process.MainWindowHandle;
+                        if (hWnd != IntPtr.Zero)
+                        {
+                            // 发送刷新命令
+                            SendMessage(hWnd, WM_COMMAND, (IntPtr)SC_REFRESH, IntPtr.Zero);
+                        }
+                    }
+
+                    WriteLog(LogLevel.Info, "已刷新所有资源管理器窗口。");
+                }
+                catch (Exception ex)
+                {
+                    WriteLog(LogLevel.Error, $"刷新资源管理器窗口时出错: {ex.Message}");
+                }
+            }
+
+            /// <summary>
+            /// 刷新桌面
+            /// </summary>
+            private static void RefreshDesktop()
+            {
+                try
+                {
+                    // 查找桌面窗口
+                    IntPtr hWnd = FindWindow("Progman", null);
+                    if (hWnd != IntPtr.Zero)
+                    {
+                        // 发送刷新命令
+                        SendMessage(hWnd, WM_COMMAND, (IntPtr)SC_REFRESH, IntPtr.Zero);
+                        WriteLog(LogLevel.Info, "桌面已刷新。");
+                    }
+                    else
+                    {
+                        WriteLog(LogLevel.Warning, "未找到桌面窗口。");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    WriteLog(LogLevel.Error, $"刷新桌面时出错: {ex.Message}");
+                }
+            }
+
+            /// <summary>
+            /// 通知系统设置已更改
+            /// </summary>
+            private static void NotifySettingChange()
+            {
+                try
+                {
+                    // 发送 WM_SETTINGCHANGE 消息
+                    SendMessageTimeout(
+                        (IntPtr)HWND_BROADCAST, // 广播到所有窗口
+                        WM_SETTINGCHANGE,      // 消息类型
+                        IntPtr.Zero,           // 未使用
+                        "Environment",         // 表示环境变量或设置已更改
+                        SMTO_ABORTIFHUNG,      // 超时标志
+                        5000,                  // 超时时间（毫秒）
+                        out IntPtr result);           // 返回值
+
+                    WriteLog(LogLevel.Info, "已通知系统设置更改。");
+                }
+                catch (Exception ex)
+                {
+                    WriteLog(LogLevel.Error, $"通知系统设置更改时出错: {ex.Message}");
+                }
+            }
+            #endregion
+            /// <summary>
+            /// 用于安装和卸载 Windows 11 的小部件
+            /// </summary>
+            public static void UninstallWindows11Widgets()
+            {
+                Process.Start("winget", "uninstall MicrosoftWindows.Client.WebExperience_cw5n1h2txyewy");
+            }
+            /// <summary>
+            /// 向桌面添加系统位置快捷方式
+            /// </summary>
+            public class AddDesktopLink
+            {
+                /// <summary>
+                /// 添加/移除"此电脑"图标
+                /// </summary>
+                /// <param name="Switch">指定添加或移除的图标</param>
+                public static void AddThisPC(bool Switch)
+                {
+                    string script;
+                    if (Switch)
+                    {
+                        script = @"
             $keyPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel'
             if (-not (Test-Path $keyPath)) {
                 New-Item -Path $keyPath -Force
             }
             Set-ItemProperty -Path $keyPath -Name '{20D04FE0-3AEA-1069-A2D8-08002B30309D}' -Value 0
         ";
-                }
-                else
-                {
-                    script = @"
+                    }
+                    else
+                    {
+                        script = @"
             $keyPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel'
             Set-ItemProperty -Path $keyPath -Name '{20D04FE0-3AEA-1069-A2D8-08002B30309D}' -Value 1
         ";
-                }
+                    }
 
-                // 执行 PowerShell 脚本
-                RunPowerShellScript(script);
-            }
-            /// <summary>
-            /// 添加/移除"网络"图标
-            /// </summary>
-            /// <param name="Switch">指定添加或移除的开关</param>
-            public static void AddInternet(bool Switch)
-            {
-                string keyPath = @"Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel";
-                using (var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(keyPath))
+                    // 执行 PowerShell 脚本
+                    RunPowerShellScript(script);
+                }
+                /// <summary>
+                /// 添加/移除"网络"图标
+                /// </summary>
+                /// <param name="Switch">指定添加或移除的开关</param>
+                public static void AddInternet(bool Switch)
                 {
+                    string keyPath = @"Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel";
+                    using (var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(keyPath))
+                    {
+                        if (Switch)
+                        {
+                            key.SetValue("{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}", 0, RegistryValueKind.DWord); // 显示网络图标
+                        }
+                        else
+                        {
+                            key.SetValue("{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}", 1, RegistryValueKind.DWord); // 隐藏网络图标
+                        }
+                    }
+                }
+                /// <summary>
+                /// 添加/移除"控制面板"图标
+                /// </summary>
+                /// <param name="Switch">指定添加或移除的开关</param>
+                public static void AddControlPan(bool Switch)
+                {
+                    string keyPath = @"Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel";
+                    using (var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(keyPath))
+                    {
+                        if (Switch)
+                        {
+                            key.SetValue("{5399E694-6CE5-4D6C-8FCE-1D8870FDCBA0}", 0, RegistryValueKind.DWord); // 显示控制面板图标
+                        }
+                        else
+                        {
+                            key.SetValue("{5399E694-6CE5-4D6C-8FCE-1D8870FDCBA0}", 1, RegistryValueKind.DWord); // 隐藏控制面板图标
+                        }
+                    }
+                }
+                /// <summary>
+                /// 添加/移除"个人文件夹"图标
+                /// </summary>
+                /// <param name="Switch">指定添加或移除的开关</param>
+                public static void AddUserFolder(bool Switch)
+                {
+                    int value;
                     if (Switch)
-                    {
-                        key.SetValue("{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}", 0, RegistryValueKind.DWord); // 显示网络图标
-                    }
+                        value = 0;
                     else
+                        value = 1;
+                    string keyPath = @"Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel";
+                    using (RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(keyPath))
                     {
-                        key.SetValue("{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}", 1, RegistryValueKind.DWord); // 隐藏网络图标
+                        if (key != null)
+                        {
+                            key.SetValue("{59031a47-3f72-44a7-89c5-5595fe6b30ee}", value, RegistryValueKind.DWord);
+                            //MessageBox.Show($"已{(value == 0 ? "添加" : "移除")}“个人文件夹”图标", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("无法访问注册表！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                }
+                /// <summary>
+                /// 运行PowerShell脚本
+                /// </summary>
+                /// <param name="script">指定的PowerShell脚本</param>
+                private static void RunPowerShellScript(string script)
+                {
+                    // 创建一个 ProcessStartInfo 对象
+                    ProcessStartInfo psi = new ProcessStartInfo
+                    {
+                        FileName = "powershell.exe", // 指定启动 PowerShell
+                        Arguments = $"-NoProfile -ExecutionPolicy unrestricted -Command \"{script}\"", // 传递脚本
+                        RedirectStandardOutput = true, // 重定向标准输出
+                        RedirectStandardError = true, // 重定向错误输出
+                        UseShellExecute = false, // 不使用操作系统 shell 启动进程
+                        CreateNoWindow = true // 不创建新窗口
+                    };
+
+                    // 创建并启动进程
+                    using (Process process = new Process())
+                    {
+                        process.StartInfo = psi;
+                        process.Start();
+
+                        // 读取输出
+                        string output = process.StandardOutput.ReadToEnd();
+                        string error = process.StandardError.ReadToEnd();
+
+                        process.WaitForExit(); // 等待进程结束
+
+                        // 显示输出或错误
+                        //if (!string.IsNullOrEmpty(output))
+                        //{
+                        //    MessageBox.Show(output, "PowerShell 输出", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        //}
+                        if (!string.IsNullOrEmpty(error))
+                        {
+                            MessageBox.Show(error, "PowerShell 错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
             }
             /// <summary>
-            /// 添加/移除"控制面板"图标
+            /// 用于修改桌面图标小箭头的类
             /// </summary>
-            /// <param name="Switch">指定添加或移除的开关</param>
-            public static void AddControlPan(bool Switch)
+            public class DesktopIconsArrow
             {
-                string keyPath = @"Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel";
-                using (var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(keyPath))
+                // 隐藏桌面图标小箭头
+                /// <summary>
+                /// 隐藏桌面图标小箭头
+                /// </summary>
+                public static void HideDesktopIconArrow()
                 {
-                    if (Switch)
+                    // 隐藏桌面图标小箭头
+                    Registry.Write(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons", "29", @"%systemroot%\system32\imageres.dll,197", RegistryValueKind.String);
+                    RefreshExplorer();
+                    return;
+                }
+                // 显示桌面图标小箭头
+                /// <summary>
+                /// 显示桌面图标小箭头
+                /// </summary>
+                public static void ShowDesktopIconArrow()
+                {
+                    // 显示桌面图标小箭头
+                    Microsoft.Win32.Registry.LocalMachine.DeleteSubKeyTree(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons");
+                    RefreshExplorer();
+                    return;
+                }
+            }
+            /// <summary>
+            /// 用于修改桌面系统图标是否在桌面上显示的类
+            /// </summary>
+            public class DesktopIconSettings
+            {
+                // 导入 ShellExecute 函数
+                [DllImport("shell32.dll", SetLastError = true)]
+                private static extern IntPtr ShellExecute(
+                    IntPtr hwnd,
+                    string lpOperation,
+                    string lpFile,
+                    string lpParameters,
+                    string lpDirectory,
+                    int nShowCmd);
+
+                // 定义窗口显示方式常量
+                private const int SW_SHOWNORMAL = 1;
+
+                /// <summary>
+                /// 打开“桌面图标设置”窗口
+                /// </summary>
+                public static void OpenDesktopIconSettings()
+                {
+                    try
                     {
-                        key.SetValue("{5399E694-6CE5-4D6C-8FCE-1D8870FDCBA0}", 0, RegistryValueKind.DWord); // 显示控制面板图标
+                        // 使用 rundll32.exe 打开“桌面图标设置”窗口
+                        ShellExecute(
+                            IntPtr.Zero,                     // 父窗口句柄
+                            "open",                          // 操作类型
+                            "rundll32.exe",                  // 文件名
+                            "shell32.dll,Control_RunDLL desk.cpl,,0", // 参数
+                            null,                            // 工作目录
+                            SW_SHOWNORMAL);                  // 窗口显示方式
+
+                        WriteLog(LogLevel.Info, "已打开“桌面图标设置”窗口。");
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        key.SetValue("{5399E694-6CE5-4D6C-8FCE-1D8870FDCBA0}", 1, RegistryValueKind.DWord); // 隐藏控制面板图标
+                        WriteLog(LogLevel.Info, $"打开“桌面图标设置”窗口时出错: {ex.Message}");
                     }
                 }
             }
             /// <summary>
-            /// 添加/移除"个人文件夹"图标
+            /// 用于管理此电脑中系统文件夹的可见性的类
             /// </summary>
-            /// <param name="Switch">指定添加或移除的开关</param>
-            public static void AddUserFolder(bool Switch)
+            public class ThisPCFolders
             {
-                int value;
-                if (Switch)
-                    value = 0;
-                else
-                    value = 1;
-                string keyPath = @"Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel";
-                using (RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(keyPath))
+                /// <summary>
+                /// 设置在此电脑中的“3D 对象”文件夹可见性
+                /// </summary>
+                public static void _3DObject(bool visibility)
                 {
-                    if (key != null)
+                    Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}", true).CreateSubKey("PropertyBag").Close();
+                    SetFolderVisibility(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}", visibility ? "Show" : "Hide");
+                }
+                /// <summary>
+                /// 设置在此电脑中的“桌面”文件夹可见性
+                /// </summary>
+                /// <param name="visibility"> 可见性</param>
+                public static void Desktop(bool visibility)
+                {
+                    Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}", true).CreateSubKey("PropertyBag").Close();
+                    SetFolderVisibility(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}", visibility ? "Show" : "Hide");
+                }
+                /// <summary>
+                /// 设置在此电脑中的“文档”文件夹可见性
+                /// </summary>
+                /// <param name="visibility"> 可见性</param>
+                public static void Documents(bool visibility)
+                {
+                    Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{f42ee2d3-909f-4907-8871-4c22fc0bf756}", true).CreateSubKey("PropertyBag").Close();
+                    SetFolderVisibility(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{f42ee2d3-909f-4907-8871-4c22fc0bf756}", visibility ? "Show" : "Hide");
+                }
+                /// <summary>
+                /// 设置在此电脑中的“下载”文件夹可见性
+                /// </summary>
+                /// <param name="visibility"> 可见性</param>
+                public static void Downloads(bool visibility)
+                {
+                    Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{7d83ee9b-2244-4e70-b1f5-5393042af1e4}", true).CreateSubKey("PropertyBag").Close();
+                    SetFolderVisibility(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{7d83ee9b-2244-4e70-b1f5-5393042af1e4}", visibility ? "Show" : "Hide");
+                }
+                /// <summary>
+                /// 设置在此电脑中的“音乐”文件夹可见性
+                /// </summary>
+                /// <param name="visibility"> 可见性</param>
+                public static void Music(bool visibility)
+                {
+                    Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{a0c69a99-21c8-4671-8703-7934162fcf1d}", true).CreateSubKey("PropertyBag").Close();
+                    SetFolderVisibility(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{a0c69a99-21c8-4671-8703-7934162fcf1d}", visibility ? "Show" : "Hide");
+                }
+                /// <summary>
+                /// 设置在此电脑中的“图片”文件夹可见性
+                /// </summary>
+                /// <param name="visibility"></param>
+                public static void Pictures(bool visibility)
+                {
+                    Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{0ddd015d-b06c-45d5-8c4c-f59713854639}", true).CreateSubKey("PropertyBag").Close();
+                    SetFolderVisibility(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{0ddd015d-b06c-45d5-8c4c-f59713854639}", visibility ? "Show" : "Hide");
+                }
+                /// <summary>
+                /// 设置在此电脑中的“视频”文件夹可见性
+                /// </summary>
+                /// <param name="visibility"> 可见性</param>
+                public static void Videos(bool visibility)
+                {
+                    Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{35286a68-3c57-41a1-bbb1-0eae73d76c95}", true).CreateSubKey("PropertyBag").Close();
+                    SetFolderVisibility(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{35286a68-3c57-41a1-bbb1-0eae73d76c95}", visibility ? "Show" : "Hide");
+                }
+            }
+            /// <summary>
+            /// 一个用于修改右键菜单的类，提供了静态方法 <see cref="Windows10Menu"/>和<see cref="Windows11Menu"/>来控制右键菜单。
+            /// </summary>
+            public class RightClickMenu
+            {
+                /// <summary>
+                /// 切换 Windows 10 右键菜单
+                /// </summary>
+                public static void Windows10Menu()
+                {
+                    try
                     {
-                        key.SetValue("{59031a47-3f72-44a7-89c5-5595fe6b30ee}", value, RegistryValueKind.DWord);
-                        //MessageBox.Show($"已{(value == 0 ? "添加" : "移除")}“个人文件夹”图标", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        // 切换 Windows 10 右键菜单
+                        Registry.Write(@"HKEY_CURRENT_USER\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32", "", "", RegistryValueKind.String);
                     }
-                    else
+                    catch (Exception e)
                     {
-                        MessageBox.Show("无法访问注册表！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(e.Message);
+                    }
+                }
+                /// <summary>
+                /// 恢复 Windows 11 右键菜单
+                /// </summary>
+                public static void Windows11Menu()
+                {
+                    try
+                    {
+                        // 恢复 Windows 11 右键菜单
+                        Microsoft.Win32.Registry.CurrentUser.DeleteSubKeyTree(@"Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}");
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
                     }
                 }
             }
             /// <summary>
-            /// 运行PowerShell脚本
+            /// 一个用于修改默认访问位置的类，提供了静态方法 <see cref="ThisPC"/>和<see cref="QuickAcess"/>来控制默认打开的文件夹。
             /// </summary>
-            /// <param name="script">指定的PowerShell脚本</param>
-            private static void RunPowerShellScript(string script)
+            public class ExplorerLaunchTo
             {
-                // 创建一个 ProcessStartInfo 对象
-                ProcessStartInfo psi = new ProcessStartInfo
+                public static void ThisPC()
                 {
-                    FileName = "powershell.exe", // 指定启动 PowerShell
-                    Arguments = $"-NoProfile -ExecutionPolicy unrestricted -Command \"{script}\"", // 传递脚本
-                    RedirectStandardOutput = true, // 重定向标准输出
-                    RedirectStandardError = true, // 重定向错误输出
-                    UseShellExecute = false, // 不使用操作系统 shell 启动进程
-                    CreateNoWindow = true // 不创建新窗口
-                };
-
-                // 创建并启动进程
-                using (Process process = new Process())
+                    Switch(1);
+                }
+                public static void QuickAcess()
                 {
-                    process.StartInfo = psi;
-                    process.Start();
-
-                    // 读取输出
-                    string output = process.StandardOutput.ReadToEnd();
-                    string error = process.StandardError.ReadToEnd();
-
-                    process.WaitForExit(); // 等待进程结束
-
-                    // 显示输出或错误
-                    //if (!string.IsNullOrEmpty(output))
-                    //{
-                    //    MessageBox.Show(output, "PowerShell 输出", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    //}
-                    if (!string.IsNullOrEmpty(error))
+                    Switch(2);
+                }
+                static void Switch(int value)
+                {
+                    string keyPath = @"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced";
+                    using (RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(keyPath))
                     {
-                        MessageBox.Show(error, "PowerShell 错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        if (key != null)
+                        {
+                            key.SetValue("LaunchTo", value, RegistryValueKind.DWord);
+                            WriteLog(LogLevel.Info, _SUCESS_WRITE_REGISTRY + keyPath);
+                            RefreshExplorer();
+                            return;
+                        }
+                        else
+                        {
+                            MessageBox.Show("无法访问注册表！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
                     }
                 }
+
             }
-        }
-        /// <summary>
-        /// 一个用于修改默认访问位置的类，提供了静态方法 <see cref="ThisPC"/>和<see cref="QuickAcess"/>来控制默认打开的文件夹。
-        /// </summary>
-        public class ExplorerLaunchTo
-        {
-            public static void ThisPC()
+            /// <summary>
+            /// 在资源管理器中打开指定路径的文件夹
+            /// </summary>
+            /// <param name="path">要打开的路径</param>
+            public static void OpenFolderInExplorer(string path)
             {
-                Switch(1);
-            }
-            public static void QuickAcess()
-            {
-                Switch(2);
-            }
-            static void Switch(int value)
-            {
-                string keyPath = @"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced";
-                using (RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(keyPath))
+                try
                 {
-                    if (key != null)
+                    if (string.IsNullOrEmpty(path))
                     {
-                        key.SetValue("LaunchTo", value, RegistryValueKind.DWord);
+                        MessageBox.Show("路径为空", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    // 检查路径是否存在
+                    if (!Directory.Exists(path) && !System.IO.File.Exists(path))
+                    {
+                        MessageBox.Show($"路径不存在: {path}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    // 检查路径是否是一个没有后缀名的文件
+                    if (System.IO.File.Exists(path))
+                    {
+                        string extension = Path.GetExtension(path);
+                        if (string.IsNullOrEmpty(extension))
+                        {
+                            MessageBox.Show($"路径是一个没有后缀名的文件: {path}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                    }
+
+                    // 打开文件夹
+                    if (Directory.Exists(path))
+                    {
+                        Process.Start("explorer.exe", path);
                     }
                     else
                     {
-                        MessageBox.Show("无法访问注册表！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        // 如果是文件，打开其所在文件夹并选中文件
+                        string folderPath = Path.GetDirectoryName(path);
+                        Process.Start("explorer.exe", $"/select,{path}");
                     }
                 }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"打开文件夹时出错: {ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-
         }
         /// <summary>
         /// 一个用于启用和禁用系统休眠功能的类，提供了静态方法 <see cref="Enable"/>和<see cref="Disable"/>来控制休眠状态。
@@ -314,7 +695,7 @@ namespace NinjaMagisk
             /// <param name="value"> 指定启用或禁用 Windows 安全中心的值</param>
             static void Switch(int value)
             {
-                while (AntiSecurity.Anti360Security() || AntiSecurity.AntiHuoRongSecurity())
+                while (Security.Anti360Security() || Security.AntiHuoRongSecurity())
                 {
                     DialogResult dialogResult = MessageBox.Show($"{_SECURITY_RUNNING}", $"{_WARNING}", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                     if (dialogResult == DialogResult.OK)
@@ -383,6 +764,41 @@ namespace NinjaMagisk
                 Switch("/D");
             }
             /// <summary>
+            /// 检查 Windows 更新服务的状态
+            /// </summary>
+            public static void CheckStatus()
+            {
+                RegistryKey key;
+                try
+                {
+                    // 读取 HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU
+                    key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU");
+                    if (key != null)
+                    {
+                        int value = (int)key.GetValue("NoAutoUpdate", 0);
+                        if (value == 1)
+                        {
+                            WriteLog(LogLevel.Info, $"{_WINDOWS_UPDATER_DISABLED}");
+                        }
+                        else
+                        {
+                            WriteLog(LogLevel.Info, $"{_WINDOWS_UPDATER_ENABLED}");
+                        }
+                        key.Close();
+                    }
+                    else
+                    {
+                        WriteLog(LogLevel.Info, $"{_WINDOWS_UPDATER_ENABLED}");
+                    }
+                }
+                catch
+                {
+                    WriteLog(LogLevel.Error, $"{_READ_REGISTRY_FAILED}");
+                    Thread.Sleep(1000);
+                }
+
+            }
+            /// <summary>
             /// 用于启用或禁用 Windows 更新服务
             /// </summary>
             /// <param name="value"> 指定启用或禁用 Windows 更新服务的值</param>
@@ -422,7 +838,7 @@ namespace NinjaMagisk
             /// <param name="value"> 指定启用或禁用 Windows 更新服务的值</param>
             static void Switch(string value)
             {
-                while (AntiSecurity.Anti360Security() || AntiSecurity.AntiHuoRongSecurity())
+                while (Security.Anti360Security() || Security.AntiHuoRongSecurity())
                 {
                     DialogResult dialogResult = MessageBox.Show($"{_NOTAVAILABLE_NETWORK_TIPS}", $"{_WARNING}", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                     if (dialogResult == DialogResult.OK)
@@ -472,7 +888,7 @@ namespace NinjaMagisk
         /// </summary>
         public static void ActiveWindows()//Windows激活
         {
-            while (AntiSecurity.Anti360Security() || AntiSecurity.AntiHuoRongSecurity())
+            while (Security.Anti360Security() || Security.AntiHuoRongSecurity())
             {
                 DialogResult dialogResult = MessageBox.Show($"{_NOTAVAILABLE_NETWORK_TIPS}", $"{_WARNING}", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 if (dialogResult == DialogResult.OK)

@@ -385,4 +385,13 @@
   <data name="_WRITE_FILE" xml:space="preserve">
     <value>写入文件</value>
   </data>
+  <data name="_WINDOWS_UPDATER_DISABLED" xml:space="preserve">
+    <value>Windows 更新已被禁用</value>
+  </data>
+  <data name="_WINDOWS_UPDATER_ENABLED" xml:space="preserve">
+    <value>Windows 更新已启用</value>
+  </data>
+  <data name="_READ_REGISTRY_FAILED" xml:space="preserve">
+    <value>读取注册表时出错</value>
+  </data>
 </root>

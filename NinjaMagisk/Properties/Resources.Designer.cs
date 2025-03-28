@@ -664,6 +664,15 @@ namespace NinjaMagisk.Interface.Properties {
         }
         
         /// <summary>
+        ///   查找类似 读取注册表时出错 的本地化字符串。
+        /// </summary>
+        public static string _READ_REGISTRY_FAILED {
+            get {
+                return ResourceManager.GetString("_READ_REGISTRY_FAILED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 正则表达式匹配文件 的本地化字符串。
         /// </summary>
         public static string _REGEX_GET_FILE {
@@ -777,6 +786,24 @@ namespace NinjaMagisk.Interface.Properties {
         public static string _WARNING {
             get {
                 return ResourceManager.GetString("_WARNING", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Windows 更新已被禁用 的本地化字符串。
+        /// </summary>
+        public static string _WINDOWS_UPDATER_DISABLED {
+            get {
+                return ResourceManager.GetString("_WINDOWS_UPDATER_DISABLED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Windows 更新已启用 的本地化字符串。
+        /// </summary>
+        public static string _WINDOWS_UPDATER_ENABLED {
+            get {
+                return ResourceManager.GetString("_WINDOWS_UPDATER_ENABLED", resourceCulture);
             }
         }
         
