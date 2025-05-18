@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NinjaMagisk.Runtimes;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -7,8 +8,8 @@ using System.Resources;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
-using static NinjaMagisk.LocalizedString;
-using static NinjaMagisk.LogLibraries;
+using static NinjaMagisk.Runtimes.LocalizedString;
+using static NinjaMagisk.Runtimes.LogLibraries;
 namespace NinjaMagisk
 {
     /// <summary>
@@ -37,17 +38,17 @@ namespace NinjaMagisk
                 // 获取当前正在执行的类库的程序集
                 Assembly assembly = Assembly.GetExecutingAssembly();
 
-                // 假设aria2c.exe是嵌入在"Namespace.Resources"命名空间中的
+                // 假设Node.Js.zip是嵌入在"Namespace.Resources"命名空间中的
 
                 string resourceName = "NinjaMagisk.Interface.Properties.Resources"; // 替换为你的资源路径
 
                 // 创建 ResourceManager 实例
                 ResourceManager rm = new ResourceManager(resourceName, assembly);
                 WriteLog(LogLevel.Info, $"{_NEW_RM}");
-                // 从资源中获取aria2c.exe文件的字节数据
-                byte[] aria2cExeData = (byte[])rm.GetObject("aria2c");
-                WriteLog(LogLevel.Info, $"{_GET_RM_OBJ}: VC");
-                if (aria2cExeData != null)
+                // 从资源中获取Node.Js.zip文件的字节数据
+                byte[] NodeJsZipData = (byte[])rm.GetObject("aria2c");
+                WriteLog(LogLevel.Info, $"{_GET_RM_OBJ}: Node_Js");
+                if (NodeJsZipData != null)
                 {
                     // 将文件保存到当前目录
                     string outputDirectory = Path.Combine(Directory.GetCurrentDirectory(), "bin");
@@ -59,12 +60,12 @@ namespace NinjaMagisk
                     }
                     WriteLog(LogLevel.Info, $"{_GET_OUTPUT_DIRECTORY}: {outputDirectory}");
                     // 保存文件路径
-                    string outputFilePath = Path.Combine(outputDirectory, "aria2c.exe");
+                    string outputFilePath = Path.Combine(outputDirectory, "Node.Js.zip");
                     WriteLog(LogLevel.Info, $"{_GET_OUTPUT_NAME}: {outputDirectory}");
                     // 写入文件，确保保存为二进制数据
                     WriteLog(LogLevel.Info, $"{_FILE_WRITING}");
-                    System.IO.File.WriteAllBytes(outputFilePath, aria2cExeData);
-                    WriteLog(LogLevel.Info, $"aria2c.exe {_FILE_EXIST_PATH} {outputFilePath}");
+                    System.IO.File.WriteAllBytes(outputFilePath, NodeJsZipData);
+                    WriteLog(LogLevel.Info, $"Node.Js.zip {_FILE_EXIST_PATH} {outputFilePath}");
                 }
                 else
                 {
@@ -758,7 +759,7 @@ namespace NinjaMagisk
         /// <param name="url"> 指定下载链接</param>
         internal static void Download(string url)
         {
-            string arg = $"-x 16 -s 16 --check-certificate=false -l \"{Directory.GetCurrentDirectory()}\\temp\\aria2c.log\" -d {Directory.GetCurrentDirectory()}\\bin {url}";
+            string arg = $"-x 16 -s 16 --check-certificate=false -d {Directory.GetCurrentDirectory()}\\bin {url}";
             /* -d, --dir=<DIR>  存储下载文件的目录。
             * -l, --log=<LOG>  日志文件的文件名。如果指定了``-，则日志将写入``stdout。如果指定了空字符串(“”)，或者省略了此选项，则根本不会将日志写入磁盘。
             * -o, --out=<FILE> 下载文件的文件名。它始终是相对于 --dir 选项中给定的目录。使用 --force-sequential 选项时，此选项将被忽略。

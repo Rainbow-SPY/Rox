@@ -1,11 +1,12 @@
-﻿using System;
+﻿using NinjaMagisk.Runtimes;
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using static NinjaMagisk.LocalizedString;
-using static NinjaMagisk.LogLibraries;
+using static NinjaMagisk.Runtimes.LocalizedString;
+using static NinjaMagisk.Runtimes.LogLibraries;
 namespace NinjaMagisk
 {
     /// <summary>

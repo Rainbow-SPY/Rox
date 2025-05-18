@@ -6,8 +6,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using static NinjaMagisk.LocalizedString;
-using static NinjaMagisk.LogLibraries;
+using static NinjaMagisk.Runtimes.LogLibraries;
+using static NinjaMagisk.Runtimes.LocalizedString;
 namespace NinjaMagisk
 {
     /// <summary>
@@ -695,12 +695,12 @@ namespace NinjaMagisk
             /// <param name="value"> 指定启用或禁用 Windows 安全中心的值</param>
             static void Switch(int value)
             {
-                while (Security.Anti360Security() || Security.AntiHuoRongSecurity())
+                if (Security.Anti360Security() || Security.AntiHuoRongSecurity())
                 {
                     DialogResult dialogResult = MessageBox.Show($"{_SECURITY_RUNNING}", $"{_WARNING}", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                    if (dialogResult == DialogResult.OK)
+                    if (dialogResult != DialogResult.OK)
                     {
-                        continue;
+                        return;
                     }
                 }
                 RegistryKey key;
@@ -766,7 +766,7 @@ namespace NinjaMagisk
             /// <summary>
             /// 检查 Windows 更新服务的状态
             /// </summary>
-            public static void CheckStatus()
+            public static bool CheckStatus()
             {
                 RegistryKey key;
                 try
@@ -779,22 +779,27 @@ namespace NinjaMagisk
                         if (value == 1)
                         {
                             WriteLog(LogLevel.Info, $"{_WINDOWS_UPDATER_DISABLED}");
+                            key.Close();
+                            return false;
                         }
                         else
                         {
                             WriteLog(LogLevel.Info, $"{_WINDOWS_UPDATER_ENABLED}");
+                            key.Close();
+                            return true;
                         }
-                        key.Close();
                     }
                     else
                     {
                         WriteLog(LogLevel.Info, $"{_WINDOWS_UPDATER_ENABLED}");
+                        return false;
                     }
                 }
                 catch
                 {
                     WriteLog(LogLevel.Error, $"{_READ_REGISTRY_FAILED}");
                     Thread.Sleep(1000);
+                    return false;
                 }
 
             }
@@ -838,12 +843,12 @@ namespace NinjaMagisk
             /// <param name="value"> 指定启用或禁用 Windows 更新服务的值</param>
             static void Switch(string value)
             {
-                while (Security.Anti360Security() || Security.AntiHuoRongSecurity())
+                if (Security.Anti360Security() || Security.AntiHuoRongSecurity())
                 {
                     DialogResult dialogResult = MessageBox.Show($"{_NOTAVAILABLE_NETWORK_TIPS}", $"{_WARNING}", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                    if (dialogResult == DialogResult.OK)
+                    if (dialogResult != DialogResult.OK)
                     {
-                        continue;
+                        return;
                     }
                 }
                 try
@@ -888,12 +893,12 @@ namespace NinjaMagisk
         /// </summary>
         public static void ActiveWindows()//Windows激活
         {
-            while (Security.Anti360Security() || Security.AntiHuoRongSecurity())
+            if (Security.Anti360Security() || Security.AntiHuoRongSecurity())
             {
                 DialogResult dialogResult = MessageBox.Show($"{_NOTAVAILABLE_NETWORK_TIPS}", $"{_WARNING}", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                if (dialogResult == DialogResult.OK)
+                if (dialogResult != DialogResult.OK)
                 {
-                    continue;
+                    return;
                 }
             }
             DownloadAssistant.ModuleDownloader(DownloadAssistant.Module.Activator);
@@ -921,6 +926,49 @@ namespace NinjaMagisk
             catch (Exception exception)
             {
                 WriteLog(LogLevel.Error, $"{_CANNOT_ACTIVE_WINDOWS}: {exception}");
+            }
+        }
+        /// <summary>
+        /// 激活 Windows 系统，首先检查安全软件的状态，然后启动指定的激活程序，并返回激活结果。
+        /// </summary>
+        /// <returns></returns>
+        public static bool BoolActiveWindows()//Windows激活
+        {
+            if (Security.Anti360Security() || Security.AntiHuoRongSecurity())
+            {
+                DialogResult dialogResult = MessageBox.Show($"{_NOTAVAILABLE_NETWORK_TIPS}", $"{_WARNING}", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                if (dialogResult != DialogResult.OK)
+                {
+                    return false;
+                }
+            }
+            DownloadAssistant.ModuleDownloader(DownloadAssistant.Module.Activator);
+            try
+            {
+                Process process12 = new Process();
+                process12.StartInfo.FileName = $"{AppDomain.CurrentDomain.BaseDirectory}\\bin\\HEU_KMS_Activator_v19.6.0.exe";
+                process12.StartInfo.Arguments = "/kms38";
+                process12.Start();
+                WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {process12.Id}");
+                WriteLog(LogLevel.Info, LogKind.Process, "process started");
+                WriteLog(LogLevel.Info, LogKind.Process, $"Args: {AppDomain.CurrentDomain.BaseDirectory}\\bin\\HEU_KMS_Activator_v19.6.0.exe /kms38");
+                process12.WaitForExit();
+                WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {process12.ExitCode}");
+                if (process12.ExitCode != 0)
+                {
+                    WriteLog(LogLevel.Error, $"{_CANNOT_ACTIVE_WINDOWS}: {process12.ExitCode}");
+                    return false;
+                }
+                else
+                {
+                    WriteLog(LogLevel.Info, $"{_ACTIVE_WINDOWS}");
+                    return true;
+                }
+            }
+            catch (Exception exception)
+            {
+                WriteLog(LogLevel.Error, $"{_CANNOT_ACTIVE_WINDOWS}: {exception}");
+                return false;
             }
         }
         #region Windows身份验证

@@ -1,0 +1,393 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Language" xml:space="preserve">
+    <value>English (United States)</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>1.5.0</value>
+  </data>
+  <data name="Author" xml:space="preserve">
+    <value>Rainbow SPY</value>
+  </data>
+  <data name="Copyright" xml:space="preserve">
+    <value>Copyright (C) Rainbow-SPY 2019-2025, All rights reserved</value>
+  </data>
+  <data name="Protect" xml:space="preserve">
+    <value>NinjaMagisk Common Interface Libraries</value>
+  </data>
+  <data name="_FILE_EXIST" xml:space="preserve">
+    <value>File exists</value>
+  </data>
+  <data name="_FILE_EXIST_PATH" xml:space="preserve">
+    <value>File saved to</value>
+  </data>
+  <data name="_RES_FILE_NOT_FIND" xml:space="preserve">
+    <value>Resource file does not exist or is not embedded</value>
+  </data>
+  <data name="_CANNOT_WRITE_LOGFILE" xml:space="preserve">
+    <value>Cannot write to log file</value>
+  </data>
+  <data name="_CLEAR_LOGFILE" xml:space="preserve">
+    <value>Clear log file</value>
+  </data>
+  <data name="_CANNOT_CLEAR_LOGFILE" xml:space="preserve">
+    <value>Cannot clear log file</value>
+  </data>
+  <data name="_GET_OUTPUT_DIRECTORY" xml:space="preserve">
+    <value>Get output directory</value>
+  </data>
+  <data name="_GET_OUTPUT_NAME" xml:space="preserve">
+    <value>Get output file name</value>
+  </data>
+  <data name="_CREATE_DIRECTORY" xml:space="preserve">
+    <value>Create directory</value>
+  </data>
+  <data name="_GET_DIRECTORY" xml:space="preserve">
+    <value>Get directory</value>
+  </data>
+  <data name="_NOTAVAILABLE_NETWORK" xml:space="preserve">
+    <value>Network unavailable</value>
+  </data>
+  <data name="_NOTAVAILABLE_NETWORK_TIPS" xml:space="preserve">
+    <value>Network unavailable, proceed with the step?</value>
+  </data>
+  <data name="_TIPS" xml:space="preserve">
+    <value>Tip</value>
+  </data>
+  <data name="_ERROR" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="_WARNING" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="_GET_URL" xml:space="preserve">
+    <value>Get download URL</value>
+  </data>
+  <data name="_GET_TEMP" xml:space="preserve">
+    <value>Get temp folder</value>
+  </data>
+  <data name="_REGEX_GET_FILE" xml:space="preserve">
+    <value>Regex match file</value>
+  </data>
+  <data name="_GET_FILES_IN_DIRECTORY" xml:space="preserve">
+    <value>Get all files in directory</value>
+  </data>
+  <data name="_GET_SYSTEM_BIT" xml:space="preserve">
+    <value>Get system bit</value>
+  </data>
+  <data name="_FINDING_HTML_DOWNLOAD_LINK" xml:space="preserve">
+    <value>Parsing HTML page file</value>
+  </data>
+  <data name="_FIND_HTML_CODE" xml:space="preserve">
+    <value>Get HTML element</value>
+  </data>
+  <data name="_SECURITY_RUNNING" xml:space="preserve">
+    <value>Security software is running, please close it</value>
+  </data>
+  <data name="_PROCESS_STARTED" xml:space="preserve">
+    <value>Process started</value>
+  </data>
+  <data name="_CANNOT_DISENABLE_HIBERNATE" xml:space="preserve">
+    <value>Cannot disable/enable hibernate</value>
+  </data>
+  <data name="_DISENABLE_HIBERNATE" xml:space="preserve">
+    <value>Hibernate disabled/enabled</value>
+  </data>
+  <data name="_CANNOT_ENABLE_HIGHPOWERCFG" xml:space="preserve">
+    <value>Cannot enable high-performance power plan</value>
+  </data>
+  <data name="_ENABLE_HIGHPOWERCFG" xml:space="preserve">
+    <value>High-performance power plan enabled</value>
+  </data>
+  <data name="_CANNOT_DISABLE_SECURITY_CENTER" xml:space="preserve">
+    <value>Cannot disable Windows Security Center</value>
+  </data>
+  <data name="_CANNOT_ENABLE_SECURITY_CENTER" xml:space="preserve">
+    <value>Cannot enable Windows Security Center</value>
+  </data>
+  <data name="_DISABLE_SECURITY_CENTER" xml:space="preserve">
+    <value>Windows Security Center disabled</value>
+  </data>
+  <data name="_ENABLE_SECURITY_CENTER" xml:space="preserve">
+    <value>Windows Security Center enabled</value>
+  </data>
+  <data name="_WRITE_REGISTRY" xml:space="preserve">
+    <value>Write registry</value>
+  </data>
+  <data name="_CANNOT_DISABLE_WINDOWS_UPDATER" xml:space="preserve">
+    <value>Cannot disable Windows Update</value>
+  </data>
+  <data name="_CANNOT_ENABLE_WINDOWS_UPDATER" xml:space="preserve">
+    <value>Cannot enable Windows Update</value>
+  </data>
+  <data name="_DISABLE_WINDOWS_UPDATER" xml:space="preserve">
+    <value>Windows Update disabled</value>
+  </data>
+  <data name="_ENABLE_WINDOWS_UPDATER" xml:space="preserve">
+    <value>Windows Update enabled</value>
+  </data>
+  <data name="_ACTIVE_WINDOWS" xml:space="preserve">
+    <value>Windows activated</value>
+  </data>
+  <data name="_CANNOT_ACTIVE_WINDOWS" xml:space="preserve">
+    <value>Cannot activate Windows</value>
+  </data>
+  <data name="_SUCESS_WRITE_REGISTRY" xml:space="preserve">
+    <value>Registry successfully written</value>
+  </data>
+  <data name="_WRITE_REGISTRY_FAILED" xml:space="preserve">
+    <value>Error writing to registry</value>
+  </data>
+  <data name="_GET_ARIA2C_ARGS" xml:space="preserve">
+    <value>Get aria2c arguments</value>
+  </data>
+  <data name="_GET_ARIA2C_PATH" xml:space="preserve">
+    <value>Get aria2c file path</value>
+  </data>
+  <data name="_GET_ARIA2C_EXITCODE" xml:space="preserve">
+    <value>Get aria2c exitcode</value>
+  </data>
+  <data name="_ENABLE_ARIA2C_LOG_OUTPUT" xml:space="preserve">
+    <value>Enable aria2c log output</value>
+  </data>
+  <data name="_DISABLE_ARIA2C_LOG_OUTPUT" xml:space="preserve">
+    <value>Disable aria2c log output</value>
+  </data>
+  <data name="_DOWNLOADING_FILE" xml:space="preserve">
+    <value>Downloading file</value>
+  </data>
+  <data name="_DOWNLOADING_COMPLETE" xml:space="preserve">
+    <value>Download complete</value>
+  </data>
+  <data name="_DOWNLOADING_FAILED" xml:space="preserve">
+    <value>Download failed</value>
+  </data>
+  <data name="_GET_64_LINK" xml:space="preserve">
+    <value>Get 64-bit download link</value>
+  </data>
+  <data name="_GET_32_LINK" xml:space="preserve">
+    <value>Get 32-bit download link</value>
+  </data>
+  <data name="_GET_RM_NAME" xml:space="preserve">
+    <value>Get project resource manifest</value>
+  </data>
+  <data name="_GET_RM_OBJ" xml:space="preserve">
+    <value>Get resource data</value>
+  </data>
+  <data name="_NEW_RM" xml:space="preserve">
+    <value>Create ResourceManager instance</value>
+  </data>
+  <data name="_FILE_WRITING" xml:space="preserve">
+    <value>Writing file</value>
+  </data>
+  <data name="_PROCESS_EXITED" xml:space="preserve">
+    <value>Process exited</value>
+  </data>
+  <data name="_GET_HTML" xml:space="preserve">
+    <value>Get html file</value>
+  </data>
+  <data name="_64" xml:space="preserve">
+    <value>64-bit</value>
+  </data>
+  <data name="_32" xml:space="preserve">
+    <value>32-bit</value>
+  </data>
+  <data name="_GET_FILE" xml:space="preserve">
+    <value>Get file</value>
+  </data>
+  <data name="_WAIT_DOWNLOADING" xml:space="preserve">
+    <value>Wait downloading complete</value>
+  </data>
+  <data name="_RETRY_DOWNLOAD" xml:space="preserve">
+    <value>Retry download</value>
+  </data>
+  <data name="_LOGIN_ERROR_USER_OR_PASSWORD" xml:space="preserve">
+    <value>Login error or password</value>
+  </data>
+  <data name="_ENTER_CREDENTIALS" xml:space="preserve">
+    <value>Enter your credentials</value>
+  </data>
+  <data name="_LOGIN_VERIFY" xml:space="preserve">
+    <value>Verify your identity</value>
+  </data>
+  <data name="_LOGIN_VERIFY_ERROR" xml:space="preserve">
+    <value>Validation failed</value>
+  </data>
+  <data name="_ERROR_CODE" xml:space="preserve">
+    <value>Error code</value>
+  </data>
+  <data name="_SUCCESS_VERIFY" xml:space="preserve">
+    <value>Verification successful</value>
+  </data>
+  <data name="_CANCEL_OP" xml:space="preserve">
+    <value>User canceled action</value>
+  </data>
+  <data name="_UNKNOW_ERROR" xml:space="preserve">
+    <value>Unknown Error</value>
+  </data>
+  <data name="_ANSWER" xml:space="preserve">
+    <value>answer</value>
+  </data>
+  <data name="_SEND_REQUEST" xml:space="preserve">
+    <value>Send request</value>
+  </data>
+  <data name="_GET_RESPONSE" xml:space="preserve">
+    <value>Get Response</value>
+  </data>
+  <data name="_LATEST_VERSION" xml:space="preserve">
+    <value>Latest version</value>
+  </data>
+  <data name="_UNSUPPORT_PLATFORM" xml:space="preserve">
+    <value>Unsupported platforms</value>
+  </data>
+  <data name="_JSON_PARSING_FAILED" xml:space="preserve">
+    <value>Parsing JSON failed</value>
+  </data>
+  <data name="_NEW_VERSION_AVAILABLE" xml:space="preserve">
+    <value>New version available</value>
+  </data>
+  <data name="_NON_NEW_VER" xml:space="preserve">
+    <value>The current version is the latest.</value>
+  </data>
+  <data name="_CURRENT_VER" xml:space="preserve">
+    <value>The current version</value>
+  </data>
+  <data name="_ADD_NEW_LINE" xml:space="preserve">
+    <value>Add new line</value>
+  </data>
+  <data name="_UPDATE_LINE" xml:space="preserve">
+    <value>Update line string</value>
+  </data>
+  <data name="_READ_FILE" xml:space="preserve">
+    <value>Read file</value>
+  </data>
+  <data name="_WRITE_FILE" xml:space="preserve">
+    <value>Write file</value>
+  </data>
+  <data name="_WINDOWS_UPDATER_DISABLED" xml:space="preserve">
+    <value>Windows Updater disabled</value>
+  </data>
+  <data name="_WINDOWS_UPDATER_ENABLED" xml:space="preserve">
+    <value>Windows Updater enabled</value>
+  </data>
+  <data name="_READ_REGISTRY_FAILED" xml:space="preserve">
+    <value>Read registry failed</value>
+  </data>
+</root>

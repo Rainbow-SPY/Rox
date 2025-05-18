@@ -1,439 +1,19 @@
 ﻿using Microsoft.Win32;
-using NinjaMagisk.Interface.Properties;
+using NinjaMagisk.Runtimes;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Net.NetworkInformation;
-using System.Resources;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static NinjaMagisk.LocalizedString;
-using static NinjaMagisk.LogLibraries;
+using static NinjaMagisk.Runtimes.LocalizedString;
+using static NinjaMagisk.Runtimes.LogLibraries;
 using static NinjaMagisk.Text;
 namespace NinjaMagisk
 {
-    /// <summary>
-    /// 根据语言获取资源文件
-    /// </summary>
-    internal class ResourceHelper
-    {
-        /// <summary>
-        /// 判断是否为简体中文
-        /// </summary>
-        /// <param name="lang"></param>
-        /// <returns>语言字符串</returns>
-        private static bool IsChineseSimple(string lang)
-        {
-            return lang == "zh-CN" || lang == "zh-CHS";
-        }
-        /// <summary>
-        /// 获取资源管理器
-        /// </summary>
-        /// <param name="lang"></param>
-        /// <returns>指定语言文件的资源管理器</returns>
-        private static ResourceManager GetResourceManager(string lang)
-        {
-            if (IsChineseSimple(lang))
-            {
-                // 如果是中文（zh-CN 或 zh-Hans），返回 Resources.resx 的资源管理器
-                return new ResourceManager("NinjaMagisk.Interface.Properties.Resources", typeof(Resources).Assembly);
-            }
-            else
-            {
-                // 如果是其他语言，返回 Resource1.resx 的资源管理器
-                return new ResourceManager("NinjaMagisk.Interface.Properties.Resource1", typeof(Resource1).Assembly);
-            }
-        }
-        /// <summary>
-        /// 获取字符串资源
-        /// </summary>
-        /// <param name="key">自定义字段</param>
-        /// <param name="lang">语言代码</param>
-        /// <returns>指定语言文件中的字符串</returns>
-        internal static string GetString(string key, string lang)
-        {
-            try
-            {
-                ResourceManager resourceManager = GetResourceManager(lang);
-                string value = resourceManager.GetString(key);
-                return value;
-            }
-            catch
-            {
-                WriteLog(LogLevel.Error, $"资源键 '{key}' 未找到，语言: {lang}");
-                WriteLog(LogLevel.Info, $"Error:{key} ");
-                return null;
-            }
-        }
-    }
-    /// <summary>
-    /// 日志类库,在控制台输出日志并记录到文件
-    /// </summary>
-    public class LogLibraries
-    {
-        public static Action<LogLevel, string> LogToUi { get; set; }
-        /// <summary>
-        /// 日志等级,分为Info,Error,Warning
-        /// </summary>
-        public enum LogLevel
-        {
-            /// <summary>
-            /// 信息
-            /// </summary>
-            Info,
-            /// <summary>
-            /// 错误
-            /// </summary>
-            Error,
-            /// <summary>
-            /// 警告
-            /// </summary>
-            Warning
-        }
-        /// <summary>
-        /// 日志类型,分为Form,Thread,Process,Service,Task,System,PowerShell,Registry,Network
-        /// </summary>
-        public enum LogKind
-        {
-            /// <summary>
-            /// 窗体  
-            /// </summary>
-            Form,
-            /// <summary>
-            /// 线程
-            /// </summary>
-            Thread,
-            /// <summary>
-            /// 进程
-            /// </summary>
-            Process,
-            /// <summary>
-            /// 服务
-            /// </summary>
-            Service,
-            /// <summary>
-            /// 任务
-            /// </summary>
-            Task,
-            /// <summary>
-            /// 系统
-            /// </summary>
-            System,
-            /// <summary>
-            /// PowerShell
-            /// </summary>
-            PowerShell,
-            /// <summary>
-            /// 注册表
-            /// </summary>
-            Registry,
-            /// <summary>
-            /// 网络
-            /// </summary>
-            Network,
-        }
-        // 定义日志文件名和路径（当前目录下的 Assistant.log 文件）
-        /// <summary>
-        /// 日志文件名
-        /// </summary>
-        private static readonly string logFileName = "Assistant.log";
-        /// <summary>
-        /// 日志文件路径
-        /// </summary>
-        private static readonly string logFilePath = Path.Combine(Directory.GetCurrentDirectory(), logFileName);
-        /// <summary>
-        /// 根据日志等级和日志类型向文件写入日志,并在控制台输出日志,并记录到文件
-        /// </summary>
-        /// <param name="logLevel">日志等级</param>
-        /// <param name="logKind">日志类型</param>
-        /// <param name="message">消息</param>
-        public static void WriteLog(LogLevel logLevel, LogKind logKind, string message)
-        {
-            // 在写日志之前先检查并处理文件重命名
-
-            // 设置颜色
-            if (logLevel == LogLevel.Info)
-            {
-                Console.ForegroundColor = ConsoleColor.Green;// 设置绿色
-                Console.Write($"[{logLevel}] ");
-                Console.ForegroundColor = ConsoleColor.DarkCyan;
-                Console.Write($"{logKind}: ");
-                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.Write($"{message}\n");
-                Console.ResetColor();
-            }
-            else if (logLevel == LogLevel.Error)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write($"[{logLevel}] ");
-                Console.ForegroundColor = ConsoleColor.DarkCyan;
-                Console.Write($"{logKind}: ");
-                Console.ForegroundColor = ConsoleColor.Red; // 设置绿色
-                Console.Write($"{message}\n");
-                Console.ResetColor();
-            }
-            else if (logLevel == LogLevel.Warning)
-            {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write($"[{logLevel}] ");
-                Console.ForegroundColor = ConsoleColor.DarkCyan;
-                Console.Write($"{logKind}: ");
-                Console.ForegroundColor = ConsoleColor.DarkYellow; // 设置绿色
-                Console.Write($"{message}\n");
-                Console.ResetColor();
-            }
-            else
-            {
-                Console.WriteLine($"[{logLevel}] {logKind}: {message}");
-            }
-
-            // 打印日志到控制台
-            Console.ResetColor();
-            LogToUi?.Invoke(logLevel, message);
-            // 记录日志到文件
-            LogToFile(logLevel, message);
-        }
-        /// <summary>
-        /// 根据日志等级向文件写入日志,并在控制台输出日志,并记录到文件
-        /// </summary>
-        /// <param name="logLevel">日志等级</param>
-        /// <param name="message">消息</param>
-        public static void WriteLog(LogLevel logLevel, string message)
-        {
-            // 在写日志之前先检查并处理文件
-            // 设置颜色
-            if (logLevel == LogLevel.Info)
-            {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write($"[{logLevel}]");
-                Console.ForegroundColor = ConsoleColor.DarkYellow; // 设置绿色
-                Console.Write($": {message}\n");
-                Console.ResetColor();
-            }
-            else if (logLevel == LogLevel.Error)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write($"[{logLevel}]");
-                Console.ForegroundColor = ConsoleColor.Red; // 设置绿色
-                Console.Write($": {message}\n");
-                Console.ResetColor();
-            }
-            else if (logLevel == LogLevel.Warning)
-            {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write($"[{logLevel}] ");
-                Console.ForegroundColor = ConsoleColor.DarkYellow; // 设置绿色
-                Console.Write($"{message}\n");
-                Console.ResetColor();
-            }
-            else
-            {
-                Console.WriteLine($"[{logLevel}] {message}");
-            }
-
-            // 打印日志到控制台
-            Console.ResetColor();
-            LogToUi?.Invoke(logLevel, message);
-            // 记录日志到文件
-            LogToFile(logLevel, message);
-        }
-        /// <summary>
-        /// 根据日志等级记录日志到文件
-        /// </summary>
-        /// <param name="logLevel">日志等级</param>
-        /// <param name="message">消息</param>
-        public static void LogToFile(LogLevel logLevel, string message)
-        {
-            // 创建日志信息
-            string logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{logLevel}]: {message}";
-
-            try
-            {
-                // 如果日志文件不存在，则创建
-                if (!System.IO.File.Exists(logFilePath))
-                {
-                    System.IO.File.Create(logFilePath).Close();
-                }
-
-                // 以追加方式写入日志内容
-                using (StreamWriter writer = new StreamWriter(logFilePath, append: true))
-                {
-                    writer.WriteLine(logMessage);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"[Error] Error writing to log file: {ex.Message}");
-                Console.ResetColor();
-            }
-        }
-        /// <summary>
-        /// 根据日志等级和日志类型记录日志到文件
-        /// </summary>
-        /// <param name="logLevel"></param>
-        /// <param name="logkind"></param>
-        /// <param name="message"></param>
-        public static void LogToFile(LogLevel logLevel, LogKind logkind, string message)
-        {
-            // 创建日志信息
-            string logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{logkind}] [{logLevel}]: {message}";
-
-            try
-            {
-                // 如果日志文件不存在，则创建
-                if (!System.IO.File.Exists(logFilePath))
-                {
-                    System.IO.File.Create(logFilePath).Close();
-                }
-
-                // 以追加方式写入日志内容
-                using (StreamWriter writer = new StreamWriter(logFilePath, append: true))
-                {
-                    writer.WriteLine(logMessage);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                WriteLog(LogLevel.Error, $"[Error] Error writing to log file: {ex.Message}");
-                Console.ResetColor();
-            }
-        }
-        /// <summary>
-        /// 清空日志文件
-        /// </summary>
-        /// <param name="filePath"></param>
-        public static void ClearFile(string filePath)
-        {
-            try
-            {
-                // 打开文件并清空内容
-                using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Write))
-                {
-                    fs.SetLength(0); // 设置文件长度为0，即清空文件内容
-                }
-
-                WriteLog(LogLevel.Info, $"{_CLEAR_LOGFILE}");
-                Console.ResetColor();
-            }
-            catch (Exception ex)
-            {
-                WriteLog(LogLevel.Error, $"{_CANNOT_CLEAR_LOGFILE}: {ex.Message}");
-                Console.ResetColor();
-            }
-        }
-    }
-    /// <summary>
-    /// 本地化字符串,根据语言获取资源文件,并提供本地化字符串
-    /// </summary>
-    public class LocalizedString
-    {
-        internal static string Language = GetLocalizedString("Language");
-        internal static readonly string Version = GetLocalizedString("Version");
-        internal static readonly string Author = GetLocalizedString("Author");
-        internal static readonly string Copyright = GetLocalizedString("Copyright");
-        internal static readonly string Protect = GetLocalizedString("Protect");
-        internal static readonly string _FILE_EXIST = GetLocalizedString("_FILE_EXIST");
-        internal static readonly string _FILE_WRITING = GetLocalizedString("_FILE_WRITING");
-        internal static readonly string _FILE_EXIST_PATH = GetLocalizedString("_FILE_EXIST_PATH");
-        internal static readonly string _RES_FILE_NOT_FIND = GetLocalizedString("_RES_FILE_NOT_FIND");
-        internal static readonly string _CANNOT_WRITE_LOGFILE = GetLocalizedString("_CANNOT_WRITE_LOGFILE");
-        internal static readonly string _CLEAR_LOGFILE = GetLocalizedString("_CLEAR_LOGFILE");
-        internal static readonly string _CANNOT_CLEAR_LOGFILE = GetLocalizedString("_CANNOT_CLEAR_LOGFILE");
-        internal static readonly string _GET_OUTPUT_DIRECTORY = GetLocalizedString("_GET_OUTPUT_DIRECTORY");
-        internal static readonly string _GET_OUTPUT_NAME = GetLocalizedString("_GET_OUTPUT_NAME");
-        internal static readonly string _CREATE_DIRECTORY = GetLocalizedString("_CREATE_DIRECTORY");
-        internal static readonly string _GET_DIRECTORY = GetLocalizedString("_GET_DIRECTORY");
-        internal static readonly string _NOTAVAILABLE_NETWORK = GetLocalizedString("_NOTAVAILABLE_NETWORK");
-        internal static readonly string _NOTAVAILABLE_NETWORK_TIPS = GetLocalizedString("_NOTAVAILABLE_NETWORK_TIPS");
-        internal static readonly string _TIPS = GetLocalizedString("_TIPS");
-        internal static readonly string _ERROR = GetLocalizedString("_ERROR");
-        internal static readonly string _WARNING = GetLocalizedString("_WARNING");
-        internal static readonly string _GET_URL = GetLocalizedString("_GET_URL");
-        internal static readonly string _GET_TEMP = GetLocalizedString("_GET_TEMP");
-        internal static readonly string _REGEX_GET_FILE = GetLocalizedString("_REGEX_GET_FILE");
-        internal static readonly string _GET_FILES_IN_DIRECTORY = GetLocalizedString("_GET_FILES_IN_DIRECTORY");
-        internal static readonly string _GET_SYSTEM_BIT = GetLocalizedString("_GET_SYSTEM_BIT");
-        internal static readonly string _FINDING_HTML_DOWNLOAD_LINK = GetLocalizedString("_FINDING_HTML_DOWNLOAD_LINK");
-        internal static readonly string _FIND_HTML_CODE = GetLocalizedString("_FIND_HTML_CODE");
-        internal static readonly string _SECURITY_RUNNING = GetLocalizedString("_SECURITY_RUNNING");
-        internal static readonly string _PROCESS_STARTED = GetLocalizedString("_PROCESS_STARTED");
-        internal static readonly string _PROCESS_EXITED = GetLocalizedString("_PROCESS_EXITED");
-        internal static readonly string _CANNOT_DISENABLE_HIBERNATE = GetLocalizedString("_CANNOT_DISENABLE_HIBERNATE");
-        internal static readonly string _DISENABLE_HIBERNATE = GetLocalizedString("_DISENABLE_HIBERNATE");
-        internal static readonly string _CANNOT_ENABLE_HIGHPOWERCFG = GetLocalizedString("_CANNOT_ENABLE_HIGHPOWERCFG");
-        internal static readonly string _ENABLE_HIGHPOWERCFG = GetLocalizedString("_ENABLE_HIGHPOWERCFG");
-        internal static readonly string _CANNOT_DISABLE_SECURITY_CENTER = GetLocalizedString("_CANNOT_DISABLE_SECURITY_CENTER");
-        internal static readonly string _CANNOT_ENABLE_SECURITY_CENTER = GetLocalizedString("_CANNOT_ENABLE_SECURITY_CENTER");
-        internal static readonly string _DISABLE_SECURITY_CENTER = GetLocalizedString("_DISABLE_SECURITY_CENTER");
-        internal static readonly string _ENABLE_SECURITY_CENTER = GetLocalizedString("_ENABLE_SECURITY_CENTER");
-        internal static readonly string _WRITE_REGISTRY = GetLocalizedString("_WRITE_REGISTRY");
-        internal static readonly string _CANNOT_DISABLE_WINDOWS_UPDATER = GetLocalizedString("_CANNOT_DISABLE_WINDOWS_UPDATER");
-        internal static readonly string _CANNOT_ENABLE_WINDOWS_UPDATER = GetLocalizedString("_CANNOT_ENABLE_WINDOWS_UPDATER");
-        internal static readonly string _DISABLE_WINDOWS_UPDATER = GetLocalizedString("_DISABLE_WINDOWS_UPDATER");
-        internal static readonly string _ENABLE_WINDOWS_UPDATER = GetLocalizedString("_ENABLE_WINDOWS_UPDATER");
-        internal static readonly string _ACTIVE_WINDOWS = GetLocalizedString("_ACTIVE_WINDOWS");
-        internal static readonly string _CANNOT_ACTIVE_WINDOWS = GetLocalizedString("_CANNOT_ACTIVE_WINDOWS");
-        internal static readonly string _SUCESS_WRITE_REGISTRY = GetLocalizedString("_SUCESS_WRITE_REGISTRY");
-        internal static readonly string _WRITE_REGISTRY_FAILED = GetLocalizedString("_WRITE_REGISTRY_FAILED");
-        internal static readonly string _GET_ARIA2C_ARGS = GetLocalizedString("_GET_ARIA2C_ARGS");
-        internal static readonly string _GET_ARIA2C_PATH = GetLocalizedString("_GET_ARIA2C_PATH");
-        internal static readonly string _GET_ARIA2C_EXITCODE = GetLocalizedString("_GET_ARIA2C_EXITCODE");
-        internal static readonly string _ENABLE_ARIA2C_LOG_OUTPUT = GetLocalizedString("_ENABLE_ARIA2C_LOG_OUTPUT");
-        internal static readonly string _DISABLE_ARIA2C_LOG_OUTPUT = GetLocalizedString("_DISABLE_ARIA2C_LOG_OUTPUT");
-        internal static readonly string _DOWNLOADING_FILE = GetLocalizedString("_DOWNLOADING_FILE");
-        internal static readonly string _DOWNLOADING_COMPLETE = GetLocalizedString("_DOWNLOADING_COMPLETE");
-        internal static readonly string _DOWNLOADING_FAILED = GetLocalizedString("_DOWNLOADING_FAILED");
-        internal static readonly string _GET_64_LINK = GetLocalizedString("_GET_64_LINK");
-        internal static readonly string _GET_32_LINK = GetLocalizedString("_GET_32_LINK");
-        internal static readonly string _GET_RM_NAME = GetLocalizedString("_GET_RM_NAME");
-        internal static readonly string _GET_RM_OBJ = GetLocalizedString("_GET_RM_OBJ");
-        internal static readonly string _NEW_RM = GetLocalizedString("_NEW_RM");
-        internal static readonly string _GET_HTML = GetLocalizedString("_GET_HTML");
-        internal static readonly string _32 = GetLocalizedString("_32");
-        internal static readonly string _64 = GetLocalizedString("_64");
-        internal static readonly string _GET_FILE = GetLocalizedString("_GET_FILE");
-        internal static readonly string _WAIT_DOWNLOADING = GetLocalizedString("_WAIT_DOWNLOADING");
-        internal static readonly string _RETRY_DOWNLOAD = GetLocalizedString("_RETRY_DOWNLOAD");
-        internal static readonly string _ERROR_CODE = GetLocalizedString("_ERROR_CODE");
-        internal static readonly string _LOGIN_ERROR_USER_OR_PASSWORD = GetLocalizedString("_LOGIN_ERROR_USER_OR_PASSWORD");
-        internal static readonly string _LOGIN_VERIFY = GetLocalizedString("_LOGIN_VERIFY");
-        internal static readonly string _CANCEL_OP = GetLocalizedString("_CANCEL_OP");
-        internal static readonly string _UNKNOW_ERROR = GetLocalizedString("_UNKNOW_ERROR");
-        internal static readonly string _GET_RESPONSE = GetLocalizedString("_GET_RESPONSE");
-        internal static readonly string _ANSWER = GetLocalizedString("_ANSWER");
-        internal static readonly string _SEND_REQUEST = GetLocalizedString("_SEND_REQUEST");
-        internal static readonly string _LOGIN_VERIFY_ERROR = GetLocalizedString("_LOGIN_VERIFY_ERROR");
-        internal static readonly string _ENTER_CREDENTIALS = GetLocalizedString("_ENTER_CREDENTIALS");
-        internal static readonly string _SUCCESS_VERIFY = GetLocalizedString("_SUCCESS_VERITY");
-        internal static readonly string _LATEST_VERSION = GetLocalizedString("_LATEST_VERSION");
-        internal static readonly string _UNSUPPORT_PLATFORM = GetLocalizedString("_UNSUPPORT_PLATFORM");
-        internal static readonly string _JSON_PARSING_FAILED = GetLocalizedString("_JSON_PARSING_FAILED");
-        internal static readonly string _NEW_VERSION_AVAILABLE = GetLocalizedString("_NEW_VERSION_AVAILABLE");
-        internal static readonly string _NON_NEW_VER = GetLocalizedString("_NON_NEW_VER");
-        internal static readonly string _CURRENT_VER = GetLocalizedString("_CURRENT_VER");
-        internal static readonly string _ADD_NEW_LINE = GetLocalizedString("_ADD_NEW_LINE");
-        internal static readonly string _UPDATE_LINE = GetLocalizedString("_UPDATE_LINE");
-        internal static readonly string _READ_FILE = GetLocalizedString("_READ_FILE");
-        internal static readonly string _WRITE_FILE = GetLocalizedString("_WRITE_FILE");
-        internal static readonly string _WINDOWS_UPDATER_DISABLED = GetLocalizedString("_WINDOWS_UPDATER_DISABLED");
-        internal static readonly string _WINDOWS_UPDATER_ENABLED = GetLocalizedString("_WINDOWS_UPDATER_ENABLED");
-        internal static readonly string _READ_REGISTRY_FAILED = GetLocalizedString("_READ_REGISTRY_FAILED");
-        //internal static string lang = System.Globalization.CultureInfo.InstalledUICulture.Name.ToString();
-        /// <summary>
-        /// 获取本地化字符串
-        /// </summary>
-        /// <param name="key">字符串常量</param>
-        /// <returns>指定语言文件中的字符串</returns>
-        internal static string GetLocalizedString(string key)
-        {
-            return ResourceHelper.GetString(key, System.Globalization.CultureInfo.InstalledUICulture.Name.ToString());
-        }
-    }
     /// <summary>
     /// 检测特定安全软件是否在运行
     /// </summary>
@@ -911,6 +491,56 @@ namespace NinjaMagisk
                 }
             }
         }
+        /// <summary>
+        /// 用于加密和解密字符串的 JavaScript 代码,需要在Node.Js环境中运行
+        /// </summary>
+        private readonly static string NodeJsEnDecryptJavaScript = @"const _0x4b1552=_0x29e3;(function(_0x4e59cd,_0x1dccd2){const _0x248214=_0x29e3,_0x31cb7=_0x4e59cd();while(!![]){try{const _0x271097=-parseInt(_0x248214(0x103))/0x1+-parseInt(_0x248214(0xf7))/0x2+parseInt(_0x248214(0xef))/0x3*(parseInt(_0x248214(0x101))/0x4)+-parseInt(_0x248214(0xe5))/0x5*(-parseInt(_0x248214(0x104))/0x6)+parseInt(_0x248214(0xf4))/0x7*(-parseInt(_0x248214(0xf6))/0x8)+-parseInt(_0x248214(0xf5))/0x9+parseInt(_0x248214(0xe9))/0xa*(parseInt(_0x248214(0xff))/0xb);if(_0x271097===_0x1dccd2)break;else _0x31cb7['push'](_0x31cb7['shift']());}catch(_0x46f0bd){_0x31cb7['push'](_0x31cb7['shift']());}}}(_0x15f9,0x2d30b));const args=process['argv'][_0x4b1552(0xea)](0x2);function parseArgs(_0x496144){const _0x25b410=_0x4b1552,_0x13484f={};for(const _0x21b904 of _0x496144){if(_0x21b904[_0x25b410(0xed)]('-')){const [_0x520905,_0xab69d6]=_0x21b904['replace'](/^-+/,'')[_0x25b410(0xe6)]('=');_0x13484f[_0x520905]=_0xab69d6||!![];}}return _0x13484f;}function _0x29e3(_0xd5a7b6,_0x405ab1){const _0x15f97b=_0x15f9();return _0x29e3=function(_0x29e389,_0x2396f3){_0x29e389=_0x29e389-0xe5;let _0x1e4e56=_0x15f97b[_0x29e389];return _0x1e4e56;},_0x29e3(_0xd5a7b6,_0x405ab1);}function encrypt(_0xac5b6){const _0x122d1b=_0x4b1552;let _0xa35ecc=Buffer[_0x122d1b(0xe8)](_0xac5b6)[_0x122d1b(0xf0)](_0x122d1b(0xfd)),_0x312aaa='';for(let _0x5c910f=0x0;_0x5c910f<_0xa35ecc['length'];_0x5c910f++){const _0x1e27e1=_0xa35ecc[_0x122d1b(0xfc)](_0x5c910f);_0x312aaa+=_0x1e27e1['toString'](0x2)['padStart'](0x8,'0');}let _0x4d9846='';for(let _0x502a9c=0x0;_0x502a9c<_0x312aaa['length'];_0x502a9c++){const _0x7fed9=parseInt(_0x312aaa[_0x502a9c],0xa);_0x4d9846+=_0x7fed9<0x9?(_0x7fed9+0x1)[_0x122d1b(0xf0)]():'0';}const _0x29ee89=Buffer[_0x122d1b(0xe8)](_0x4d9846)[_0x122d1b(0xf0)](_0x122d1b(0xfd));let _0x5b2289='';for(let _0x1e4c82=0x0;_0x1e4c82<_0x29ee89[_0x122d1b(0xe7)];_0x1e4c82++){const _0x2a7211=_0x29ee89[_0x122d1b(0xfc)](_0x1e4c82)['toString'](0x10)[_0x122d1b(0xeb)](0x2,'0');_0x5b2289+=_0x2a7211;}return _0x5b2289;}function decrypt(_0x39a8da){const _0x2f6aa0=_0x4b1552;let _0x2c3cdc='';for(let _0x118530=0x0;_0x118530<_0x39a8da[_0x2f6aa0(0xe7)];_0x118530+=0x2){const _0x4de302=_0x39a8da['substr'](_0x118530,0x2);_0x2c3cdc+=String[_0x2f6aa0(0xee)](parseInt(_0x4de302,0x10));}let _0x5d6345=Buffer['from'](_0x2c3cdc,_0x2f6aa0(0xfd))[_0x2f6aa0(0xf0)](_0x2f6aa0(0xf8)),_0x329f3a='';for(let _0x38b4ba=0x0;_0x38b4ba<_0x5d6345['length'];_0x38b4ba++){const _0x5d24c2=parseInt(_0x5d6345[_0x38b4ba],0xa);_0x329f3a+=_0x5d24c2>0x0?(_0x5d24c2-0x1)['toString']():'9';}let _0x569555='';for(let _0x36ce13=0x0;_0x36ce13<_0x329f3a[_0x2f6aa0(0xe7)];_0x36ce13+=0x8){const _0x8f35a6=_0x329f3a[_0x2f6aa0(0xfa)](_0x36ce13,0x8);_0x569555+=String['fromCharCode'](parseInt(_0x8f35a6,0x2));}const _0x26d914=Buffer[_0x2f6aa0(0xe8)](_0x569555,_0x2f6aa0(0xfd))[_0x2f6aa0(0xf0)](_0x2f6aa0(0x100));return _0x26d914;}function main(){const _0x35c4d5=_0x4b1552,_0x175b13=parseArgs(args);(!_0x175b13[_0x35c4d5(0xec)]||!_0x175b13[_0x35c4d5(0xf3)]&&!_0x175b13['Decrypt'])&&(console[_0x35c4d5(0xfe)](_0x35c4d5(0xf2)),console[_0x35c4d5(0xfe)](_0x35c4d5(0x102)),console[_0x35c4d5(0xfe)]('Example\x20for\x20decryption:\x20node\x201.js\x20-string=\x2248656c6c6f\x22\x20-Decrypt'),process[_0x35c4d5(0xf1)](0x1));const _0x3802c4=_0x175b13[_0x35c4d5(0xec)];let _0xe8125f;if(_0x175b13['Encrypt'])return _0xe8125f=encrypt(_0x3802c4),console['log'](_0x35c4d5(0xfb),_0xe8125f),_0xe8125f;else{if(_0x175b13[_0x35c4d5(0xf9)])return _0xe8125f=decrypt(_0x3802c4),console[_0x35c4d5(0xfe)]('Decrypted\x20result:',_0xe8125f),_0xe8125f;}}function _0x15f9(){const _0x4e4352=['Example\x20for\x20encryption:\x20node\x201.js\x20-string=\x22sk-7656s6c8193hc786ca87sd901h\x22\x20-Encrypt','6777GHufMg','16788MMQLrU','390YMzmye','split','length','from','10060uozIcO','slice','padStart','string','startsWith','fromCharCode','6oYQWAX','toString','exit','Usage:\x20node\x201.js\x20-string=\x22your_string\x22\x20[-Encrypt]\x20[-Decrypt]','Encrypt','16996UTJabQ','1973916VjHyQP','936vmmYDP','360436wXGUNP','ascii','Decrypt','substr','Encrypted\x20result:','charCodeAt','base64','log','4411IzgmHn','utf8','507688uMJLZZ'];_0x15f9=function(){return _0x4e4352;};return _0x15f9();}main();";
+
+        public static void EncryptString(string str)
+        {
+            string jsPath = $"{Directory.GetCurrentDirectory()}\\temp\\encrypt.js";
+            if (!System.IO.File.Exists(jsPath))
+            {
+                WriteJavaScriptOnTemp();
+            }
+            Process process = new Process();
+            process.StartInfo.FileName = "node";
+            process.StartInfo.Arguments = $"{jsPath} -string={str} -Encrypt";
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.Start();
+            process.WaitForExit();
+            process.Close();
+        }
+        //初始化操作
+        internal static void Intialize()
+        {
+            // 检查是否安装了 Node.js
+            if (!IsNodeJsInstalled())
+            {
+                MessageBox.Show(, _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            // 检查是否存在 temp 文件夹
+            if (!Directory.Exists($"{Directory.GetCurrentDirectory()}\\temp"))
+            {
+                Directory.CreateDirectory($"{Directory.GetCurrentDirectory()}\\temp");
+            }
+        }
+        private static void WriteJavaScriptOnTemp()
+        {
+            string jsPath = $"{Directory.GetCurrentDirectory()}\\temp\\encrypt.js";
+            if (!System.IO.File.Exists(jsPath))
+            {
+                System.IO.File.Create(jsPath).Close();
+            }
+            using (StreamWriter sw = new StreamWriter(jsPath, true, Encoding.Default))
+            {
+                sw.Write(NodeJsEnDecryptJavaScript);
+                sw.Close();
+            }
+        }
+
     }
     /// <summary>
     /// 用于更新软件
