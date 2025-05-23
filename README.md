@@ -1,8 +1,14 @@
 ![Icon](NinjaMagisk/Icon+Text.png)
 ___
-NinjaMagisk 是一个使用 C# .NET Framework 4.7.2 编写，并使用 Microsoft Visual Studio 2022 编译的跨平台动态链接库。它提供了多种功能模块，包括日志记录、文件操作、网络检查、Windows 系统配置、AI 集成等。
+NinjaMagisk 是一个使用 C# .NET Framework 4.7.2 编写，并使用 Microsoft Visual Studio 2022 编译的跨平台动态链接库。它提供了多种功能模块，包括日志记录、文件操作、网络检查、Windows 系统配置、AI 集成,**音频解密**等。
 
-> [c2db0e9](https://github.com/Rainbow-SPY/NinjaMagisk/commit/c2fb0e9658cb6b951103b7c13369571f59944bd7#diff-9e1b2aa1e49fe5dd1128cc48315650e9479900b2facf0770776ba9705b07a514) 提交中在`Main.cs`中对全方法进行了\<summary\>注释添加,详情可以查看在Github 上的 [Main.cs](https://github.com/Rainbow-SPY/NinjaMagisk/blob/master/NinjaMagisk/Main.cs)
+## 提示! 
+> [!WARNING]
+> [5f6e7e44](https://github.com/Rainbow-SPY/NinjaMagisk/commit/5f6e7e443fd479705cd078bc9bd5bac9d79b45df) 提交在Main.cs中将`LocalizedString`本地化字符串 和 `LogLibraries`日志库组件迁移到`Runtimes.cs`中, v1.5版本后的主模块和其他模块需要引用运行库进行操作.
+> ```csharp
+> using NinjaMagisk.Runtimes;
+> using static NinjaMagisk.Runtimes.LogLibraries;
+> using static NinjaMagisk.Runtimes.LocalizedString;
 ## 目录
 
 1. [全局引用方法](#1-全局引用方法)
@@ -17,6 +23,9 @@ NinjaMagisk 是一个使用 C# .NET Framework 4.7.2 编写，并使用 Microsoft
 10. [检查更新模块](#10-检查更新模块)
 11. [文本类处理](#11-文本类处理)
 12. [API查询](#12-API查询)
+13. [音乐解密](#13-音乐解密)
+14. [Node.js](#14-nodejs)
+
 
 ## 1. 全局引用方法
 
@@ -24,35 +33,36 @@ NinjaMagisk 提供了多种引用方式，您可以根据需求选择合适的�
 
 ```csharp
 using NinjaMagisk;
-using static NinjaMagisk.LogLibraries;
-using static NinjaMagisk.Windows;
+using static NinjaMagisk.Runtimes.LogLibraries;
+using static NinjaMagisk.Runtimes.LocalizedString;
+...
 ```
 ## 2. 日志
 ### 控制台打印彩色日志
 ```csharp 
-NinjaMagisk.LogLibries.WriteLog(LogLevel loglevel, LogKind logkind,string message);
-NinjaMagisk.LogLibries.WriteLog(LogLevel loglevel,string message);
+NinjaMagisk.Runtimes.LogLibries.WriteLog(LogLevel loglevel, LogKind logkind,string message);
+NinjaMagisk.Runtimes.LogLibries.WriteLog(LogLevel loglevel,string message);
 ```
 
 * **`LogLevel` 可用枚举:** `Info`,`Warning`,`Error`.
 * **`LogKind` 可用枚举:** `Process`,`Task`,`Service`,`Registry`,`Network`,`PowerShell`,`Form`,`System`,`Thread`.
-
+___
 ### 写入日志到文件
 
 ```csharp
-NinjaMagisk.LogLibries.LogToFile(LogLevel loglevel,LogKind logkind, string message);
-NinjaMagisk.LogLibries.LogToFile(LogLevel loglevel, string message);
+NinjaMagisk.Runtimes.LogLibries.LogToFile(LogLevel loglevel,LogKind logkind, string message);
+NinjaMagisk.Runtimes.LogLibries.LogToFile(LogLevel loglevel, string message);
 ```
 调用此方法时,会在当前目录下创建`Assistant.log`日志文件,并会以下格式写入文件
 
  ```plaintext
  $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{logkind}] [{logLevel}]: {message}";
  ```
-
+___
 ### 清空日志
 
 ```csharp
-NinjaMagisk.LogLibries.ClearFile(string filePath);
+NinjaMagisk.Runtimes.LogLibries.ClearFile(string filePath);
 ```
 
 * **`filepath`:** 日志文件路径
@@ -80,7 +90,7 @@ NinjaMagisk.DownloadAssistant.Downloader(string url,string Downloadvocation,stri
 * **`outputName`**: 文件的输出名称
 
 文件下载完后会以`outputName`为命名储存在`Downloadvocation`文件夹内.
-
+___
 ### 模块下载
 
 ```csharp
@@ -93,7 +103,7 @@ NinjaMagisk.DownloadAssistant.ModuleDownloader(Module module);
 
 当您使用`Module.zip`下载7-zip组件时, 此文件会保存在`$"{Directory.GetCurrentDirectory()}\\bin"`文件夹内.
 <br>
-
+___
 ### 应用下载
 
 ```csharp
@@ -123,36 +133,51 @@ NinjaMagisk.Network.IsNetworkAvailable();
 ## 6. Windows系统相关配置
 
 > [!WARNING]
-> 此操作可能需要高性能电脑，执行后可能会影响系统性能和安全。
+> 此操作执行后可能会影响系统性能和安全。
 ### 启用/禁用休眠
 
 ```csharp
 NinjaMagisk.Windows.Hibernate.Enable(); //启用休眠
 NinjaMagisk.Windows.Hibernate.Disable(); //禁用休眠
 ```
+___
 ### 启用卓越性能
 
 ```csharp
 NinjaMagisk.Windows.EnableHighPowercfg(); //启用卓越性能
 ```
+___
 ### 启用/禁用Windows 安全中心与Windows Defender
 
 ```csharp
 NinjaMagisk.Security.WindowsSecurityCenter.Enable() //启用
 NinjaMagisk.Security.WindowsSecurityCenter.Disable() //禁用
 ```
+___
 ### 启用/禁用 Windows Update
 
 ```csharp
 NinjaMagisk.Windows.WindowsUpdate.Enable() //启用Windows 更新
 NinjaMagisk.Windows.WindowsUpdate.Disable() //禁用Windows 更新
 ```
+___
+### 检查 Windows Update状态
+
+```csharp
+bool status = NinjaMagisk.Windows.WindowsUpdate.CheckStatus();
+```
+* **返回类型:** bool
+* **返回值:** 已禁用更新返回`false`.已启用更新返回`true`,键值不存在或遇到未知错误返回`false`
+___
 ### 激活 Windows
 
 ```csharp
 NinjaMagisk.Windows.ActiveWindows(); //激活Windows
+bool _return = NinjaMagisk.Windows.BoolActiveWindows(); //激活Windows并返回值
 ```
-
+* **返回类型:** bool
+* **返回值:** 激活成功返回`true`,激活失败或遇到未知错误返回`false`
+___
 ### 写入注册表
 
 ```csharp
@@ -345,3 +370,35 @@ NinjaMagisk.API.SteamUserData(string steamID);
 * **`steamID`:** SteamID,支持SteamID3,ID64,个人主页链接,自定义URL,好友代码
 * **返回类型:** `Json`
 * **返回值:** 返回Steam用户信息(可等待)
+## 13. 音乐解密
+
+### 裤猫音乐解密
+> [!WARNING]
+> 请勿将此项目用于商业用途, 如造成的财产和版权损失与开发者改不相关
+
+```csharp
+NinjaMagisk.Audio.ParseKGG.ChooseSigleKGGFile(); // 选择单一文件进行解密.kgg加密格式音频
+NinjaMagisk.Audio.ParseKGG.ReadKGGFiles(string filepath); //选择文件夹进行识别格式解密.kgg加密格式音频
+NinjaMagisk.Audio.ParseKGM.ChooseSigleKGMFile(); // 虚着呢单一文件进行解密.kgm加密格式音频
+NinjaMagisk.Audio.ParseKGM.ReadKGMFiles(string filepath); //选择文件夹进行识别格式解密.kgm加密格式音频
+```
+
+* **`filepath`:** 文件夹
+## 14. Node.js
+
+### 提取Node.js
+```csharp
+string _return = NinjaMagisk.Runtimes.NodeJs.ExtractNodeJs(string ExtarctFolder); //提取Node.js到指定文件夹
+```
+> Node.js版本为node-v22.15.1-win-x86,使用32位
+* **`ExtractFolder`:** 指定被提取的文件夹
+* **返回类型:** `string`
+* **返回值:** 参数为`null`或路径不合法返回`Error`并弹出`MessageBox`, 如果文件夹已经存在`node.exe`或提取完成返回**Node.js文件路径**, 资源未找到返回`_RES_FILE_NOT_FIND`本地化字符串, 提取失败返回PowerShell进程退出码.
+
+### 检查Node.Js是否存在
+```csharp
+NinjaMagisk.Runtimes.NodeJs.CheckNodeJs(string ExtraedFolder); //检查文件夹内有没有提取过的Node.js
+```
+* **`ExtractedFolder`:** 指定提取过的文件夹
+* **返回类型:** `string`
+* **返回值:** 参数为`null`或路径不合法返回`Error`并弹出`MessageBox`, 如果文件夹已经存在`node.exe`或提取完成返回**Node.js文件路径**, 资源未找到返回`_RES_FILE_NOT_FIND`本地化字符串, 提取失败返回PowerShell进程退出码.
