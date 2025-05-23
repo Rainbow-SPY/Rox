@@ -1,18 +1,14 @@
-﻿using NinjaMagisk.Runtimes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using static NinjaMagisk.Runtimes.LocalizedString;
-using static NinjaMagisk.Runtimes.LogLibraries;
-namespace NinjaMagisk
+using static Rox.Runtimes.LocalizedString;
+using static Rox.Runtimes.LogLibraries;
+namespace Rox
 {
-    /// <summary>
-    /// 用于文本处理
-    /// </summary>
-    public class Text
+    namespace Text
     {
         /// <summary>
         /// 用于读取和写入配置文件的类，提供了静态方法 <see cref="ReadConfig"/> 和 <see cref="WriteConfig"/> 来处理指定路径的配置文件

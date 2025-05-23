@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NinjaMagisk.Audio.Properties {
+namespace Rox {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace NinjaMagisk.Audio.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    internal class Resource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources() {
+        internal Resource() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace NinjaMagisk.Audio.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NinjaMagisk.Audio.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Rox.Window.Resource", typeof(Resource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,43 +61,14 @@ namespace NinjaMagisk.Audio.Properties {
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///Microsoft\Windows\WindowsUpdate\*=1,2
+        ///Microsoft\Windows\UpdateOrchestrator\Schedule Maintenance Work= [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
-        internal static byte[] kgg_dec {
+        internal static string aria2c {
             get {
-                object obj = ResourceManager.GetObject("kgg_dec", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("aria2c", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
-        /// </summary>
-        internal static byte[] kgm_x64 {
-            get {
-                object obj = ResourceManager.GetObject("kgm_x64", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
-        /// </summary>
-        internal static byte[] kgm_x86 {
-            get {
-                object obj = ResourceManager.GetObject("kgm_x86", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
-        /// </summary>
-        internal static byte[] mask {
-            get {
-                object obj = ResourceManager.GetObject("mask", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
+
     }
 }

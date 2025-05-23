@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>embedded</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\%24Release\NinjaMagisk\</OutputPath>
+    <OutputPath>..\..\..\%24Release\Rox\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -56,7 +56,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="NinjaMagisk.Resources.Language.Editor.exe" />
+    <Content Include="Rox.Resources.Language.Editor.exe" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources.Language.en-us.ini" />

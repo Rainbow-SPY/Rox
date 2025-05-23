@@ -1,18 +1,17 @@
 ﻿using Microsoft.Win32;
 using NinjaMagisk.Runtimes;
+using NinjaMagisk.Text;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
-using System.Net.NetworkInformation;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static NinjaMagisk.Runtimes.LocalizedString;
 using static NinjaMagisk.Runtimes.LogLibraries;
-using static NinjaMagisk.Text;
-namespace NinjaMagisk
+namespace Rox
 {
     /// <summary>
     /// 检测特定安全软件是否在运行
@@ -65,63 +64,6 @@ namespace NinjaMagisk
         }
     }
     /// <summary>
-    /// 网络相关操作
-    /// </summary>
-    public class Network
-    {
-        /// <summary>
-        /// 检查网络是否可用
-        /// </summary>
-        /// <returns> 可用返回 <see langword="true"></see> 不可用返回 <see langword="false"></see></returns>
-        public static bool IsNetworkAvailable()
-        {
-            try
-            {
-                // 检查网络适配器是否有可用的
-                //if (!NetworkInterface.GetIsNetworkAvailable())
-                //{
-                //    WriteLog(LogLevel.Info, $"{_NOTAVAILABLE_NETWORK}");
-                //    return false;
-                //}
-
-                // 进一步通过 Ping 验证网络连接
-                using (var ping = new Ping())
-                {
-                    PingReply reply = ping.Send("8.8.8.8", 2000); // 尝试 Ping Google 的公共 DNS
-                    return reply != null && reply.Status == IPStatus.Success;
-                }
-            }
-            catch
-            {
-                // 发生异常视为无网络
-                WriteLog(LogLevel.Warning, $"{_NOTAVAILABLE_NETWORK}");
-                return false;
-            }
-        }
-        /// <summary>
-        /// 检查网络是否可用
-        /// </summary>
-        /// <param name="ip"> IP地址</param>
-        /// <returns> 可用返回 <see langword="true"></see> 不可用返回 <see langword="false"></see></returns>
-        public static bool Ping(string ip)
-        {
-            try
-            {
-                using (var ping = new Ping())
-                {
-                    PingReply reply = ping.Send(ip, 120);
-                    return reply.Status == IPStatus.Success ? true : false;
-                }
-            }
-            catch
-            {
-                WriteLog(LogLevel.Warning, $"{_NOTAVAILABLE_NETWORK}");
-                return false;
-            }
-        }
-
-    }
-    /// <summary>
     /// 用于处理注册表操作
     /// </summary>
     public class Registry
@@ -170,130 +112,6 @@ namespace NinjaMagisk
                 }
             }
             return value;
-        }
-    }
-    /// <summary>
-    /// 一个包含AI聊天功能的类，提供与 APl 交互的能力,
-    /// </summary>
-    public class AI// AI
-    {
-        /// <summary>
-        /// 用于与 DeepSeek API 进行聊天交互的类，提供了配置 API URL 和发送消息的功能。
-        /// </summary>
-        public class DeepSeek
-        {
-            // ==================== API配置区（后期可修改） ====================
-            /// <summary>
-            /// DeepSeek API的URL
-            /// </summary>
-            private const string ApiUrl = "https://api.deepseek.com/v1/chat/completions"; // DeepSeek API的URL
-            /// <summary>
-            /// 表示模型的名称，默认为 <see langword="default"/>
-            /// </summary>
-            public string Model { get; set; } = "default"; // 默认模型
-            /// <summary>
-            /// 用于与 DeepSeek API 进行聊天交互
-            /// </summary>
-            /// <param name="text"> 要发送的消息</param>
-            /// <param name="api"> DeepSeek API的密钥</param>
-            /// <returns></returns>
-            public static async Task Chat(string text, string api)
-            {
-                try
-                {
-                    using (HttpClient client = new HttpClient())
-                    {
-                        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {api}");
-                        var requestBody = new
-                        {
-                            model = "deepseek-chat",
-                            messages = new[]
-                            {
-                            new { role = "user", content = text }
-                        }
-                        };
-                        string json = Json.SerializeObject(requestBody);
-                        var content = new StringContent(json, Encoding.UTF8, "application/json");
-                        WriteLog(LogLevel.Info, $"{_SEND_REQUEST}...{text}");
-                        HttpResponseMessage response = await client.PostAsync(ApiUrl, content);
-                        string responseJson = await response.Content.ReadAsStringAsync();
-                        WriteLog(LogLevel.Info, _GET_RESPONSE);
-                        if (response.IsSuccessStatusCode)
-                        {
-                            var responseObject = Text.Json.DeserializeObject<dynamic>(responseJson);
-                            string answer = responseObject.choices[0].message.content;
-                            WriteLog(LogLevel.Info, $"{_ANSWER}: {answer}");
-                        }
-                        else
-                        {
-                            WriteLog(LogLevel.Error, $"{_ERROR}: {responseJson}");
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    WriteLog(LogLevel.Error, $"{_ERROR}: {ex.Message}");
-                }
-            }
-        }
-        /// <summary>
-        /// 用于与 OpenAI API 进行聊天交互的类，提供了配置 API URL 和发送消息的功能。
-        /// </summary>
-        public class ChatGPT
-        {
-            // ==================== API配置区（后期可修改） ====================
-            /// <summary>
-            /// OpenAI API的URL
-            /// </summary>
-            private const string ApiUrl = "https://api.openai.com/v1/chat/completions"; // OpenAI API的URL
-            /// <summary>
-            /// 表示模型的名称，默认为 <see langword="gpt-3.5-turbo"/>
-            /// </summary>
-            public string Model { get; set; } = "gpt-3.5-turbo"; // 默认模型
-            /// <summary>
-            /// 用于与 OpenAI API 进行聊天交互
-            /// </summary>
-            /// <param name="text"> 要发送的消息</param>
-            /// <param name="apiKey"> OpenAI API的密钥</param>
-            /// <returns></returns>
-            public static async Task Chat(string text, string apiKey)
-            {
-                try
-                {
-                    using (HttpClient client = new HttpClient())
-                    {
-                        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
-                        var requestBody = new
-                        {
-                            model = "gpt-4o-mini", // 模型名称
-                            messages = new[]
-                            {
-                                new { role = "user", content = text }
-                            }
-                        };
-                        string json = Text.Json.SerializeObject(requestBody);
-                        var content = new StringContent(json, Encoding.UTF8, "application/json");
-                        WriteLog(LogLevel.Info, $"{_SEND_REQUEST}...{text}");
-                        HttpResponseMessage response = await client.PostAsync(ApiUrl, content);
-                        string responseJson = await response.Content.ReadAsStringAsync();
-                        WriteLog(LogLevel.Info, _GET_RESPONSE);
-                        if (response.IsSuccessStatusCode)
-                        {
-                            var responseObject = Text.Json.DeserializeObject<dynamic>(responseJson);
-                            string answer = responseObject.choices[0].message.content;
-                            WriteLog(LogLevel.Info, $"{_ANSWER}: {answer}");
-                        }
-                        else
-                        {
-                            WriteLog(LogLevel.Error, $"{_ERROR} : {responseJson}");
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    WriteLog(LogLevel.Error, $"{_ERROR} : {ex.Message}");
-                }
-            }
         }
     }
     /// <summary>
@@ -513,20 +331,6 @@ namespace NinjaMagisk
             process.Close();
         }
         //初始化操作
-        internal static void Intialize()
-        {
-            // 检查是否安装了 Node.js
-            if (!IsNodeJsInstalled())
-            {
-                MessageBox.Show(, _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            // 检查是否存在 temp 文件夹
-            if (!Directory.Exists($"{Directory.GetCurrentDirectory()}\\temp"))
-            {
-                Directory.CreateDirectory($"{Directory.GetCurrentDirectory()}\\temp");
-            }
-        }
         private static void WriteJavaScriptOnTemp()
         {
             string jsPath = $"{Directory.GetCurrentDirectory()}\\temp\\encrypt.js";

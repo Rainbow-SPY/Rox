@@ -1,4 +1,4 @@
-﻿using NinjaMagisk.Runtimes;
+﻿using Rox.Runtimes;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -8,9 +8,9 @@ using System.Resources;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
-using static NinjaMagisk.Runtimes.LocalizedString;
-using static NinjaMagisk.Runtimes.LogLibraries;
-namespace NinjaMagisk
+using static Rox.Runtimes.LocalizedString;
+using static Rox.Runtimes.LogLibraries;
+namespace Rox
 {
     /// <summary>
     /// 下载助手,处理下载任务
@@ -40,7 +40,7 @@ namespace NinjaMagisk
 
                 // 假设Node.Js.zip是嵌入在"Namespace.Resources"命名空间中的
 
-                string resourceName = "NinjaMagisk.Interface.Properties.Resources"; // 替换为你的资源路径
+                string resourceName = "Rox.Interface.Properties.Resources"; // 替换为你的资源路径
 
                 // 创建 ResourceManager 实例
                 ResourceManager rm = new ResourceManager(resourceName, assembly);
@@ -288,7 +288,7 @@ namespace NinjaMagisk
         {
             string filePath = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c.exe";
             CheckFile(filePath);
-            if (!NinjaMagisk.Network.IsNetworkAvailable())
+            if (!Rox.Runtimes.Network.IsNetworkAvailable())
             {
                 DialogResult dialogResult = MessageBox.Show($"{_NOTAVAILABLE_NETWORK_TIPS}", $"{_TIPS}! {_NOTAVAILABLE_NETWORK}", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 if (dialogResult == DialogResult.No)
@@ -401,12 +401,12 @@ namespace NinjaMagisk
         /// <param name="app"> 指定下载应用</param>
         public static void ApplicationDownloader(App app)
         {
-            var temp = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\Temp\\NinjaMagisk";
+            var temp = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\Temp\\Rox";
             WriteLog(LogLevel.Info, $"{GetLocalizedString("_GET_TEMP")}");
             string folderPath = $"{temp}";
             string filePath = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c.exe";
             CheckFile(filePath);
-            if (!NinjaMagisk.Network.IsNetworkAvailable())
+            if (!Rox.Runtimes.Network.IsNetworkAvailable())
             {
                 DialogResult dialogResult = MessageBox.Show($"{_NOTAVAILABLE_NETWORK_TIPS}", $"{_TIPS}", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 if (dialogResult == DialogResult.No)

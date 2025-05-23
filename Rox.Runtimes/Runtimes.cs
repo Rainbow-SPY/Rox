@@ -1,14 +1,15 @@
-﻿using NinjaMagisk.Runtimes.Properties;
+﻿using Rox.Runtimes.Properties;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Resources;
 using System.Windows.Forms;
-using static NinjaMagisk.Runtimes.LocalizedString;
-using static NinjaMagisk.Runtimes.LogLibraries;
+using static Rox.Runtimes.LocalizedString;
+using static Rox.Runtimes.LogLibraries;
 
-namespace NinjaMagisk
+namespace Rox
 {
     namespace Runtimes
     {
@@ -296,12 +297,12 @@ namespace NinjaMagisk
                 if (IsChineseSimple(lang))
                 {
                     // 如果是中文（zh-CN 或 zh-Hans），返回 Resources.resx 的资源管理器
-                    return new ResourceManager("NinjaMagisk.Runtimes.Properties.Resources", typeof(Resources).Assembly);
+                    return new ResourceManager("Rox.Runtimes.Properties.Resources", typeof(Resources).Assembly);
                 }
                 else
                 {
                     // 如果是其他语言，返回 Resource1.resx 的资源管理器
-                    return new ResourceManager("NinjaMagisk.Runtimes.Properties.Resource1", typeof(Resource1).Assembly);
+                    return new ResourceManager("Rox.Runtimes.Properties.Resource1", typeof(Resource1).Assembly);
                 }
             }
             /// <summary>
@@ -455,7 +456,7 @@ namespace NinjaMagisk
                 if (string.IsNullOrWhiteSpace(ExtraedFolder) || Path.GetFileName(ExtraedFolder) == string.Empty)
                 {
                     WriteLog(LogLevel.Error, $"{ExtraedFolder}值为null或空字符串");
-                    MessageBox.Show($"{ExtraedFolder}值为null或空字符串", "错误的路径! - NinjaMagisk", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    MessageBox.Show($"{ExtraedFolder}值为null或空字符串", "错误的路径! - Rox", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                     return $"Error";
                 }
                 else
@@ -488,7 +489,7 @@ namespace NinjaMagisk
 
                     // 假设Node.Js.zip是嵌入在"Namespace.Resources"命名空间中的
 
-                    string resourceName = "NinjaMagisk.Runtimes.Properties.Resources"; // 替换为你的资源路径
+                    string resourceName = "Rox.Runtimes.Properties.Resources"; // 替换为你的资源路径
 
                     // 创建 ResourceManager 实例
                     ResourceManager rm = new ResourceManager(resourceName, assembly);
@@ -538,7 +539,7 @@ namespace NinjaMagisk
                     else
                     {
                         LogLibraries.WriteLog(LogLevel.Error, $"Node.js {_DOWNLOADING_FAILED}");
-                        LogLibraries.WriteLog(LogLevel.Error, $"{_ERROR_CODE}: {zip.ExitCode}");
+                        LogLibraries.WriteLog(LogLevel.Error, $"{zip.ExitCode}");
                         return $"{zip.ExitCode}";
                     }
                 }
@@ -547,7 +548,7 @@ namespace NinjaMagisk
             /// 检查 Node.Js 是否存在
             /// </summary>
             /// <param name="ExtraedFolder"></param>
-            /// <returns></returns>
+            /// <returns> 返回提取结果, 如果提取成功则返回文件路径, 否则返回错误信息或返回值</returns>
             public static string CheckNodeJs(string ExtraedFolder)
             {
                 // 检查文件夹是否合法
@@ -559,7 +560,7 @@ namespace NinjaMagisk
                 if (string.IsNullOrWhiteSpace(ExtraedFolder) || Path.GetFileName(ExtraedFolder) == string.Empty)
                 {
                     WriteLog(LogLevel.Error, $"{ExtraedFolder}值为null或空字符串");
-                    MessageBox.Show($"{ExtraedFolder}值为null或空字符串", "错误的路径! - NinjaMagisk", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    MessageBox.Show($"{ExtraedFolder}值为null或空字符串", "错误的路径! - Rox", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                     return $"Error";
                 }
                 else
@@ -584,7 +585,7 @@ namespace NinjaMagisk
                 else
                 {
                     LogLibraries.WriteLog(LogLevel.Error, $"File Not Exist");
-                    string _returnValue = NinjaMagisk.Runtimes.NodeJs.ExtractNodeJs(ExtraedFolder);
+                    string _returnValue = Rox.Runtimes.NodeJs.ExtractNodeJs(ExtraedFolder);
                     char drive = _returnValue[0];
                     if ((drive >= 'A' && drive <= 'Z') || (drive >= 'a' && drive <= 'z') && _returnValue[1] == ':')
                     {
@@ -613,5 +614,63 @@ namespace NinjaMagisk
                 // 检查返回值是否为路径
             }
         }
+        /// <summary>
+        /// 网络相关操作
+        /// </summary>
+        public class Network
+        {
+            /// <summary>
+            /// 检查网络是否可用
+            /// </summary>
+            /// <returns> 可用返回 <see langword="true"></see> 不可用返回 <see langword="false"></see></returns>
+            public static bool IsNetworkAvailable()
+            {
+                try
+                {
+                    // 检查网络适配器是否有可用的
+                    //if (!NetworkInterface.GetIsNetworkAvailable())
+                    //{
+                    //    WriteLog(LogLevel.Info, $"{_NOTAVAILABLE_NETWORK}");
+                    //    return false;
+                    //}
+
+                    // 进一步通过 Ping 验证网络连接
+                    using (var ping = new Ping())
+                    {
+                        PingReply reply = ping.Send("8.8.8.8", 2000); // 尝试 Ping Google 的公共 DNS
+                        return reply != null && reply.Status == IPStatus.Success;
+                    }
+                }
+                catch
+                {
+                    // 发生异常视为无网络
+                    WriteLog(LogLevel.Warning, $"{_NOTAVAILABLE_NETWORK}");
+                    return false;
+                }
+            }
+            /// <summary>
+            /// 检查网络是否可用
+            /// </summary>
+            /// <param name="ip"> IP地址</param>
+            /// <returns> 可用返回 <see langword="true"></see> 不可用返回 <see langword="false"></see></returns>
+            public static bool Ping(string ip)
+            {
+                try
+                {
+                    using (var ping = new Ping())
+                    {
+                        PingReply reply = ping.Send(ip, 120);
+                        return reply.Status == IPStatus.Success ? true : false;
+                    }
+                }
+                catch
+                {
+                    WriteLog(LogLevel.Warning, $"{_NOTAVAILABLE_NETWORK}");
+                    return false;
+                }
+            }
+
+        }
+
     }
 }

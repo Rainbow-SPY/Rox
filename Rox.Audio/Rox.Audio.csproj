@@ -1,25 +1,23 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1A93B989-729D-429D-8848-5C8EC38B9F8A}</ProjectGuid>
+    <ProjectGuid>{3FC9C513-ADE0-408A-8319-985A1BC2906A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NinjaMagisk.Interface</RootNamespace>
-    <AssemblyName>NinjaMagisk.Interface</AssemblyName>
+    <RootNamespace>Rox.Audio</RootNamespace>
+    <AssemblyName>Rox.Audio</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <Deterministic>false</Deterministic>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>embedded</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\%24Release\NinjaMagisk\</OutputPath>
+    <OutputPath>..\..\..\%24Release\Rox\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -32,14 +30,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>Icon.ico</ApplicationIcon>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NinjaMagisk.Runtimes, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\$Release\NinjaMagisk\NinjaMagisk.Runtimes.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms" />
@@ -51,33 +42,39 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DownloadAssistant.cs" />
-    <Compile Include="api.cs" />
-    <Compile Include="Main.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Text.cs" />
-    <Compile Include="Windows.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
+      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\kgg-dec.exe" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\aria2c.exe" />
+    <None Include="Resources\kgm.mask" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\VC.exe" />
+    <None Include="Resources\unlock-kugou-windows-amd64-alpha2.exe" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Icon+Text.png" />
-    <Content Include="Icon.ico" />
+    <None Include="Resources\unlock-kugou-windows-386-alpha2.exe" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Rox.Runtimes\Rox.Runtimes.csproj">
+      <Project>{ba4c591e-3d2a-491b-bccb-1f995545a26c}</Project>
+      <Name>Rox.Runtimes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rox\Rox.csproj">
+      <Project>{1a93b989-729d-429d-8848-5c8ec38b9f8a}</Project>
+      <Name>Rox</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

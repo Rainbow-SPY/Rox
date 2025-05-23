@@ -1,4 +1,4 @@
-﻿using NinjaMagisk.Runtimes;
+﻿using Rox.Runtimes;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -6,12 +6,12 @@ using System.Reflection;
 using System.Resources;
 using System.Threading;
 using System.Windows.Forms;
-namespace NinjaMagisk
+namespace Rox
 {
     namespace Audio
     {
         /* 解析酷狗音乐.kgg加密音乐 拓展库
-         * 此工具需要依赖于 NinjaMagisk 主程序
+         * 此工具需要依赖于 Rox 主程序 和 Rox运行库
          */
         /// <summary>
         /// 解析酷狗音乐.kgg文件
@@ -26,7 +26,7 @@ namespace NinjaMagisk
             /// 读取加密文件
             /// </summary>
             /// <param name="filepath"></param>
-            public static void ReadKGGFile(string filepath)
+            public static void ReadKGGFiles(string filepath)
             {
                 Process(filepath, database); // 解析文件 
             }
@@ -58,7 +58,7 @@ namespace NinjaMagisk
             {
                 Assembly assembly = Assembly.GetExecutingAssembly();
                 // 假设 kgg_dec.exe是嵌入在"Namespace.Resources"命名空间中的
-                string resourceName = "NinjaMagisk.Audio.Properties.Resources"; // 替换为你的资源路径
+                string resourceName = "Rox.Audio.Properties.Resources"; // 替换为你的资源路径
                 // 创建 ResourceManager 实例
                 ResourceManager rm = new ResourceManager(resourceName, assembly);
                 // 从资源中获取aria2c.exe文件的字节数据
@@ -159,9 +159,9 @@ namespace NinjaMagisk
             /// 读取目录下的所有加密文件
             /// </summary>
             /// <param name="filepath"> 目录路径</param>
-            public static void ReadKGMFile(string filepath)
+            public static void ReadKGMFiles(string filepath)
             {
-                string path = Process();
+                string path = Process(); //返回解密程序路径
                 // 等待Process完成
                 ParseAll(path, filepath);
                 return;
@@ -196,7 +196,7 @@ namespace NinjaMagisk
                 }
                 Assembly assembly = Assembly.GetExecutingAssembly();
                 // 假设 kgg_dec.exe是嵌入在"Namespace.Resources"命名空间中的
-                string resourceName = "NinjaMagisk.Audio.Properties.Resources"; // 替换为你的资源路径
+                string resourceName = "Rox.Audio.Properties.Resources"; // 替换为你的资源路径
                 // 创建 ResourceManager 实例
                 ResourceManager rm = new ResourceManager(resourceName, assembly);
                 // Fix for the line causing CS0029, CS1003, and CS1525 errors

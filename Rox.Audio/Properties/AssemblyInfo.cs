@@ -1,17 +1,16 @@
-﻿using System.Resources;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("NinjaMagisk Common Interface Libraries")]
+[assembly: AssemblyTitle("Rox.Audio")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("NinjaMagisk Common Interface Libraries")]
-[assembly: AssemblyCopyright("Copyright (C) Rainbow-SPY 2019-2025 , All rights reserved")]
+[assembly: AssemblyProduct("Rox.Audio")]
+[assembly: AssemblyCopyright("Copyright ©  2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -21,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 如果此项目向 COM 公开，则下列 GUID 用于类型库的 ID
-[assembly: Guid("1a93b989-729d-429d-8848-5c8ec38b9f8a")]
+[assembly: Guid("3fc9c513-ade0-408a-8319-985a1bc2906a")]
 
 // 程序集的版本信息由下列四个值组成: 
 //
@@ -30,7 +29,5 @@ using System.Runtime.InteropServices;
 //      生成号
 //      修订号
 //
-//[assembly: AssemblyVersion("1.5.0.0")]
-[assembly: AssemblyVersion("1.5.*")]
-//[assembly: AssemblyFileVersion("1.5.0.0")]
-[assembly: NeutralResourcesLanguage("zh-CN")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]
