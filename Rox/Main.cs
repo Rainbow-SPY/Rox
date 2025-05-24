@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
-using NinjaMagisk.Runtimes;
-using NinjaMagisk.Text;
+using Rox.Runtimes;
+using Rox.Text;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -9,8 +9,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static NinjaMagisk.Runtimes.LocalizedString;
-using static NinjaMagisk.Runtimes.LogLibraries;
+using static Rox.Runtimes.LocalizedString;
+using static Rox.Runtimes.LogLibraries;
 namespace Rox
 {
     /// <summary>
@@ -657,7 +657,7 @@ namespace Rox
 
                             // 验证文件哈希值
 
-                            if (NinjaMagisk.File.CheckFileHash(filePath, expectedHash))
+                            if (Rox.File.CheckFileHash(filePath, expectedHash))
                             {
                                 WriteLog(LogLevel.Info, $"File {fileName} Passed");
 

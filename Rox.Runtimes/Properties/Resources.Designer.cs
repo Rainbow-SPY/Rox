@@ -851,7 +851,7 @@ namespace Rox.Runtimes.Properties {
                 return ResourceManager.GetString("Copyright", resourceCulture);
             }
         }
-                
+        
         /// <summary>
         ///   查找类似 简体中文 的本地化字符串。
         /// </summary>
@@ -872,7 +872,7 @@ namespace Rox.Runtimes.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Rox Common Interface Libraries 的本地化字符串。
+        ///   查找类似 NinjaMagisk Common Interface Libraries 的本地化字符串。
         /// </summary>
         internal static string Protect {
             get {

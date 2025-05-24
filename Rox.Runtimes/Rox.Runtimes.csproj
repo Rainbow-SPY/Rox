@@ -7,8 +7,8 @@
     <ProjectGuid>{BA4C591E-3D2A-491B-BCCB-1F995545A26C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NinjaMagisk.Runtimes</RootNamespace>
-    <AssemblyName>NinjaMagisk.Runtimes</AssemblyName>
+    <RootNamespace>Rox.Runtimes</RootNamespace>
+    <AssemblyName>Rox.Runtimes</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

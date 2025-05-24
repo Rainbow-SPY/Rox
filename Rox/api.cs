@@ -1,4 +1,4 @@
-﻿using NinjaMagisk.Runtimes;
+﻿using Rox.Runtimes;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -6,8 +6,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Rox;
+using Rox.Text;
 
-namespace NinjaMagisk
+namespace Rox
 {
     /// <summary>
     /// 提供API查询
@@ -158,9 +160,9 @@ namespace NinjaMagisk
                 LogLibraries.WriteLog(LogLibraries.LogLevel.Info, compressedJson);
 
                 // 直接解析 JSON 字符串
-                Text.Json.JObject jObject = Text.Json.JObject.Parse(compressedJson);
+               Text.Json.JObject jObject = Rox.Text.Json.JObject.Parse(compressedJson);
                 // 反序列化为 SteamType 对象
-                var SteamType = Text.Json.DeserializeObject<SteamType>(compressedJson);
+                var SteamType = Rox.Text.Json.DeserializeObject<SteamType>(compressedJson);
                 switch (SteamType.code)
                 {
                     case 432:

@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("NinjaMagisk.Text")]
+[assembly: AssemblyTitle("Rox texts process libraries")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("China")]
-[assembly: AssemblyProduct("NinjaMagisk.Text")]
-[assembly: AssemblyCopyright("Copyright © China 2025")]
+[assembly: AssemblyCompany("Rainbow SPY")]
+[assembly: AssemblyProduct("Rox")]
+[assembly: AssemblyCopyright("Copyright (C) Rainbow-SPY 2019-2025 , All rights reserved")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

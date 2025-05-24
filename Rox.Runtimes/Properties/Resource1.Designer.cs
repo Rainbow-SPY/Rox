@@ -862,7 +862,7 @@ namespace Rox.Runtimes.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Rox Common Interface Libraries 的本地化字符串。
+        ///   查找类似 NinjaMagisk Common Interface Libraries 的本地化字符串。
         /// </summary>
         public static string Protect {
             get {

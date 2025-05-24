@@ -34,6 +34,10 @@
     <Reference Include="Rox.Runtimes">
       <HintPath>..\..\..\$Release\Rox\Rox.Runtimes.dll</HintPath>
     </Reference>
+    <Reference Include="Rox.Text, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\$Release\Rox\Rox.Text.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

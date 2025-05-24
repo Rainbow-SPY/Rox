@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using static NinjaMagisk.Runtimes.LogLibraries;
-using static NinjaMagisk.Runtimes.LocalizedString;
-namespace NinjaMagisk
+using static Rox.Runtimes.LogLibraries;
+using static Rox.Runtimes.LocalizedString;
+namespace Rox
 {
     /// <summary>
     /// Windows 相关操作
