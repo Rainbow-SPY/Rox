@@ -22,7 +22,7 @@ Rox 是一个使用 C# .NET Framework 4.7.2 编写，并使用 Microsoft Visual 
 9. [Windows身份验证](#9-Windows身份验证)
 10. [检查更新模块](#10-检查更新模块)
 11. [文本类处理](#11-文本类处理)
-12. [API查询](#12-API查询)
+12. [API查询](#12-api查询)
 13. [音乐解密](#13-音乐解密)
 14. [Node.js](#14-nodejs)
 
