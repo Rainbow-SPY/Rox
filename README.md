@@ -371,7 +371,7 @@ var info = type.$SteamType$;
 ```
 
 * **`steamID`:** SteamID,支持SteamID3,ID64,个人主页链接,自定义URL,好友代码
-* **$SteamType$:** 实际的 **SteamType** 属性
+* **`$SteamType$`:** 实际的 **SteamType** 属性
 * **返回类型:** `Json`
 * **返回值:** 返回Steam用户信息
 <br><br>
@@ -419,7 +419,7 @@ string text = await Rox.API.SteamUserData.$void$(string SteamID);
  string avator = await Rox.API.SteamUserData.GetAvatarString("7656xxxxxxxx"); // 获取头像链接
  ...
 ```
-* **`\$void\$`:** 实际的直接调用方法
+* **`$void$`:** 实际的直接调用方法
 通过对此类方法组的调用可以直接获取到字符串, 不用进一步解析Json
 
 
@@ -459,7 +459,7 @@ var allweather = await Rox.API.Weather.GetWeatherDataJson("东城区");
 string temperature = allweather.temperature_1; //获取气温属性值
 ```
 
-* **`\$WeatherType\$`:** 实际的 **WeatherType** 属性
+* **`$WeatherType$`:** 实际的 **WeatherType** 属性
 * **`city`:** 指定的地区
 * **返回类型:** `Json`
 * **返回值:** 天气信息
@@ -494,7 +494,7 @@ var temperature = await Rox.API.Weather.GetTemperature("东城区"); // 获取�
 var weather = await Rox.API.Weather.GetWeather("黑河市"); //获取黑龙江省黑河市的天气状况
 ...
 ```
-* **$void$:** 实际的直接调用方法
+* **`$void$`:** 实际的直接调用方法
 通过对此类方法组的调用可以直接获取到字符串, 不用进一步解析Json
 
 
