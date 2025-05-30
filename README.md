@@ -419,7 +419,9 @@ string text = await Rox.API.SteamUserData.$void$(string SteamID);
  string avator = await Rox.API.SteamUserData.GetAvatarString("7656xxxxxxxx"); // 获取头像链接
  ...
 ```
-* **`$void$`:** 实际的直接调用方法
+* **`$void$`:** 实际的直接调用方法  
+  
+  
 通过对此类方法组的调用可以直接获取到字符串, 不用进一步解析Json
 
 **附: 直接调用方法列表**
@@ -496,6 +498,9 @@ var weather = await Rox.API.Weather.GetWeather("黑河市"); //获取黑龙江�
 ...
 ```
 * **`$void$`:** 实际的直接调用方法
+* **`city`:** 指定的地区  
+  
+  
 通过对此类方法组的调用可以直接获取到字符串, 不用进一步解析Json
 
 **附: 直接调用方法列表**
