@@ -374,8 +374,9 @@ var info = type.$SteamType$;
 * **$SteamType$:** 实际的 **SteamType** 属性
 * **返回类型:** `Json`
 * **返回值:** 返回Steam用户信息
-<br>
+<br><br>
 举个例子: 获取好友代码及多个数值
+
 ```csharp
 var type = await Rox.API.SteamUserData.GetDataJson("7656xxxxxxxx"); // 先获取返回的Json
 
@@ -396,15 +397,16 @@ strike username = type.username; //提取用户名属性值
 | steamID64 | SteamID64 ( 7656xxxxxxxx ) |
 | username | 用户名 |
 | realname | 真实姓名 |
-| profileurl | ⚠️个人主页链接, 原生属性使用会**带有转义字符**(https:\/\/) |
+| profileurl | ⚠️个人主页链接, 原生属性使用会**带有转义字符**(https:\\/\\/) |
 | profileurl_1 | ✔️个人主页链接, 使用此属性可输出**无转义符的网址** | 
-| avator | ⚠️头像链接, 原生属性使用会**带有转义字符**(https:\/\/) |
+| avator | ⚠️头像链接, 原生属性使用会**带有转义字符**(https:\\/\\/) |
 | avator_1 | ✔️个人主页链接, 使用此属性可输出**无转义符的网址** | 
 | accountcreationdate | 账号创建时间 |
 | lastlogoff | 上次登出时间 |
 | location | 账号绑定区域 |
 | onlinestatus | 在线状态 |
 | friendcode | 好友代码 |
+___
 ### Steam个人信息 - 直接方法调用 (可等待)
 
 > **以下内容返回类型均为`string`**
@@ -417,7 +419,7 @@ string text = await Rox.API.SteamUserData.$void$(string SteamID);
  string avator = await Rox.API.SteamUserData.GetAvatarString("7656xxxxxxxx"); // 获取头像链接
  ...
 ```
-* **$void$:** 实际的直接调用方法
+* **`\$void\$`:** 实际的直接调用方法
 通过对此类方法组的调用可以直接获取到字符串, 不用进一步解析Json
 
 
@@ -446,7 +448,7 @@ ___
 
 
 
-
+___
 ### 天气查询(可等待)
 ```csharp
 var allweather = await Rox.API.Weather.GetWeatherDataJson(string city);//获取返回的Json
@@ -457,7 +459,7 @@ var allweather = await Rox.API.Weather.GetWeatherDataJson("东城区");
 string temperature = allweather.temperature_1; //获取气温属性值
 ```
 
-* **$WeatherType$:** 实际的 **WeatherType** 属性
+* **`\$WeatherType\$`:** 实际的 **WeatherType** 属性
 * **`city`:** 指定的地区
 * **返回类型:** `Json`
 * **返回值:** 天气信息
