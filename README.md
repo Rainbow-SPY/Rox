@@ -420,6 +420,7 @@ string text = await Rox.API.SteamUserData.$void$(string SteamID);
  ...
 ```
 * **`$void$`:** 实际的直接调用方法  
+* **`steamID`:** SteamID,支持SteamID3,ID64,个人主页链接,自定义URL,好友代码
   
   
 通过对此类方法组的调用可以直接获取到字符串, 不用进一步解析Json
