@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Rox.Text;
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
-using static Rox.Text;
 
 namespace Rox
 {
