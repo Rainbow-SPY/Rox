@@ -423,7 +423,7 @@ string text = await Rox.API.SteamUserData.$void$(string SteamID);
 通过对此类方法组的调用可以直接获取到字符串, 不用进一步解析Json
 
 
-___
+
 | 方法  |  返回值 | 注释 |
 | :------------: | :------------: |:------------: |
 | GetCommunityState | 目前状态 | 获取社区状态 |
@@ -482,6 +482,7 @@ string temperature = allweather.temperature_1; //获取气温属性值
 | humidty_1 | 湿度 ✔️**此属性输出带有单位的字符串** |
 | reporttime | 天气的更新时间 |
 | msg | 错误信息 |
+___
 ### 天气查询 - 直接方法调用
 
 > **以下内容返回类型均为`string`**
@@ -498,7 +499,6 @@ var weather = await Rox.API.Weather.GetWeather("黑河市"); //获取黑龙江�
 通过对此类方法组的调用可以直接获取到字符串, 不用进一步解析Json
 
 
-___
 | 方法  |  返回值 | 注释 |
 | :------------: | :------------: |:------------: |
 | GetTemperature | 温度 ℃ | 获取指定地区的温度 |
