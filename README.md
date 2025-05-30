@@ -1,14 +1,14 @@
-![Icon](NinjaMagisk/Icon+Text.png)
+![Icon](Rox/Icon+Text.png)
 ___
-NinjaMagisk 是一个使用 C# .NET Framework 4.7.2 编写，并使用 Microsoft Visual Studio 2022 编译的跨平台动态链接库。它提供了多种功能模块，包括日志记录、文件操作、网络检查、Windows 系统配置、AI 集成,**音频解密**等。
+Rox 是一个使用 C# .NET Framework 4.7.2 编写，并使用 Microsoft Visual Studio 2022 编译的跨平台动态链接库。它提供了多种功能模块，包括日志记录、文件操作、网络检查、Windows 系统配置、AI 集成,**音频解密**等。
 
 ## 提示! 
 > [!WARNING]
-> [5f6e7e44](https://github.com/Rainbow-SPY/NinjaMagisk/commit/5f6e7e443fd479705cd078bc9bd5bac9d79b45df) 提交在Main.cs中将`LocalizedString`本地化字符串 和 `LogLibraries`日志库组件迁移到`Runtimes.cs`中, v1.5版本后的主模块和其他模块需要引用运行库进行操作.
+> [5f6e7e44](https://github.com/Rainbow-SPY/Rox/commit/5f6e7e443fd479705cd078bc9bd5bac9d79b45df) 提交在Main.cs中将`LocalizedString`本地化字符串 和 `LogLibraries`日志库组件迁移到`Runtimes.cs`中, v1.5版本后的主模块和其他模块需要引用运行库进行操作.
 > ```csharp
-> using NinjaMagisk.Runtimes;
-> using static NinjaMagisk.Runtimes.LogLibraries;
-> using static NinjaMagisk.Runtimes.LocalizedString;
+> using Rox.Runtimes;
+> using static Rox.Runtimes.LogLibraries;
+> using static Rox.Runtimes.LocalizedString;
 ## 目录
 
 1. [全局引用方法](#1-全局引用方法)
@@ -29,19 +29,19 @@ NinjaMagisk 是一个使用 C# .NET Framework 4.7.2 编写，并使用 Microsoft
 
 ## 1. 全局引用方法
 
-NinjaMagisk 提供了多种引用方式，您可以根据需求选择合适的方式：
+Rox 提供了多种引用方式，您可以根据需求选择合适的方式：
 
 ```csharp
-using NinjaMagisk;
-using static NinjaMagisk.Runtimes.LogLibraries;
-using static NinjaMagisk.Runtimes.LocalizedString;
+using Rox;
+using static Rox.Runtimes.LogLibraries;
+using static Rox.Runtimes.LocalizedString;
 ...
 ```
 ## 2. 日志
 ### 控制台打印彩色日志
 ```csharp 
-NinjaMagisk.Runtimes.LogLibries.WriteLog(LogLevel loglevel, LogKind logkind,string message);
-NinjaMagisk.Runtimes.LogLibries.WriteLog(LogLevel loglevel,string message);
+Rox.Runtimes.LogLibries.WriteLog(LogLevel loglevel, LogKind logkind,string message);
+Rox.Runtimes.LogLibries.WriteLog(LogLevel loglevel,string message);
 ```
 
 * **`LogLevel` 可用枚举:** `Info`,`Warning`,`Error`.
@@ -50,8 +50,8 @@ ___
 ### 写入日志到文件
 
 ```csharp
-NinjaMagisk.Runtimes.LogLibries.LogToFile(LogLevel loglevel,LogKind logkind, string message);
-NinjaMagisk.Runtimes.LogLibries.LogToFile(LogLevel loglevel, string message);
+Rox.Runtimes.LogLibries.LogToFile(LogLevel loglevel,LogKind logkind, string message);
+Rox.Runtimes.LogLibries.LogToFile(LogLevel loglevel, string message);
 ```
 调用此方法时,会在当前目录下创建`Assistant.log`日志文件,并会以下格式写入文件
 
@@ -62,7 +62,7 @@ ___
 ### 清空日志
 
 ```csharp
-NinjaMagisk.Runtimes.LogLibries.ClearFile(string filePath);
+Rox.Runtimes.LogLibries.ClearFile(string filePath);
 ```
 
 * **`filepath`:** 日志文件路径
@@ -73,11 +73,11 @@ NinjaMagisk.Runtimes.LogLibries.ClearFile(string filePath);
 > 使用时请注意,在无网络的情况下,`MessageBox`会弹出提示询问是否进行下一步操作.
 
 ```csharp
-NinjaMagisk.DownloadAssistant.Downloader(string url);
-NinjaMagisk.DownloadAssistant.Downloader(string url,string Downloadvocation);
-NinjaMagisk.DownloadAssistant.Downloader(string url,string Downloadvocation,bool log);
-NinjaMagisk.DownloadAssistant.Downloader(string url,string Downloadvocation,string outputName);
-NinjaMagisk.DownloadAssistant.Downloader(string url,string Downloadvocation,string outputName,bool log);
+Rox.DownloadAssistant.Downloader(string url);
+Rox.DownloadAssistant.Downloader(string url,string Downloadvocation);
+Rox.DownloadAssistant.Downloader(string url,string Downloadvocation,bool log);
+Rox.DownloadAssistant.Downloader(string url,string Downloadvocation,string outputName);
+Rox.DownloadAssistant.Downloader(string url,string Downloadvocation,string outputName,bool log);
 ```
 * **`url`:** 下载链接
 
@@ -94,7 +94,7 @@ ___
 ### 模块下载
 
 ```csharp
-NinjaMagisk.DownloadAssistant.ModuleDownloader(Module module);
+Rox.DownloadAssistant.ModuleDownloader(Module module);
 ```
 
 * **`Module`可用枚举:** `zip`,`VC`.
@@ -107,7 +107,7 @@ ___
 ### 应用下载
 
 ```csharp
-NinjaMagisk.DownloadAssistant.ApplicationDownloader(App app);
+Rox.DownloadAssistant.ApplicationDownloader(App app);
 ```
 * **`App`可用枚举:** `EasiNote5`,`EasiCamera`,`SeewoService`,`WeChat`,`ToDesk`.
 
@@ -116,8 +116,8 @@ NinjaMagisk.DownloadAssistant.ApplicationDownloader(App app);
 ## 4. 安全软件检测
 
 ```csharp
-NinjaMagisk.Security.Anti360Security();
-NinjaMagisk.Security.AntiHuoRongSecurity();
+Rox.Security.Anti360Security();
+Rox.Security.AntiHuoRongSecurity();
 ```
 
 * **返回值:** `true` 表示安全软件正在运行，`false` 表示未运行。
@@ -125,7 +125,7 @@ NinjaMagisk.Security.AntiHuoRongSecurity();
 ### 网络可用性检查
 
 ```csharp
-NinjaMagisk.Network.IsNetworkAvailable();
+Rox.Network.IsNetworkAvailable();
 ```
 
 - **返回值:** `true` 表示网络可用，`false` 表示网络不可用。
@@ -137,34 +137,34 @@ NinjaMagisk.Network.IsNetworkAvailable();
 ### 启用/禁用休眠
 
 ```csharp
-NinjaMagisk.Windows.Hibernate.Enable(); //启用休眠
-NinjaMagisk.Windows.Hibernate.Disable(); //禁用休眠
+Rox.Windows.Hibernate.Enable(); //启用休眠
+Rox.Windows.Hibernate.Disable(); //禁用休眠
 ```
 ___
 ### 启用卓越性能
 
 ```csharp
-NinjaMagisk.Windows.EnableHighPowercfg(); //启用卓越性能
+Rox.Windows.EnableHighPowercfg(); //启用卓越性能
 ```
 ___
 ### 启用/禁用Windows 安全中心与Windows Defender
 
 ```csharp
-NinjaMagisk.Security.WindowsSecurityCenter.Enable() //启用
-NinjaMagisk.Security.WindowsSecurityCenter.Disable() //禁用
+Rox.Security.WindowsSecurityCenter.Enable() //启用
+Rox.Security.WindowsSecurityCenter.Disable() //禁用
 ```
 ___
 ### 启用/禁用 Windows Update
 
 ```csharp
-NinjaMagisk.Windows.WindowsUpdate.Enable() //启用Windows 更新
-NinjaMagisk.Windows.WindowsUpdate.Disable() //禁用Windows 更新
+Rox.Windows.WindowsUpdate.Enable() //启用Windows 更新
+Rox.Windows.WindowsUpdate.Disable() //禁用Windows 更新
 ```
 ___
 ### 检查 Windows Update状态
 
 ```csharp
-bool status = NinjaMagisk.Windows.WindowsUpdate.CheckStatus();
+bool status = Rox.Windows.WindowsUpdate.CheckStatus();
 ```
 * **返回类型:** bool
 * **返回值:** 已禁用更新返回`false`.已启用更新返回`true`,键值不存在或遇到未知错误返回`false`
@@ -172,8 +172,8 @@ ___
 ### 激活 Windows
 
 ```csharp
-NinjaMagisk.Windows.ActiveWindows(); //激活Windows
-bool _return = NinjaMagisk.Windows.BoolActiveWindows(); //激活Windows并返回值
+Rox.Windows.ActiveWindows(); //激活Windows
+bool _return = Rox.Windows.BoolActiveWindows(); //激活Windows并返回值
 ```
 * **返回类型:** bool
 * **返回值:** 激活成功返回`true`,激活失败或遇到未知错误返回`false`
@@ -181,7 +181,7 @@ ___
 ### 写入注册表
 
 ```csharp
-NinjaMagisk.Registry.Write(string keyPath,string valueName,object valueData,RegistryValueKind valueType);
+Rox.Registry.Write(string keyPath,string valueName,object valueData,RegistryValueKind valueType);
 ```
 
 * **`keyPath`: 设定注册表路径**
@@ -200,7 +200,7 @@ NinjaMagisk.Registry.Write(string keyPath,string valueName,object valueData,Regi
 ### ChatGPT API引用
 
 ```csharp
-NinjaMagisk.AI.ChatGPT.Chat(string text,string api); //ChatGPT API引用
+Rox.AI.ChatGPT.Chat(string text,string api); //ChatGPT API引用
 ```
 * **`text`: 向 `api.openai.com/v1/completions` 发送的请求**
 
@@ -210,7 +210,7 @@ NinjaMagisk.AI.ChatGPT.Chat(string text,string api); //ChatGPT API引用
 ### DeepSeek API引用
 
 ```csharp
-NinjaMagisk.AI.DeepSeek.Chat(string text,string api); //DeepSeek API引用
+Rox.AI.DeepSeek.Chat(string text,string api); //DeepSeek API引用
 ```
 
 * **`text`: 向 `api.deepseek.com/v1/completions` 发送的请求**
@@ -225,8 +225,8 @@ NinjaMagisk.AI.DeepSeek.Chat(string text,string api); //DeepSeek API引用
 > 请妥善保管好您的`IV`算法初始化向量和您的`Key`密钥.
 
 ```csharp
-NinjaMagisk.File.AESEncryption.Decrypt(string cipherText, byte[] Key /*256-bit*/ , byte[] IV /*128-bit*/ );//解密
-NinjaMagisk.File.AESEncryption.Encrypt(string cipherText, byte[] Key /*256-bit*/ , byte[] IV /*128-bit*/ );//加密
+Rox.File.AESEncryption.Decrypt(string cipherText, byte[] Key /*256-bit*/ , byte[] IV /*128-bit*/ );//解密
+Rox.File.AESEncryption.Encrypt(string cipherText, byte[] Key /*256-bit*/ , byte[] IV /*128-bit*/ );//加密
 ```
 * **`cipherText`: 要加密/解密的文本**
 * **`key`: AES加密/解密密钥(256位)**
@@ -236,7 +236,7 @@ NinjaMagisk.File.AESEncryption.Encrypt(string cipherText, byte[] Key /*256-bit*/
 ### 文件属性修改
 
 ```csharp
-NinjaMagisk.File.Attrib(string path, AtOp Key, bool Switch);
+Rox.File.Attrib(string path, AtOp Key, bool Switch);
 ```
 
 * **`path`: 文件的路径**
@@ -246,7 +246,7 @@ NinjaMagisk.File.Attrib(string path, AtOp Key, bool Switch);
 
 ### MD5哈希值验证
 ```csharp
-NinjaMagisk.File.CheckFileHash(string filePath, string expectedMD5);
+Rox.File.CheckFileHash(string filePath, string expectedMD5);
 ```
 
 * **`filePath`: 文件路径**
@@ -256,7 +256,7 @@ NinjaMagisk.File.CheckFileHash(string filePath, string expectedMD5);
 
 ### 获取文件MD5哈希值
 ```csharp
-NinjaMagisk.File.CalculateMD5(string filePath);
+Rox.File.CalculateMD5(string filePath);
 ```
 
 * **`filePath`: 文件路径**
@@ -266,14 +266,14 @@ NinjaMagisk.File.CalculateMD5(string filePath);
 ## 9. Windows 身份验证
 
 ```csharp
-NinjaMagisk.Windows.Authentication();
+Rox.Windows.Authentication();
 ```
 * **返回值:** `true` 表示验证成功，`false` 表示取消操作。
 
 ## 10. 检查更新模块
 ### 检查更新
 ```csharp
-await NinjaMagisk.Update.CheckUpdate(string CheckUpdateUrl,Platform platform);
+await Rox.Update.CheckUpdate(string CheckUpdateUrl,Platform platform);
 ```
 
 * **`CheckUpdateUrl`: 检查更新的API链接**
@@ -289,7 +289,7 @@ ___
  ___
  ### 自动更新
  ```csharp
- NinjaMagisk.Update.SelfUpdate(); // 自动更新
+ Rox.Update.SelfUpdate(); // 自动更新
  ```
  * **返回类型:** `MessageBox`
  ___
@@ -324,8 +324,8 @@ ___
 ## 11. 文本类处理
 ### 读取 / 写入配置文件
 ```csharp
-NinjaMagisk.Text.Config.ReadConfig(string iniPath,string HeadText); //读取配置文件
-NinjaMagisk.Text.Config.WriteConfig(string iniPath,string HeadText,string Value); //写入配置文件
+Rox.Text.Config.ReadConfig(string iniPath,string HeadText); //读取配置文件
+Rox.Text.Config.WriteConfig(string iniPath,string HeadText,string Value); //写入配置文件
 ```
 
 * **`iniPath`:** 配置文件路径
@@ -343,8 +343,8 @@ ___
 ___
 ### Json反序列化
 ```csharp
-NinjaMagisk.Text.Json.DeserializeObject<T>(string json);
-NinjaMagisk.Text.Json.DeserializeObject(string json);
+Rox.Text.Json.DeserializeObject<T>(string json);
+Rox.Text.Json.DeserializeObject(string json);
 ```
 
 * **`json`:** Json字符串*
@@ -354,7 +354,7 @@ NinjaMagisk.Text.Json.DeserializeObject(string json);
 ___
 ### Json序列化
 ```csharp
-NinjaMagisk.Text.Json.SerializeObject(object obj);
+Rox.Text.Json.SerializeObject(object obj);
 ```
 
 * **`obj`:** 对象
@@ -362,14 +362,151 @@ NinjaMagisk.Text.Json.SerializeObject(object obj);
 * **返回值:** 返回序列化后的Json字符串
 ## 12. API查询
 
-### Steam个人信息查询
+### Steam个人信息查询(可等待)
 ```csharp
-NinjaMagisk.API.SteamUserData(string steamID);
+Rox.API.SteamUserData.GetDataJson(string SteamID);
+
+var type = await Rox.API.SteamUserData.GetDataJson(SteamID);
+var info = type.$SteamType$;
 ```
 
 * **`steamID`:** SteamID,支持SteamID3,ID64,个人主页链接,自定义URL,好友代码
+* **$SteamType$:** 实际的 **SteamType** 属性
 * **返回类型:** `Json`
-* **返回值:** 返回Steam用户信息(可等待)
+* **返回值:** 返回Steam用户信息
+<br>
+举个例子: 获取好友代码及多个数值
+```csharp
+var type = await Rox.API.SteamUserData.GetDataJson("7656xxxxxxxx"); // 先获取返回的Json
+
+string FriendCode = type.friendcode; // 提取好友代码属性值
+strike username = type.username; //提取用户名属性值
+...
+```
+
+
+**附: SteamType类属性**
+
+| 属性  | 注释 |
+| :------------: |:------------: |
+| code | ⚠️**此属性为int类型** HttpClient返回值 (200成功,432无玩家信息,443无效的输入) |
+| communitystate | 社区隐私状态 |
+| steamID | SteamID ( STEAM_0:1:xxxxxxxx ) |
+| steamID3 |  SteamID3 ( [U:1:xxxxxxx] ) |
+| steamID64 | SteamID64 ( 7656xxxxxxxx ) |
+| username | 用户名 |
+| realname | 真实姓名 |
+| profileurl | ⚠️个人主页链接, 原生属性使用会**带有转义字符**(https:\/\/) |
+| profileurl_1 | ✔️个人主页链接, 使用此属性可输出**无转义符的网址** | 
+| avator | ⚠️头像链接, 原生属性使用会**带有转义字符**(https:\/\/) |
+| avator_1 | ✔️个人主页链接, 使用此属性可输出**无转义符的网址** | 
+| accountcreationdate | 账号创建时间 |
+| lastlogoff | 上次登出时间 |
+| location | 账号绑定区域 |
+| onlinestatus | 在线状态 |
+| friendcode | 好友代码 |
+### Steam个人信息 - 直接方法调用 (可等待)
+
+> **以下内容返回类型均为`string`**
+
+```csharp
+string text = await Rox.API.SteamUserData.$void$(string SteamID);
+
+举个例子:
+ string name = await Rox.API.SteamUserData.GetUserNameString("7656xxxxxxxx"); // 获取用户名
+ string avator = await Rox.API.SteamUserData.GetAvatarString("7656xxxxxxxx"); // 获取头像链接
+ ...
+```
+* **$void$:** 实际的直接调用方法
+通过对此类方法组的调用可以直接获取到字符串, 不用进一步解析Json
+
+
+___
+| 方法  |  返回值 | 注释 |
+| :------------: | :------------: |:------------: |
+| GetCommunityState | 目前状态 | 获取社区状态 |
+| GetSteamIDString | SteamID | 获取SteamID |
+| GetSteamID3String | SteamID3 | 获取SteamID3 |
+| GetUserNameString | 用户名 | 获取Steam用户名 |
+| GetSteamID64String | SteamID64 | 获取SteamID64 |
+| GetSteamProfileUrlString | URL | 获取Steam个人主页链接地址 |
+| GetAvatarString | URL | 获取Steam头像链接地址 |
+| GetAccountCreationDateString | 日期 | 获取账号创建日期 |
+| GetLastLogoffString | 日期 | 获取账号最后登出时间 |
+| GetLocationString | 国家或地区 | 获取账号绑定区域 |
+| GetOnlineStatusString | 目前状态 | 获取在线状态 |
+| GetFriendCodeString | 好友代码 | 获取好友代码 |
+| GetRealNameString | 真实姓名 | 获取真实姓名 |
+
+
+
+
+
+
+
+
+
+
+### 天气查询(可等待)
+```csharp
+var allweather = await Rox.API.Weather.GetWeatherDataJson(string city);//获取返回的Json
+string type = allweather.$WeatherType$; //获取属性值
+
+举个例子:
+var allweather = await Rox.API.Weather.GetWeatherDataJson("东城区");
+string temperature = allweather.temperature_1; //获取气温属性值
+```
+
+* **$WeatherType$:** 实际的 **WeatherType** 属性
+* **`city`:** 指定的地区
+* **返回类型:** `Json`
+* **返回值:** 天气信息
+
+**附: WeatherType属性**
+
+| 属性  | 注释 |
+| :------------: |:------------: |
+| code | ⚠️**此属性为int类型** HttpClient返回值 (200成功,500未查询到城市,400空输入,0非法/不安全的请求) |
+| province | 省份名称 |
+| city | 城市名称 |
+| temperature | 气温⚠️**此属性不输出单位** 请使用`temperature_1`获取更好体验 |
+| temperature_1 | 气温 ✔️ **此属性输出带有单位的字符串** |
+| weather | 天气状况 |
+| wind_direction | 风向 ⚠️**此属性不输出单位** 请使用`wind_direction_1`获取更好体验 |
+| wind_direction_1 | 风向 ✔️**此属性输出带有单位的字符串** |
+| wind_power | 风力等级 ⚠️**此属性不输出单位** 请使用`wind_power_1`获取更好体验|
+| wind_power_1 | 风力等级 ✔️**此属性输出带有单位的字符串** |
+| humidty | 湿度 ⚠️**此属性不输出单位** 请使用`humidty_1`获取更好体验|
+| humidty_1 | 湿度 ✔️**此属性输出带有单位的字符串** |
+| reporttime | 天气的更新时间 |
+| msg | 错误信息 |
+### 天气查询 - 直接方法调用
+
+> **以下内容返回类型均为`string`**
+
+```csharp
+var text = await Rox.API.Weather.$void$(string city);
+
+举个例子:
+var temperature = await Rox.API.Weather.GetTemperature("东城区"); // 获取北京市东城区的气温
+var weather = await Rox.API.Weather.GetWeather("黑河市"); //获取黑龙江省黑河市的天气状况
+...
+```
+* **$void$:** 实际的直接调用方法
+通过对此类方法组的调用可以直接获取到字符串, 不用进一步解析Json
+
+
+___
+| 方法  |  返回值 | 注释 |
+| :------------: | :------------: |:------------: |
+| GetTemperature | 温度 ℃ | 获取指定地区的温度 |
+| GetWeather | 天气 | 获取指定地区的天气 |
+| GetWindDirection | 风向 风 | 获取指定地区的风向 |
+| GetWindPower | 风力 级 | 获取指定地区的风力 |
+| GetHumidity | 湿度 % | 获取SteamID64 |
+
+
+
 ## 13. 音乐解密
 
 ### 裤猫音乐解密
@@ -377,10 +514,10 @@ NinjaMagisk.API.SteamUserData(string steamID);
 > 请勿将此项目用于商业用途, 如造成的财产和版权损失与开发者改不相关
 
 ```csharp
-NinjaMagisk.Audio.ParseKGG.ChooseSigleKGGFile(); // 选择单一文件进行解密.kgg加密格式音频
-NinjaMagisk.Audio.ParseKGG.ReadKGGFiles(string filepath); //选择文件夹进行识别格式解密.kgg加密格式音频
-NinjaMagisk.Audio.ParseKGM.ChooseSigleKGMFile(); // 虚着呢单一文件进行解密.kgm加密格式音频
-NinjaMagisk.Audio.ParseKGM.ReadKGMFiles(string filepath); //选择文件夹进行识别格式解密.kgm加密格式音频
+Rox.Audio.ParseKGG.ChooseSigleKGGFile(); // 选择单一文件进行解密.kgg加密格式音频
+Rox.Audio.ParseKGG.ReadKGGFiles(string filepath); //选择文件夹进行识别格式解密.kgg加密格式音频
+Rox.Audio.ParseKGM.ChooseSigleKGMFile(); // 虚着呢单一文件进行解密.kgm加密格式音频
+Rox.Audio.ParseKGM.ReadKGMFiles(string filepath); //选择文件夹进行识别格式解密.kgm加密格式音频
 ```
 
 * **`filepath`:** 文件夹
@@ -388,7 +525,7 @@ NinjaMagisk.Audio.ParseKGM.ReadKGMFiles(string filepath); //选择文件夹进�
 
 ### 提取Node.js
 ```csharp
-string _return = NinjaMagisk.Runtimes.NodeJs.ExtractNodeJs(string ExtarctFolder); //提取Node.js到指定文件夹
+string _return = Rox.Runtimes.NodeJs.ExtractNodeJs(string ExtarctFolder); //提取Node.js到指定文件夹
 ```
 > Node.js版本为node-v22.15.1-win-x86,使用32位
 * **`ExtractFolder`:** 指定被提取的文件夹
@@ -397,7 +534,7 @@ string _return = NinjaMagisk.Runtimes.NodeJs.ExtractNodeJs(string ExtarctFolder)
 
 ### 检查Node.Js是否存在
 ```csharp
-NinjaMagisk.Runtimes.NodeJs.CheckNodeJs(string ExtraedFolder); //检查文件夹内有没有提取过的Node.js
+Rox.Runtimes.NodeJs.CheckNodeJs(string ExtraedFolder); //检查文件夹内有没有提取过的Node.js
 ```
 * **`ExtractedFolder`:** 指定提取过的文件夹
 * **返回类型:** `string`

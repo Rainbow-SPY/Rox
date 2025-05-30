@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Rox.Runtimes.LogLibraries;
+using static Rox.API.SteamUserData.SteamType;
 
 namespace Rox
 {
@@ -329,7 +330,8 @@ namespace Rox
                         LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"Request failed with status code: {response.StatusCode}");
                         return null;
                     }
-
+                    var t = await SteamUserData.GetDataJson("");
+                    string e = t.username;
                     // 读取响应内容
                     var responseData = await response.Content.ReadAsStringAsync();
                     LogLibraries.WriteLog(LogLibraries.LogLevel.Info, "Raw JSON Response:");
@@ -516,7 +518,7 @@ namespace Rox
                 WriteLog(LogLibraries.LogLevel.Info, $"Code: {weatherType.code}");
                 WriteLog(LogLibraries.LogLevel.Info, $"获取省份名称: {weatherType.province}");
                 WriteLog(LogLibraries.LogLevel.Info, $"获取城市名称: {weatherType.city}");
-                WriteLog(LogLibraries.LogLevel.Info, $"获取温度: {weatherType.temperature}");
+                WriteLog(LogLibraries.LogLevel.Info, $"获取温度: {weatherType.temperature_1}");
                 WriteLog(LogLibraries.LogLevel.Info, $"获取天气状况: {weatherType.weather}");
                 WriteLog(LogLibraries.LogLevel.Info, $"获取风向: {weatherType.wind_direction_1}");
                 WriteLog(LogLibraries.LogLevel.Info, $"获取风力等级: {weatherType.wind_power_1}");
@@ -535,7 +537,7 @@ namespace Rox
                 {
                     _lastWeatherData = await GetWeatherDataJson(city);
                 }
-                return _lastWeatherData?.temperature;
+                return _lastWeatherData?.temperature_1;
             }
             /// <summary>
             /// 获取指定城市的天气状况信息
@@ -606,6 +608,7 @@ namespace Rox
                 /// <summary>
                 /// 温度
                 /// </summary>
+                public string temperature_1 => temperature + "℃"; // 20℃ 30℃
                 public string temperature { get; set; }
                 /// <summary>
                 /// 天气状况
@@ -614,7 +617,7 @@ namespace Rox
                 /// <summary>
                 /// 风向
                 /// </summary>
-                public string wind_direction_1 => wind_direction + "凤"; // 东南风 西北风
+                public string wind_direction_1 => wind_direction + "风"; // 东南风 西北风
                 public string wind_direction { get; set; }
                 /// <summary>
                 /// 风力等级
