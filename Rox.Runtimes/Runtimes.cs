@@ -1,4 +1,5 @@
-﻿using Rox.Runtimes.Properties;
+﻿using Microsoft.Win32;
+using Rox.Runtimes.Properties;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -274,6 +275,58 @@ namespace Rox
             }
         }
         /// <summary>
+        /// 用于处理注册表操作
+        /// </summary>
+        public class Registry
+        {
+            /// <summary>
+            /// 用于写入注册表项的值
+            /// </summary>
+            /// <param name="keyPath"> 注册表项路径</param>
+            /// <param name="valueName"> 注册表项名称</param>
+            /// <param name="valueType"> 注册表项类型</param>
+            /// <param name="valueData"> 注册表项数据</param>
+            public static void Write(string keyPath, string valueName, object valueData, RegistryValueKind valueType)
+            {
+                try
+                {
+                    // 打开注册表项
+                    using (RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(keyPath))
+                    {
+                        // 写入值
+                        WriteLog(LogLevel.Info, $"{_WRITE_REGISTRY}");
+                        key.SetValue(valueName, valueData, valueType);
+                        key.Close();
+                    }
+                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, $"{_SUCESS_WRITE_REGISTRY}");
+                }
+                catch (Exception ex)
+                {
+                    LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"{_WRITE_REGISTRY_FAILED}: {ex.Message}");
+                }
+            }
+            /// <summary>
+            /// 用于读取注册表项的值
+            /// </summary>
+            /// <param name="keyName"> 注册表项路径</param>
+            /// <param name="valueName"> 注册表项名称</param>
+            /// <returns> 返回注册表项的值</returns>
+            internal static string GetRegistryValue(string keyName, string valueName)
+            {
+                string value = "";
+                using (var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(keyName))
+                {
+                    if (key != null)
+                    {
+                        value = key.GetValue(valueName) as string;
+                        key.Close();
+                    }
+                }
+                return value;
+            }
+        }
+
+        /// <summary>
         /// 根据语言获取资源文件
         /// </summary>
         public class ResourceHelper
@@ -432,6 +485,13 @@ namespace Rox
             {
                 return ResourceHelper.GetString(key, System.Globalization.CultureInfo.InstalledUICulture.Name.ToString());
             }
+
+        }
+        /// <summary>
+        /// Windows Toast 通知类
+        /// </summary>
+        public class WindowsToast
+        {
 
         }
         /// <summary>
@@ -628,7 +688,7 @@ namespace Rox
                 try
                 {
                     // 检查网络适配器是否有可用的
-                    //if (!NetworkInterface.GetIsNetworkAvailable())
+                    //if (NetworkInterface.GetIsNetworkAvailable())
                     //{
                     //    WriteLog(LogLevel.Info, $"{_NOTAVAILABLE_NETWORK}");
                     //    return false;
@@ -660,7 +720,7 @@ namespace Rox
                     using (var ping = new Ping())
                     {
                         PingReply reply = ping.Send(ip, 120);
-                        return reply.Status == IPStatus.Success ? true : false;
+                        return reply.Status == IPStatus.Success;
                     }
                 }
                 catch

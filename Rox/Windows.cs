@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using Registry = Rox.Runtimes.Registry;
 using System;
 using System.Diagnostics;
 using System.IO;
