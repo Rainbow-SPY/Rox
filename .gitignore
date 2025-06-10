@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/WindowsUWPToast/WindowsUWPToast.csproj
+/WindowsUWPToast/Properties/AssemblyInfo.cs
+/WindowsUWPToast/Program.cs
+/WindowsUWPToast

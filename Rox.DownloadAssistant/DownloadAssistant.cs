@@ -38,17 +38,17 @@ namespace Rox
                 // 获取当前正在执行的类库的程序集
                 Assembly assembly = Assembly.GetExecutingAssembly();
 
-                // 假设Node.Js.zip是嵌入在"Namespace.Resources"命名空间中的
+                // 假设aria2c.exe是嵌入在"Namespace.Resources"命名空间中的
 
-                string resourceName = "Rox.Interface.Properties.Resources"; // 替换为你的资源路径
+                string resourceName = "Rox.DownloadAssistant.Properties.Resources"; // 替换为你的资源路径
 
                 // 创建 ResourceManager 实例
                 ResourceManager rm = new ResourceManager(resourceName, assembly);
                 WriteLog(LogLevel.Info, $"{_NEW_RM}");
-                // 从资源中获取Node.Js.zip文件的字节数据
-                byte[] NodeJsZipData = (byte[])rm.GetObject("aria2c");
-                WriteLog(LogLevel.Info, $"{_GET_RM_OBJ}: Node_Js");
-                if (NodeJsZipData != null)
+                // 从资源中获取aria2c.exe文件的字节数据
+                byte[] Aria2cExeData = (byte[])rm.GetObject("aria2c");
+                WriteLog(LogLevel.Info, $"{_GET_RM_OBJ}: aria2c");
+                if (Aria2cExeData != null)
                 {
                     // 将文件保存到当前目录
                     string outputDirectory = Path.Combine(Directory.GetCurrentDirectory(), "bin");
@@ -60,12 +60,12 @@ namespace Rox
                     }
                     WriteLog(LogLevel.Info, $"{_GET_OUTPUT_DIRECTORY}: {outputDirectory}");
                     // 保存文件路径
-                    string outputFilePath = Path.Combine(outputDirectory, "Node.Js.zip");
+                    string outputFilePath = Path.Combine(outputDirectory, "aria2c.exe");
                     WriteLog(LogLevel.Info, $"{_GET_OUTPUT_NAME}: {outputDirectory}");
                     // 写入文件，确保保存为二进制数据
                     WriteLog(LogLevel.Info, $"{_FILE_WRITING}");
-                    System.IO.File.WriteAllBytes(outputFilePath, NodeJsZipData);
-                    WriteLog(LogLevel.Info, $"Node.Js.zip {_FILE_EXIST_PATH} {outputFilePath}");
+                    System.IO.File.WriteAllBytes(outputFilePath, Aria2cExeData);
+                    WriteLog(LogLevel.Info, $"aria2c.exe {_FILE_EXIST_PATH} {outputFilePath}");
                 }
                 else
                 {

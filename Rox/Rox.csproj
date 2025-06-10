@@ -79,9 +79,6 @@
     <None Include="Resources\aria2c.exe" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\VC.exe" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Icon+Text.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>

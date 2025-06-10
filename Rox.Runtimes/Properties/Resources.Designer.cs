@@ -874,9 +874,9 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 NinjaMagisk Common Interface Libraries 的本地化字符串。
         /// </summary>
-        internal static string Protect {
+        internal static string Product {
             get {
-                return ResourceManager.GetString("Protect", resourceCulture);
+                return ResourceManager.GetString("Product", resourceCulture);
             }
         }
         
@@ -886,6 +886,16 @@ namespace Rox.Runtimes.Properties {
         internal static string Version {
             get {
                 return ResourceManager.GetString("Version", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Byte[] 类型的本地化资源。
+        /// </summary>
+        internal static byte[] WindowsToast {
+            get {
+                object obj = ResourceManager.GetObject("WindowsToast", resourceCulture);
+                return ((byte[])(obj));
             }
         }
     }

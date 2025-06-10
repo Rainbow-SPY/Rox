@@ -123,18 +123,21 @@
   <data name="Copyright" xml:space="preserve">
     <value>Copyright (C) Rainbow-SPY 2019-2025 , All rights reserved</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="Language" xml:space="preserve">
     <value>简体中文</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="Node_js" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Node.js.zip;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="Protect" xml:space="preserve">
+  <data name="Product" xml:space="preserve">
     <value>NinjaMagisk Common Interface Libraries</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>1.5.0</value>
+  </data>
+  <data name="WindowsToast" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WindowsToast.zip;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="_32" xml:space="preserve">
     <value>32位</value>

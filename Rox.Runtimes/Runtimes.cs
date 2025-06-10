@@ -385,96 +385,369 @@ namespace Rox
         /// </summary>
         public class LocalizedString
         {
+            /// <summary>
+            /// 语言
+            /// </summary>
             public static string Language = GetLocalizedString("Language");
+            /// <summary>
+            /// 版本
+            /// </summary>
             public static readonly string Version = GetLocalizedString("Version");
+            /// <summary>
+            /// 作者
+            /// </summary>
             public static readonly string Author = GetLocalizedString("Author");
+            /// <summary>
+            /// 版权所有
+            /// </summary>
             public static readonly string Copyright = GetLocalizedString("Copyright");
-            public static readonly string Protect = GetLocalizedString("Protect");
+            /// <summary>
+            /// 产品
+            /// </summary>
+            public static readonly string Product = GetLocalizedString("Product");
+            /// <summary>
+            /// 文件存在
+            /// </summary>
             public static readonly string _FILE_EXIST = GetLocalizedString("_FILE_EXIST");
+            /// <summary>
+            /// 写入文件
+            /// </summary>
             public static readonly string _FILE_WRITING = GetLocalizedString("_FILE_WRITING");
+            /// <summary>
+            /// 文件已保存到
+            /// </summary>
             public static readonly string _FILE_EXIST_PATH = GetLocalizedString("_FILE_EXIST_PATH");
+            /// <summary>
+            /// 资源文件未找到
+            /// </summary>
             public static readonly string _RES_FILE_NOT_FIND = GetLocalizedString("_RES_FILE_NOT_FIND");
+            /// <summary>
+            /// 未能写入日志文件
+            /// </summary>
             public static readonly string _CANNOT_WRITE_LOGFILE = GetLocalizedString("_CANNOT_WRITE_LOGFILE");
+            /// <summary>
+            /// 清空日志
+            /// </summary>
             public static readonly string _CLEAR_LOGFILE = GetLocalizedString("_CLEAR_LOGFILE");
+            /// <summary>
+            /// 未能清空日志文件
+            /// </summary>
             public static readonly string _CANNOT_CLEAR_LOGFILE = GetLocalizedString("_CANNOT_CLEAR_LOGFILE");
+            /// <summary>
+            /// 获取输出目录
+            /// </summary>
             public static readonly string _GET_OUTPUT_DIRECTORY = GetLocalizedString("_GET_OUTPUT_DIRECTORY");
+            /// <summary>
+            /// 获取输出名称
+            /// </summary>
             public static readonly string _GET_OUTPUT_NAME = GetLocalizedString("_GET_OUTPUT_NAME");
+            /// <summary>
+            /// 创建目录
+            /// </summary>
             public static readonly string _CREATE_DIRECTORY = GetLocalizedString("_CREATE_DIRECTORY");
+            /// <summary>
+            /// 获取目录
+            /// </summary>
             public static readonly string _GET_DIRECTORY = GetLocalizedString("_GET_DIRECTORY");
+            /// <summary>
+            /// 网络不可用
+            /// </summary>
             public static readonly string _NOTAVAILABLE_NETWORK = GetLocalizedString("_NOTAVAILABLE_NETWORK");
+            /// <summary>
+            /// 网络不可用, 是否执行步骤?
+            /// </summary>
             public static readonly string _NOTAVAILABLE_NETWORK_TIPS = GetLocalizedString("_NOTAVAILABLE_NETWORK_TIPS");
+            /// <summary>
+            /// 提示
+            /// </summary>
             public static readonly string _TIPS = GetLocalizedString("_TIPS");
+            /// <summary>
+            /// 错误
+            /// </summary>
             public static readonly string _ERROR = GetLocalizedString("_ERROR");
+            /// <summary>
+            /// 警告
+            /// </summary>
             public static readonly string _WARNING = GetLocalizedString("_WARNING");
+            /// <summary>
+            /// 获取 URL
+            /// </summary>
             public static readonly string _GET_URL = GetLocalizedString("_GET_URL");
+            /// <summary>
+            /// 获取临时目录
+            /// </summary>
             public static readonly string _GET_TEMP = GetLocalizedString("_GET_TEMP");
+            /// <summary>
+            /// 正则表达式获取文件
+            /// </summary>
             public static readonly string _REGEX_GET_FILE = GetLocalizedString("_REGEX_GET_FILE");
+            /// <summary>
+            /// 获取目录内的文件
+            /// </summary>
             public static readonly string _GET_FILES_IN_DIRECTORY = GetLocalizedString("_GET_FILES_IN_DIRECTORY");
+            /// <summary>
+            /// 获取系统位数
+            /// </summary>
             public static readonly string _GET_SYSTEM_BIT = GetLocalizedString("_GET_SYSTEM_BIT");
+            /// <summary>
+            /// 获取网页文件下载链接
+            /// </summary>
             public static readonly string _FINDING_HTML_DOWNLOAD_LINK = GetLocalizedString("_FINDING_HTML_DOWNLOAD_LINK");
+            /// <summary>
+            /// 获取 HTML 代码
+            /// </summary>
             public static readonly string _FIND_HTML_CODE = GetLocalizedString("_FIND_HTML_CODE");
+            /// <summary>
+            /// 安全软件正在运行
+            /// </summary>
             public static readonly string _SECURITY_RUNNING = GetLocalizedString("_SECURITY_RUNNING");
+            /// <summary>
+            /// 进程已启动
+            /// </summary>
             public static readonly string _PROCESS_STARTED = GetLocalizedString("_PROCESS_STARTED");
+            /// <summary>
+            /// 进程已退出
+            /// </summary>
             public static readonly string _PROCESS_EXITED = GetLocalizedString("_PROCESS_EXITED");
+            /// <summary>
+            /// 未能禁用休眠
+            /// </summary>
             public static readonly string _CANNOT_DISENABLE_HIBERNATE = GetLocalizedString("_CANNOT_DISENABLE_HIBERNATE");
+            /// <summary>
+            /// 已禁用休眠
+            /// </summary>
             public static readonly string _DISENABLE_HIBERNATE = GetLocalizedString("_DISENABLE_HIBERNATE");
+            /// <summary>
+            /// 未能启用卓越性能模式
+            /// </summary>
             public static readonly string _CANNOT_ENABLE_HIGHPOWERCFG = GetLocalizedString("_CANNOT_ENABLE_HIGHPOWERCFG");
+            /// <summary>
+            /// 启用卓越性能模式
+            /// </summary>
             public static readonly string _ENABLE_HIGHPOWERCFG = GetLocalizedString("_ENABLE_HIGHPOWERCFG");
+            /// <summary>
+            /// 未能禁用安全中心
+            /// </summary>
             public static readonly string _CANNOT_DISABLE_SECURITY_CENTER = GetLocalizedString("_CANNOT_DISABLE_SECURITY_CENTER");
+            /// <summary>
+            /// 未能启用安全中心
+            /// </summary>
             public static readonly string _CANNOT_ENABLE_SECURITY_CENTER = GetLocalizedString("_CANNOT_ENABLE_SECURITY_CENTER");
+            /// <summary>
+            /// 已禁用安全中心
+            /// </summary>
             public static readonly string _DISABLE_SECURITY_CENTER = GetLocalizedString("_DISABLE_SECURITY_CENTER");
+            /// <summary>
+            /// 已启用安全中心
+            /// </summary>
             public static readonly string _ENABLE_SECURITY_CENTER = GetLocalizedString("_ENABLE_SECURITY_CENTER");
+            /// <summary>
+            /// 写入注册表
+            /// </summary>
             public static readonly string _WRITE_REGISTRY = GetLocalizedString("_WRITE_REGISTRY");
+            /// <summary>
+            /// 未能禁用 Windows 更新
+            /// </summary>
             public static readonly string _CANNOT_DISABLE_WINDOWS_UPDATER = GetLocalizedString("_CANNOT_DISABLE_WINDOWS_UPDATER");
+            /// <summary>
+            /// 未能启用 Windows 更新
+            /// </summary>
             public static readonly string _CANNOT_ENABLE_WINDOWS_UPDATER = GetLocalizedString("_CANNOT_ENABLE_WINDOWS_UPDATER");
+            /// <summary>
+            /// 已禁用 Windows 更新
+            /// </summary>
             public static readonly string _DISABLE_WINDOWS_UPDATER = GetLocalizedString("_DISABLE_WINDOWS_UPDATER");
+            /// <summary>
+            /// 已启用 Windows 更新
+            /// </summary>
             public static readonly string _ENABLE_WINDOWS_UPDATER = GetLocalizedString("_ENABLE_WINDOWS_UPDATER");
+            /// <summary>
+            /// Windows 已激活
+            /// </summary>
             public static readonly string _ACTIVE_WINDOWS = GetLocalizedString("_ACTIVE_WINDOWS");
+            /// <summary>
+            /// 未能激活 Windows
+            /// </summary>
             public static readonly string _CANNOT_ACTIVE_WINDOWS = GetLocalizedString("_CANNOT_ACTIVE_WINDOWS");
+            /// <summary>
+            /// 成功写入注册表
+            /// </summary>
             public static readonly string _SUCESS_WRITE_REGISTRY = GetLocalizedString("_SUCESS_WRITE_REGISTRY");
+            /// <summary>
+            /// 未能写入注册表
+            /// </summary>
             public static readonly string _WRITE_REGISTRY_FAILED = GetLocalizedString("_WRITE_REGISTRY_FAILED");
+            /// <summary>
+            /// 获取 Aria2c 参数
+            /// </summary>
             public static readonly string _GET_ARIA2C_ARGS = GetLocalizedString("_GET_ARIA2C_ARGS");
+            /// <summary>
+            /// 获取 Aria2c 路径
+            /// </summary>
             public static readonly string _GET_ARIA2C_PATH = GetLocalizedString("_GET_ARIA2C_PATH");
+            /// <summary>
+            /// 获取 Aria2c 退出代码
+            /// </summary>
             public static readonly string _GET_ARIA2C_EXITCODE = GetLocalizedString("_GET_ARIA2C_EXITCODE");
+            /// <summary>
+            /// 已启用 Aria2c 日志输出
+            /// </summary>
             public static readonly string _ENABLE_ARIA2C_LOG_OUTPUT = GetLocalizedString("_ENABLE_ARIA2C_LOG_OUTPUT");
+            /// <summary>
+            /// 已禁用 Aria2c 日志输出
+            /// </summary>
             public static readonly string _DISABLE_ARIA2C_LOG_OUTPUT = GetLocalizedString("_DISABLE_ARIA2C_LOG_OUTPUT");
+            /// <summary>
+            /// 正在下载文件
+            /// </summary>
             public static readonly string _DOWNLOADING_FILE = GetLocalizedString("_DOWNLOADING_FILE");
+            /// <summary>
+            /// 下载完成
+            /// </summary>
             public static readonly string _DOWNLOADING_COMPLETE = GetLocalizedString("_DOWNLOADING_COMPLETE");
+            /// <summary>
+            /// 下载失败
+            /// </summary>
             public static readonly string _DOWNLOADING_FAILED = GetLocalizedString("_DOWNLOADING_FAILED");
+            /// <summary>
+            /// 获取 64 位下载链接
+            /// </summary>
             public static readonly string _GET_64_LINK = GetLocalizedString("_GET_64_LINK");
+            /// <summary>
+            /// 获取 32 位下载链接
+            /// </summary>
             public static readonly string _GET_32_LINK = GetLocalizedString("_GET_32_LINK");
+            /// <summary>
+            /// 获取 ResourceManager 名称
+            /// </summary>
             public static readonly string _GET_RM_NAME = GetLocalizedString("_GET_RM_NAME");
+            /// <summary>
+            /// 获取 ResourceManager 对象
+            /// </summary>
             public static readonly string _GET_RM_OBJ = GetLocalizedString("_GET_RM_OBJ");
+            /// <summary>
+            /// 创建新的 ResourceManager 实例
+            /// </summary>
             public static readonly string _NEW_RM = GetLocalizedString("_NEW_RM");
+            /// <summary>
+            /// 获取 HTML 页面文件
+            /// </summary>
             public static readonly string _GET_HTML = GetLocalizedString("_GET_HTML");
+            /// <summary>
+            /// 32 位
+            /// </summary>
             public static readonly string _32 = GetLocalizedString("_32");
+            /// <summary>
+            /// 64 位
+            /// </summary>
             public static readonly string _64 = GetLocalizedString("_64");
+            /// <summary>
+            /// 获取文件
+            /// </summary>
             public static readonly string _GET_FILE = GetLocalizedString("_GET_FILE");
+            /// <summary>
+            /// 等待下载
+            /// </summary>
             public static readonly string _WAIT_DOWNLOADING = GetLocalizedString("_WAIT_DOWNLOADING");
+            /// <summary>
+            /// 重试下载
+            /// </summary>
             public static readonly string _RETRY_DOWNLOAD = GetLocalizedString("_RETRY_DOWNLOAD");
+            /// <summary>
+            /// 错误代码
+            /// </summary>
             public static readonly string _ERROR_CODE = GetLocalizedString("_ERROR_CODE");
+            /// <summary>
+            /// 登录失败: 用户名未知或密码错误
+            /// </summary>
             public static readonly string _LOGIN_ERROR_USER_OR_PASSWORD = GetLocalizedString("_LOGIN_ERROR_USER_OR_PASSWORD");
+            /// <summary>
+            /// 请验证您的身份
+            /// </summary>
             public static readonly string _LOGIN_VERIFY = GetLocalizedString("_LOGIN_VERIFY");
+            /// <summary>
+            /// 用户取消了操作
+            /// </summary>
             public static readonly string _CANCEL_OP = GetLocalizedString("_CANCEL_OP");
+            /// <summary>
+            /// 未知错误
+            /// </summary>
             public static readonly string _UNKNOW_ERROR = GetLocalizedString("_UNKNOW_ERROR");
+            /// <summary>
+            /// 接受到响应
+            /// </summary>
             public static readonly string _GET_RESPONSE = GetLocalizedString("_GET_RESPONSE");
+            /// <summary>
+            /// 回答
+            /// </summary>
             public static readonly string _ANSWER = GetLocalizedString("_ANSWER");
+            /// <summary>
+            /// 发送请求
+            /// </summary>
             public static readonly string _SEND_REQUEST = GetLocalizedString("_SEND_REQUEST");
+            /// <summary>
+            /// 验证失败
+            /// </summary>
             public static readonly string _LOGIN_VERIFY_ERROR = GetLocalizedString("_LOGIN_VERIFY_ERROR");
+            /// <summary>
+            /// 请输入您的凭据
+            /// </summary>
             public static readonly string _ENTER_CREDENTIALS = GetLocalizedString("_ENTER_CREDENTIALS");
+            /// <summary>
+            /// 验证成功
+            /// </summary>
             public static readonly string _SUCCESS_VERIFY = GetLocalizedString("_SUCCESS_VERITY");
+            /// <summary>
+            /// 最新版本
+            /// </summary>
             public static readonly string _LATEST_VERSION = GetLocalizedString("_LATEST_VERSION");
+            /// <summary>
+            /// 不支持的平台
+            /// </summary>
             public static readonly string _UNSUPPORT_PLATFORM = GetLocalizedString("_UNSUPPORT_PLATFORM");
+            /// <summary>
+            /// 解析 JSON 失败
+            /// </summary>
             public static readonly string _JSON_PARSING_FAILED = GetLocalizedString("_JSON_PARSING_FAILED");
+            /// <summary>
+            /// 新版本可用
+            /// </summary>
             public static readonly string _NEW_VERSION_AVAILABLE = GetLocalizedString("_NEW_VERSION_AVAILABLE");
+            /// <summary>
+            /// 当前版本为最新版本
+            /// </summary>
             public static readonly string _NON_NEW_VER = GetLocalizedString("_NON_NEW_VER");
+            /// <summary>
+            /// 当前版本
+            /// </summary>
             public static readonly string _CURRENT_VER = GetLocalizedString("_CURRENT_VER");
+            /// <summary>
+            /// 添加新行
+            /// </summary>
             public static readonly string _ADD_NEW_LINE = GetLocalizedString("_ADD_NEW_LINE");
+            /// <summary>
+            /// 更新行值
+            /// </summary>
             public static readonly string _UPDATE_LINE = GetLocalizedString("_UPDATE_LINE");
+            /// <summary>
+            /// 读取文件
+            /// </summary>
             public static readonly string _READ_FILE = GetLocalizedString("_READ_FILE");
+            /// <summary>
+            /// 写入文件
+            /// </summary>
             public static readonly string _WRITE_FILE = GetLocalizedString("_WRITE_FILE");
+            /// <summary>
+            /// Windows 更新 已禁用
+            /// </summary>
             public static readonly string _WINDOWS_UPDATER_DISABLED = GetLocalizedString("_WINDOWS_UPDATER_DISABLED");
+            /// <summary>
+            /// Windows 更新 已启用
+            /// </summary>
             public static readonly string _WINDOWS_UPDATER_ENABLED = GetLocalizedString("_WINDOWS_UPDATER_ENABLED");
+            /// <summary>
+            /// 读取注册表失败
+            /// </summary>
             public static readonly string _READ_REGISTRY_FAILED = GetLocalizedString("_READ_REGISTRY_FAILED");
             /// <summary>
             /// 获取本地化字符串
@@ -492,7 +765,152 @@ namespace Rox
         /// </summary>
         public class WindowsToast
         {
+            /// <summary>
+            /// 提取 WindowsToast 模块,并解压缩到指定路径
+            /// </summary>
+            /// <param name="ExtractPath"></param>
+            public static void ExtractToastModule(string ExtractPath)
+            {
+                // 获取当前正在执行的类库的程序集
+                Assembly assembly = Assembly.GetExecutingAssembly();
 
+                // 假设WindowsToast是嵌入在"Namespace.Resources"命名空间中的
+
+                string resourceName = "Rox.Runtimes.Properties.Resources"; // 替换为你的资源路径
+                string path = Path.GetTempPath(); // 获取临时目录路径
+                // 创建 ResourceManager 实例
+                ResourceManager rm = new ResourceManager(resourceName, assembly);
+                WriteLog(LogLevel.Info, $"{_NEW_RM}");
+                // 从资源中获取WindowsToast文件的字节数据
+                byte[] ToastZipData = (byte[])rm.GetObject("WindowsToast");
+                WriteLog(LogLevel.Info, $"{_GET_RM_OBJ}: WindowsToast Module");
+                if (ToastZipData != null)
+                {
+                    // 检查并创建目录
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                        WriteLog(LogLevel.Info, $"{_CREATE_DIRECTORY}");
+                    }
+                    WriteLog(LogLevel.Info, $"{_GET_OUTPUT_DIRECTORY}: {path}");
+                    // 保存文件路径
+                    string outputFilePath = Path.Combine(path, "WindowsToast.zip");
+                    WriteLog(LogLevel.Info, $"{_GET_OUTPUT_NAME}: {path}");
+                    // 写入文件，确保保存为二进制数据
+                    WriteLog(LogLevel.Info, $"{_FILE_WRITING}");
+                    System.IO.File.WriteAllBytes(outputFilePath, ToastZipData);
+                    WriteLog(LogLevel.Info, $"WindowsToast {_FILE_EXIST_PATH} {outputFilePath}");
+                }
+                else
+                {
+                    WriteLog(LogLevel.Error, $"{_RES_FILE_NOT_FIND}");
+                }
+                UnzipToastModuleZip(ExtractPath, path);
+            }
+            /// <summary>
+            /// 解压缩 WindowsToast 模块的 ZIP 文件到指定路径
+            /// </summary>
+            /// <param name="path"></param>
+            /// <param name="OriginalFile"></param>
+            private static void UnzipToastModuleZip(string path, string OriginalFile)
+            {
+                if (path == string.Empty || OriginalFile == string.Empty)
+                {
+                    WriteLog(LogLevel.Error, $"{(path == string.Empty ? "指定的目标路径" : "原始压缩文件路径")} 为null或空值, 将使用默认路径\".\\bin\"");
+                    path = $"{Directory.GetCurrentDirectory()}\\bin";
+                    if (!Directory.Exists($"{Directory.GetCurrentDirectory()}\\bin"))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                }
+                //检查参数是否合法
+                if (string.IsNullOrWhiteSpace(path) || Path.GetFileName(path) == string.Empty)
+                {
+                    WriteLog(LogLevel.Error, $"{path}值为null或空字符串");
+                    MessageBox.Show($"{path}值为null或空字符串", "错误的路径! - Rox", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    return;
+                }
+                else
+                {
+                    WriteLog(LogLevel.Info, $"{_GET_DIRECTORY}: {OriginalFile}");
+                }
+                // 检查文件是否存在
+                string zipFilePath = Path.Combine(OriginalFile, "WindowsToast.zip");
+                if (File.Exists(zipFilePath))
+                {
+                    // 解压缩文件
+                    Process zip = new Process();
+                    zip.StartInfo.FileName = "powershell.exe";
+                    zip.StartInfo.Arguments = $"-Command \"Expand-Archive -Path '{zipFilePath}' -DestinationPath '{path}'\"";
+                    zip.StartInfo.UseShellExecute = false;
+                    zip.StartInfo.CreateNoWindow = true;
+                    zip.Start();
+                    zip.WaitForExit();
+                    if (zip.ExitCode == 0)
+                    {
+                        WriteLog(LogLevel.Info, $"WindowsToast {_DOWNLOADING_COMPLETE}");
+                        WriteLog(LogLevel.Info, $"{_FILE_EXIST_PATH} {path}");
+                    }
+                    else
+                    {
+                        WriteLog(LogLevel.Error, $"WindowsToast {_DOWNLOADING_FAILED}");
+                        WriteLog(LogLevel.Error, $"{zip.ExitCode}");
+                    }
+                }
+                else
+                {
+                    WriteLog(LogLevel.Error, $"WindowsToast {_RES_FILE_NOT_FIND}");
+                    MessageBox.Show($"{_RES_FILE_NOT_FIND}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    return;
+                }
+            }
+            /// <summary>
+            /// 发送 Toast 通知
+            /// </summary>
+            /// <param name="title"> Toast 通知标题</param>
+            /// <param name="content"> Toast 通知内容</param>
+            public static void PostToastNotification(string title, string content)
+            {
+                // 检查 ToastNotification 模块是否存在
+                if (!File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "bin", "WindowsToast.exe")) && !File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "WindowsToast.exe")))
+                {
+                    WriteLog(LogLevel.Error, "WindowsToast 模块未找到，请先提取模块。");
+                    return;
+                }
+                try
+                {
+                    // 加载 WindowsToast 模块
+                    string toastModulePath = null;
+                    if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "bin", "WindowsToast.exe")))
+                    {
+                         toastModulePath = Path.Combine(Directory.GetCurrentDirectory(), "bin", "WindowsToast.exe");
+                    }
+                    else
+                    {
+                         toastModulePath = Path.Combine(Directory.GetCurrentDirectory(), "WindowsToast.exe");
+                    }
+
+                    Process process = new Process();
+                    process.StartInfo.FileName = toastModulePath;
+                    process.StartInfo.Arguments = $"-title=\"{title}\" -message=\"{content}\""; // 使用双引号包裹参数以处理空格
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.CreateNoWindow = true; // 不显示命令行窗口
+                    process.Start();
+                    process.WaitForExit(); // 等待进程结束
+                    if (process.ExitCode == 0)
+                    {
+                        WriteLog(LogLevel.Info, "Toast 通知发送成功。");
+                    }
+                    else
+                    {
+                        WriteLog(LogLevel.Error, $"Toast 通知发送失败，退出代码: {process.ExitCode}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    WriteLog(LogLevel.Error, $"发送 Toast 通知失败: {ex.Message}");
+                }
+            }
         }
         /// <summary>
         /// Node.Js 类

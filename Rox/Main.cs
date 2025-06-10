@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using Rox.Runtimes;
+﻿using Rox.Runtimes;
 using Rox.Text;
 using System;
 using System.Diagnostics;
@@ -69,77 +68,25 @@ namespace Rox
     public class File
     {
         /// <summary>
-        /// 用于处理文件的加密和解密操作
-        /// </summary>
-        public class AESEncryption
-        {
-            /// <summary>
-            /// 用于使用指定的 256 位密钥和 128 位初始化向量对给定的明文字符串进行 AES 加密，并返回加密后的字符串。
-            /// </summary>
-            /// <param name="plainText"> 要加密的明文字符串</param>
-            /// <param name="Key"> 256位密钥</param>
-            /// <param name="IV"> 128位初始化向量</param>
-            /// <returns> 返回加密后的字符串</returns>
-            public static string Encrypt(string plainText, byte[] Key/*256-bit*/, byte[] IV/*128-bit*/)
-            {
-                using (Aes aesAlg = Aes.Create())
-                {
-                    aesAlg.Key = Key;
-                    aesAlg.IV = IV;
-
-                    ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
-
-                    using (var msEncrypt = new System.IO.MemoryStream())
-                    {
-                        using (var csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
-                        {
-                            using (var swEncrypt = new System.IO.StreamWriter(csEncrypt))
-                            {
-                                swEncrypt.Write(plainText);
-                            }
-                            return Convert.ToBase64String(msEncrypt.ToArray());
-                        }
-                    }
-                }
-            }// 加密方法
-            /// <summary>
-            /// 用于使用指定的 256 位密钥和 128  位初始化向量对给定的密文字符串进行 AES 解密，并返回解密后的字符串。
-            /// </summary>
-            /// <param name="cipherText"> 要解密的密文字符串</param>
-            /// <param name="Key"> 256位密钥</param>
-            /// <param name="IV"> 128位初始化向量</param>
-            /// <returns> 返回解密后的字符串</returns>
-            public static string Decrypt(string cipherText, byte[] Key/*256-bit*/, byte[] IV/*128-bit*/)
-            {
-                using (Aes aesAlg = Aes.Create())
-                {
-                    aesAlg.Key = Key;
-                    aesAlg.IV = IV;
-
-                    ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
-
-                    using (var msDecrypt = new System.IO.MemoryStream(Convert.FromBase64String(cipherText)))
-                    {
-                        using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
-                        {
-                            using (var srDecrypt = new System.IO.StreamReader(csDecrypt))
-                            {
-                                return srDecrypt.ReadToEnd();
-                            }
-                        }
-                    }
-                }
-            }// 解密方法
-        }
-        /// <summary>
         /// 定义了文件的厘性选项，包括只读、系统、隐藏和归档。
         /// </summary>
-
-        public enum AtOp
+        public enum Properties
         {
+            /// <summary>
+            /// 只读属性
+            /// </summary>
             Readonly,
+            /// <summary>
+            /// 系统属性
+            /// </summary>
             System,
+            /// <summary>
+            /// 隐藏属性
+            /// </summary>
             Hidden,
+            /// <summary>
+            /// 归档属性
+            /// </summary>
             Archive,
         }
         /// <summary>
@@ -148,65 +95,28 @@ namespace Rox
         /// <param name="path"> 文件路径</param>
         /// <param name="Key"> 属性选项</param>
         /// <param name="Switch"> 开关</param>
-        public void Attrib(string path, AtOp Key, bool Switch)
+        public void FileProperties(string path, Properties key, bool Enable)
         {
-            string key;
-            if (Switch)
-            {
-                key = "+";
-            }
+            string arg;
+            string Switch = Enable ? "+" : "-";
+            if (key == Properties.Readonly) arg = $"{Switch}r";
+            else if (key == Properties.System) arg = $"{Switch}s";
+            else if (key == Properties.Hidden) arg = $"{Switch}h";
+            else if (key == Properties.Archive) arg = $"{Switch}a";
             else
             {
-                key = "-";
+                MessageBox.Show("Unsupported property type.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                WriteLog(LogLevel.Error, "_UNSUPPORT_PROPERTY_TYPE");
+                return;
             }
-            if (Key == AtOp.Readonly)
-            {
-                string arg = $"{key}r";
-                Process process = new Process();
-                process.StartInfo.FileName = "attrib";
-                process.StartInfo.Arguments = $"{arg} {path}";
-                process.Start();
-                WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {process.Id}");
-                process.WaitForExit();
-                WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {process.ExitCode}");
-                process.Close();
-            }
-            if (Key == AtOp.System)
-            {
-                string arg = $"{key}s";
-                Process process = new Process();
-                process.StartInfo.FileName = "attrib";
-                process.StartInfo.Arguments = $"{arg} {path}";
-                process.Start();
-                WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {process.Id}");
-                process.WaitForExit();
-                WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {process.ExitCode}");
-                process.Close();
-            }
-            if (Key == AtOp.Hidden)
-            {
-                string arg = $"{key}h";
-                Process process = new Process();
-                process.StartInfo.FileName = "attrib";
-                process.StartInfo.Arguments = $"{arg} {path}";
-                process.Start();
-                WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {process.Id}");
-                process.WaitForExit();
-                WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {process.ExitCode}");
-                process.Close();
-            }
-            if (Key == AtOp.Archive)
-            {
-                string arg = $"{key}a";
-                Process process = new Process();
-                process.StartInfo.FileName = "attrib";
-                process.StartInfo.Arguments = $"{arg} {path}";
-                process.Start();
-                WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {process.Id}");
-                process.WaitForExit();
-                WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {process.ExitCode}");
-                process.Close();
-            }
+            Process process = new Process();
+            process.StartInfo.FileName = "attrib";
+            process.StartInfo.Arguments = $"{arg} {path}";
+            process.Start();
+            WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {process.Id}");
+            process.WaitForExit();
+            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {process.ExitCode}");
+            process.Close();
         }
         /// <summary>
         /// 用于检查文件的哈希值是否与预期的哈希值匹配
@@ -261,36 +171,91 @@ namespace Rox
         /// <summary>
         /// 用于加密和解密字符串的 JavaScript 代码,需要在Node.Js环境中运行
         /// </summary>
-        private readonly static string NodeJsEnDecryptJavaScript = @"const _0x4b1552=_0x29e3;(function(_0x4e59cd,_0x1dccd2){const _0x248214=_0x29e3,_0x31cb7=_0x4e59cd();while(!![]){try{const _0x271097=-parseInt(_0x248214(0x103))/0x1+-parseInt(_0x248214(0xf7))/0x2+parseInt(_0x248214(0xef))/0x3*(parseInt(_0x248214(0x101))/0x4)+-parseInt(_0x248214(0xe5))/0x5*(-parseInt(_0x248214(0x104))/0x6)+parseInt(_0x248214(0xf4))/0x7*(-parseInt(_0x248214(0xf6))/0x8)+-parseInt(_0x248214(0xf5))/0x9+parseInt(_0x248214(0xe9))/0xa*(parseInt(_0x248214(0xff))/0xb);if(_0x271097===_0x1dccd2)break;else _0x31cb7['push'](_0x31cb7['shift']());}catch(_0x46f0bd){_0x31cb7['push'](_0x31cb7['shift']());}}}(_0x15f9,0x2d30b));const args=process['argv'][_0x4b1552(0xea)](0x2);function parseArgs(_0x496144){const _0x25b410=_0x4b1552,_0x13484f={};for(const _0x21b904 of _0x496144){if(_0x21b904[_0x25b410(0xed)]('-')){const [_0x520905,_0xab69d6]=_0x21b904['replace'](/^-+/,'')[_0x25b410(0xe6)]('=');_0x13484f[_0x520905]=_0xab69d6||!![];}}return _0x13484f;}function _0x29e3(_0xd5a7b6,_0x405ab1){const _0x15f97b=_0x15f9();return _0x29e3=function(_0x29e389,_0x2396f3){_0x29e389=_0x29e389-0xe5;let _0x1e4e56=_0x15f97b[_0x29e389];return _0x1e4e56;},_0x29e3(_0xd5a7b6,_0x405ab1);}function encrypt(_0xac5b6){const _0x122d1b=_0x4b1552;let _0xa35ecc=Buffer[_0x122d1b(0xe8)](_0xac5b6)[_0x122d1b(0xf0)](_0x122d1b(0xfd)),_0x312aaa='';for(let _0x5c910f=0x0;_0x5c910f<_0xa35ecc['length'];_0x5c910f++){const _0x1e27e1=_0xa35ecc[_0x122d1b(0xfc)](_0x5c910f);_0x312aaa+=_0x1e27e1['toString'](0x2)['padStart'](0x8,'0');}let _0x4d9846='';for(let _0x502a9c=0x0;_0x502a9c<_0x312aaa['length'];_0x502a9c++){const _0x7fed9=parseInt(_0x312aaa[_0x502a9c],0xa);_0x4d9846+=_0x7fed9<0x9?(_0x7fed9+0x1)[_0x122d1b(0xf0)]():'0';}const _0x29ee89=Buffer[_0x122d1b(0xe8)](_0x4d9846)[_0x122d1b(0xf0)](_0x122d1b(0xfd));let _0x5b2289='';for(let _0x1e4c82=0x0;_0x1e4c82<_0x29ee89[_0x122d1b(0xe7)];_0x1e4c82++){const _0x2a7211=_0x29ee89[_0x122d1b(0xfc)](_0x1e4c82)['toString'](0x10)[_0x122d1b(0xeb)](0x2,'0');_0x5b2289+=_0x2a7211;}return _0x5b2289;}function decrypt(_0x39a8da){const _0x2f6aa0=_0x4b1552;let _0x2c3cdc='';for(let _0x118530=0x0;_0x118530<_0x39a8da[_0x2f6aa0(0xe7)];_0x118530+=0x2){const _0x4de302=_0x39a8da['substr'](_0x118530,0x2);_0x2c3cdc+=String[_0x2f6aa0(0xee)](parseInt(_0x4de302,0x10));}let _0x5d6345=Buffer['from'](_0x2c3cdc,_0x2f6aa0(0xfd))[_0x2f6aa0(0xf0)](_0x2f6aa0(0xf8)),_0x329f3a='';for(let _0x38b4ba=0x0;_0x38b4ba<_0x5d6345['length'];_0x38b4ba++){const _0x5d24c2=parseInt(_0x5d6345[_0x38b4ba],0xa);_0x329f3a+=_0x5d24c2>0x0?(_0x5d24c2-0x1)['toString']():'9';}let _0x569555='';for(let _0x36ce13=0x0;_0x36ce13<_0x329f3a[_0x2f6aa0(0xe7)];_0x36ce13+=0x8){const _0x8f35a6=_0x329f3a[_0x2f6aa0(0xfa)](_0x36ce13,0x8);_0x569555+=String['fromCharCode'](parseInt(_0x8f35a6,0x2));}const _0x26d914=Buffer[_0x2f6aa0(0xe8)](_0x569555,_0x2f6aa0(0xfd))[_0x2f6aa0(0xf0)](_0x2f6aa0(0x100));return _0x26d914;}function main(){const _0x35c4d5=_0x4b1552,_0x175b13=parseArgs(args);(!_0x175b13[_0x35c4d5(0xec)]||!_0x175b13[_0x35c4d5(0xf3)]&&!_0x175b13['Decrypt'])&&(console[_0x35c4d5(0xfe)](_0x35c4d5(0xf2)),console[_0x35c4d5(0xfe)](_0x35c4d5(0x102)),console[_0x35c4d5(0xfe)]('Example\x20for\x20decryption:\x20node\x201.js\x20-string=\x2248656c6c6f\x22\x20-Decrypt'),process[_0x35c4d5(0xf1)](0x1));const _0x3802c4=_0x175b13[_0x35c4d5(0xec)];let _0xe8125f;if(_0x175b13['Encrypt'])return _0xe8125f=encrypt(_0x3802c4),console['log'](_0x35c4d5(0xfb),_0xe8125f),_0xe8125f;else{if(_0x175b13[_0x35c4d5(0xf9)])return _0xe8125f=decrypt(_0x3802c4),console[_0x35c4d5(0xfe)]('Decrypted\x20result:',_0xe8125f),_0xe8125f;}}function _0x15f9(){const _0x4e4352=['Example\x20for\x20encryption:\x20node\x201.js\x20-string=\x22sk-7656s6c8193hc786ca87sd901h\x22\x20-Encrypt','6777GHufMg','16788MMQLrU','390YMzmye','split','length','from','10060uozIcO','slice','padStart','string','startsWith','fromCharCode','6oYQWAX','toString','exit','Usage:\x20node\x201.js\x20-string=\x22your_string\x22\x20[-Encrypt]\x20[-Decrypt]','Encrypt','16996UTJabQ','1973916VjHyQP','936vmmYDP','360436wXGUNP','ascii','Decrypt','substr','Encrypted\x20result:','charCodeAt','base64','log','4411IzgmHn','utf8','507688uMJLZZ'];_0x15f9=function(){return _0x4e4352;};return _0x15f9();}main();";
-
-        public static void EncryptString(string str)
+        private readonly static string NodeJsEnDecryptJavaScript = @"const _0x33e61e=_0x4ea0;(function(_0x305f38,_0x2572de){const _0x3f2138=_0x4ea0,_0x16a93c=_0x305f38();while(!![]){try{const _0x56c7bb=-parseInt(_0x3f2138(0xa6))/0x1+parseInt(_0x3f2138(0x90))/0x2+parseInt(_0x3f2138(0x9b))/0x3+-parseInt(_0x3f2138(0x98))/0x4+-parseInt(_0x3f2138(0x9a))/0x5*(parseInt(_0x3f2138(0xa7))/0x6)+parseInt(_0x3f2138(0x8f))/0x7+parseInt(_0x3f2138(0x9f))/0x8;if(_0x56c7bb===_0x2572de)break;else _0x16a93c['push'](_0x16a93c['shift']());}catch(_0x8fbf77){_0x16a93c['push'](_0x16a93c['shift']());}}}(_0x2a05,0x5f820));const args=process[_0x33e61e(0x97)]['slice'](0x2);function _0x4ea0(_0x13d757,_0x25e003){const _0x2a0544=_0x2a05();return _0x4ea0=function(_0x4ea020,_0x38eb89){_0x4ea020=_0x4ea020-0x8f;let _0x3bf398=_0x2a0544[_0x4ea020];return _0x3bf398;},_0x4ea0(_0x13d757,_0x25e003);}function _0x2a05(){const _0x25a754=['4185580eJbWBj','177308ONURtb','substr','from','ascii','log','split','Decrypt','argv','986532FRqflK','length','2112710JTrgNg','1806636JAxYXN','Example\x20for\x20decryption:\x20node\x201.js\x20-string=\x2248656c6c6f\x22\x20-Decrypt','fromCharCode','Usage:\x20node\x201.js\x20-string=\x22your_string\x22\x20[-Encrypt]\x20[-Decrypt]','3016048ILwvAR','toString','Example\x20for\x20encryption:\x20node\x201.js\x20-string=\x22sk-7656s6c8193hc786ca87sd901h\x22\x20-Encrypt','string','exit','base64','charCodeAt','605437DXPkDm','6xcWLxq','padStart','Encrypt'];_0x2a05=function(){return _0x25a754;};return _0x2a05();}function parseArgs(_0x582a0d){const _0x20c106=_0x33e61e,_0x376544={};for(const _0x4d809c of _0x582a0d){if(_0x4d809c['startsWith']('-')){const [_0x199d7a,_0x2f1af8]=_0x4d809c['replace'](/^-+/,'')[_0x20c106(0x95)]('=');_0x376544[_0x199d7a]=_0x2f1af8||!![];}}return _0x376544;}function encrypt(_0x101668){const _0x2371e9=_0x33e61e;let _0x11204e=Buffer[_0x2371e9(0x92)](_0x101668)[_0x2371e9(0xa0)]('base64'),_0x11ab14='';for(let _0x3b01c6=0x0;_0x3b01c6<_0x11204e['length'];_0x3b01c6++){const _0x1ef67e=_0x11204e[_0x2371e9(0xa5)](_0x3b01c6);_0x11ab14+=_0x1ef67e[_0x2371e9(0xa0)](0x2)['padStart'](0x8,'0');}let _0x89d7ad='';for(let _0x44fecd=0x0;_0x44fecd<_0x11ab14['length'];_0x44fecd++){const _0x50c7ca=parseInt(_0x11ab14[_0x44fecd],0xa);_0x89d7ad+=_0x50c7ca<0x9?(_0x50c7ca+0x1)[_0x2371e9(0xa0)]():'0';}const _0x58a5e2=Buffer[_0x2371e9(0x92)](_0x89d7ad)[_0x2371e9(0xa0)](_0x2371e9(0xa4));let _0x8729a9='';for(let _0x5983ef=0x0;_0x5983ef<_0x58a5e2['length'];_0x5983ef++){const _0x313db8=_0x58a5e2['charCodeAt'](_0x5983ef)['toString'](0x10)[_0x2371e9(0xa8)](0x2,'0');_0x8729a9+=_0x313db8;}return _0x8729a9;}function decrypt(_0x645565){const _0x506809=_0x33e61e;let _0x1825c6='';for(let _0x5f5853=0x0;_0x5f5853<_0x645565['length'];_0x5f5853+=0x2){const _0x30e23d=_0x645565[_0x506809(0x91)](_0x5f5853,0x2);_0x1825c6+=String['fromCharCode'](parseInt(_0x30e23d,0x10));}let _0x505f98=Buffer[_0x506809(0x92)](_0x1825c6,'base64')[_0x506809(0xa0)](_0x506809(0x93)),_0x2a2117='';for(let _0x18b051=0x0;_0x18b051<_0x505f98[_0x506809(0x99)];_0x18b051++){const _0x3ffdd4=parseInt(_0x505f98[_0x18b051],0xa);_0x2a2117+=_0x3ffdd4>0x0?(_0x3ffdd4-0x1)['toString']():'9';}let _0x210be8='';for(let _0xce1031=0x0;_0xce1031<_0x2a2117['length'];_0xce1031+=0x8){const _0x287b3e=_0x2a2117[_0x506809(0x91)](_0xce1031,0x8);_0x210be8+=String[_0x506809(0x9d)](parseInt(_0x287b3e,0x2));}const _0x679c9b=Buffer[_0x506809(0x92)](_0x210be8,_0x506809(0xa4))[_0x506809(0xa0)]('utf8');return _0x679c9b;}function main(){const _0x568605=_0x33e61e,_0x3cdd9b=parseArgs(args);(!_0x3cdd9b[_0x568605(0xa2)]||!_0x3cdd9b[_0x568605(0xa9)]&&!_0x3cdd9b[_0x568605(0x96)])&&(console[_0x568605(0x94)](_0x568605(0x9e)),console['log'](_0x568605(0xa1)),console[_0x568605(0x94)](_0x568605(0x9c)),process[_0x568605(0xa3)](0x1));const _0x592553=_0x3cdd9b[_0x568605(0xa2)];let _0x3f82e9;if(_0x3cdd9b[_0x568605(0xa9)])return _0x3f82e9=encrypt(_0x592553),console[_0x568605(0x94)](_0x3f82e9),_0x3f82e9;else{if(_0x3cdd9b[_0x568605(0x96)])return _0x3f82e9=decrypt(_0x592553),console['log'](_0x3f82e9),_0x3f82e9;}}main();";
+        /// <summary>
+        /// 用于加密字符串,使用 Node.js 环境中的 JavaScript 代码进行加密操作
+        /// </summary>
+        /// <param name="str"> 要加密的字符串</param>
+        /// <returns> 返回加密后的字符串</returns>
+        public static string EncryptString(string str)
         {
-            string jsPath = $"{Directory.GetCurrentDirectory()}\\temp\\encrypt.js";
-            if (!System.IO.File.Exists(jsPath))
+            try
             {
-                WriteJavaScriptOnTemp();
+                Process process = new Process();
+                process.StartInfo.FileName = NodeJs.CheckNodeJs(Directory.GetCurrentDirectory() + "\\bin");
+                process.StartInfo.Arguments = $"{WriteJavaScriptOnTemp()} -string={str} -Encrypt";
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.Start();
+                string output = process.StandardOutput.ReadToEnd();
+                process.WaitForExit();
+                process.Close();
+                // 获取输出的字符串,返回加密后的字符串
+                if (output == "\n")
+                {
+                    WriteLog(LogLevel.Error, $"{_ERROR}: Encryption failed");
+                    MessageBox.Show($"{_ERROR}: Encryption failed", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    return null;
+                }
+                return output;
             }
-            Process process = new Process();
-            process.StartInfo.FileName = "node";
-            process.StartInfo.Arguments = $"{jsPath} -string={str} -Encrypt";
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.Start();
-            process.WaitForExit();
-            process.Close();
+            catch (Exception ex)
+            {
+                WriteLog(LogLevel.Error, $"{_ERROR}: {ex.Message}");
+                MessageBox.Show($"{_ERROR}: {ex.Message}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                return null;
+            }
+        }
+        /// <summary>
+        /// 用于解密字符串,使用 Node.js 环境中的 JavaScript 代码进行解密操作
+        /// </summary>
+        /// <param name="str"> 要解密的字符串</param>
+        /// <returns> 返回解密后的字符串</returns>
+        public static string DecryptString(string str)
+        {
+            try
+            {
+                Process process = new Process();
+                process.StartInfo.FileName = NodeJs.CheckNodeJs(Directory.GetCurrentDirectory() + "\\bin");
+                process.StartInfo.Arguments = $"{WriteJavaScriptOnTemp()} -string={str} -Decrypt";
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.Start();
+                string output = process.StandardOutput.ReadToEnd();
+                process.WaitForExit();
+                process.Close();
+                // 获取输出的字符串,返回解密后的字符串
+                if (output == "\n")
+                {
+                    WriteLog(LogLevel.Error, $"{_ERROR}: Decryption failed");
+                    MessageBox.Show($"{_ERROR}: Decryption failed", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                }
+                return output;
+            }
+            catch (Exception ex)
+            {
+                WriteLog(LogLevel.Error, $"{_ERROR}: {ex.Message}");
+                MessageBox.Show($"{_ERROR}: {ex.Message}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                return null;
+            }
         }
         //初始化操作
-        private static void WriteJavaScriptOnTemp()
+        /// <summary>
+        /// 用于将 JavaScript 代码写入临时文件,以便在 Node.js 环境中执行加密和解密操作
+        /// </summary>
+        /// <returns> 返回Js脚本文件的路径</returns>
+        private static string WriteJavaScriptOnTemp()
         {
-            string jsPath = $"{Directory.GetCurrentDirectory()}\\temp\\encrypt.js";
+            string jsPath = $"{Path.GetTempPath()}encrypt.js";
             if (!System.IO.File.Exists(jsPath))
             {
                 System.IO.File.Create(jsPath).Close();
             }
-            using (StreamWriter sw = new StreamWriter(jsPath, true, Encoding.Default))
+            using (StreamWriter sw = new StreamWriter(jsPath, false, Encoding.Default))
             {
                 sw.Write(NodeJsEnDecryptJavaScript);
                 sw.Close();
+                return jsPath;
             }
         }
 
