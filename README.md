@@ -25,7 +25,8 @@ Rox 是一个使用 C# .NET Framework 4.7.2 编写，并使用 Microsoft Visual 
 12. [API查询](#12-api查询)
 13. [音乐解密](#13-音乐解密)
 14. [Node.js](#14-nodejs)
-
+15. [发送Windows通知](#15-发送Windows通知)
+> 此方法要求系统版本为 Windows 10 以上
 
 ## 1. 全局引用方法
 
@@ -322,6 +323,17 @@ ___
     2 > Library.pdb,FDFA7596701DCC2E96D462DBC35E7823
 ```           
 ## 11. 文本类处理
+### 加密 / 解密字符串
+```csharp
+Rox.Text.EncryptString(string str); //加密
+Rox.Text.DecryptString(string str); //解密
+```
+* **`str`:** 要加密或解密的字符串
+* **返回类型:** `string`
+* **返回值:** 加密或解密后的字符串
+  
+在加密或解密之前, Rox会先解包 Node.js, 使用Node.js执行js脚本进行加解密
+
 ### 读取 / 写入配置文件
 ```csharp
 Rox.Text.Config.ReadConfig(string iniPath,string HeadText); //读取配置文件
@@ -548,3 +560,16 @@ Rox.Runtimes.NodeJs.CheckNodeJs(string ExtraedFolder); //检查文件夹内有�
 * **`ExtractedFolder`:** 指定提取过的文件夹
 * **返回类型:** `string`
 * **返回值:** 参数为`null`或路径不合法返回`Error`并弹出`MessageBox`, 如果文件夹已经存在`node.exe`或提取完成返回**Node.js文件路径**, 资源未找到返回`_RES_FILE_NOT_FIND`本地化字符串, 提取失败返回PowerShell进程退出码.
+
+## 15. 发送Windows通知
+
+> 此功能要求系统版本为Windows 10以上
+
+```csharp
+Rox.Runtimes.WindowsToast.PostToastNotification(string title, string content);
+```
+* **`title`:** 发送通知的标题
+* **`content`:** 发送通知的内容
+> 暂不支持图片, 后续会加入
+
+发送通知前会在本地的 `bin` 文件夹下生成 `WindowsToast.exe` 用来发送通知
