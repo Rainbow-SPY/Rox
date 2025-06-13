@@ -31,6 +31,6 @@ using System.Runtime.InteropServices;
 //      修订号
 //
 //[assembly: AssemblyVersion("1.5.0.0")]
-[assembly: AssemblyVersion("2.0.*")]
+[assembly: AssemblyVersion("1.6.*")]
 //[assembly: AssemblyFileVersion("1.5.0.0")]
 [assembly: NeutralResourcesLanguage("zh-CN")]
