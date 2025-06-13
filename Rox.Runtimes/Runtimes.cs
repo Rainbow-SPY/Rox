@@ -877,7 +877,9 @@ namespace Rox
                 // 检查 ToastNotification 模块是否存在
                 if (!File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "bin", "WindowsToast.exe")) && !File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "WindowsToast.exe")))
                 {
-                    WriteLog(LogLevel.Error, "WindowsToast 模块未找到，请先提取模块。");
+                    WriteLog(LogLevel.Error, "WindowsToast 模块未找到，正在提取模块。");
+                    ExtractToastModule(Directory.GetCurrentDirectory() + "\\bin");
+                    PostToastNotification(title, content);
                     return;
                 }
                 try
