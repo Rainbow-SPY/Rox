@@ -49,13 +49,21 @@ namespace Rox
                 return false;
             }
         }
+        /// <summary>
+        /// 开启或关闭 Windows 安全中心 , 此方法重定向到 <see cref="Windows.WindowsSecurityCenter.Enable()"/>  和 <see cref="Windows.WindowsSecurityCenter.Disable()"/>
+        /// </summary>
         public class WindowsSecurity
         {
+            /// <summary>
+            /// 开启 Windows 安全中心 , 此方法重定向到 <see cref="Windows.WindowsSecurityCenter.Enable()"/>
+            /// </summary>
             public static void Enable()
             {
                 Windows.WindowsSecurityCenter.Enable();
             }
-
+            /// <summary>
+            /// 关闭 Windows 安全中心 , 此方法重定向到 <see cref="Windows.WindowsSecurityCenter.Disable()"/>
+            /// </summary>
             public static void Disable()
             {
                 Windows.WindowsSecurityCenter.Disable();
@@ -93,8 +101,8 @@ namespace Rox
         /// 用于设置文件的属性
         /// </summary>
         /// <param name="path"> 文件路径</param>
-        /// <param name="Key"> 属性选项</param>
-        /// <param name="Switch"> 开关</param>
+        /// <param name="key"> 属性选项</param>
+        /// <param name="Enable"> 开关</param>
         public void FileProperties(string path, Properties key, bool Enable)
         {
             string arg;

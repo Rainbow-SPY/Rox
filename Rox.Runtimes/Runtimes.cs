@@ -21,6 +21,9 @@ namespace Rox
         {
             private static readonly string _CLEAR_LOGFILE = "清空日志文件成功";
             private static readonly string _CANNOT_CLEAR_LOGFILE = "清空日志文件失败";
+            /// <summary>
+            /// 日志输出到 UI 的委托,用于在 UI 上显示日志
+            /// </summary>
             public static Action<LogLevel, string> LogToUi { get; set; }
             /// <summary>
             /// 日志等级,分为Info,Error,Warning
