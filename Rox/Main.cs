@@ -187,6 +187,12 @@ namespace Rox
         /// <returns> 返回加密后的字符串</returns>
         public static string EncryptString(string str)
         {
+            if (string.IsNullOrEmpty(str))
+            {
+                WriteLog(LogLevel.Error, $"{_ERROR}: The string to encrypt cannot be null or empty");
+                MessageBox.Show($"{_ERROR}: The string to encrypt cannot be null or empty", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                return null;
+            }
             try
             {
                 Process process = new Process();
