@@ -1,4 +1,4 @@
-![Icon](Rox/Icon+Text.png)
+![Icon](Rox/logo+Text.png)
 ___
 Rox 是一个使用 C# .NET Framework 4.7.2 编写，并使用 Microsoft Visual Studio 2022 编译的跨平台动态链接库。它提供了多种功能模块，包括日志记录、文件操作、网络检查、Windows 系统配置、AI 集成,**音频解密**等。
 
