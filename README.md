@@ -126,7 +126,7 @@ Rox.Security.AntiHuoRongSecurity();
 ### 网络可用性检查
 
 ```csharp
-Rox.Network.IsNetworkAvailable();
+Rox.Runtimes.Network_I.IsNetworkAvailable();
 ```
 
 - **返回值:** `true` 表示网络可用，`false` 表示网络不可用。
@@ -182,7 +182,7 @@ ___
 ### 写入注册表
 
 ```csharp
-Rox.Registry.Write(string keyPath,string valueName,object valueData,RegistryValueKind valueType);
+Rox.Runtimes.Registry_1.Write(string keyPath,string valueName,object valueData,RegistryValueKind valueType);
 ```
 
 * **`keyPath`: 设定注册表路径**
@@ -220,34 +220,20 @@ Rox.AI.DeepSeek.Chat(string text,string api); //DeepSeek API引用
 
 ## 8. 文件
 
-### AES加密/解密
-
-> [!NOTE]
-> 请妥善保管好您的`IV`算法初始化向量和您的`Key`密钥.
-
-```csharp
-Rox.File.AESEncryption.Decrypt(string cipherText, byte[] Key /*256-bit*/ , byte[] IV /*128-bit*/ );//解密
-Rox.File.AESEncryption.Encrypt(string cipherText, byte[] Key /*256-bit*/ , byte[] IV /*128-bit*/ );//加密
-```
-* **`cipherText`: 要加密/解密的文本**
-* **`key`: AES加密/解密密钥(256位)**
-* **`IV`: AES加密/解密初始化向量(128位)**
-<br>
-
 ### 文件属性修改
 
 ```csharp
-Rox.File.Attrib(string path, AtOp Key, bool Switch);
+Rox.Runtimes.File_I.FileProperties(string path, Properties key, bool Enable);
 ```
 
 * **`path`: 文件的路径**
-* **`AtOp`(Attrib Option) 可用枚举:** `System`(设置文件为系统文件),`Hidden`(设置文件为受保护的隐藏文件),`Readonly`(设置文件为只读),`Archive`(设置文件为可存档文件).
-* **`Key`: 文件属性**
-* **`Switch`: 启用或取消属性:** 设置为`true`时,给出的命令为`+r`(示例);设置为`false`时,给出的命令为`-r`(示例).
+* **`Properties` 可用枚举:** `System`(设置文件为系统文件),`Hidden`(设置文件为受保护的隐藏文件),`Readonly`(设置文件为只读),`Archive`(设置文件为可存档文件).
+* **`key`: 文件属性**
+* **`Enable`: 启用或取消属性:** 设置为`true`时,给出的命令为`+r`(示例);设置为`false`时,给出的命令为`-r`(示例).
 
 ### MD5哈希值验证
 ```csharp
-Rox.File.CheckFileHash(string filePath, string expectedMD5);
+Rox.Runtimes.File_I.CheckFileHash(string filePath, string expectedMD5);
 ```
 
 * **`filePath`: 文件路径**
@@ -257,7 +243,7 @@ Rox.File.CheckFileHash(string filePath, string expectedMD5);
 
 ### 获取文件MD5哈希值
 ```csharp
-Rox.File.CalculateMD5(string filePath);
+Rox.Runtimes.File_I.CalculateMD5(string filePath);
 ```
 
 * **`filePath`: 文件路径**
@@ -269,9 +255,14 @@ Rox.File.CalculateMD5(string filePath);
 ```csharp
 Rox.Windows.Authentication();
 ```
+* **返回类型: `bool`**
 * **返回值:** `true` 表示验证成功，`false` 表示取消操作。
 
 ## 10. 检查更新模块
+> [!NOTE]
+> **此类因长时间未进行维护而暂停使用**
+
+
 ### 检查更新
 ```csharp
 await Rox.Update.CheckUpdate(string CheckUpdateUrl,Platform platform);
