@@ -153,6 +153,11 @@ namespace Rox
                 }
             }
         }
+        /// <summary>
+        /// 解析酷狗音乐.kgm加密音乐 拓展库
+        /// 
+        /// 此工具需要依赖于 <see cref="Rox"/> 主程序 和 <see cref="Rox"/> 运行库
+        /// </summary>
         public class PaserKGM
         {
             /// <summary>
@@ -166,6 +171,9 @@ namespace Rox
                 ParseAll(path, filepath);
                 return;
             }
+            /// <summary>
+            /// 读取单个加密文件
+            /// </summary>
             public static void ChooseSigleKGMFile()
             {
                 OpenFileDialog openFileDialog = new OpenFileDialog

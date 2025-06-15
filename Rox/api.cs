@@ -439,12 +439,18 @@ namespace Rox
                 /// <summary>
                 /// Steam个人主页
                 /// </summary>
-                private string profileurl { get; set; }
+                public string profileurl { get; set; }
+                /// <summary>
+                /// Steam个人主页,替换转义字符
+                /// </summary>
                 public string profileurl_1 => profileurl_1.Replace("\\/", "/");
                 /// <summary>
                 /// Steam头像
                 /// </summary>
-                private string avatar { get; set; }
+                public string avatar { get; set; }
+                /// <summary>
+                /// Steam头像,替换转义字符
+                /// </summary>
                 public string avatar_1 => avatar_1.Replace("\\/", "/");
                 /// <summary>
                 /// Steam账号创建日期
@@ -469,8 +475,14 @@ namespace Rox
             }
             #endregion
         }
+        /// <summary>
+        /// 天气查询
+        /// </summary>
         public class Weather
         {
+            /// <summary>
+            /// 存储上次获取的天气数据
+            /// </summary>
             private static WeatherType _lastWeatherData;
             /// <summary>
             /// 获取天气信息
@@ -591,6 +603,9 @@ namespace Rox
                 }
                 return _lastWeatherData?.humidity_1;
             }
+            /// <summary>
+            /// 获取指定城市的数据更新时间信息属性
+            /// </summary>
             public class WeatherType
             {
                 /// <summary>
@@ -606,28 +621,40 @@ namespace Rox
                 /// </summary>
                 public string city { get; set; }
                 /// <summary>
-                /// 温度
+                /// 温度,带单位
                 /// </summary>
                 public string temperature_1 => temperature + "℃"; // 20℃ 30℃
+                /// <summary>
+                /// 温度
+                /// </summary>
                 public string temperature { get; set; }
                 /// <summary>
                 /// 天气状况
                 /// </summary>
                 public string weather { get; set; }
                 /// <summary>
-                /// 风向
+                /// 风向,带单位
                 /// </summary>
                 public string wind_direction_1 => wind_direction + "风"; // 东南风 西北风
+                /// <summary>
+                /// 风向
+                /// </summary>
                 public string wind_direction { get; set; }
+                /// <summary>
+                /// 风力等级,带单位
+                /// </summary>
+                public string wind_power_1 => wind_power + "级"; // 1级 2级
                 /// <summary>
                 /// 风力等级
                 /// </summary>
-                public string wind_power_1 => wind_power + "级"; // 1级 2级
                 public string wind_power { get; set; }
+                /// <summary>
+                /// 湿度,带单位
+                /// </summary>
+                public string humidity_1 => humidity + "%";
                 /// <summary>
                 /// 湿度
                 /// </summary>
-                public string humidity_1 => humidity + "%";
                 public string humidity { get; set; }
                 /// <summary>
                 /// 数据更新时间	

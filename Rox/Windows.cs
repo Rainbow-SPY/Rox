@@ -1,5 +1,5 @@
 ﻿using Microsoft.Win32;
-using Registry = Rox.Runtimes.Registry;
+using Registry = Rox.Runtimes.Registry_I;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -530,10 +530,16 @@ namespace Rox
             /// </summary>
             public class ExplorerLaunchTo
             {
+                /// <summary>
+                /// 设置资源管理器默认打开位置为此电脑
+                /// </summary>
                 public static void ThisPC()
                 {
                     Switch(1);
                 }
+                /// <summary>
+                /// 设置资源管理器默认打开位置为快速访问
+                /// </summary>
                 public static void QuickAcess()
                 {
                     Switch(2);

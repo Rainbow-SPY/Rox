@@ -288,7 +288,7 @@ namespace Rox
         {
             string filePath = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c.exe";
             CheckFile(filePath);
-            if (!Rox.Runtimes.Network.IsNetworkAvailable())
+            if (!Rox.Runtimes.Network_I.IsNetworkAvailable())
             {
                 DialogResult dialogResult = MessageBox.Show($"{_NOTAVAILABLE_NETWORK_TIPS}", $"{_TIPS}! {_NOTAVAILABLE_NETWORK}", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 if (dialogResult == DialogResult.No)
@@ -406,18 +406,13 @@ namespace Rox
             string folderPath = $"{temp}";
             string filePath = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c.exe";
             CheckFile(filePath);
-            if (!Rox.Runtimes.Network.IsNetworkAvailable())
+            if (!Rox.Runtimes.Network_I.IsNetworkAvailable())
             {
                 DialogResult dialogResult = MessageBox.Show($"{_NOTAVAILABLE_NETWORK_TIPS}", $"{_TIPS}", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 if (dialogResult == DialogResult.No)
                 {
                     return;
                 }
-                else
-                {
-
-                }
-
             }
             if (app == App.EasiNote5)
             {
