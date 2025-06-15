@@ -50,19 +50,19 @@ namespace Rox
             }
         }
         /// <summary>
-        /// 开启或关闭 Windows 安全中心 , 此方法重定向到 <see cref="Windows.WindowsSecurityCenter.Enable()"/>  和 <see cref="Windows.WindowsSecurityCenter.Disable()"/>
+        /// 开启或关闭 Windows 安全中心 , 此方法重定向到 <see cref="Rox.Windows.WindowsSecurityCenter.Enable()"/>  和 <see cref="Rox.Windows.WindowsSecurityCenter.Disable()"/>
         /// </summary>
         public class WindowsSecurity
         {
             /// <summary>
-            /// 开启 Windows 安全中心 , 此方法重定向到 <see cref="Windows.WindowsSecurityCenter.Enable()"/>
+            /// 开启 Windows 安全中心 , 此方法重定向到 <see cref="Rox.Windows.WindowsSecurityCenter.Enable()"/>
             /// </summary>
             public static void Enable()
             {
                 Windows.WindowsSecurityCenter.Enable();
             }
             /// <summary>
-            /// 关闭 Windows 安全中心 , 此方法重定向到 <see cref="Windows.WindowsSecurityCenter.Disable()"/>
+            /// 关闭 Windows 安全中心 , 此方法重定向到 <see cref="Rox.Windows.WindowsSecurityCenter.Disable()"/>
             /// </summary>
             public static void Disable()
             {
