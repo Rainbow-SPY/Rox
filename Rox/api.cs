@@ -396,7 +396,7 @@ namespace Rox
                 catch (Exception ex)
                 {
                     // 捕获并输出异常
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"An error occurred: {ex.Message}");
+                    LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"获取天气信息失败，请检查网络连接或API服务状态: {ex.Message}");
                     return null;
                 }
             }
@@ -539,10 +539,10 @@ namespace Rox
                     WriteLog(LogLibraries.LogLevel.Info, $"数据更新时间: {weatherType.reporttime}");
                     return weatherType;
                 }
-                catch
+                catch(Exception ex)
                 {
-                    MessageBox.Show("获取天气信息失败，请检查网络连接或API服务状态", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return null; // 返回空值表示获取失败
+                    LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"获取天气信息失败，请检查网络连接或API服务状态: {ex.Message}");
+                    return null;
                 }
 
             }
