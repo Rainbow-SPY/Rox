@@ -192,6 +192,10 @@ namespace Rox
                 /// 网络
                 /// </summary>
                 Network,
+                /// <summary>
+                /// JSON
+                /// </summary>
+                Json,
             }
             // 定义日志文件名和路径（当前目录下的 Assistant.log 文件）
             /// <summary>

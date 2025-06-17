@@ -7,7 +7,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Rox.Runtimes.LogLibraries;
-using static Rox.API.SteamUserData.SteamType;
 
 namespace Rox
 {
@@ -491,52 +490,61 @@ namespace Rox
             /// <returns>天气信息字符串</returns>
             public static async Task<WeatherType> GetWeatherDataJson(string city)
             {
-                if (string.IsNullOrEmpty(city))
+                try
                 {
-                    MessageBox.Show("城市名称不能为空", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return null;
-                }
-                var httpClient = new HttpClient();
-                var requestUrl = $"https://uapis.cn/api/weather?name={city}";
-                var response = await httpClient.GetAsync(requestUrl);
-                if (!response.IsSuccessStatusCode)
-                {
-                    MessageBox.Show("无法获取天气信息", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return null;
-                }
-                var responseData = await response.Content.ReadAsStringAsync();
-                string compressedJson = CompressJson(responseData);
-                LogLibraries.WriteLog(LogLibraries.LogLevel.Info, "Compressed JSON");
-                // 直接解析 JSON 字符串
-                Text.Json.JObject jObject = Rox.Text.Json.JObject.Parse(compressedJson);
-                var weatherType = Rox.Text.Json.DeserializeObject<WeatherType>(compressedJson);
-                switch (weatherType.code) // 修改为通过实例访问 code 属性
-                {
-                    case 400:
+                    if (string.IsNullOrEmpty(city))
+                    {
                         MessageBox.Show("城市名称不能为空", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return null;
-                    case 500:
-                        MessageBox.Show("请求的城市不存在,请键入\"广东省、北京市、海淀区\"", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    var httpClient = new HttpClient();
+                    var requestUrl = $"https://uapis.cn/api/weather?name={city}";
+                    var response = await httpClient.GetAsync(requestUrl);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        MessageBox.Show("无法获取天气信息", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return null;
-                    case 0:
-                        MessageBox.Show("检测到非法/不安全的请求!访问已拒绝", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    var responseData = await response.Content.ReadAsStringAsync();
+                    string compressedJson = CompressJson(responseData);
+                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, "Compressed JSON");
+                    // 直接解析 JSON 字符串
+                    Text.Json.JObject jObject = Rox.Text.Json.JObject.Parse(compressedJson);
+                    var weatherType = Rox.Text.Json.DeserializeObject<WeatherType>(compressedJson);
+                    switch (weatherType.code) // 修改为通过实例访问 code 属性
+                    {
+                        case 400:
+                            MessageBox.Show("城市名称不能为空", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return null;
+                        case 500:
+                            MessageBox.Show("请求的城市不存在,请键入\"广东省、北京市、海淀区\"", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return null;
+                        case 0:
+                            MessageBox.Show("检测到非法/不安全的请求!访问已拒绝", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return null;
+                    }
+                    if (jObject == null)
+                    {
+                        LogLibraries.WriteLog(LogLibraries.LogLevel.Error, "Failed to parse JSON object.");
                         return null;
+                    }
+                    WriteLog(LogLibraries.LogLevel.Info, $"Code: {weatherType.code}");
+                    WriteLog(LogLibraries.LogLevel.Info, $"获取省份名称: {weatherType.province}");
+                    WriteLog(LogLibraries.LogLevel.Info, $"获取城市名称: {weatherType.city}");
+                    WriteLog(LogLibraries.LogLevel.Info, $"获取温度: {weatherType.temperature_1}");
+                    WriteLog(LogLibraries.LogLevel.Info, $"获取天气状况: {weatherType.weather}");
+                    WriteLog(LogLibraries.LogLevel.Info, $"获取风向: {weatherType.wind_direction_1}");
+                    WriteLog(LogLibraries.LogLevel.Info, $"获取风力等级: {weatherType.wind_power_1}");
+                    WriteLog(LogLibraries.LogLevel.Info, $"获取湿度: {weatherType.humidity_1}");
+                    WriteLog(LogLibraries.LogLevel.Info, $"数据更新时间: {weatherType.reporttime}");
+                    return weatherType;
                 }
-                if (jObject == null)
+                catch
                 {
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Error, "Failed to parse JSON object.");
-                    return null;
+                    MessageBox.Show("获取天气信息失败，请检查网络连接或API服务状态", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return null; // 返回空值表示获取失败
                 }
-                WriteLog(LogLibraries.LogLevel.Info, $"Code: {weatherType.code}");
-                WriteLog(LogLibraries.LogLevel.Info, $"获取省份名称: {weatherType.province}");
-                WriteLog(LogLibraries.LogLevel.Info, $"获取城市名称: {weatherType.city}");
-                WriteLog(LogLibraries.LogLevel.Info, $"获取温度: {weatherType.temperature_1}");
-                WriteLog(LogLibraries.LogLevel.Info, $"获取天气状况: {weatherType.weather}");
-                WriteLog(LogLibraries.LogLevel.Info, $"获取风向: {weatherType.wind_direction_1}");
-                WriteLog(LogLibraries.LogLevel.Info, $"获取风力等级: {weatherType.wind_power_1}");
-                WriteLog(LogLibraries.LogLevel.Info, $"获取湿度: {weatherType.humidity_1}");
-                WriteLog(LogLibraries.LogLevel.Info, $"数据更新时间: {weatherType.reporttime}");
-                return weatherType;
+
             }
             /// <summary>
             /// 获取指定城市的温度信息
