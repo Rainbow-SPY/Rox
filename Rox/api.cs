@@ -528,6 +528,9 @@ namespace Rox
                         LogLibraries.WriteLog(LogLibraries.LogLevel.Error, "Failed to parse JSON object.");
                         return null;
                     }
+                    // 检测是否传入null
+                    if (weatherType.temperature == "" || weatherType.temperature == string.Empty || string.IsNullOrWhiteSpace(weatherType.temperature))
+                        return null;
                     WriteLog(LogLibraries.LogLevel.Info, $"Code: {weatherType.code}");
                     WriteLog(LogLibraries.LogLevel.Info, $"获取省份名称: {weatherType.province}");
                     WriteLog(LogLibraries.LogLevel.Info, $"获取城市名称: {weatherType.city}");
