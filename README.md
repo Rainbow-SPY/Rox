@@ -1,6 +1,27 @@
 ![Icon](Rox/logo+Text.png)
-___
+
 Rox 是一个使用 C# .NET Framework 4.7.2 编写，并使用 Microsoft Visual Studio 2022 编译的跨平台动态链接库。它提供了多种功能模块，包括日志记录、文件操作、网络检查、Windows 系统配置、AI 集成,**音频解密**等。
+
+---
+## 📜 License / 许可证  
+This project is licensed under **AGPL-3.0 + Attribution + Non-Commercial terms**.  
+- 🔍 **You must**:  
+  - Keep original author attribution and repository link.  
+  - Open-source any modified versions under AGPL-3.0.  
+- 🚫 **You cannot**:  
+  - Use this code (or derivatives) for commercial purposes.  
+- 📂 See [LICENSE](LICENSE) for full terms.  
+
+本项目采用 **AGPL-3.0 + 署名 + 非商业附加条款** 许可协议。  
+- 🔍 **您必须**：  
+  - 保留原始作者署名及仓库链接。  
+  - 任何修改后的版本必须以 AGPL-3.0 协议开源。  
+- 🚫 **您不得**：  
+  - 将此代码（或衍生作品）用于商业用途。  
+- 📂 完整条款参见 [LICENSE](LICENSE)。  
+
+---
+
 
 ## 提示! 
 > [!WARNING]
