@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
 
 namespace Rox
@@ -30,7 +31,8 @@ namespace Rox
             {
                 if (string.IsNullOrEmpty(SteamID))
                 {
-                    MessageBox.Show("SteamID64为空值", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    WriteLog(LogLevel.Error, LogKind.System, $"SteamID64为空值, 错误代码: {_String_NullOrEmpty}");
+                    MessageBox.Show($"SteamID64为空值, 错误代码: {_String_NullOrEmpty}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return null;
                 }
                 // 创建HttpClient实例
@@ -64,22 +66,35 @@ namespace Rox
                 if (httpSteam) //解析个人主页
                 {
                     string SteamID64 = ExtractSteamID(SteamID);
-                    if (SteamID64 != null)
+
+                    if (SteamID64 == null)
                     {
-                        _lastSteamData = await SendQueryMessage(SteamID, new HttpClient());
-                        return await SendQueryMessage(SteamID64, httpClient); //解析SteamID64
+                        WriteLog(LogLevel.Error, LogKind.Json, $"无法解析SteamID64, 错误代码: {_Json_Parse_SteamID64}");
+                        MessageBox.Show($"无法解析SteamID64, 错误代码: {_Json_Parse_SteamID64}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return null;
+                    }
+                    else if (SteamID64 == _Regex_Match_Unknow_Exception)
+                    {
+                        WriteLog(LogLevel.Error, LogKind.Regex, $"处理 正则表达式 时发生未知异常 , 返回的错误代码: {_Regex_Match_Unknow_Exception} ");
+                        return null;
+                    }
+                    else if (SteamID64 == _Regex_Match_Not_Found_Any)
+                    {
+                        WriteLog(LogLevel.Error, LogKind.Regex, $"未匹配到任何 正则表达式 , 返回的错误代码: {_Regex_Match_Not_Found_Any}");
+                        return null;
                     }
                     else
                     {
-                        MessageBox.Show("无法解析SteamID64", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return null;
+                        _lastSteamData = await SendQueryMessage(SteamID, new HttpClient());
+                        return await SendQueryMessage(SteamID64, httpClient); //解析SteamID64
                     }
                 }
                 if (ID64Steam) //解析SteamID64
                 {
                     if (SteamID.Length != 17)
                     {
-                        MessageBox.Show("SteamID64不满足17位唯一标识符!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        WriteLog(LogLevel.Error, LogKind.System, $"SteamID64不满足17位唯一标识符!, 错误代码: {Not_Allow_17_SteamID64}");
+                        MessageBox.Show($"SteamID64不满足17位唯一标识符!, 错误代码: {Not_Allow_17_SteamID64}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return null;
                     }
                     _lastSteamData = await SendQueryMessage(SteamID, new HttpClient());
@@ -103,38 +118,53 @@ namespace Rox
                 return null;//返回空值
             }
             /// <summary>
-            /// 向api发送请求获取 <see cref="Text.Json"/> 文本
-            /// </summary>
-            /// <param name="url"> 支持SteamID3,ID64,个人主页链接,自定义URL,好友代码</param>
-            /// <returns> <see cref="SteamType"/> 格式的 <see cref="Text.Json"/> 文本</returns>
+            /// 使用 <see cref="System.Text.RegularExpressions.Match"/> 正则表达式匹配 SteamID
+            /// </summary> 
+            /// <param name="url"> Steam 个人主页链接</param>
+            /// <returns> <see cref="string"/> 格式的文本</returns>
             private static string ExtractSteamID(string url)
             {
-                // 正则表达式匹配自定义 ID
-                string customIdPattern = @"\/id\/([^\/]+)";
-                // 正则表达式匹配 17 位数字 ID
-                string numericIdPattern = @"\/profiles\/(\d{17})";
-
-                // 尝试匹配自定义 ID
-                Match customIdMatch = Regex.Match(url, customIdPattern);
-                if (customIdMatch.Success)
+                try
                 {
-                    return customIdMatch.Groups[1].Value; // 返回自定义 ID
-                }
+                    // 正则表达式匹配自定义 ID
+                    string customIdPattern = @"\/id\/([^\/]+)";
+                    // 正则表达式匹配 17 位数字 ID
+                    string numericIdPattern = @"\/profiles\/(\d{17})";
 
-                // 尝试匹配 17 位数字 ID
-                Match numericIdMatch = Regex.Match(url, numericIdPattern);
-                if (numericIdMatch.Success)
-                {
-                    if (numericIdMatch.Groups[1].Value.Length != 17)
+                    // 尝试匹配自定义 ID
+                    WriteLog(LogLevel.Info, LogKind.Regex, "正则表达式匹配自定义ID");
+                    Match customIdMatch = Regex.Match(url, customIdPattern);
+                    if (customIdMatch.Success)
                     {
-                        MessageBox.Show("SteamID64不满足17位唯一标识符!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return null;
+                        WriteLog(LogLevel.Info, LogKind.Regex, $"返回正则表达式匹配值: {customIdMatch.Groups[1].Value} ");
+                        return customIdMatch.Groups[1].Value; // 返回自定义 ID
                     }
-                    return numericIdMatch.Groups[1].Value; // 返回 17 位数字 ID
-                }
 
-                // 如果未匹配到任何 ID，返回 null
-                return null;
+                    // 尝试匹配 17 位数字 ID
+                    WriteLog(LogLevel.Info, LogKind.Regex, $"正则表达式匹配17位ID");
+                    Match numericIdMatch = Regex.Match(url, numericIdPattern);
+                    if (numericIdMatch.Success)
+                    {
+                        if (numericIdMatch.Groups[1].Value.Length != 17)
+                        {
+                            WriteLog(LogLevel.Error, LogKind.System, $"SteamID64不满足17位唯一标识符!, 错误代码: {Not_Allow_17_SteamID64}");
+                            MessageBox.Show($"SteamID64不满足17位唯一标识符!, 错误代码: {Not_Allow_17_SteamID64}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return Not_Allow_17_SteamID64;
+                        }
+                        WriteLog(LogLevel.Info, LogKind.Regex, $"返回正则表达式匹配值: {numericIdMatch.Groups[1].Value} ");
+                        return numericIdMatch.Groups[1].Value; // 返回 17 位数字 ID
+                    }
+
+                    // 如果未匹配到任何 ID，返回 null
+                    WriteLog(LogLevel.Error, LogKind.Regex, $"未匹配到任何ID , 错误代码: {_Regex_Match_Not_Found_Any}");
+                    return _Regex_Match_Not_Found_Any;
+                }
+                catch (Exception e)
+                {
+                    WriteLog(LogLevel.Error, LogKind.Regex, $"正则表达式 遭遇未知的异常: {e}, 错误代码: {_Regex_Match_Unknow_Exception}");
+                    MessageBox.Show($"正则表达式 遭遇未知的异常: {e} , 错误代码: {_Regex_Match_Unknow_Exception}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    return _Regex_Match_Unknow_Exception;
+                }
             }
             #region GetSimpleData 获取Steam用户信息简易数据
             /// <summary>
@@ -148,6 +178,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamID, new HttpClient());
                 }
+                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.communitystate}");
                 return _lastSteamData?.communitystate;
             }
             /// <summary>
@@ -161,6 +192,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamID, new HttpClient());
                 }
+                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.steamID}");
                 return _lastSteamData?.steamID;
             }
             /// <summary>
@@ -174,6 +206,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamID, new HttpClient());
                 }
+                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.steamID3}");
                 return _lastSteamData?.steamID3;
             }
             /// <summary>
@@ -187,6 +220,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamID, new HttpClient());
                 }
+                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.username}");
                 return _lastSteamData?.username;
             }
             /// <summary>
@@ -200,6 +234,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
+                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.steamID64}");
                 return _lastSteamData?.steamID64;
             }
             /// <summary>
@@ -213,6 +248,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
+                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.profileurl_1}");
                 return _lastSteamData?.profileurl_1;
             }
             /// <summary>
@@ -226,6 +262,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
+                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.avatar_1}");
                 return _lastSteamData?.avatar_1;
             }
             /// <summary>
@@ -239,6 +276,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
+                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.accountcreationdate}");
                 return _lastSteamData?.accountcreationdate;
             }
             /// <summary>
@@ -252,6 +290,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
+                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.lastlogoff}");
                 return _lastSteamData?.lastlogoff;
             }
             /// <summary>
@@ -265,6 +304,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
+                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.location}");
                 return _lastSteamData?.location;
             }
             /// <summary>
@@ -278,6 +318,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
+                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.onlinestatus}");
                 return _lastSteamData?.onlinestatus;
             }
             /// <summary>
@@ -291,6 +332,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
+                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.friendcode}");
                 return _lastSteamData?.friendcode;
             }
             /// <summary>
@@ -304,6 +346,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
+                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.realname}");
                 return _lastSteamData?.realname;
             }
             #endregion
@@ -320,51 +363,53 @@ namespace Rox
                     // 构建GET请求的URL，将用户ID作为查询参数
                     var requestUrl = $"https://uapis.cn/api/steamuserinfo?input={SteamID}";
 
+                    WriteLog(LogLevel.Info, LogKind.Network, $"发送请求: {requestUrl}");
                     // 发送GET请求并获取响应
                     var response = await httpClient.GetAsync(requestUrl);
 
                     // 检查响应是否成功
                     if (!response.IsSuccessStatusCode)
                     {
-                        LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"Request failed with status code: {response.StatusCode}");
+                        LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"请求失败: {response.StatusCode}, {_HttpClient_Request_Failed}");
                         return null;
                     }
-                    var t = await SteamUserData.GetDataJson("");
-                    string e = t.username;
                     // 读取响应内容
                     var responseData = await response.Content.ReadAsStringAsync();
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, "Raw JSON Response:");
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, responseData);
+                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, LogKind.Json, "获取原始 Json 内容");
 
                     // 压缩 JSON 字符串
                     string compressedJson = CompressJson(responseData);
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, "Compressed JSON:");
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, compressedJson);
+                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, LogKind.Json, "压缩 Json");
 
                     // 直接解析 JSON 字符串
-                    Text.Json.JObject jObject = Rox.Text.Json.JObject.Parse(compressedJson);
+                    //Text.Json.JObject jObject = Rox.Text.Json.JObject.Parse(compressedJson);
                     // 反序列化为 SteamType 对象
+                    WriteLog(LogLevel.Info, LogKind.Json, $"反序列化 Json");
                     var SteamType = Rox.Text.Json.DeserializeObject<SteamType>(compressedJson);
                     switch (SteamType.code)
                     {
                         case 432:
-                            MessageBox.Show("Steam账户不存在", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            WriteLog(LogLevel.Info, LogKind.Network, $"API返回响应: Steam账户不存在, 错误代码: {_Steam_Not_Found_Account}");
+                            MessageBox.Show($"Steam账户不存在, 错误代码: {_Steam_Not_Found_Account}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
                         case 443:
-                            MessageBox.Show("无效的输入", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            WriteLog(LogLevel.Info, LogKind.Network, $"API返回响应: 无效的输入, 错误代码: {Invaid_String_Input}");
+                            MessageBox.Show($"无效的输入, 错误代码: {Invaid_String_Input}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
                         case 200:
+                            WriteLog(LogLevel.Info, LogKind.Network, $"API返回响应: Json解析成功");
                             break;
                         default:
-                            MessageBox.Show("未知错误", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            WriteLog(LogLevel.Info, LogKind.Json, $"Json 反序列化过程中出现未知错误, 错误代码: {_Json_DeObject_Unknow_Exception}");
+                            MessageBox.Show($"Json 反序列化过程中出现未知错误, 错误代码: {_Json_DeObject_Unknow_Exception}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
                     }
                     // 检查 jObject 是否为空
-                    if (jObject == null)
-                    {
-                        LogLibraries.WriteLog(LogLibraries.LogLevel.Error, "Failed to parse JSON object.");
-                        return null;
-                    }
+                    //if (jObject == null)
+                    //{
+                    //    LogLibraries.WriteLog(LogLibraries.LogLevel.Error, "解析 Json 对象时出错, 错误代码: _Json_Parse_jObject_Failed (6003)");
+                    //    return null;
+                    //}
                     //string[] parts = SteamType.steamID3.Split(':'); // 按冒号分割字符串
                     //string friendCode = parts[2].TrimEnd(']'); // 提取第三部分并去掉末尾的 ']'
                     // 输出字段值
@@ -396,7 +441,7 @@ namespace Rox
                 catch (Exception ex)
                 {
                     // 捕获并输出异常
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"获取天气信息失败，请检查网络连接或API服务状态: {ex.Message}");
+                    LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"获取 Steam 个人信息失败，请检查网络连接或API服务状态: {ex.Message}, 错误代码: {_Steam_Unknow_Exception}");
                     return null;
                 }
             }
@@ -494,7 +539,7 @@ namespace Rox
                 {
                     if (string.IsNullOrEmpty(city))
                     {
-                        MessageBox.Show("城市名称不能为空", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show($"城市名称不能为空, 错误代码: {_String_NullOrEmpty}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return null;
                     }
                     var httpClient = new HttpClient();
@@ -502,32 +547,32 @@ namespace Rox
                     var response = await httpClient.GetAsync(requestUrl);
                     if (!response.IsSuccessStatusCode)
                     {
-                        MessageBox.Show("无法获取天气信息", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show($"请求失败: {response.StatusCode}, 错误代码: {_HttpClient_Request_Failed}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return null;
                     }
                     var responseData = await response.Content.ReadAsStringAsync();
                     string compressedJson = CompressJson(responseData);
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, "Compressed JSON");
+                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, "压缩 Json");
                     // 直接解析 JSON 字符串
-                    Text.Json.JObject jObject = Rox.Text.Json.JObject.Parse(compressedJson);
+                    //Text.Json.JObject jObject = Rox.Text.Json.JObject.Parse(compressedJson);
                     var weatherType = Rox.Text.Json.DeserializeObject<WeatherType>(compressedJson);
                     switch (weatherType.code) // 修改为通过实例访问 code 属性
                     {
                         case 400:
-                            MessageBox.Show("城市名称不能为空", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show($"城市名称不能为空, 错误代码: {_String_NullOrEmpty}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
                         case 500:
-                            MessageBox.Show("请求的城市不存在,请键入\"广东省、北京市、海淀区\"", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show($"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
                         case 0:
-                            MessageBox.Show("检测到非法/不安全的请求!访问已拒绝", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show($"检测到非法/不安全的请求!访问已拒绝, 错误代码: {_HttpClient_Request_UnsafeOrIllegal_Denied}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
                     }
-                    if (jObject == null)
-                    {
-                        LogLibraries.WriteLog(LogLibraries.LogLevel.Error, "Failed to parse JSON object.");
-                        return null;
-                    }
+                    //if (jObject == null)
+                    //{
+                    //    LogLibraries.WriteLog(LogLibraries.LogLevel.Error, "Failed to parse JSON object.");
+                    //    return null;
+                    //}
                     // 检测是否传入null
                     if (weatherType.temperature == "" || weatherType.temperature == string.Empty || string.IsNullOrWhiteSpace(weatherType.temperature))
                         return null;
@@ -542,13 +587,13 @@ namespace Rox
                     WriteLog(LogLibraries.LogLevel.Info, $"数据更新时间: {weatherType.reporttime}");
                     return weatherType;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"获取天气信息失败，请检查网络连接或API服务状态: {ex.Message}");
+                    LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"获取天气信息失败，请检查网络连接或API服务状态: {ex.Message}, 错误代码:  {_Weather_Unknow_Exception}");
                     return null;
                 }
-
             }
+            #region 获取简单天气信息
             /// <summary>
             /// 获取指定城市的温度信息
             /// </summary>
@@ -614,6 +659,7 @@ namespace Rox
                 }
                 return _lastWeatherData?.humidity_1;
             }
+            #endregion
             /// <summary>
             /// 获取指定城市的数据更新时间信息属性
             /// </summary>

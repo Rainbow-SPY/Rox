@@ -3,11 +3,13 @@ using Rox.Runtimes.Properties;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
@@ -157,15 +159,15 @@ namespace Rox
             public enum LogKind
             {
                 /// <summary>
-                /// 窗体  
+                /// 窗体  <see cref="System.Windows.Forms"/>
                 /// </summary>
                 Form,
                 /// <summary>
-                /// 线程
+                /// 线程 <see cref="System.Threading.Thread"/>
                 /// </summary>
                 Thread,
                 /// <summary>
-                /// 进程
+                /// 进程 <see cref="System.Diagnostics.Process"/>
                 /// </summary>
                 Process,
                 /// <summary>
@@ -173,7 +175,7 @@ namespace Rox
                 /// </summary>
                 Service,
                 /// <summary>
-                /// 任务
+                /// 任务 <see cref="System.Threading.Tasks.Task"/>
                 /// </summary>
                 Task,
                 /// <summary>
@@ -193,9 +195,13 @@ namespace Rox
                 /// </summary>
                 Network,
                 /// <summary>
-                /// JSON
+                /// Json
                 /// </summary>
                 Json,
+                /// <summary>
+                /// 正则表达式 <see cref="System.Text.RegularExpressions.Regex"/>
+                /// </summary>
+                Regex,
             }
             // 定义日志文件名和路径（当前目录下的 Assistant.log 文件）
             /// <summary>
@@ -256,7 +262,7 @@ namespace Rox
                 Console.ResetColor();
                 LogToUi?.Invoke(logLevel, message);
                 // 记录日志到文件
-                LogToFile(logLevel, message);
+                LogToFile(logLevel, logKind, message);
             }
             /// <summary>
             /// 根据日志等级向文件写入日志,并在控制台输出日志,并记录到文件
@@ -500,6 +506,7 @@ namespace Rox
         /// </summary>
         public class LocalizedString
         {
+            #region 本地化字符串
             /// <summary>
             /// 语言
             /// </summary>
@@ -864,11 +871,71 @@ namespace Rox
             /// 读取注册表失败
             /// </summary>
             public static readonly string _READ_REGISTRY_FAILED = GetLocalizedString("_READ_REGISTRY_FAILED");
+            #endregion
+            #region 错误代码
+            /// <summary>
+            /// 不符合 17 位 SteamID64 格式
+            /// </summary>
+            public static readonly string Not_Allow_17_SteamID64 = "Not_Allow_17_SteamID64 (6003)";
+            /// <summary>
+            /// 未找到 Steam 账户
+            /// </summary>
+            public static readonly string _Steam_Not_Found_Account = "_Steam_Not_Found_Account (6006)";
+            /// <summary>
+            /// 查询 Steam 账户信息时发生未知异常
+            /// </summary>
+            public static readonly string _Steam_Unknow_Exception = "_Steam_Unknow_Exception (6007)";
+            /// <summary>
+            /// 处理 Json 时发生未知异常
+            /// </summary>
+            public static readonly string _Json_Unknow_Exception = "_Json_Unknow_Exception (6001)";
+            /// <summary>
+            /// 解析 SteamType 对象时发生错误 或 无法解析 SteamID64
+            /// </summary>
+            public static readonly string _Json_Parse_SteamID64 = "_Json_Parse_SteamID64 (6002)";
+            /// <summary>
+            /// 指定的 Json 数据在反序列化过程中出现未知异常
+            /// </summary>
+            public static readonly string _Json_DeObject_Unknow_Exception = "_Json_DeObject_Unknow_Exception (6201)";
+            /// <summary>
+            /// 指定的字符串为 <see cref="string.Empty"/> 或 <see langword="null"/>
+            /// </summary>
+            public static readonly string _String_NullOrEmpty = "_String_NullOrEmpty (1002)";
+            /// <summary>
+            /// 无效的字符串输入, 通常由API返回响应时回复错误
+            /// </summary>
+            public static readonly string Invaid_String_Input = "Invaid_String_Input (1001)";
+            /// <summary>
+            /// 处理 正则表达式 时发生未知异常
+            /// </summary>
+            public static readonly string _Regex_Match_Unknow_Exception = "_Regex_Match_Unknow_Exception (4002)";
+            /// <summary>
+            /// 指定的 正则表达式 <see cref="Regex.Match(string)"/> 未匹配出结果而导致输出字符串为 <see cref="string.Empty"/> 或 <see langword="null"/>
+            /// </summary>
+            public static readonly string _Regex_Match_Not_Found_Any = "_Regex_Match_Not_Found_Any (4001)";
+            /// <summary>
+            /// 使用 <see cref="HttpClient.GetAsync(string)"/> 发送请求时出现错误
+            /// </summary>
+            public static readonly string _HttpClient_Request_Failed = "_HttpClient_Request_Failed (1301)";
+            /// <summary>
+            /// 检测到非法/不安全的请求, 服务器访问已拒绝
+            /// </summary>
+            public static readonly string _HttpClient_Request_UnsafeOrIllegal_Denied = "_HttpClient_Request_UnsafeOrIllegal_Denied (1302)";
+            /// <summary>
+            /// 请求的天气名称不存在或未找到
+            /// </summary>
+            public static readonly string _Weather_City_Not_Found = "_Weather_City_Not_Found (1201)";
+            /// <summary>
+            /// 查询天气时发生未知异常
+            /// </summary>
+            public static readonly string _Weather_Unknow_Exception = "_Weather_Unknow_Exception (1202)";
+            #endregion
             /// <summary>
             /// 获取本地化字符串
             /// </summary>
             /// <param name="key">字符串常量</param>
             /// <returns>指定语言文件中的字符串</returns>
+
             public static string GetLocalizedString(string key)
             {
                 return ResourceHelper.GetString(key, System.Globalization.CultureInfo.InstalledUICulture.Name.ToString());

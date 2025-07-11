@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Rox Common Interface Libraries")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Rainbow SPY")]
 [assembly: AssemblyProduct("Rox")]
 [assembly: AssemblyCopyright("Copyright (C) Rainbow-SPY 2019-2025 , All rights reserved")]
 [assembly: AssemblyTrademark("")]

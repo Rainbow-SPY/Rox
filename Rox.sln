@@ -15,6 +15,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.ArtificialIntelligence"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.Text", "Rox.Text\Rox.Text.csproj", "{4F55481F-3CF2-489F-9153-156E7E2637BC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.API", "Rox.API\Rox.API.csproj", "{8B2D3FCF-8EFC-4E19-9DD0-F074C92F3222}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4F55481F-3CF2-489F-9153-156E7E2637BC} = {4F55481F-3CF2-489F-9153-156E7E2637BC}
+		{BA4C591E-3D2A-491B-BCCB-1F995545A26C} = {BA4C591E-3D2A-491B-BCCB-1F995545A26C}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +51,10 @@ Global
 		{4F55481F-3CF2-489F-9153-156E7E2637BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F55481F-3CF2-489F-9153-156E7E2637BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F55481F-3CF2-489F-9153-156E7E2637BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B2D3FCF-8EFC-4E19-9DD0-F074C92F3222}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B2D3FCF-8EFC-4E19-9DD0-F074C92F3222}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B2D3FCF-8EFC-4E19-9DD0-F074C92F3222}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B2D3FCF-8EFC-4E19-9DD0-F074C92F3222}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
