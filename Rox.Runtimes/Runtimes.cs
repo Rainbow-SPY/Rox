@@ -348,7 +348,7 @@ namespace Rox
             public static void LogToFile(LogLevel logLevel, LogKind logkind, string message)
             {
                 // 创建日志信息
-                string logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{logkind}] [{logLevel}]: {message}";
+                string logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{logLevel}] [{logkind}]: {message}";
 
                 try
                 {
