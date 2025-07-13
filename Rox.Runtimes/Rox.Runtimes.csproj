@@ -54,6 +54,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Directory_I.cs" />
+    <Compile Include="File_I.cs" />
+    <Compile Include="LocalizedString.cs" />
+    <Compile Include="LogLibraries.cs" />
+    <Compile Include="Network_I.cs" />
+    <Compile Include="NodeJs.cs" />
     <Compile Include="Properties\Resource1.Designer.cs">
       <DependentUpon>Resource1.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -64,7 +70,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Runtimes.cs" />
+    <Compile Include="Registry_I.cs" />
+    <Compile Include="ResourceHelper.cs" />
+    <Compile Include="WindowsToast.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
