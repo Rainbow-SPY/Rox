@@ -702,7 +702,7 @@ namespace Rox
             /// <param name="value"> 指定启用或禁用 Windows 安全中心的值</param>
             static void Switch(int value)
             {
-                if (Security.Anti360Security() || Security.AntiHuoRongSecurity())
+                if (Security.Is360SafeRunning() || Security.IsHuorongSecurityRunning())
                 {
                     DialogResult dialogResult = MessageBox.Show($"{_SECURITY_RUNNING}", $"{_WARNING}", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                     if (dialogResult != DialogResult.OK)
@@ -850,7 +850,7 @@ namespace Rox
             /// <param name="value"> 指定启用或禁用 Windows 更新服务的值</param>
             static void Switch(string value)
             {
-                if (Security.Anti360Security() || Security.AntiHuoRongSecurity())
+                if (Security.Is360SafeRunning() || Security.IsHuorongSecurityRunning())
                 {
                     DialogResult dialogResult = MessageBox.Show($"{_NOTAVAILABLE_NETWORK_TIPS}", $"{_WARNING}", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                     if (dialogResult != DialogResult.OK)
@@ -900,7 +900,7 @@ namespace Rox
         /// </summary>
         public static void ActiveWindows()//Windows激活
         {
-            if (Security.Anti360Security() || Security.AntiHuoRongSecurity())
+            if (Security.Is360SafeRunning() || Security.IsHuorongSecurityRunning())
             {
                 DialogResult dialogResult = MessageBox.Show($"{_NOTAVAILABLE_NETWORK_TIPS}", $"{_WARNING}", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 if (dialogResult != DialogResult.OK)
@@ -941,7 +941,7 @@ namespace Rox
         /// <returns></returns>
         public static bool BoolActiveWindows()//Windows激活
         {
-            if (Security.Anti360Security() || Security.AntiHuoRongSecurity())
+            if (Security.Is360SafeRunning() || Security.IsHuorongSecurityRunning())
             {
                 DialogResult dialogResult = MessageBox.Show($"{_NOTAVAILABLE_NETWORK_TIPS}", $"{_WARNING}", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 if (dialogResult != DialogResult.OK)
