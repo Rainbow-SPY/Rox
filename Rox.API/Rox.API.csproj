@@ -51,6 +51,8 @@
   <ItemGroup>
     <Compile Include="api.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SteamUserData.cs" />
+    <Compile Include="Weather.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="only logo.ico" />
