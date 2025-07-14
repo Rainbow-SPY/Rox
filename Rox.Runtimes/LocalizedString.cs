@@ -381,13 +381,21 @@ namespace Rox
             /// </summary>
             public static readonly string Not_Allow_17_SteamID64 = "Not_Allow_17_SteamID64 (6003)";
             /// <summary>
-            /// 未找到 Steam 账户
+            /// 未找到 Steam 账户或完全私密了个人资料
             /// </summary>
             public static readonly string _Steam_Not_Found_Account = "_Steam_Not_Found_Account (6006)";
             /// <summary>
             /// 查询 Steam 账户信息时发生未知异常
             /// </summary>
             public static readonly string _Steam_Unknow_Exception = "_Steam_Unknow_Exception (6007)";
+            /// <summary>
+            /// 查询 Steam 账户信息时上游服务错误, 在向 Steam 的官方 API 请求数据时遇到了问题, 这可能是他们的服务暂时中断，请稍后重试。
+            /// </summary>
+            public static readonly string _Steam_Server_Error = "_Steam_Server_Error (6008)";
+            /// <summary>
+            /// 查询 Steam 账户信息时认证失败, 提供的 Steam Web API Key 无效或已过期，或者没有提供 Key
+            /// </summary>
+            public static readonly string _Steam_Server_UnAuthenticated = "_Steam_Server_UnAuthenticated (6009)";
             /// <summary>
             /// 处理 Json 时发生未知异常
             /// </summary>

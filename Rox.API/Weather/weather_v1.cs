@@ -2,12 +2,9 @@
 {
     public partial class API
     {
-        public partial class Weather
+        public class Weather_v1
         {
-            public class Weather_v1
-            {
 
-            }
         }
     }
 }

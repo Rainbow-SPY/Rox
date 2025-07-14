@@ -359,7 +359,7 @@ namespace Rox
                     // 构建GET请求的URL，将用户ID作为查询参数
                     var requestUrl = $"https://uapis.cn/api/steamuserinfo?input={SteamID}";
 
-                    WriteLog(LogLevel.Info, LogKind.Network, $"发送请求: {requestUrl}");
+                    WriteLog(LogLevel.Info, LogKind.Network, $"{_SEND_REQUEST}: {requestUrl}");
                     // 发送GET请求并获取响应
                     var response = await httpClient.GetAsync(requestUrl);
 
