@@ -13,7 +13,7 @@ namespace Rox
         /// <summary>
         /// 天气查询
         /// </summary>
-        public class Weather
+        public partial class Weather
         {
             /// <summary>
             /// 存储上次获取的天气数据

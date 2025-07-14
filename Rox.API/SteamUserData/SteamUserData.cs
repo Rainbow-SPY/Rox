@@ -10,7 +10,7 @@ using static Rox.Runtimes.LogLibraries;
 
 namespace Rox
 {
-public partial class API
+    public partial class API
     {
         /// <summary>
         /// Steam用户信息查询
