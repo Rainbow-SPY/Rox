@@ -23,7 +23,7 @@ namespace Rox
             /// 获取天气信息
             /// </summary>
             /// <param name="city">城市名称</param>
-            /// <returns>天气信息字符串</returns>
+            /// <returns><see cref="WeatherType"/> 类型的 <see cref="Text.Json"/> 对象</returns>
             public static async Task<WeatherType> GetWeatherDataJson(string city)
             {
                 try
@@ -50,12 +50,15 @@ namespace Rox
                     switch (weatherType.code) // 修改为通过实例访问 code 属性
                     {
                         case 400:
+                            WriteLog(LogLevel.Error, LogKind.Network, $"城市名称不能为空, 错误代码: {_String_NullOrEmpty}");
                             MessageBox.Show($"城市名称不能为空, 错误代码: {_String_NullOrEmpty}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
                         case 500:
+                            WriteLog(LogLevel.Error, LogKind.Network, $"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}");
                             MessageBox.Show($"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
                         case 0:
+                            WriteLog(LogLevel.Error, LogKind.Network, $"检测到非法/不安全的请求!访问已拒绝, 错误代码: {_HttpClient_Request_UnsafeOrIllegal_Denied}");
                             MessageBox.Show($"检测到非法/不安全的请求!访问已拒绝, 错误代码: {_HttpClient_Request_UnsafeOrIllegal_Denied}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
                     }

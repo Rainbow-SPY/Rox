@@ -391,7 +391,7 @@ namespace Rox
             /// <summary>
             /// 查询 Steam 账户信息时上游服务错误, 在向 Steam 的官方 API 请求数据时遇到了问题, 这可能是他们的服务暂时中断，请稍后重试。
             /// </summary>
-            public static readonly string _Steam_Server_Error = "_Steam_Server_Error (6008)";
+            public static readonly string _Steam_Service_Error = "_Steam_Service_Error (6008)";
             /// <summary>
             /// 查询 Steam 账户信息时认证失败, 提供的 Steam Web API Key 无效或已过期，或者没有提供 Key
             /// </summary>
@@ -440,6 +440,10 @@ namespace Rox
             /// 查询天气时发生未知异常
             /// </summary>
             public static readonly string _Weather_Unknow_Exception = "_Weather_Unknow_Exception (1202)";
+            /// <summary>
+            /// 上游服务错误, 天气服务提供商的API暂时不可用或返回了错误。
+            /// </summary>
+            public static readonly string _Weather_Service_Error = "_Weather_Service_Error (1203)";
             #endregion
             /// <summary>
             /// 获取本地化字符串

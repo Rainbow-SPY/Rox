@@ -81,8 +81,8 @@ namespace Rox
                             WriteLog(LogLevel.Info, LogKind.Network, $"API返回响应: Json解析成功");
                             break;
                         case 502: //服务器网关错误
-                            WriteLog(LogLevel.Error, LogKind.Network, $"API返回响应: 上游服务错误, 在向 Steam 的官方 API 请求数据时遇到了问题, 这可能是他们的服务暂时中断，请稍后重试, 错误代码: {_Steam_Server_Error}");
-                            MessageBox.Show($"上游服务错误, 在向 Steam 的官方 API 请求数据时遇到了问题, 这可能是他们的服务暂时中断，请稍后重试. 错误代码: {_Steam_Server_Error}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            WriteLog(LogLevel.Error, LogKind.Network, $"API返回响应: 上游服务错误, 在向 Steam 的官方 API 请求数据时遇到了问题, 这可能是他们的服务暂时中断，请稍后重试, 错误代码: {_Steam_Service_Error}");
+                            MessageBox.Show($"上游服务错误, 在向 Steam 的官方 API 请求数据时遇到了问题, 这可能是他们的服务暂时中断，请稍后重试. 错误代码: {_Steam_Service_Error}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
                         case 401: //未经授权
                             WriteLog(LogLevel.Error, LogKind.Network, $"API返回响应: 认证失败。你提供的 Steam Web API Key 无效或已过期，或者你没有提供 Key。请检查你的 Key. 错误代码: {_Steam_Server_UnAuthenticated}");
