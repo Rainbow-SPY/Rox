@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.API", "Rox.API\Rox.API.
 		{BA4C591E-3D2A-491B-BCCB-1F995545A26C} = {BA4C591E-3D2A-491B-BCCB-1F995545A26C}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.GameExpansionFeatures", "Rox.GameExpansionFeatures\Rox.GameExpansionFeatures.csproj", "{970D6D33-5E08-44DD-BB66-C6BEFCEE071C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{8B2D3FCF-8EFC-4E19-9DD0-F074C92F3222}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B2D3FCF-8EFC-4E19-9DD0-F074C92F3222}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B2D3FCF-8EFC-4E19-9DD0-F074C92F3222}.Release|Any CPU.Build.0 = Release|Any CPU
+		{970D6D33-5E08-44DD-BB66-C6BEFCEE071C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{970D6D33-5E08-44DD-BB66-C6BEFCEE071C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{970D6D33-5E08-44DD-BB66-C6BEFCEE071C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{970D6D33-5E08-44DD-BB66-C6BEFCEE071C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -12,7 +12,7 @@ namespace Rox
         /// </summary>
         /// <param name="json"> <see cref="Text.Json"/> 字符串</param>
         /// <returns> 压缩后的 <see cref="Text.Json"/> 字符串</returns>
-        private static string CompressJson(string json)
+        public static string CompressJson(string json)
         {
             var result = new StringBuilder();
             bool inString = false; // 是否在字符串内

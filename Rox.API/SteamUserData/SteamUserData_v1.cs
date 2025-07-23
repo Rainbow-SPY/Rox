@@ -1,5 +1,4 @@
-﻿using Rox.Runtimes;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -121,104 +120,105 @@ namespace Rox
 
                 }
             }
-        }
-        /// <summary>
-        /// Steam用户信息
-        /// </summary>
-        public class SteamType
-        {
+
             /// <summary>
-            /// 返回值
+            /// Steam用户信息
             /// </summary>
-            public int code { get; set; }
-            /// <summary>
-            /// SteamID64
-            /// </summary>
-            public string steamid { get; set; }
-            /// <summary>
-            /// Steam社区状态, 1 为可见 3为隐藏
-            /// </summary>
-            public int communityvisibilitystate { get; set; }
-            /// <summary>
-            /// 如果为 1 , 代表用户已经填写了个人资料
-            /// </summary>
-            public int profilestate { get; set; }
-            /// <summary>
-            /// Steam用户名
-            /// </summary>
-            public string personaname { get; set; }
-            /// <summary>
-            /// Steam个人主页
-            /// </summary>
-            public string profileurl { get; set; }
-            /// <summary>
-            /// Steam个人主页,替换转义字符
-            /// </summary>
-            public string profileurl_1 => profileurl_1.Replace("\\/", "/");
-            /// <summary>
-            /// Steam头像, 32*32图像
-            /// </summary>
-            public string avatar { get; set; }
-            /// <summary>
-            /// Steam头像,替换转义字符, 32*32图像
-            /// </summary>
-            public string avatar_1 => avatar_1.Replace("\\/", "/");
-            /// <summary>
-            /// Steam头像, 64*64图像
-            /// </summary>
-            public string avatarmedium { get; set; }
-            /// <summary>
-            /// Steam头像,替换转义字符, 64*64图像
-            /// </summary>
-            public string avatarmedium_1 => avatarmedium.Replace("\\/", "/");
-            /// <summary>
-            /// Steam头像, 184*184图像
-            /// </summary>
-            public string avatarfull { get; set; }
-            /// <summary>
-            /// Steam头像,替换转义字符, 184*184图像
-            /// </summary>
-            public string avatarfull_1 => avatarfull.Replace("\\/", "/");
-            /// <summary>
-            /// Steam在线状态, 0-离线/隐私, 1-在线, 2-忙碌, 3-离开, 4-打盹, 5-想交易, 6-想玩。
-            /// </summary>
-            public int personastate { get; set; }
-            /// <summary>
-            /// Steam真实姓名
-            /// </summary>
-            public string realname { get; set; }
-            /// <summary>
-            ///  主要社区组
-            /// </summary>
-            public string primaryclanid { get; set; }
-            /// <summary>
-            /// Steam账号创建日期的时间刻
-            /// </summary>
-            public int timecreated { get; set; }
-            /// <summary>
-            /// Steam账号创建日期的时间戳
-            /// </summary>
-            public string timecreated_str { get; set; }
-            /// <summary>
-            /// Steam账号绑定区域
-            /// </summary>
-            public string loccountrycode { get; set; }
-            ///// <summary>
-            ///// SteamID3
-            ///// </summary>
-            //public string steamID { get; set; }
-            ///// <summary>
-            ///// SteamID3
-            ///// </summary>
-            //public string steamID3 { get; set; }
-            ///// <summary>
-            ///// Steam最后登出日期
-            ///// </summary>
-            //public string lastlogoff { get; set; }
-            ///// <summary>
-            ///// Steam好友代码
-            ///// </summary>
-            //public string friendcode => steamID3.Split(':')[2].TrimEnd(']');
+            public class SteamType
+            {
+                /// <summary>
+                /// 返回值
+                /// </summary>
+                public int code { get; set; }
+                /// <summary>
+                /// SteamID64
+                /// </summary>
+                public string steamid { get; set; }
+                /// <summary>
+                /// Steam社区状态, 1 为可见 3为隐藏
+                /// </summary>
+                public int communityvisibilitystate { get; set; }
+                /// <summary>
+                /// 如果为 1 , 代表用户已经填写了个人资料
+                /// </summary>
+                public int profilestate { get; set; }
+                /// <summary>
+                /// Steam用户名
+                /// </summary>
+                public string personaname { get; set; }
+                /// <summary>
+                /// Steam个人主页
+                /// </summary>
+                public string profileurl { get; set; }
+                /// <summary>
+                /// Steam个人主页,替换转义字符
+                /// </summary>
+                public string profileurl_1 => profileurl_1.Replace("\\/", "/");
+                /// <summary>
+                /// Steam头像, 32*32图像
+                /// </summary>
+                public string avatar { get; set; }
+                /// <summary>
+                /// Steam头像,替换转义字符, 32*32图像
+                /// </summary>
+                public string avatar_1 => avatar_1.Replace("\\/", "/");
+                /// <summary>
+                /// Steam头像, 64*64图像
+                /// </summary>
+                public string avatarmedium { get; set; }
+                /// <summary>
+                /// Steam头像,替换转义字符, 64*64图像
+                /// </summary>
+                public string avatarmedium_1 => avatarmedium.Replace("\\/", "/");
+                /// <summary>
+                /// Steam头像, 184*184图像
+                /// </summary>
+                public string avatarfull { get; set; }
+                /// <summary>
+                /// Steam头像,替换转义字符, 184*184图像
+                /// </summary>
+                public string avatarfull_1 => avatarfull.Replace("\\/", "/");
+                /// <summary>
+                /// Steam在线状态, 0-离线/隐私, 1-在线, 2-忙碌, 3-离开, 4-打盹, 5-想交易, 6-想玩。
+                /// </summary>
+                public int personastate { get; set; }
+                /// <summary>
+                /// Steam真实姓名
+                /// </summary>
+                public string realname { get; set; }
+                /// <summary>
+                ///  主要社区组
+                /// </summary>
+                public string primaryclanid { get; set; }
+                /// <summary>
+                /// Steam账号创建日期的时间刻
+                /// </summary>
+                public int timecreated { get; set; }
+                /// <summary>
+                /// Steam账号创建日期的时间戳
+                /// </summary>
+                public string timecreated_str { get; set; }
+                /// <summary>
+                /// Steam账号绑定区域
+                /// </summary>
+                public string loccountrycode { get; set; }
+                ///// <summary>
+                ///// SteamID3
+                ///// </summary>
+                //public string steamID { get; set; }
+                ///// <summary>
+                ///// SteamID3
+                ///// </summary>
+                //public string steamID3 { get; set; }
+                ///// <summary>
+                ///// Steam最后登出日期
+                ///// </summary>
+                //public string lastlogoff { get; set; }
+                ///// <summary>
+                ///// Steam好友代码
+                ///// </summary>
+                //public string friendcode => steamID3.Split(':')[2].TrimEnd(']');
+            }
         }
     }
 }
