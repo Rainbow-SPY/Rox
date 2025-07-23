@@ -27,7 +27,7 @@ namespace Rox
             {
                 if (string.IsNullOrEmpty(SteamID))
                 {
-                    WriteLog(LogLevel.Error, LogKind.System, $"SteamID64为空值, 错误代码: {_String_NullOrEmpty}");
+                    WriteLog.Error(LogKind.System, $"SteamID64为空值, 错误代码: {_String_NullOrEmpty}");
                     MessageBox.Show($"SteamID64为空值, 错误代码: {_String_NullOrEmpty}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return null;
                 }
@@ -65,18 +65,18 @@ namespace Rox
 
                     if (SteamID64 == null)
                     {
-                        WriteLog(LogLevel.Error, LogKind.Json, $"无法解析SteamID64, 错误代码: {_Json_Parse_SteamID64}");
+                        WriteLog.Error(LogKind.Json, $"无法解析SteamID64, 错误代码: {_Json_Parse_SteamID64}");
                         MessageBox.Show($"无法解析SteamID64, 错误代码: {_Json_Parse_SteamID64}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return null;
                     }
                     else if (SteamID64 == _Regex_Match_Unknow_Exception)
                     {
-                        WriteLog(LogLevel.Error, LogKind.Regex, $"处理 正则表达式 时发生未知异常 , 返回的错误代码: {_Regex_Match_Unknow_Exception} ");
+                        WriteLog.Error(LogKind.Regex, $"处理 正则表达式 时发生未知异常 , 返回的错误代码: {_Regex_Match_Unknow_Exception} ");
                         return null;
                     }
                     else if (SteamID64 == _Regex_Match_Not_Found_Any)
                     {
-                        WriteLog(LogLevel.Error, LogKind.Regex, $"未匹配到任何 正则表达式 , 返回的错误代码: {_Regex_Match_Not_Found_Any}");
+                        WriteLog.Error(LogKind.Regex, $"未匹配到任何 正则表达式 , 返回的错误代码: {_Regex_Match_Not_Found_Any}");
                         return null;
                     }
                     else
@@ -89,7 +89,7 @@ namespace Rox
                 {
                     if (SteamID.Length != 17)
                     {
-                        WriteLog(LogLevel.Error, LogKind.System, $"SteamID64不满足17位唯一标识符!, 错误代码: {Not_Allow_17_SteamID64}");
+                        WriteLog.Error(LogKind.System, $"SteamID64不满足17位唯一标识符!, 错误代码: {Not_Allow_17_SteamID64}");
                         MessageBox.Show($"SteamID64不满足17位唯一标识符!, 错误代码: {Not_Allow_17_SteamID64}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return null;
                     }
@@ -128,36 +128,36 @@ namespace Rox
                     string numericIdPattern = @"\/profiles\/(\d{17})";
 
                     // 尝试匹配自定义 ID
-                    WriteLog(LogLevel.Info, LogKind.Regex, "正则表达式匹配自定义ID");
+                    WriteLog.Info(LogKind.Regex, "正则表达式匹配自定义ID");
                     Match customIdMatch = Regex.Match(url, customIdPattern);
                     if (customIdMatch.Success)
                     {
-                        WriteLog(LogLevel.Info, LogKind.Regex, $"返回正则表达式匹配值: {customIdMatch.Groups[1].Value} ");
+                        WriteLog.Info(LogKind.Regex, $"返回正则表达式匹配值: {customIdMatch.Groups[1].Value} ");
                         return customIdMatch.Groups[1].Value; // 返回自定义 ID
                     }
 
                     // 尝试匹配 17 位数字 ID
-                    WriteLog(LogLevel.Info, LogKind.Regex, $"正则表达式匹配17位ID");
+                    WriteLog.Info(LogKind.Regex, $"正则表达式匹配17位ID");
                     Match numericIdMatch = Regex.Match(url, numericIdPattern);
                     if (numericIdMatch.Success)
                     {
                         if (numericIdMatch.Groups[1].Value.Length != 17)
                         {
-                            WriteLog(LogLevel.Error, LogKind.System, $"SteamID64不满足17位唯一标识符!, 错误代码: {Not_Allow_17_SteamID64}");
+                            WriteLog.Error(LogKind.System, $"SteamID64不满足17位唯一标识符!, 错误代码: {Not_Allow_17_SteamID64}");
                             MessageBox.Show($"SteamID64不满足17位唯一标识符!, 错误代码: {Not_Allow_17_SteamID64}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return Not_Allow_17_SteamID64;
                         }
-                        WriteLog(LogLevel.Info, LogKind.Regex, $"返回正则表达式匹配值: {numericIdMatch.Groups[1].Value} ");
+                        WriteLog.Info(LogKind.Regex, $"返回正则表达式匹配值: {numericIdMatch.Groups[1].Value} ");
                         return numericIdMatch.Groups[1].Value; // 返回 17 位数字 ID
                     }
 
                     // 如果未匹配到任何 ID，返回 null
-                    WriteLog(LogLevel.Error, LogKind.Regex, $"未匹配到任何ID , 错误代码: {_Regex_Match_Not_Found_Any}");
+                    WriteLog.Error(LogKind.Regex, $"未匹配到任何ID , 错误代码: {_Regex_Match_Not_Found_Any}");
                     return _Regex_Match_Not_Found_Any;
                 }
                 catch (Exception e)
                 {
-                    WriteLog(LogLevel.Error, LogKind.Regex, $"正则表达式 遭遇未知的异常: {e}, 错误代码: {_Regex_Match_Unknow_Exception}");
+                    WriteLog.Error(LogKind.Regex, $"正则表达式 遭遇未知的异常: {e}, 错误代码: {_Regex_Match_Unknow_Exception}");
                     MessageBox.Show($"正则表达式 遭遇未知的异常: {e} , 错误代码: {_Regex_Match_Unknow_Exception}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                     return _Regex_Match_Unknow_Exception;
                 }
@@ -174,7 +174,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamID, new HttpClient());
                 }
-                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.communitystate}");
+                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.communitystate}");
                 return _lastSteamData?.communitystate;
             }
             /// <summary>
@@ -188,7 +188,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamID, new HttpClient());
                 }
-                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.steamID}");
+                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.steamID}");
                 return _lastSteamData?.steamID;
             }
             /// <summary>
@@ -202,7 +202,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamID, new HttpClient());
                 }
-                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.steamID3}");
+                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.steamID3}");
                 return _lastSteamData?.steamID3;
             }
             /// <summary>
@@ -216,7 +216,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamID, new HttpClient());
                 }
-                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.username}");
+                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.username}");
                 return _lastSteamData?.username;
             }
             /// <summary>
@@ -230,7 +230,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
-                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.steamID64}");
+                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.steamID64}");
                 return _lastSteamData?.steamID64;
             }
             /// <summary>
@@ -244,7 +244,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
-                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.profileurl_1}");
+                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.profileurl_1}");
                 return _lastSteamData?.profileurl_1;
             }
             /// <summary>
@@ -258,7 +258,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
-                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.avatar_1}");
+                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.avatar_1}");
                 return _lastSteamData?.avatar_1;
             }
             /// <summary>
@@ -272,7 +272,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
-                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.accountcreationdate}");
+                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.accountcreationdate}");
                 return _lastSteamData?.accountcreationdate;
             }
             /// <summary>
@@ -286,7 +286,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
-                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.lastlogoff}");
+                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.lastlogoff}");
                 return _lastSteamData?.lastlogoff;
             }
             /// <summary>
@@ -300,7 +300,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
-                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.location}");
+                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.location}");
                 return _lastSteamData?.location;
             }
             /// <summary>
@@ -314,7 +314,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
-                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.onlinestatus}");
+                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.onlinestatus}");
                 return _lastSteamData?.onlinestatus;
             }
             /// <summary>
@@ -328,7 +328,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
-                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.friendcode}");
+                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.friendcode}");
                 return _lastSteamData?.friendcode;
             }
             /// <summary>
@@ -342,7 +342,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
-                WriteLog(LogLevel.Info, LogKind.Json, $"return Json value: {_lastSteamData?.realname}");
+                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.realname}");
                 return _lastSteamData?.realname;
             }
             #endregion
@@ -359,70 +359,70 @@ namespace Rox
                     // 构建GET请求的URL，将用户ID作为查询参数
                     var requestUrl = $"https://uapis.cn/api/steamuserinfo?input={SteamID}";
 
-                    WriteLog(LogLevel.Info, LogKind.Network, $"{_SEND_REQUEST}: {requestUrl}");
+                    WriteLog.Info(LogKind.Network, $"{_SEND_REQUEST}: {requestUrl}");
                     // 发送GET请求并获取响应
                     var response = await httpClient.GetAsync(requestUrl);
 
                     // 检查响应是否成功
                     if (!response.IsSuccessStatusCode)
                     {
-                        LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"请求失败: {response.StatusCode}, {_HttpClient_Request_Failed}");
+                        LogLibraries.WriteLog.Error($"请求失败: {response.StatusCode}, {_HttpClient_Request_Failed}");
                         return null;
                     }
                     // 读取响应内容
                     var responseData = await response.Content.ReadAsStringAsync();
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, LogKind.Json, "获取原始 Json 内容");
+                    LogLibraries.WriteLog.Info(LogKind.Json, "获取原始 Json 内容");
 
                     // 压缩 JSON 字符串
                     string compressedJson = CompressJson(responseData);
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, LogKind.Json, "压缩 Json");
+                    LogLibraries.WriteLog.Info(LogKind.Json, "压缩 Json");
 
                     // 直接解析 JSON 字符串
                     //Text.Json.JObject jObject = Rox.Text.Json.JObject.Parse(compressedJson);
                     // 反序列化为 SteamType 对象
-                    WriteLog(LogLevel.Info, LogKind.Json, $"反序列化 Json");
+                    WriteLog.Info(LogKind.Json, $"反序列化 Json");
                     var SteamType = Rox.Text.Json.DeserializeObject<SteamType>(compressedJson);
                     switch (SteamType.code)
                     {
                         case 432:
-                            WriteLog(LogLevel.Info, LogKind.Network, $"API返回响应: Steam账户不存在, 错误代码: {_Steam_Not_Found_Account}");
+                            WriteLog.Info(LogKind.Network, $"API返回响应: Steam账户不存在, 错误代码: {_Steam_Not_Found_Account}");
                             MessageBox.Show($"Steam账户不存在, 错误代码: {_Steam_Not_Found_Account}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
                         case 443:
-                            WriteLog(LogLevel.Info, LogKind.Network, $"API返回响应: 无效的输入, 错误代码: {Invaid_String_Input}");
+                            WriteLog.Info(LogKind.Network, $"API返回响应: 无效的输入, 错误代码: {Invaid_String_Input}");
                             MessageBox.Show($"无效的输入, 错误代码: {Invaid_String_Input}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
                         case 200:
-                            WriteLog(LogLevel.Info, LogKind.Network, $"API返回响应: Json解析成功");
+                            WriteLog.Info(LogKind.Network, $"API返回响应: Json解析成功");
                             break;
                         default:
-                            WriteLog(LogLevel.Info, LogKind.Json, $"Json 反序列化过程中出现未知错误, 错误代码: {_Json_DeObject_Unknow_Exception}");
+                            WriteLog.Info(LogKind.Json, $"Json 反序列化过程中出现未知错误, 错误代码: {_Json_DeObject_Unknow_Exception}");
                             MessageBox.Show($"Json 反序列化过程中出现未知错误, 错误代码: {_Json_DeObject_Unknow_Exception}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
                     }
                     // 检查 jObject 是否为空
                     //if (jObject == null)
                     //{
-                    //    LogLibraries.WriteLog(LogLibraries.LogLevel.Error, "解析 Json 对象时出错, 错误代码: _Json_Parse_jObject_Failed (6003)");
+                    //    LogLibraries.WriteLog.Error("解析 Json 对象时出错, 错误代码: _Json_Parse_jObject_Failed (6003)");
                     //    return null;
                     //}
                     //string[] parts = SteamType.steamID3.Split(':'); // 按冒号分割字符串
                     //string friendCode = parts[2].TrimEnd(']'); // 提取第三部分并去掉末尾的 ']'
                     // 输出字段值
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, $"Code: {SteamType.code}");
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, $"Community State: {SteamType.communitystate}");
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, $"Steam ID: {SteamType.steamID}");
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, $"Steam ID3: {SteamType.steamID3}");
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, $"Steam ID64: {SteamType.steamID64}");
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, $"Username: {SteamType.username}");
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, $"Real Name: {SteamType.realname}");
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, $"Profile URL: {SteamType.profileurl_1}");
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, $"Avatar: {SteamType.avatar_1}");
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, $"Account Creation Date: {SteamType.accountcreationdate}");
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, $"Last Logoff: {SteamType.lastlogoff}");
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, $"Location: {SteamType.location}");
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, $"Online Status: {SteamType.onlinestatus}");
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, $"Friend Code: {SteamType.friendcode}");
+                    LogLibraries.WriteLog.Info($"Code: {SteamType.code}");
+                    LogLibraries.WriteLog.Info($"Community State: {SteamType.communitystate}");
+                    LogLibraries.WriteLog.Info($"Steam ID: {SteamType.steamID}");
+                    LogLibraries.WriteLog.Info($"Steam ID3: {SteamType.steamID3}");
+                    LogLibraries.WriteLog.Info($"Steam ID64: {SteamType.steamID64}");
+                    LogLibraries.WriteLog.Info($"Username: {SteamType.username}");
+                    LogLibraries.WriteLog.Info($"Real Name: {SteamType.realname}");
+                    LogLibraries.WriteLog.Info($"Profile URL: {SteamType.profileurl_1}");
+                    LogLibraries.WriteLog.Info($"Avatar: {SteamType.avatar_1}");
+                    LogLibraries.WriteLog.Info($"Account Creation Date: {SteamType.accountcreationdate}");
+                    LogLibraries.WriteLog.Info($"Last Logoff: {SteamType.lastlogoff}");
+                    LogLibraries.WriteLog.Info($"Location: {SteamType.location}");
+                    LogLibraries.WriteLog.Info($"Online Status: {SteamType.onlinestatus}");
+                    LogLibraries.WriteLog.Info($"Friend Code: {SteamType.friendcode}");
                     //MessageBox.Show(
                     //    "Steam 个人信息查询\n\n" +
                     //    $"Https 返回值: {SteamType.code}\n" +
@@ -437,7 +437,7 @@ namespace Rox
                 catch (Exception ex)
                 {
                     // 捕获并输出异常
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"获取 Steam 个人信息失败，请检查网络连接或API服务状态: {ex.Message}, 错误代码: {_Steam_Unknow_Exception}");
+                    LogLibraries.WriteLog.Error($"获取 Steam 个人信息失败，请检查网络连接或API服务状态: {ex.Message}, 错误代码: {_Steam_Unknow_Exception}");
                     return null;
                 }
             }

@@ -340,7 +340,7 @@ namespace Rox
                 if (!Directory.Exists(sourceDirectory))
                 {
                     MessageBox.Show("源目录不存在: " + sourceDirectory, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    WriteLog(LogLevel.Error, $"CopyDirectory failed: Source directory does not exist: {sourceDirectory}");
+                    WriteLog.Error($"CopyDirectory failed: Source directory does not exist: {sourceDirectory}");
                     return false;
                 }
 
@@ -391,7 +391,7 @@ namespace Rox
                 catch (Exception ex)
                 {
                     MessageBox.Show($"复制目录时出错: {ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    WriteLog(LogLevel.Error, $"CopyDirectory failed: {ex.Message}");
+                    WriteLog.Error($"CopyDirectory failed: {ex.Message}");
                     return false;
                 }
             }

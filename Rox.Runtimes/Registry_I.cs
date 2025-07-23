@@ -26,15 +26,15 @@ namespace Rox
                     using (RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(keyPath))
                     {
                         // 写入值
-                        WriteLog(LogLevel.Info, $"{_WRITE_REGISTRY}");
+                        WriteLog.Info($"{_WRITE_REGISTRY}");
                         key.SetValue(valueName, valueData, valueType);
                         key.Close();
                     }
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, $"{_SUCESS_WRITE_REGISTRY}");
+                    LogLibraries.WriteLog.Info($"{_SUCESS_WRITE_REGISTRY}");
                 }
                 catch (Exception ex)
                 {
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"{_WRITE_REGISTRY_FAILED}: {ex.Message}");
+                    LogLibraries.WriteLog.Error($"{_WRITE_REGISTRY_FAILED}: {ex.Message}");
                 }
             }
             /// <summary>

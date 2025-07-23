@@ -31,7 +31,7 @@ namespace Rox
                 using (RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(keyPath))
                 {
                     key.SetValue("HideFileExt", Switch ? 0 : 1, RegistryValueKind.DWord); // 显示扩展名
-                    WriteLog(LogLevel.Info, _SUCESS_WRITE_REGISTRY + keyPath);
+                    WriteLog.Info(_SUCESS_WRITE_REGISTRY + keyPath);
                     RefreshExplorer();
                     return;
                 }
@@ -49,7 +49,7 @@ namespace Rox
                     {
                         key.SetValue("Hidden", 1, RegistryValueKind.DWord); // 显示隐藏文件
                                                                             //key.SetValue("ShowSuperHidden", 1, RegistryValueKind.DWord); // 显示系统文件
-                        WriteLog(LogLevel.Info, _SUCESS_WRITE_REGISTRY + keyPath);
+                        WriteLog.Info(_SUCESS_WRITE_REGISTRY + keyPath);
                         RefreshExplorer();
                         return;
                     }
@@ -57,7 +57,7 @@ namespace Rox
                     {
                         key.SetValue("Hidden", 0, RegistryValueKind.DWord); // 隐藏隐藏文件
                                                                             //key.SetValue("ShowSuperHidden", 0, RegistryValueKind.DWord); // 隐藏系统文件
-                        WriteLog(LogLevel.Info, _SUCESS_WRITE_REGISTRY + keyPath);
+                        WriteLog.Info(_SUCESS_WRITE_REGISTRY + keyPath);
                         RefreshExplorer();
                         return;
                     }
@@ -73,11 +73,11 @@ namespace Rox
                 try
                 {
                     Registry.Write(registryPath, "ThisPCPolicy", visibility, RegistryValueKind.String);
-                    WriteLog(LogLevel.Info, $"成功设置 {registryPath} 的可见性为 {visibility}");
+                    WriteLog.Info($"成功设置 {registryPath} 的可见性为 {visibility}");
                 }
                 catch (Exception ex)
                 {
-                    WriteLog(LogLevel.Error, $"设置 {registryPath} 的可见性时出错: {ex.Message}");
+                    WriteLog.Error($"设置 {registryPath} 的可见性时出错: {ex.Message}");
                 }
             }
             #region 刷新资源管理器
@@ -121,11 +121,11 @@ namespace Rox
                     // 3. 通知系统设置已更改
                     NotifySettingChange();
 
-                    WriteLog(LogLevel.Info, "资源管理器、桌面和系统设置已刷新。");
+                    WriteLog.Info("资源管理器、桌面和系统设置已刷新。");
                 }
                 catch (Exception ex)
                 {
-                    WriteLog(LogLevel.Error, $"刷新过程中出错: {ex.Message}");
+                    WriteLog.Error($"刷新过程中出错: {ex.Message}");
                 }
             }
 
@@ -148,11 +148,11 @@ namespace Rox
                         }
                     }
 
-                    WriteLog(LogLevel.Info, "已刷新所有资源管理器窗口。");
+                    WriteLog.Info("已刷新所有资源管理器窗口。");
                 }
                 catch (Exception ex)
                 {
-                    WriteLog(LogLevel.Error, $"刷新资源管理器窗口时出错: {ex.Message}");
+                    WriteLog.Error($"刷新资源管理器窗口时出错: {ex.Message}");
                 }
             }
 
@@ -169,16 +169,16 @@ namespace Rox
                     {
                         // 发送刷新命令
                         SendMessage(hWnd, WM_COMMAND, (IntPtr)SC_REFRESH, IntPtr.Zero);
-                        WriteLog(LogLevel.Info, "桌面已刷新。");
+                        WriteLog.Info("桌面已刷新。");
                     }
                     else
                     {
-                        WriteLog(LogLevel.Warning, "未找到桌面窗口。");
+                        WriteLog.Warning("未找到桌面窗口。");
                     }
                 }
                 catch (Exception ex)
                 {
-                    WriteLog(LogLevel.Error, $"刷新桌面时出错: {ex.Message}");
+                    WriteLog.Error($"刷新桌面时出错: {ex.Message}");
                 }
             }
 
@@ -199,11 +199,11 @@ namespace Rox
                         5000,                  // 超时时间（毫秒）
                         out IntPtr result);           // 返回值
 
-                    WriteLog(LogLevel.Info, "已通知系统设置更改。");
+                    WriteLog.Info("已通知系统设置更改。");
                 }
                 catch (Exception ex)
                 {
-                    WriteLog(LogLevel.Error, $"通知系统设置更改时出错: {ex.Message}");
+                    WriteLog.Error($"通知系统设置更改时出错: {ex.Message}");
                 }
             }
             #endregion
@@ -413,11 +413,11 @@ namespace Rox
                             null,                            // 工作目录
                             SW_SHOWNORMAL);                  // 窗口显示方式
 
-                        WriteLog(LogLevel.Info, "已打开“桌面图标设置”窗口。");
+                        WriteLog.Info("已打开“桌面图标设置”窗口。");
                     }
                     catch (Exception ex)
                     {
-                        WriteLog(LogLevel.Info, $"打开“桌面图标设置”窗口时出错: {ex.Message}");
+                        WriteLog.Info($"打开“桌面图标设置”窗口时出错: {ex.Message}");
                     }
                 }
             }
@@ -552,7 +552,7 @@ namespace Rox
                         if (key != null)
                         {
                             key.SetValue("LaunchTo", value, RegistryValueKind.DWord);
-                            WriteLog(LogLevel.Info, _SUCESS_WRITE_REGISTRY + keyPath);
+                            WriteLog.Info(_SUCESS_WRITE_REGISTRY + keyPath);
                             RefreshExplorer();
                             return;
                         }
@@ -643,16 +643,16 @@ namespace Rox
                 Sleep.StartInfo.FileName = "powercfg.exe";
                 Sleep.StartInfo.Arguments = "/hibernate " + key;
                 Sleep.Start();
-                WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {Sleep.Id}");
+                WriteLog.Info($"{_PROCESS_STARTED}: {Sleep.Id}");
                 Sleep.WaitForExit();
-                WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {Sleep.ExitCode}");
+                WriteLog.Info($"{_PROCESS_EXITED}: {Sleep.ExitCode}");
                 if (Sleep.ExitCode != 0)
                 {
-                    WriteLog(LogLevel.Error, LogKind.System, $"{_CANNOT_DISENABLE_HIBERNATE}: {Sleep.ExitCode}");
+                    WriteLog.Error(LogKind.System, $"{_CANNOT_DISENABLE_HIBERNATE}: {Sleep.ExitCode}");
                 }
                 else
                 {
-                    WriteLog(LogLevel.Info, LogKind.System, $"{_DISENABLE_HIBERNATE}");
+                    WriteLog.Info(LogKind.System, $"{_DISENABLE_HIBERNATE}");
                 }
             }
         }//休眠
@@ -665,16 +665,16 @@ namespace Rox
             p.StartInfo.FileName = "powercfg";
             p.StartInfo.Arguments = "-duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61";
             p.Start();
-            WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {p.Id}");
+            WriteLog.Info($"{_PROCESS_STARTED}: {p.Id}");
             p.WaitForExit();
-            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {p.ExitCode}");
+            WriteLog.Info($"{_PROCESS_EXITED}: {p.ExitCode}");
             if (p.ExitCode != 0)
             {
-                WriteLog(LogLevel.Error, $"{_CANNOT_ENABLE_HIGHPOWERCFG}: {p.ExitCode}");
+                WriteLog.Error($"{_CANNOT_ENABLE_HIGHPOWERCFG}: {p.ExitCode}");
             }
             else
             {
-                WriteLog(LogLevel.Info, LogKind.Process, $"{_ENABLE_HIGHPOWERCFG}");
+                WriteLog.Info(LogKind.Process, $"{_ENABLE_HIGHPOWERCFG}");
             }
         }//卓越性能电源方案
         /// <summary>
@@ -715,38 +715,38 @@ namespace Rox
                 {
                     // 修改 HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender
                     key = Microsoft.Win32.Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Policies\Microsoft\Windows Defender");
-                    WriteLog(LogLevel.Info, $"{_WRITE_REGISTRY}");
+                    WriteLog.Info($"{_WRITE_REGISTRY}");
                     key.SetValue("DisableAntiSpyware", value, RegistryValueKind.DWord);  // 禁用防间谍软件
-                    WriteLog(LogLevel.Info, $"{_SUCESS_WRITE_REGISTRY}");
+                    WriteLog.Info($"{_SUCESS_WRITE_REGISTRY}");
                     key.Close();  // 关闭注册表项
 
                     // 修改 HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection
                     key = Microsoft.Win32.Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection");
-                    WriteLog(LogLevel.Info, $"{_WRITE_REGISTRY}");
+                    WriteLog.Info($"{_WRITE_REGISTRY}");
                     key.SetValue("DisableBehaviorMonitoring", value, RegistryValueKind.DWord);  // 禁用行为监控
-                    WriteLog(LogLevel.Info, $"{_SUCESS_WRITE_REGISTRY}");
-                    WriteLog(LogLevel.Info, $"{_WRITE_REGISTRY}");
+                    WriteLog.Info($"{_SUCESS_WRITE_REGISTRY}");
+                    WriteLog.Info($"{_WRITE_REGISTRY}");
                     key.SetValue("DisableIOAVProtection", value, RegistryValueKind.DWord);  // 禁用文件扫描
-                    WriteLog(LogLevel.Info, $"{_SUCESS_WRITE_REGISTRY}");
-                    WriteLog(LogLevel.Info, $"{_WRITE_REGISTRY}");
+                    WriteLog.Info($"{_SUCESS_WRITE_REGISTRY}");
+                    WriteLog.Info($"{_WRITE_REGISTRY}");
                     key.SetValue("DisableOnAccessProtection", value, RegistryValueKind.DWord);  // 禁用访问保护
-                    WriteLog(LogLevel.Info, $"{_SUCESS_WRITE_REGISTRY}");
-                    WriteLog(LogLevel.Info, $"{_WRITE_REGISTRY}");
+                    WriteLog.Info($"{_SUCESS_WRITE_REGISTRY}");
+                    WriteLog.Info($"{_WRITE_REGISTRY}");
                     key.SetValue("DisableRealtimeMonitoring", value, RegistryValueKind.DWord);  // 禁用实时监控
-                    WriteLog(LogLevel.Info, $"{_SUCESS_WRITE_REGISTRY}");
+                    WriteLog.Info($"{_SUCESS_WRITE_REGISTRY}");
                     key.Close();  // 关闭注册表项
 
                     // 修改 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SecurityHealthService
                     key = Microsoft.Win32.Registry.LocalMachine.CreateSubKey(@"SYSTEM\CurrentControlSet\Services\SecurityHealthService");
-                    WriteLog(LogLevel.Info, $"{_WRITE_REGISTRY}");
+                    WriteLog.Info($"{_WRITE_REGISTRY}");
                     key.SetValue("Start", value + 2, RegistryValueKind.DWord);  // 设置服务启动类型为2自动 3手动 
-                    WriteLog(LogLevel.Info, $"{_SUCESS_WRITE_REGISTRY}");
+                    WriteLog.Info($"{_SUCESS_WRITE_REGISTRY}");
                     key.Close();
                     // 关闭注册表项
                 }
                 catch
                 {
-                    WriteLog(LogLevel.Error, $"{_WRITE_REGISTRY_FAILED}");
+                    WriteLog.Error($"{_WRITE_REGISTRY_FAILED}");
                     Thread.Sleep(1000);
                 }
             }//开关
@@ -785,26 +785,26 @@ namespace Rox
                         int value = (int)key.GetValue("NoAutoUpdate", 0);
                         if (value == 1)
                         {
-                            WriteLog(LogLevel.Info, $"{_WINDOWS_UPDATER_DISABLED}");
+                            WriteLog.Info($"{_WINDOWS_UPDATER_DISABLED}");
                             key.Close();
                             return false;
                         }
                         else
                         {
-                            WriteLog(LogLevel.Info, $"{_WINDOWS_UPDATER_ENABLED}");
+                            WriteLog.Info($"{_WINDOWS_UPDATER_ENABLED}");
                             key.Close();
                             return true;
                         }
                     }
                     else
                     {
-                        WriteLog(LogLevel.Info, $"{_WINDOWS_UPDATER_ENABLED}");
+                        WriteLog.Info($"{_WINDOWS_UPDATER_ENABLED}");
                         return false;
                     }
                 }
                 catch
                 {
-                    WriteLog(LogLevel.Error, $"{_READ_REGISTRY_FAILED}");
+                    WriteLog.Error($"{_READ_REGISTRY_FAILED}");
                     Thread.Sleep(1000);
                     return false;
                 }
@@ -876,22 +876,22 @@ namespace Rox
                     p.StartInfo.FileName = Path.Combine(modulePath, fileName);
                     p.StartInfo.Arguments = value;
                     p.Start();
-                    WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {p.Id}");
+                    WriteLog.Info($"{_PROCESS_STARTED}: {p.Id}");
                     p.WaitForExit();
-                    WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {p.ExitCode}");
+                    WriteLog.Info($"{_PROCESS_EXITED}: {p.ExitCode}");
                     if (p.ExitCode != 0)
                     {
-                        WriteLog(LogLevel.Warning, $"{ErrorEnable(value)}: ExitCode= {p.ExitCode}");
+                        WriteLog.Warning($"{ErrorEnable(value)}: ExitCode= {p.ExitCode}");
                     }
                     else
                     {
-                        WriteLog(LogLevel.Info, $"{IsEnable(value)}");
+                        WriteLog.Info($"{IsEnable(value)}");
                     }
                     p.Close();
                 }
                 catch (Exception e)
                 {
-                    WriteLog(LogLevel.Error, $"{ErrorEnable(value)}: {e}");
+                    WriteLog.Error($"{ErrorEnable(value)}: {e}");
                 }
             }//开关
         }
@@ -915,24 +915,24 @@ namespace Rox
                 process12.StartInfo.FileName = $"{AppDomain.CurrentDomain.BaseDirectory}\\bin\\HEU_KMS_Activator_v19.6.0.exe";
                 process12.StartInfo.Arguments = "/kms38";
                 process12.Start();
-                WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {process12.Id}");
-                WriteLog(LogLevel.Info, LogKind.Process, "process started");
-                WriteLog(LogLevel.Info, LogKind.Process, $"Args: {AppDomain.CurrentDomain.BaseDirectory}\\bin\\HEU_KMS_Activator_v19.6.0.exe /kms38");
+                WriteLog.Info($"{_PROCESS_STARTED}: {process12.Id}");
+                WriteLog.Info(LogKind.Process, "process started");
+                WriteLog.Info(LogKind.Process, $"Args: {AppDomain.CurrentDomain.BaseDirectory}\\bin\\HEU_KMS_Activator_v19.6.0.exe /kms38");
                 process12.WaitForExit();
-                WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {process12.ExitCode}");
+                WriteLog.Info($"{_PROCESS_EXITED}: {process12.ExitCode}");
                 if (process12.ExitCode != 0)
                 {
-                    WriteLog(LogLevel.Error, $"{_CANNOT_ACTIVE_WINDOWS}: {process12.ExitCode}");
+                    WriteLog.Error($"{_CANNOT_ACTIVE_WINDOWS}: {process12.ExitCode}");
                 }
                 else
                 {
-                    WriteLog(LogLevel.Info, $"{_ACTIVE_WINDOWS}");
+                    WriteLog.Info($"{_ACTIVE_WINDOWS}");
                 }
                 process12.Close();
             }
             catch (Exception exception)
             {
-                WriteLog(LogLevel.Error, $"{_CANNOT_ACTIVE_WINDOWS}: {exception}");
+                WriteLog.Error($"{_CANNOT_ACTIVE_WINDOWS}: {exception}");
             }
         }
         /// <summary>
@@ -956,25 +956,25 @@ namespace Rox
                 process12.StartInfo.FileName = $"{AppDomain.CurrentDomain.BaseDirectory}\\bin\\HEU_KMS_Activator_v19.6.0.exe";
                 process12.StartInfo.Arguments = "/kms38";
                 process12.Start();
-                WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {process12.Id}");
-                WriteLog(LogLevel.Info, LogKind.Process, "process started");
-                WriteLog(LogLevel.Info, LogKind.Process, $"Args: {AppDomain.CurrentDomain.BaseDirectory}\\bin\\HEU_KMS_Activator_v19.6.0.exe /kms38");
+                WriteLog.Info($"{_PROCESS_STARTED}: {process12.Id}");
+                WriteLog.Info(LogKind.Process, "process started");
+                WriteLog.Info(LogKind.Process, $"Args: {AppDomain.CurrentDomain.BaseDirectory}\\bin\\HEU_KMS_Activator_v19.6.0.exe /kms38");
                 process12.WaitForExit();
-                WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {process12.ExitCode}");
+                WriteLog.Info($"{_PROCESS_EXITED}: {process12.ExitCode}");
                 if (process12.ExitCode != 0)
                 {
-                    WriteLog(LogLevel.Error, $"{_CANNOT_ACTIVE_WINDOWS}: {process12.ExitCode}");
+                    WriteLog.Error($"{_CANNOT_ACTIVE_WINDOWS}: {process12.ExitCode}");
                     return false;
                 }
                 else
                 {
-                    WriteLog(LogLevel.Info, $"{_ACTIVE_WINDOWS}");
+                    WriteLog.Info($"{_ACTIVE_WINDOWS}");
                     return true;
                 }
             }
             catch (Exception exception)
             {
-                WriteLog(LogLevel.Error, $"{_CANNOT_ACTIVE_WINDOWS}: {exception}");
+                WriteLog.Error($"{_CANNOT_ACTIVE_WINDOWS}: {exception}");
                 return false;
             }
         }
@@ -1113,12 +1113,12 @@ namespace Rox
             if (isAuthenticated)
             {
                 // 执行后续操作（例如打开受保护的功能）
-                WriteLog(LogLevel.Info, _SUCCESS_VERIFY);
+                WriteLog.Info(_SUCCESS_VERIFY);
                 return true;
             }
             else
             {
-                WriteLog(LogLevel.Info, _CANCEL_OP);
+                WriteLog.Info(_CANCEL_OP);
                 return false;
             }
         }//Windows安全中心身份验证

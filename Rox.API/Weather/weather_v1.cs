@@ -51,29 +51,29 @@ namespace Rox
                     }
                     var responseData = await response.Content.ReadAsStringAsync();
                     string compressedJson = CompressJson(responseData);
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, LogKind.Json, "压缩 Json");
+                    LogLibraries.WriteLog.Info(LogKind.Json, "压缩 Json");
                     var weatherType = Rox.Text.Json.DeserializeObject<WeatherType>(compressedJson);
-                    WriteLog(LogLevel.Info, LogKind.Json, "反序列化 Json 对象");
+                    WriteLog.Info(LogKind.Json, "反序列化 Json 对象");
                     switch ((int)response.StatusCode) // 修改为通过实例访问 code 属性
                     {
                         case 400:
-                            WriteLog(LogLevel.Error, LogKind.Network, $"城市名称不能为空, 错误代码: {_String_NullOrEmpty}, 错误信息: {weatherType.code} - {weatherType.message}");
+                            WriteLog.Error(LogKind.Network, $"城市名称不能为空, 错误代码: {_String_NullOrEmpty}, 错误信息: {weatherType.code} - {weatherType.message}");
                             MessageBox.Show($"城市名称不能为空, 错误代码: {_String_NullOrEmpty}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
                         case 410:
-                            WriteLog(LogLevel.Error, LogKind.Network, $"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}, 错误信息: {weatherType.code} - {weatherType.message}");
+                            WriteLog.Error(LogKind.Network, $"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}, 错误信息: {weatherType.code} - {weatherType.message}");
                             MessageBox.Show($"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
                         case 502:
-                            WriteLog(LogLevel.Error, LogKind.Network, $"上游服务错误, 天气供应商API暂时不可用或返回了错误, 错误代码: {_Weather_Service_Error}, 错误信息: {weatherType.code} - {weatherType.message}");
+                            WriteLog.Error(LogKind.Network, $"上游服务错误, 天气供应商API暂时不可用或返回了错误, 错误代码: {_Weather_Service_Error}, 错误信息: {weatherType.code} - {weatherType.message}");
                             MessageBox.Show($"上游服务错误, 天气供应商API暂时不可用或返回了错误, 错误代码: {_Weather_Service_Error}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
                         case 500:
-                            WriteLog(LogLevel.Error, LogKind.Network, $"服务器内部错误。在处理天气数据时发生了未知问题, 错误代码: {_Weather_Unknow_Exception}, 错误信息: {weatherType.code} - {weatherType.message}");
+                            WriteLog.Error(LogKind.Network, $"服务器内部错误。在处理天气数据时发生了未知问题, 错误代码: {_Weather_Unknow_Exception}, 错误信息: {weatherType.code} - {weatherType.message}");
                             MessageBox.Show($"服务器内部错误。在处理天气数据时发生了未知问题, 错误代码: {_Weather_Unknow_Exception}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
                         case 200:
-                            WriteLog(LogLevel.Info, LogKind.Network, $"请求成功");
+                            WriteLog.Info(LogKind.Network, $"请求成功");
                             break;
                     }
                     if (weatherType.weather == "" || weatherType.weather == string.Empty || string.IsNullOrWhiteSpace(weatherType.weather))
@@ -82,7 +82,7 @@ namespace Rox
                 }
                 catch (Exception ex)
                 {
-                    WriteLog(LogLevel.Error, LogKind.Network, $"获取天气信息失败，请检查网络连接或API服务状态: {ex.Message}, 错误代码:  {_Weather_Unknow_Exception}");
+                    WriteLog.Error(LogKind.Network, $"获取天气信息失败，请检查网络连接或API服务状态: {ex.Message}, 错误代码:  {_Weather_Unknow_Exception}");
                     return null;
                 }
             }

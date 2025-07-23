@@ -43,47 +43,47 @@ namespace Rox
                     }
                     var responseData = await response.Content.ReadAsStringAsync();
                     string compressedJson = CompressJson(responseData);
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, "压缩 Json");
+                    LogLibraries.WriteLog.Info("压缩 Json");
                     // 直接解析 JSON 字符串
                     //Text.Json.JObject jObject = Rox.Text.Json.JObject.Parse(compressedJson);
                     var weatherType = Rox.Text.Json.DeserializeObject<WeatherType>(compressedJson);
                     switch (weatherType.code) // 修改为通过实例访问 code 属性
                     {
                         case 400:
-                            WriteLog(LogLevel.Error, LogKind.Network, $"城市名称不能为空, 错误代码: {_String_NullOrEmpty}");
+                            WriteLog.Error(LogKind.Network, $"城市名称不能为空, 错误代码: {_String_NullOrEmpty}");
                             MessageBox.Show($"城市名称不能为空, 错误代码: {_String_NullOrEmpty}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
                         case 500:
-                            WriteLog(LogLevel.Error, LogKind.Network, $"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}");
+                            WriteLog.Error(LogKind.Network, $"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}");
                             MessageBox.Show($"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
                         case 0:
-                            WriteLog(LogLevel.Error, LogKind.Network, $"检测到非法/不安全的请求!访问已拒绝, 错误代码: {_HttpClient_Request_UnsafeOrIllegal_Denied}");
+                            WriteLog.Error(LogKind.Network, $"检测到非法/不安全的请求!访问已拒绝, 错误代码: {_HttpClient_Request_UnsafeOrIllegal_Denied}");
                             MessageBox.Show($"检测到非法/不安全的请求!访问已拒绝, 错误代码: {_HttpClient_Request_UnsafeOrIllegal_Denied}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
                     }
                     //if (jObject == null)
                     //{
-                    //    LogLibraries.WriteLog(LogLibraries.LogLevel.Error, "Failed to parse JSON object.");
+                    //    LogLibraries.WriteLog.Error("Failed to parse JSON object.");
                     //    return null;
                     //}
                     // 检测是否传入null
                     if (weatherType.temperature == "" || weatherType.temperature == string.Empty || string.IsNullOrWhiteSpace(weatherType.temperature))
                         return null;
-                    WriteLog(LogLibraries.LogLevel.Info, $"Code: {weatherType.code}");
-                    WriteLog(LogLibraries.LogLevel.Info, $"获取省份名称: {weatherType.province}");
-                    WriteLog(LogLibraries.LogLevel.Info, $"获取城市名称: {weatherType.city}");
-                    WriteLog(LogLibraries.LogLevel.Info, $"获取温度: {weatherType.temperature_1}");
-                    WriteLog(LogLibraries.LogLevel.Info, $"获取天气状况: {weatherType.weather}");
-                    WriteLog(LogLibraries.LogLevel.Info, $"获取风向: {weatherType.wind_direction_1}");
-                    WriteLog(LogLibraries.LogLevel.Info, $"获取风力等级: {weatherType.wind_power_1}");
-                    WriteLog(LogLibraries.LogLevel.Info, $"获取湿度: {weatherType.humidity_1}");
-                    WriteLog(LogLibraries.LogLevel.Info, $"数据更新时间: {weatherType.reporttime}");
+                    WriteLog.Info($"Code: {weatherType.code}");
+                    WriteLog.Info($"获取省份名称: {weatherType.province}");
+                    WriteLog.Info($"获取城市名称: {weatherType.city}");
+                    WriteLog.Info($"获取温度: {weatherType.temperature_1}");
+                    WriteLog.Info($"获取天气状况: {weatherType.weather}");
+                    WriteLog.Info($"获取风向: {weatherType.wind_direction_1}");
+                    WriteLog.Info($"获取风力等级: {weatherType.wind_power_1}");
+                    WriteLog.Info($"获取湿度: {weatherType.humidity_1}");
+                    WriteLog.Info($"数据更新时间: {weatherType.reporttime}");
                     return weatherType;
                 }
                 catch (Exception ex)
                 {
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"获取天气信息失败，请检查网络连接或API服务状态: {ex.Message}, 错误代码:  {_Weather_Unknow_Exception}");
+                    LogLibraries.WriteLog.Error($"获取天气信息失败，请检查网络连接或API服务状态: {ex.Message}, 错误代码:  {_Weather_Unknow_Exception}");
                     return null;
                 }
             }

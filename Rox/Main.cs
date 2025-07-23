@@ -136,23 +136,23 @@ namespace Rox
     //        if (!string.IsNullOrEmpty(jsonResponse))
     //        {
     //            var (TagName, Name) = ExtractTagAndName(jsonResponse, platform);
-    //            WriteLog(LogLevel.Info, $"{_LATEST_VERSION}: {TagName} - {Name}");
+    //            WriteLog.Info($"{_LATEST_VERSION}: {TagName} - {Name}");
     //            string[] strings = TagName.Split('v');
     //            string res = NewerVersions(LocalizedString.Version, strings[1]);
     //            if (res == "same" || res == LocalizedString.Version)
     //            {
-    //                WriteLog(LogLevel.Info, _NON_NEW_VER);
+    //                WriteLog.Info(_NON_NEW_VER);
     //                return false;
     //            }
     //            else
     //            {
-    //                WriteLog(LogLevel.Info, $"{_NEW_VERSION_AVAILABLE}: {res} {_CURRENT_VER}: {LocalizedString.Version}");
+    //                WriteLog.Info($"{_NEW_VERSION_AVAILABLE}: {res} {_CURRENT_VER}: {LocalizedString.Version}");
     //                return true;
     //            }
     //        }
     //        else
     //        {
-    //            WriteLog(LogLevel.Error, _JSON_PARSING_FAILED);
+    //            WriteLog.Error(_JSON_PARSING_FAILED);
     //            return false;
     //        }
     //    }
@@ -168,7 +168,7 @@ namespace Rox
     //        {
     //            string jsonResponse = FetchJsonFromUrl(CheckUpdateUrl).Result;
     //            var (TagName, Name) = ExtractTagAndName(jsonResponse, platform);
-    //            WriteLog(LogLevel.Info, $"{_LATEST_VERSION}: {TagName} - {Name}");
+    //            WriteLog.Info($"{_LATEST_VERSION}: {TagName} - {Name}");
     //            string strings1 = $"{TagName};{Name}";
     //            return strings1;
     //        }
@@ -199,7 +199,7 @@ namespace Rox
     //        }
     //        catch (HttpRequestException ex)
     //        {
-    //            WriteLog(LogLevel.Error, $"{_ERROR}: {ex.Message}");
+    //            WriteLog.Error($"{_ERROR}: {ex.Message}");
     //            return null;
     //        }
     //    }
@@ -236,7 +236,7 @@ namespace Rox
     //        }
     //        catch (Exception ex)
     //        {
-    //            WriteLog(LogLevel.Error, $"{_JSON_PARSING_FAILED}: {ex.Message}");
+    //            WriteLog.Error($"{_JSON_PARSING_FAILED}: {ex.Message}");
     //            return (null, null);
     //        }
     //    }
@@ -282,7 +282,7 @@ namespace Rox
     //            if (!Directory.Exists(updateDir))
     //            {
     //                Directory.CreateDirectory(updateDir);
-    //                WriteLog(LogLevel.Info, $"{_CREATE_DIRECTORY}: {updateDir}");
+    //                WriteLog.Info($"{_CREATE_DIRECTORY}: {updateDir}");
     //            }
     //            var temp = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\Temp";
     //            var update = $"{Directory.GetCurrentDirectory()}\\update";
@@ -297,36 +297,36 @@ namespace Rox
     //            {
 
     //                string UpdateFile = fileDialog.FileName;
-    //                WriteLog(LogLevel.Info, $"Selected update file: {UpdateFile}");
+    //                WriteLog.Info($"Selected update file: {UpdateFile}");
     //                if (CheckFilesInArchive(UpdateFile))
     //                {
-    //                    WriteLog(LogLevel.Info, $"Archive Passed");
+    //                    WriteLog.Info($"Archive Passed");
     //                    string path = ExtractUpdateFiles(update, UpdateFile);
     //                    if (string.IsNullOrEmpty(path))
     //                    {
-    //                        WriteLog(LogLevel.Error, "Failed to extract update files.");
+    //                        WriteLog.Error("Failed to extract update files.");
     //                        return;
     //                    }
 
-    //                    WriteLog(LogLevel.Info, $"Files extracted to: {path}");
+    //                    WriteLog.Info($"Files extracted to: {path}");
     //                    // 读取 filehash.ini 文件
     //                    string updateIniPath = Path.Combine(path, "filehash.ini");
     //                    if (!System.IO.File.Exists(updateIniPath))
     //                    {
-    //                        WriteLog(LogLevel.Error, $"update.ini not found in: {path}");
+    //                        WriteLog.Error($"update.ini not found in: {path}");
     //                        return;
     //                    }
 
     //                    string[] lines = System.IO.File.ReadAllLines(updateIniPath);
-    //                    WriteLog(LogLevel.Info, $"Reading filehash.ini from: {updateIniPath}");
+    //                    WriteLog.Info($"Reading filehash.ini from: {updateIniPath}");
     //                    BatchWriter(true, "");
     //                    foreach (string line in lines)
     //                    {
-    //                        WriteLog(LogLevel.Info, "Reading line: " + line);
+    //                        WriteLog.Info("Reading line: " + line);
     //                        string[] parts = line.Split(',');
     //                        if (parts.Length < 2)
     //                        {
-    //                            WriteLog(LogLevel.Error, $"Invalid line in filehash.ini: {line}");
+    //                            WriteLog.Error($"Invalid line in filehash.ini: {line}");
     //                            break;
     //                        }
     //                        string fileName = parts[0].Trim();
@@ -336,24 +336,24 @@ namespace Rox
     //                        string filePath = Path.Combine(path, fileName);
     //                        string destinationPath = Path.Combine(Directory.GetCurrentDirectory(), "update", fileName);
 
-    //                        WriteLog(LogLevel.Info, $"Verifying file: {filePath}, Expected Hash: {expectedHash}");
+    //                        WriteLog.Info($"Verifying file: {filePath}, Expected Hash: {expectedHash}");
 
     //                        // 验证文件哈希值
 
     //                        if (File_I.CheckFileHash(filePath, expectedHash))
     //                        {
-    //                            WriteLog(LogLevel.Info, $"File {fileName} Passed");
+    //                            WriteLog.Info($"File {fileName} Passed");
 
     //                            // 确保目标目录存在
     //                            Directory.CreateDirectory(Path.GetDirectoryName(destinationPath));
 
     //                            // 移动文件
     //                            System.IO.File.Move(filePath, destinationPath);
-    //                            WriteLog(LogLevel.Info, $"File {fileName} moved to: {destinationPath}");
+    //                            WriteLog.Info($"File {fileName} moved to: {destinationPath}");
     //                        }
     //                        else
     //                        {
-    //                            WriteLog(LogLevel.Error, $"File {fileName} Failed");
+    //                            WriteLog.Error($"File {fileName} Failed");
     //                            MessageBox.Show($"{_ERROR}: The file {fileName} did not pass MD5 verification.", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
     //                        }
     //                    }
@@ -363,14 +363,14 @@ namespace Rox
     //                }
     //                else
     //                {
-    //                    WriteLog(LogLevel.Error, $"Archive Failed");
+    //                    WriteLog.Error($"Archive Failed");
     //                    MessageBox.Show($"{_ERROR}: The archive not passed structure verify.", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
     //                }
     //            }
     //        }
     //        catch (Exception ex)
     //        {
-    //            WriteLog(LogLevel.Error, $"{_ERROR}: {ex.Message}");
+    //            WriteLog.Error($"{_ERROR}: {ex.Message}");
     //        }
     //    }
     //    /// <summary>
@@ -425,7 +425,7 @@ namespace Rox
     //        }
     //        if (process.ExitCode != 0)
     //        {
-    //            WriteLog(LogLevel.Error, $"{_ERROR}: {process.ExitCode}");
+    //            WriteLog.Error($"{_ERROR}: {process.ExitCode}");
     //            process.Close();
     //            return false;
     //        }

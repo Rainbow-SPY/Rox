@@ -53,8 +53,8 @@ namespace Rox
                 }
                 catch
                 {
-                    WriteLog(LogLevel.Error, $"资源键 '{key}' 未找到，语言: {lang}");
-                    WriteLog(LogLevel.Info, $"Error:{key} ");
+                    WriteLog.Error($"资源键 '{key}' 未找到，语言: {lang}");
+                    WriteLog.Info($"Error:{key} ");
                     return null;
                 }
             }

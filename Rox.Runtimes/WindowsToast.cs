@@ -30,30 +30,30 @@ namespace Rox
                 string path = Path.GetTempPath(); // 获取临时目录路径
                 // 创建 ResourceManager 实例
                 ResourceManager rm = new ResourceManager(resourceName, assembly);
-                WriteLog(LogLevel.Info, $"{_NEW_RM}");
+                WriteLog.Info($"{_NEW_RM}");
                 // 从资源中获取WindowsToast文件的字节数据
                 byte[] ToastZipData = (byte[])rm.GetObject("WindowsToast");
-                WriteLog(LogLevel.Info, $"{_GET_RM_OBJ}: WindowsToast Module");
+                WriteLog.Info($"{_GET_RM_OBJ}: WindowsToast Module");
                 if (ToastZipData != null)
                 {
                     // 检查并创建目录
                     if (!Directory.Exists(path))
                     {
                         Directory.CreateDirectory(path);
-                        WriteLog(LogLevel.Info, $"{_CREATE_DIRECTORY}");
+                        WriteLog.Info($"{_CREATE_DIRECTORY}");
                     }
-                    WriteLog(LogLevel.Info, $"{_GET_OUTPUT_DIRECTORY}: {path}");
+                    WriteLog.Info($"{_GET_OUTPUT_DIRECTORY}: {path}");
                     // 保存文件路径
                     string outputFilePath = Path.Combine(path, "WindowsToast.zip");
-                    WriteLog(LogLevel.Info, $"{_GET_OUTPUT_NAME}: {path}");
+                    WriteLog.Info($"{_GET_OUTPUT_NAME}: {path}");
                     // 写入文件，确保保存为二进制数据
-                    WriteLog(LogLevel.Info, $"{_FILE_WRITING}");
+                    WriteLog.Info($"{_FILE_WRITING}");
                     System.IO.File.WriteAllBytes(outputFilePath, ToastZipData);
-                    WriteLog(LogLevel.Info, $"WindowsToast {_FILE_EXIST_PATH} {outputFilePath}");
+                    WriteLog.Info($"WindowsToast {_FILE_EXIST_PATH} {outputFilePath}");
                 }
                 else
                 {
-                    WriteLog(LogLevel.Error, $"{_RES_FILE_NOT_FIND}");
+                    WriteLog.Error($"{_RES_FILE_NOT_FIND}");
                 }
                 UnzipToastModuleZip(ExtractPath, path);
             }
@@ -66,7 +66,7 @@ namespace Rox
             {
                 if (path == string.Empty || OriginalFile == string.Empty)
                 {
-                    WriteLog(LogLevel.Error, $"{(path == string.Empty ? "指定的目标路径" : "原始压缩文件路径")} 为null或空值, 将使用默认路径\".\\bin\"");
+                    WriteLog.Error($"{(path == string.Empty ? "指定的目标路径" : "原始压缩文件路径")} 为null或空值, 将使用默认路径\".\\bin\"");
                     path = $"{Directory.GetCurrentDirectory()}\\bin";
                     if (!Directory.Exists($"{Directory.GetCurrentDirectory()}\\bin"))
                     {
@@ -76,13 +76,13 @@ namespace Rox
                 //检查参数是否合法
                 if (string.IsNullOrWhiteSpace(path) || Path.GetFileName(path) == string.Empty)
                 {
-                    WriteLog(LogLevel.Error, $"{path}值为null或空字符串");
+                    WriteLog.Error($"{path}值为null或空字符串");
                     MessageBox.Show($"{path}值为null或空字符串", "错误的路径! - Rox", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                     return;
                 }
                 else
                 {
-                    WriteLog(LogLevel.Info, $"{_GET_DIRECTORY}: {OriginalFile}");
+                    WriteLog.Info($"{_GET_DIRECTORY}: {OriginalFile}");
                 }
                 // 检查文件是否存在
                 string zipFilePath = Path.Combine(OriginalFile, "WindowsToast.zip");
@@ -98,18 +98,18 @@ namespace Rox
                     zip.WaitForExit();
                     if (zip.ExitCode == 0)
                     {
-                        WriteLog(LogLevel.Info, $"WindowsToast {_DOWNLOADING_COMPLETE}");
-                        WriteLog(LogLevel.Info, $"{_FILE_EXIST_PATH} {path}");
+                        WriteLog.Info($"WindowsToast {_DOWNLOADING_COMPLETE}");
+                        WriteLog.Info($"{_FILE_EXIST_PATH} {path}");
                     }
                     else
                     {
-                        WriteLog(LogLevel.Error, $"WindowsToast {_DOWNLOADING_FAILED}");
-                        WriteLog(LogLevel.Error, $"{zip.ExitCode}");
+                        WriteLog.Error($"WindowsToast {_DOWNLOADING_FAILED}");
+                        WriteLog.Error($"{zip.ExitCode}");
                     }
                 }
                 else
                 {
-                    WriteLog(LogLevel.Error, $"WindowsToast {_RES_FILE_NOT_FIND}");
+                    WriteLog.Error($"WindowsToast {_RES_FILE_NOT_FIND}");
                     MessageBox.Show($"{_RES_FILE_NOT_FIND}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                     return;
                 }
@@ -124,7 +124,7 @@ namespace Rox
                 // 检查 ToastNotification 模块是否存在
                 if (!System.IO.File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "bin", "WindowsToast.exe")) && !File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "WindowsToast.exe")))
                 {
-                    WriteLog(LogLevel.Error, "WindowsToast 模块未找到，正在提取模块。");
+                    WriteLog.Error("WindowsToast 模块未找到，正在提取模块。");
                     ExtractToastModule(Directory.GetCurrentDirectory() + "\\bin");
                     PostToastNotification(title, content);
                     return;
@@ -151,16 +151,16 @@ namespace Rox
                     process.WaitForExit(); // 等待进程结束
                     if (process.ExitCode == 0)
                     {
-                        WriteLog(LogLevel.Info, "Toast 通知发送成功。");
+                        WriteLog.Info("Toast 通知发送成功。");
                     }
                     else
                     {
-                        WriteLog(LogLevel.Error, $"Toast 通知发送失败，退出代码: {process.ExitCode}");
+                        WriteLog.Error($"Toast 通知发送失败，退出代码: {process.ExitCode}");
                     }
                 }
                 catch (Exception ex)
                 {
-                    WriteLog(LogLevel.Error, $"发送 Toast 通知失败: {ex.Message}");
+                    WriteLog.Error($"发送 Toast 通知失败: {ex.Message}");
                 }
             }
         }

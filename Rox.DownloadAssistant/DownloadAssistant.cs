@@ -25,11 +25,11 @@ namespace Rox
         {
             if (System.IO.File.Exists(filePath))
             {
-                WriteLog(LogLevel.Info, $"{_GET_ARIA2C_PATH}: {filePath}");
+                WriteLog.Info($"{_GET_ARIA2C_PATH}: {filePath}");
                 Assembly assembly = Assembly.GetExecutingAssembly();
                 foreach (var resource in assembly.GetManifestResourceNames())
                 {
-                    WriteLog(LogLevel.Info, $"{_GET_RM_NAME}: {resource}");
+                    WriteLog.Info($"{_GET_RM_NAME}: {resource}");
                 }
                 return;
             }
@@ -44,10 +44,10 @@ namespace Rox
 
                 // 创建 ResourceManager 实例
                 ResourceManager rm = new ResourceManager(resourceName, assembly);
-                WriteLog(LogLevel.Info, $"{_NEW_RM}");
+                WriteLog.Info($"{_NEW_RM}");
                 // 从资源中获取aria2c.exe文件的字节数据
                 byte[] Aria2cExeData = (byte[])rm.GetObject("aria2c");
-                WriteLog(LogLevel.Info, $"{_GET_RM_OBJ}: aria2c");
+                WriteLog.Info($"{_GET_RM_OBJ}: aria2c");
                 if (Aria2cExeData != null)
                 {
                     // 将文件保存到当前目录
@@ -56,20 +56,20 @@ namespace Rox
                     if (!Directory.Exists(outputDirectory))
                     {
                         Directory.CreateDirectory(outputDirectory);
-                        WriteLog(LogLevel.Info, $"{_CREATE_DIRECTORY}");
+                        WriteLog.Info($"{_CREATE_DIRECTORY}");
                     }
-                    WriteLog(LogLevel.Info, $"{_GET_OUTPUT_DIRECTORY}: {outputDirectory}");
+                    WriteLog.Info($"{_GET_OUTPUT_DIRECTORY}: {outputDirectory}");
                     // 保存文件路径
                     string outputFilePath = Path.Combine(outputDirectory, "aria2c.exe");
-                    WriteLog(LogLevel.Info, $"{_GET_OUTPUT_NAME}: {outputDirectory}");
+                    WriteLog.Info($"{_GET_OUTPUT_NAME}: {outputDirectory}");
                     // 写入文件，确保保存为二进制数据
-                    WriteLog(LogLevel.Info, $"{_FILE_WRITING}");
+                    WriteLog.Info($"{_FILE_WRITING}");
                     System.IO.File.WriteAllBytes(outputFilePath, Aria2cExeData);
-                    WriteLog(LogLevel.Info, $"aria2c.exe {_FILE_EXIST_PATH} {outputFilePath}");
+                    WriteLog.Info($"aria2c.exe {_FILE_EXIST_PATH} {outputFilePath}");
                 }
                 else
                 {
-                    WriteLog(LogLevel.Error, $"{_RES_FILE_NOT_FIND}");
+                    WriteLog.Error($"{_RES_FILE_NOT_FIND}");
                 }
             }
         }
@@ -140,19 +140,19 @@ namespace Rox
             Process p = new Process();
             p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
             p.StartInfo.Arguments = arg;
-            WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
+            WriteLog.Info($"{_GET_ARIA2C_ARGS}: {arg}");
             p.Start();
-            WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {p.Id}");
-            WriteLog(LogLevel.Info, $"{_DOWNLOADING_FILE}...");
+            WriteLog.Info($"{_PROCESS_STARTED}: {p.Id}");
+            WriteLog.Info($"{_DOWNLOADING_FILE}...");
             p.WaitForExit();
-            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {p.ExitCode}");
+            WriteLog.Info($"{_PROCESS_EXITED}: {p.ExitCode}");
             if (p.ExitCode != 0)
             {
-                LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
+                LogLibraries.WriteLog.Error($"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
             }
             else
             {
-                WriteLog(LogLevel.Info, $"{_DOWNLOADING_COMPLETE}");
+                WriteLog.Info($"{_DOWNLOADING_COMPLETE}");
             }
             p.Close();
         }
@@ -168,12 +168,12 @@ namespace Rox
             CheckFile($"{Directory.GetCurrentDirectory()}\\bin\\aria2c.exe");
             if (!log)
             {
-                WriteLog(LogLevel.Info, $"{_DISABLE_ARIA2C_LOG_OUTPUT}");
+                WriteLog.Info($"{_DISABLE_ARIA2C_LOG_OUTPUT}");
                 arg = $"-x 16 -d \"{Downloadvocation}\" \"{url}\"";
             }
             else
             {
-                WriteLog(LogLevel.Info, $"{_ENABLE_ARIA2C_LOG_OUTPUT}");
+                WriteLog.Info($"{_ENABLE_ARIA2C_LOG_OUTPUT}");
                 arg = $"-x 16 -d \"{Downloadvocation}\" -l \"{Directory.GetCurrentDirectory()}\\aria2c.log\" \"{url}\"";
             }
             /* -d, --dir=<DIR>  存储下载文件的目录。
@@ -184,19 +184,19 @@ namespace Rox
             Process p = new Process();
             p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
             p.StartInfo.Arguments = arg;
-            WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
+            WriteLog.Info($"{_GET_ARIA2C_ARGS}: {arg}");
             p.Start();
-            WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {p.Id}");
-            WriteLog(LogLevel.Info, $"{_DOWNLOADING_FILE}...");
+            WriteLog.Info($"{_PROCESS_STARTED}: {p.Id}");
+            WriteLog.Info($"{_DOWNLOADING_FILE}...");
             p.WaitForExit();
-            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {p.ExitCode}");
+            WriteLog.Info($"{_PROCESS_EXITED}: {p.ExitCode}");
             if (p.ExitCode != 0)
             {
-                LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
+                LogLibraries.WriteLog.Error($"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
             }
             else
             {
-                WriteLog(LogLevel.Info, $"{_DOWNLOADING_COMPLETE}");
+                WriteLog.Info($"{_DOWNLOADING_COMPLETE}");
             }
             p.Close();
         }
@@ -218,19 +218,19 @@ namespace Rox
             Process p = new Process();
             p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
             p.StartInfo.Arguments = arg;
-            WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
+            WriteLog.Info($"{_GET_ARIA2C_ARGS}: {arg}");
             p.Start();
-            WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {p.Id}");
-            WriteLog(LogLevel.Info, $"{_DOWNLOADING_FILE}...");
+            WriteLog.Info($"{_PROCESS_STARTED}: {p.Id}");
+            WriteLog.Info($"{_DOWNLOADING_FILE}...");
             p.WaitForExit();
-            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {p.ExitCode}");
+            WriteLog.Info($"{_PROCESS_EXITED}: {p.ExitCode}");
             if (p.ExitCode != 0)
             {
-                LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
+                LogLibraries.WriteLog.Error($"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
             }
             else
             {
-                WriteLog(LogLevel.Info, $"{_DOWNLOADING_COMPLETE}");
+                WriteLog.Info($"{_DOWNLOADING_COMPLETE}");
             }
             p.Close();
         }
@@ -247,12 +247,12 @@ namespace Rox
             CheckFile($"{Directory.GetCurrentDirectory()}\\bin\\aria2c.exe");
             if (!log)
             {
-                WriteLog(LogLevel.Info, $"{_DISABLE_ARIA2C_LOG_OUTPUT}");
+                WriteLog.Info($"{_DISABLE_ARIA2C_LOG_OUTPUT}");
                 arg = $"-x 16 -d \"{Downloadvocation}\" -q \"{url}\" -o \"{outputName}\"";
             }
             else
             {
-                WriteLog(LogLevel.Info, $"{_ENABLE_ARIA2C_LOG_OUTPUT}");
+                WriteLog.Info($"{_ENABLE_ARIA2C_LOG_OUTPUT}");
                 arg = $"-x 16 -d \"{Downloadvocation}\" -l \"{Directory.GetCurrentDirectory()}\\aria2c.log\" \"{url}\" -o \"{outputName}\"";
             }
             /* -x 线程数, 修改版可以上限1000线程
@@ -264,19 +264,19 @@ namespace Rox
             Process p = new Process();
             p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
             p.StartInfo.Arguments = arg;
-            WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
+            WriteLog.Info($"{_GET_ARIA2C_ARGS}: {arg}");
             p.Start();
-            WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {p.Id}");
-            WriteLog(LogLevel.Info, $"{_DOWNLOADING_FILE}...");
+            WriteLog.Info($"{_PROCESS_STARTED}: {p.Id}");
+            WriteLog.Info($"{_DOWNLOADING_FILE}...");
             p.WaitForExit();
-            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {p.ExitCode}");
+            WriteLog.Info($"{_PROCESS_EXITED}: {p.ExitCode}");
             if (p.ExitCode != 0)
             {
-                LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
+                LogLibraries.WriteLog.Error($"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
             }
             else
             {
-                WriteLog(LogLevel.Info, $"{_DOWNLOADING_COMPLETE}");
+                WriteLog.Info($"{_DOWNLOADING_COMPLETE}");
             }
             p.Close();
         }
@@ -305,14 +305,14 @@ namespace Rox
                     "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/resource/Wubx32.exe",
                     "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/resource/Wubx32.ini",
                     };
-                WriteLog(LogLevel.Info, $"{_GET_URL} {url}");
+                WriteLog.Info($"{_GET_URL} {url}");
                 Download(url);
                 return;
             }
             if (module == Module.Activator)
             {
                 string url = "https://gitee.com/Rainbow-SPY/GoldSource-Engine-ToolKit-.NET/raw/resource/HEU_KMS_Activator_v19.6.0.exe";
-                WriteLog(LogLevel.Info, $"{_GET_URL} {url}");
+                WriteLog.Info($"{_GET_URL} {url}");
                 Download(url);
                 return;
             }
@@ -327,12 +327,12 @@ namespace Rox
                     };
                 if (!System.IO.File.Exists($"{Directory.GetCurrentDirectory()}\\bin\\7zxa.dll"))
                 {
-                    WriteLog(LogLevel.Info, $"{_GET_URL} {url}");
+                    WriteLog.Info($"{_GET_URL} {url}");
                     Download(url);
                 }
                 else
                 {
-                    WriteLog(LogLevel.Info, $"{_FILE_EXIST}: {Directory.GetCurrentDirectory()}\\bin\\7zxa.dll");
+                    WriteLog.Info($"{_FILE_EXIST}: {Directory.GetCurrentDirectory()}\\bin\\7zxa.dll");
                 }
                 return;
             }
@@ -351,18 +351,18 @@ namespace Rox
                     };
                 if (!System.IO.File.Exists($"{Directory.GetCurrentDirectory()}\\bin\\VC.zip.001"))
                 {
-                    WriteLog(LogLevel.Info, $"{_GET_URL} {url}");
+                    WriteLog.Info($"{_GET_URL} {url}");
                     Download(url);
                 }
                 else
                 {
-                    WriteLog(LogLevel.Info, $"{_FILE_EXIST}: {Directory.GetCurrentDirectory()}\\bin\\VC.zip.001");
+                    WriteLog.Info($"{_FILE_EXIST}: {Directory.GetCurrentDirectory()}\\bin\\VC.zip.001");
                 }
                 Thread.Sleep(3000);
                 if (System.IO.File.Exists($"{Directory.GetCurrentDirectory()}\\bin\\VC.zip.008"))
                 {
                     var temp = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\Temp";
-                    WriteLog(LogLevel.Info, $"{_GET_TEMP} {temp}");
+                    WriteLog.Info($"{_GET_TEMP} {temp}");
                     DownloadAssistant.ModuleDownloader(Module.zip);
                     Process p = new Process();
                     p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\7za";
@@ -371,11 +371,11 @@ namespace Rox
                     p.WaitForExit();
                     if (p.ExitCode != 0)
                     {
-                        WriteLog(LogLevel.Error, $"{_PROCESS_EXITED} {p.ExitCode}");
+                        WriteLog.Error($"{_PROCESS_EXITED} {p.ExitCode}");
                     }
                     else
                     {
-                        WriteLog(LogLevel.Info, $"{_PROCESS_EXITED} {p.ExitCode}");
+                        WriteLog.Info($"{_PROCESS_EXITED} {p.ExitCode}");
                     }
                     p.Close();
                     Process w = new Process();
@@ -384,11 +384,11 @@ namespace Rox
                     w.WaitForExit();
                     if (w.ExitCode != 0)
                     {
-                        WriteLog(LogLevel.Error, $"{_PROCESS_EXITED} {w.ExitCode}");
+                        WriteLog.Error($"{_PROCESS_EXITED} {w.ExitCode}");
                     }
                     else
                     {
-                        WriteLog(LogLevel.Info, $"{_PROCESS_EXITED} {w.ExitCode}");
+                        WriteLog.Info($"{_PROCESS_EXITED} {w.ExitCode}");
                     }
                     w.Close();
                     return;
@@ -402,7 +402,7 @@ namespace Rox
         public static void ApplicationDownloader(App app)
         {
             var temp = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\Temp\\Rox";
-            WriteLog(LogLevel.Info, $"{GetLocalizedString("_GET_TEMP")}");
+            WriteLog.Info($"{GetLocalizedString("_GET_TEMP")}");
             string folderPath = $"{temp}";
             string filePath = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c.exe";
             CheckFile(filePath);
@@ -435,26 +435,26 @@ namespace Rox
                         var files = Directory.GetFiles(folderPath)
                                     .Where(f => regex.IsMatch(Path.GetFileName(f)))
                                     .ToArray();
-                        WriteLog(LogLevel.Info, $"{_GET_DIRECTORY}: {folderPath}");
+                        WriteLog.Info($"{_GET_DIRECTORY}: {folderPath}");
                         if (files.Any())
                         {
-                            WriteLog(LogLevel.Info, $"{_REGEX_GET_FILE}: {Path.GetFileName(files.First())}");
+                            WriteLog.Info($"{_REGEX_GET_FILE}: {Path.GetFileName(files.First())}");
                             downloadSuccess = true;
                             break;
                         }
-                        WriteLog(LogLevel.Info, $"{_WAIT_DOWNLOADING}... {checkTimer.ElapsedMilliseconds / 1000}s");
+                        WriteLog.Info($"{_WAIT_DOWNLOADING}... {checkTimer.ElapsedMilliseconds / 1000}s");
                         Thread.Sleep(checkInterval);
                     }
                     if (!downloadSuccess)
                     {
                         retryCount++;
-                        WriteLog(LogLevel.Warning, $"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
+                        WriteLog.Warning($"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
                         Directory.GetFiles(folderPath).ToList().ForEach(System.IO.File.Delete); // 清理残留文件
                     }
                 }
                 if (!downloadSuccess)
                 {
-                    WriteLog(LogLevel.Error, $"{_DOWNLOADING_FAILED}: EasiNote5");
+                    WriteLog.Error($"{_DOWNLOADING_FAILED}: EasiNote5");
                 }
             }
             if (app == App.EasiCamera)
@@ -474,26 +474,26 @@ namespace Rox
                     while (checkTimer.ElapsedMilliseconds < timeout)
                     {
                         var files = Directory.GetFiles(folderPath, $"{targetPrefix}*.exe");
-                        WriteLog(LogLevel.Info, $"{_GET_DIRECTORY}: {folderPath}");
+                        WriteLog.Info($"{_GET_DIRECTORY}: {folderPath}");
                         if (files.Any())
                         {
-                            WriteLog(LogLevel.Info, $"{_GET_FILE}: {Path.GetFileName(files.First())}");
+                            WriteLog.Info($"{_GET_FILE}: {Path.GetFileName(files.First())}");
                             downloadSuccess = true;
                             break;
                         }
-                        WriteLog(LogLevel.Info, $"{_WAIT_DOWNLOADING}... {checkTimer.ElapsedMilliseconds / 1000}s");
+                        WriteLog.Info($"{_WAIT_DOWNLOADING}... {checkTimer.ElapsedMilliseconds / 1000}s");
                         Thread.Sleep(checkInterval);
                     }
                     if (!downloadSuccess)
                     {
                         retryCount++;
-                        WriteLog(LogLevel.Warning, $"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
+                        WriteLog.Warning($"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
                         Directory.GetFiles(folderPath).ToList().ForEach(System.IO.File.Delete);
                     }
                 }
                 if (!downloadSuccess)
                 {
-                    WriteLog(LogLevel.Error, $"{_DOWNLOADING_FAILED}: EasiCamera");
+                    WriteLog.Error($"{_DOWNLOADING_FAILED}: EasiCamera");
                 }
             }
             if (app == App.WeChat)
@@ -505,7 +505,7 @@ namespace Rox
                 var downloadvocation = $"{Directory.GetCurrentDirectory()}\\temp";
                 Downloader("https://pc.weixin.qq.com", downloadvocation, true);
                 var html = System.IO.File.ReadAllText($"{downloadvocation}\\index.html");
-                WriteLog(LogLevel.Info, $"{_GET_HTML}: {downloadvocation}\\index.html");
+                WriteLog.Info($"{_GET_HTML}: {downloadvocation}\\index.html");
                 // 根据系统架构确定要下载的链接
                 bool is64Bit = Environment.Is64BitOperatingSystem;
                 string systemBit;
@@ -514,14 +514,14 @@ namespace Rox
                 if (is64Bit)
                 {
                     systemBit = _64;
-                    WriteLog(LogLevel.Info, $"{_GET_64_LINK}: {downloadLink}");
+                    WriteLog.Info($"{_GET_64_LINK}: {downloadLink}");
                 }
                 else
                 {
                     systemBit = _32;
-                    WriteLog(LogLevel.Info, $"{_GET_32_LINK}: {downloadLink}");
+                    WriteLog.Info($"{_GET_32_LINK}: {downloadLink}");
                 }
-                WriteLog(LogLevel.Info, $"{_GET_SYSTEM_BIT}: {systemBit}");
+                WriteLog.Info($"{_GET_SYSTEM_BIT}: {systemBit}");
                 // 下载主逻辑
                 bool downloadSuccess = false;
                 int retryCount = 0;
@@ -535,33 +535,33 @@ namespace Rox
                     while (checkTimer.ElapsedMilliseconds < timeout)
                     {
                         var files = Directory.GetFiles(folderPath, targetFile);
-                        WriteLog(LogLevel.Info, $"{_GET_FILES_IN_DIRECTORY}: {folderPath}");
+                        WriteLog.Info($"{_GET_FILES_IN_DIRECTORY}: {folderPath}");
                         if (files.Any())
                         {
-                            WriteLog(LogLevel.Info, $"{_GET_FILE}: {files.First()}");
+                            WriteLog.Info($"{_GET_FILE}: {files.First()}");
                             var newFile = files.First();
                             downloadSuccess = true;
                             Process process = new Process();
                             process.StartInfo.FileName = newFile;
                             process.Start();
-                            WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {process.Id}");
+                            WriteLog.Info($"{_PROCESS_STARTED}: {process.Id}");
                             process.WaitForExit();
-                            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {process.ExitCode}");
+                            WriteLog.Info($"{_PROCESS_EXITED}: {process.ExitCode}");
                             process.Close();
                             break;
                         }
-                        WriteLog(LogLevel.Info, $"{_WAIT_DOWNLOADING}... waiting {checkTimer.ElapsedMilliseconds / 1000} second");
+                        WriteLog.Info($"{_WAIT_DOWNLOADING}... waiting {checkTimer.ElapsedMilliseconds / 1000} second");
                         Thread.Sleep(checkInterval);
                     }
                     if (!downloadSuccess)
                     {
                         retryCount++;
-                        WriteLog(LogLevel.Warning, $"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
+                        WriteLog.Warning($"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
                     }
                 }
                 if (!downloadSuccess)
                 {
-                    WriteLog(LogLevel.Error, $"{_DOWNLOADING_FAILED}: {retryCount}/{maxRetries}");
+                    WriteLog.Error($"{_DOWNLOADING_FAILED}: {retryCount}/{maxRetries}");
                 }
             }
             if (app == App.SeewoService)
@@ -581,26 +581,26 @@ namespace Rox
                     while (checkTimer.ElapsedMilliseconds < timeout)
                     {
                         var files = Directory.GetFiles(folderPath, $"{targetPrefix}*.exe");
-                        WriteLog(LogLevel.Info, $"{_GET_DIRECTORY}: {folderPath}");
+                        WriteLog.Info($"{_GET_DIRECTORY}: {folderPath}");
                         if (files.Any())
                         {
-                            WriteLog(LogLevel.Info, $"{_GET_FILE}: {Path.GetFileName(files.First())}");
+                            WriteLog.Info($"{_GET_FILE}: {Path.GetFileName(files.First())}");
                             downloadSuccess = true;
                             break;
                         }
-                        WriteLog(LogLevel.Info, $"{_WAIT_DOWNLOADING}... {checkTimer.ElapsedMilliseconds / 1000}s");
+                        WriteLog.Info($"{_WAIT_DOWNLOADING}... {checkTimer.ElapsedMilliseconds / 1000}s");
                         Thread.Sleep(checkInterval);
                     }
                     if (!downloadSuccess)
                     {
                         retryCount++;
-                        WriteLog(LogLevel.Warning, $"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
+                        WriteLog.Warning($"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
                         Directory.GetFiles(folderPath).ToList().ForEach(System.IO.File.Delete);
                     }
                 }
                 if (!downloadSuccess)
                 {
-                    WriteLog(LogLevel.Error, $"{_DOWNLOADING_FAILED}: SeewoService");
+                    WriteLog.Error($"{_DOWNLOADING_FAILED}: SeewoService");
                 }
             }
             if (app == App.ToDesk)
@@ -612,9 +612,9 @@ namespace Rox
                 var downloadvocation = $"{Directory.GetCurrentDirectory()}\\temp";
                 Downloader("https://www.todesk.com/download.html", downloadvocation, true);
                 var html = System.IO.File.ReadAllText($"{downloadvocation}\\download.html");
-                WriteLog(LogLevel.Info, $"{_GET_HTML}: {downloadvocation}\\download.html");
+                WriteLog.Info($"{_GET_HTML}: {downloadvocation}\\download.html");
                 string downloadLink = GetToDeskDownlaodLink(html);
-                WriteLog(LogLevel.Info, $"{_GET_URL}: {downloadLink}");
+                WriteLog.Info($"{_GET_URL}: {downloadLink}");
                 bool downloadSuccess = false;
                 int retryCount = 0;
 
@@ -626,33 +626,33 @@ namespace Rox
                     while (checkTimer.ElapsedMilliseconds < timeout)
                     {
                         var files = Directory.GetFiles(folderPath, targetFile);
-                        WriteLog(LogLevel.Info, $"{_GET_FILES_IN_DIRECTORY}: {folderPath}");
+                        WriteLog.Info($"{_GET_FILES_IN_DIRECTORY}: {folderPath}");
                         if (files.Any())
                         {
-                            WriteLog(LogLevel.Info, $"{_GET_FILE}: {files.First()}");
+                            WriteLog.Info($"{_GET_FILE}: {files.First()}");
                             var newFile = files.First();
                             downloadSuccess = true;
                             Process process = new Process();
                             process.StartInfo.FileName = newFile;
                             process.Start();
-                            WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {process.Id}");
+                            WriteLog.Info($"{_PROCESS_STARTED}: {process.Id}");
                             process.WaitForExit();
-                            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {process.ExitCode}");
+                            WriteLog.Info($"{_PROCESS_EXITED}: {process.ExitCode}");
                             process.Close();
                             break;
                         }
-                        WriteLog(LogLevel.Info, $"{_WAIT_DOWNLOADING}... waiting {checkTimer.ElapsedMilliseconds / 1000} second");
+                        WriteLog.Info($"{_WAIT_DOWNLOADING}... waiting {checkTimer.ElapsedMilliseconds / 1000} second");
                         Thread.Sleep(checkInterval);
                     }
                     if (!downloadSuccess)
                     {
                         retryCount++;
-                        WriteLog(LogLevel.Warning, $"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
+                        WriteLog.Warning($"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
                     }
                 }
                 if (!downloadSuccess)
                 {
-                    WriteLog(LogLevel.Error, $"{_DOWNLOADING_FAILED}: {retryCount}/{maxRetries}");
+                    WriteLog.Error($"{_DOWNLOADING_FAILED}: {retryCount}/{maxRetries}");
                 }
             }
         }
@@ -729,20 +729,20 @@ namespace Rox
                 Process p = new Process();
                 p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
                 p.StartInfo.Arguments = arg;
-                WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
+                WriteLog.Info($"{_GET_ARIA2C_ARGS}: {arg}");
                 p.StartInfo.CreateNoWindow = true;
                 p.Start();
-                WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {p.Id}");
-                WriteLog(LogLevel.Info, $"{_DOWNLOADING_FILE}...");
+                WriteLog.Info($"{_PROCESS_STARTED}: {p.Id}");
+                WriteLog.Info($"{_DOWNLOADING_FILE}...");
                 p.WaitForExit();
-                WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {p.ExitCode}");
+                WriteLog.Info($"{_PROCESS_EXITED}: {p.ExitCode}");
                 if (p.ExitCode != 0)
                 {
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
+                    LogLibraries.WriteLog.Error($"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
                 }
                 else
                 {
-                    WriteLog(LogLevel.Info, $"{_DOWNLOADING_COMPLETE}");
+                    WriteLog.Info($"{_DOWNLOADING_COMPLETE}");
                 }
                 p.Close();
             }
@@ -763,20 +763,20 @@ namespace Rox
             Process p = new Process();
             p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
             p.StartInfo.Arguments = arg;
-            WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
+            WriteLog.Info($"{_GET_ARIA2C_ARGS}: {arg}");
             p.StartInfo.CreateNoWindow = true;
             p.Start();
-            WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {p.Id}");
-            WriteLog(LogLevel.Info, $"{_DOWNLOADING_FILE}...");
+            WriteLog.Info($"{_PROCESS_STARTED}: {p.Id}");
+            WriteLog.Info($"{_DOWNLOADING_FILE}...");
             p.WaitForExit();
-            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {p.ExitCode}");
+            WriteLog.Info($"{_PROCESS_EXITED}: {p.ExitCode}");
             if (p.ExitCode != 0)
             {
-                LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
+                LogLibraries.WriteLog.Error($"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
             }
             else
             {
-                WriteLog(LogLevel.Info, $"{_DOWNLOADING_COMPLETE}");
+                WriteLog.Info($"{_DOWNLOADING_COMPLETE}");
             }
             p.Close();
         }
@@ -798,20 +798,20 @@ namespace Rox
                 Process p = new Process();
                 p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
                 p.StartInfo.Arguments = arg;
-                WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
+                WriteLog.Info($"{_GET_ARIA2C_ARGS}: {arg}");
                 p.StartInfo.CreateNoWindow = true;
                 p.Start();
-                WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {p.Id}");
-                WriteLog(LogLevel.Info, $"{_DOWNLOADING_FILE}...");
+                WriteLog.Info($"{_PROCESS_STARTED}: {p.Id}");
+                WriteLog.Info($"{_DOWNLOADING_FILE}...");
                 p.WaitForExit();
-                WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {p.ExitCode}");
+                WriteLog.Info($"{_PROCESS_EXITED}: {p.ExitCode}");
                 if (p.ExitCode != 0)
                 {
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
+                    LogLibraries.WriteLog.Error($"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
                 }
                 else
                 {
-                    WriteLog(LogLevel.Info, $"{_DOWNLOADING_COMPLETE}");
+                    WriteLog.Info($"{_DOWNLOADING_COMPLETE}");
                 }
                 p.Close();
             }
@@ -832,20 +832,20 @@ namespace Rox
             Process p = new Process();
             p.StartInfo.FileName = $"{Directory.GetCurrentDirectory()}\\bin\\aria2c";
             p.StartInfo.Arguments = arg;
-            WriteLog(LogLevel.Info, $"{_GET_ARIA2C_ARGS}: {arg}");
+            WriteLog.Info($"{_GET_ARIA2C_ARGS}: {arg}");
             p.StartInfo.CreateNoWindow = true;
             p.Start();
-            WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {p.Id}");
-            WriteLog(LogLevel.Info, $"{_DOWNLOADING_FILE}...");
+            WriteLog.Info($"{_PROCESS_STARTED}: {p.Id}");
+            WriteLog.Info($"{_DOWNLOADING_FILE}...");
             p.WaitForExit();
-            WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {p.ExitCode}");
+            WriteLog.Info($"{_PROCESS_EXITED}: {p.ExitCode}");
             if (p.ExitCode != 0)
             {
-                LogLibraries.WriteLog(LogLibraries.LogLevel.Error, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
+                LogLibraries.WriteLog.Error($"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {p.ExitCode}");
             }
             else
             {
-                WriteLog(LogLevel.Info, $"{_DOWNLOADING_COMPLETE}");
+                WriteLog.Info($"{_DOWNLOADING_COMPLETE}");
             }
             p.Close();
         }

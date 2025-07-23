@@ -47,25 +47,25 @@ namespace Rox
                         };
                         string json = Json.SerializeObject(requestBody);
                         var content = new StringContent(json, Encoding.UTF8, "application/json");
-                        WriteLog(LogLevel.Info, $"{_SEND_REQUEST}...{text}");
+                        WriteLog.Info($"{_SEND_REQUEST}...{text}");
                         HttpResponseMessage response = await client.PostAsync(ApiUrl, content);
                         string responseJson = await response.Content.ReadAsStringAsync();
-                        WriteLog(LogLevel.Info, _GET_RESPONSE);
+                        WriteLog.Info(_GET_RESPONSE);
                         if (response.IsSuccessStatusCode)
                         {
                             var responseObject = Text.Json.DeserializeObject<dynamic>(responseJson);
                             string answer = responseObject.choices[0].message.content;
-                            WriteLog(LogLevel.Info, $"{_ANSWER}: {answer}");
+                            WriteLog.Info($"{_ANSWER}: {answer}");
                         }
                         else
                         {
-                            WriteLog(LogLevel.Error, $"{_ERROR}: {responseJson}");
+                            WriteLog.Error($"{_ERROR}: {responseJson}");
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    WriteLog(LogLevel.Error, $"{_ERROR}: {ex.Message}");
+                    WriteLog.Error($"{_ERROR}: {ex.Message}");
                 }
             }
         }
@@ -106,25 +106,25 @@ namespace Rox
                         };
                         string json = Text.Json.SerializeObject(requestBody);
                         var content = new StringContent(json, Encoding.UTF8, "application/json");
-                        WriteLog(LogLevel.Info, $"{_SEND_REQUEST}...{text}");
+                        WriteLog.Info($"{_SEND_REQUEST}...{text}");
                         HttpResponseMessage response = await client.PostAsync(ApiUrl, content);
                         string responseJson = await response.Content.ReadAsStringAsync();
-                        WriteLog(LogLevel.Info, _GET_RESPONSE);
+                        WriteLog.Info(_GET_RESPONSE);
                         if (response.IsSuccessStatusCode)
                         {
                             var responseObject = Text.Json.DeserializeObject<dynamic>(responseJson);
                             string answer = responseObject.choices[0].message.content;
-                            WriteLog(LogLevel.Info, $"{_ANSWER}: {answer}");
+                            WriteLog.Info($"{_ANSWER}: {answer}");
                         }
                         else
                         {
-                            WriteLog(LogLevel.Error, $"{_ERROR} : {responseJson}");
+                            WriteLog.Error($"{_ERROR} : {responseJson}");
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    WriteLog(LogLevel.Error, $"{_ERROR} : {ex.Message}");
+                    WriteLog.Error($"{_ERROR} : {ex.Message}");
                 }
             }
         }

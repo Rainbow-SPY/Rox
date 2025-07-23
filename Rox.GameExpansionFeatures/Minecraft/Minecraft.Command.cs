@@ -54,7 +54,7 @@ public partial class Minecraft
                     // 检测是否为文件夹
                     if (!System.IO.Directory.Exists(JEVerFolder))
                     {
-                        WriteLog(LogLevel.Error, LogKind.System, "指定的文件夹不存在或不是一个有效的文件夹。");
+                        WriteLog.Error(LogKind.System, "指定的文件夹不存在或不是一个有效的文件夹。");
                         MessageBox.Show(JEVerFolder + " 不是一个有效的文件夹。", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         return null;
                     }
@@ -76,20 +76,20 @@ public partial class Minecraft
                             string[] parts = folder.Split('\\');
                             // 获取最后一个部分作为文件夹名称
                             string folderName = parts[parts.Length - 1];
-                            WriteLog(LogLevel.Info, LogKind.Json, $"正在处理文件夹: {folderName}");
+                            WriteLog.Info(LogKind.Json, $"正在处理文件夹: {folderName}");
                             // 游戏版本的Json文件名称
                             string JsonName = folderName + ".json";
-                            WriteLog(LogLevel.Info, LogKind.Json, $"Json 文件名称: {JsonName}");
+                            WriteLog.Info(LogKind.Json, $"Json 文件名称: {JsonName}");
                             if (File.Exists($"{folder}\\{JsonName}"))
                             {
                                 // 读取文件
-                                LogLibraries.WriteLog(LogLibraries.LogLevel.Info, LogKind.Json, "获取原始 Json 内容");
+                                LogLibraries.WriteLog.Info(LogKind.Json, "获取原始 Json 内容");
                                 var data = File.ReadAllText(folder + "\\" + JsonName);
-                                LogLibraries.WriteLog(LogLibraries.LogLevel.Info, LogKind.Json, "压缩 Json");
+                                LogLibraries.WriteLog.Info(LogKind.Json, "压缩 Json");
                                 string compressedJson = CompressJson(data);
-                                LogLibraries.WriteLog(LogLibraries.LogLevel.Info, LogKind.Json, "反序列化 Json 对象");
+                                LogLibraries.WriteLog.Info(LogKind.Json, "反序列化 Json 对象");
                                 var jsonObject = Rox.Text.Json.DeserializeObject<MinecraftType>(compressedJson);
-                                WriteLog(LogLevel.Info, LogKind.Json, jsonObject.clientVersion);
+                                WriteLog.Info(LogKind.Json, jsonObject.clientVersion);
                                 return jsonObject.clientVersion; // 返回版本号
                             }
                         }
@@ -97,7 +97,7 @@ public partial class Minecraft
                     }
                     catch (Exception ex)
                     {
-                        WriteLog(LogLevel.Error, LogKind.System, "读取文件时发生错误: " + ex.Message);
+                        WriteLog.Error(LogKind.System, "读取文件时发生错误: " + ex.Message);
                         MessageBox.Show("读取文件时发生错误: " + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         return null;
                     }

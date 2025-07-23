@@ -53,16 +53,16 @@ namespace Rox
                 else
                 {
                     MessageBox.Show("Unsupported property type.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    WriteLog(LogLevel.Error, "_UNSUPPORT_PROPERTY_TYPE");
+                    WriteLog.Error("_UNSUPPORT_PROPERTY_TYPE");
                     return;
                 }
                 Process process = new Process();
                 process.StartInfo.FileName = "attrib";
                 process.StartInfo.Arguments = $"{arg} {path}";
                 process.Start();
-                WriteLog(LogLevel.Info, $"{_PROCESS_STARTED}: {process.Id}");
+                WriteLog.Info($"{_PROCESS_STARTED}: {process.Id}");
                 process.WaitForExit();
-                WriteLog(LogLevel.Info, $"{_PROCESS_EXITED}: {process.ExitCode}");
+                WriteLog.Info($"{_PROCESS_EXITED}: {process.ExitCode}");
                 process.Close();
             }
             /// <summary>

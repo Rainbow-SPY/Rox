@@ -55,7 +55,7 @@ namespace Rox
 
                 // 读取文件的所有行
                 string[] lines = System.IO.File.ReadAllLines(iniPath);
-                WriteLog(LogLevel.Info, $"{_READ_FILE}: {iniPath}");
+                WriteLog.Info($"{_READ_FILE}: {iniPath}");
                 bool found = false;
 
                 // 遍历每一行，查找是否有匹配的头部
@@ -64,7 +64,7 @@ namespace Rox
                     if (lines[i].StartsWith(HeadText))
                     {
                         // 如果找到匹配的头部，替换该行的值\
-                        WriteLog(LogLevel.Info, $"{_UPDATE_LINE}: {HeadText} = {Value}");
+                        WriteLog.Info($"{_UPDATE_LINE}: {HeadText} = {Value}");
                         lines[i] = $"{HeadText}={Value}";
                         found = true;
                         break;
@@ -74,14 +74,14 @@ namespace Rox
                 // 如果没有找到匹配的头部，追加一行
                 if (!found)
                 {
-                    WriteLog(LogLevel.Info, $"{_ADD_NEW_LINE}: {HeadText} = {Value}");
+                    WriteLog.Info($"{_ADD_NEW_LINE}: {HeadText} = {Value}");
                     Array.Resize(ref lines, lines.Length + 1);
                     lines[lines.Length - 1] = $"{HeadText}={Value}";
                 }
 
                 // 将修改后的内容写回文件
                 System.IO.File.WriteAllLines(iniPath, lines);
-                WriteLog(LogLevel.Info, $"{_WRITE_FILE}: {iniPath}");
+                WriteLog.Info($"{_WRITE_FILE}: {iniPath}");
             }
         }
         /// <summary>
@@ -700,7 +700,7 @@ namespace Rox
             {
                 if (string.IsNullOrEmpty(str))
                 {
-                    WriteLog(LogLevel.Error, $"{_ERROR}: The string to encrypt cannot be null or empty");
+                    WriteLog.Error($"{_ERROR}: The string to encrypt cannot be null or empty");
                     MessageBox.Show($"{_ERROR}: The string to encrypt cannot be null or empty", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                     return null;
                 }
@@ -718,7 +718,7 @@ namespace Rox
                     // 获取输出的字符串,返回加密后的字符串
                     if (output == "\n")
                     {
-                        WriteLog(LogLevel.Error, $"{_ERROR}: Encryption failed");
+                        WriteLog.Error($"{_ERROR}: Encryption failed");
                         MessageBox.Show($"{_ERROR}: Encryption failed", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         return null;
                     }
@@ -726,7 +726,7 @@ namespace Rox
                 }
                 catch (Exception ex)
                 {
-                    WriteLog(LogLevel.Error, $"{_ERROR}: {ex.Message}");
+                    WriteLog.Error($"{_ERROR}: {ex.Message}");
                     MessageBox.Show($"{_ERROR}: {ex.Message}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                     return null;
                 }
@@ -752,14 +752,14 @@ namespace Rox
                     // 获取输出的字符串,返回解密后的字符串
                     if (output == "\n")
                     {
-                        WriteLog(LogLevel.Error, $"{_ERROR}: Decryption failed");
+                        WriteLog.Error($"{_ERROR}: Decryption failed");
                         MessageBox.Show($"{_ERROR}: Decryption failed", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                     }
                     return output;
                 }
                 catch (Exception ex)
                 {
-                    WriteLog(LogLevel.Error, $"{_ERROR}: {ex.Message}");
+                    WriteLog.Error($"{_ERROR}: {ex.Message}");
                     MessageBox.Show($"{_ERROR}: {ex.Message}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                     return null;
                 }

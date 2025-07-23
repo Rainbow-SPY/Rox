@@ -41,7 +41,7 @@ namespace Rox.GameExpansionFeatures
                 {
                     version = version.TrimEnd('.'); // 去除末尾的点
                 }
-                WriteLog(LogLevel.Info, LogKind.System, $"正在检查版本: {version}");
+                WriteLog.Info(LogKind.System, $"正在检查版本: {version}");
 
                 Regex regex = new Regex(@"(?:(?<release>\d+\.\d+(?:\.\d+)?)|(?<snapshot>\d{2}w\d{2}[a-z](?:_[a-z]+)?)|(?<pre_release>\d\.\d+(?:\.\d)?-pre\d+)|(?<rc>\d\.\d+(?:\.\d)?-rc\d+)|(?<experimental>(?:Experimental )?Snapshot \d{2}w\d{2}[a-z]?))");
                 Match match = regex.Match(version);
@@ -56,24 +56,24 @@ namespace Rox.GameExpansionFeatures
                         // 检查是否在支持的大版本列表中
                         if (Array.Exists(AllMasterVersions, v => v == limitVer))
                         {
-                            WriteLog(LogLevel.Info, LogKind.Regex, $"版本 {version} 在 正则表达式匹配的结果为 {limitVer} 正式版(Release)");
+                            WriteLog.Info(LogKind.Regex, $"版本 {version} 在 正则表达式匹配的结果为 {limitVer} 正式版(Release)");
                             return limitVer; // 返回大版本号
                         }
                         return limitVer; // 返回大版本号
                     case "Experimental Snapshot": // 实验性快照版
-                        WriteLog(LogLevel.Error, LogKind.Regex, $"版本 {version} 在 正则表达式匹配的结果为 实验性快照(Experimental Snapshot)");
+                        WriteLog.Error(LogKind.Regex, $"版本 {version} 在 正则表达式匹配的结果为 实验性快照(Experimental Snapshot)");
                         return "Experimental Snapshot"; // 返回实验性快照
                     case "Release Candidate": // 候选发布版
-                        WriteLog(LogLevel.Error, LogKind.Regex, $"版本 {version} 在 正则表达式匹配的结果为 候选发布版(Release Candidate)");
+                        WriteLog.Error(LogKind.Regex, $"版本 {version} 在 正则表达式匹配的结果为 候选发布版(Release Candidate)");
                         return "Release Candidate"; // 返回候选发布版
                     case "Pre-Release": // 预发布版
-                        WriteLog(LogLevel.Error, LogKind.Regex, $"版本 {version} 在 正则表达式匹配的结果为 预发布版(Pre-release)");
+                        WriteLog.Error(LogKind.Regex, $"版本 {version} 在 正则表达式匹配的结果为 预发布版(Pre-release)");
                         return "Pre-release"; // 返回预发布版
                     case "Snapshot": // 快照版
-                        WriteLog(LogLevel.Error, LogKind.Regex, $"版本 {version} 在 正则表达式匹配的结果为 快照(Snapshot)");
+                        WriteLog.Error(LogKind.Regex, $"版本 {version} 在 正则表达式匹配的结果为 快照(Snapshot)");
                         return "Snapshot"; // 返回快照版
                     default: // 未知结果
-                        WriteLog(LogLevel.Error, LogKind.Regex, $"版本 {version} 在 正则表达式匹配的结果为 未知结果");
+                        WriteLog.Error(LogKind.Regex, $"版本 {version} 在 正则表达式匹配的结果为 未知结果");
                         return "Unknow"; // 返回未知结果
                 }
             }

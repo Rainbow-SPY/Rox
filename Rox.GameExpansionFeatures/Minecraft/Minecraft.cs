@@ -20,7 +20,7 @@ namespace Rox.GameExpansionFeatures
             double discount = 0.3 + 0.0625 * (HearoOfVillage_Level - 1);
             double finalPrice = BasePrice * (1 - discount);
             int value = Math.Max(1, (int)Math.Round(finalPrice));
-            WriteLog(LogLevel.Info, LogKind.System, $"村庄英雄交易价格计算器 输出的结果: {value}");
+            WriteLog.Info(LogKind.System, $"村庄英雄交易价格计算器 输出的结果: {value}");
             // 四舍五入并确保最小值为1
             return value;
         }

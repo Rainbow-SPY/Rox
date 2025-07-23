@@ -14,24 +14,56 @@ namespace Rox
             /// <summary>
             /// 日志输出到 UI 的委托,用于在 UI 上显示日志
             /// </summary>
-            public static Action<LogLevel, string> LogToUi { get; set; }
+            public static Action<string, string> LogToUi { get; set; }
             /// <summary>
-            /// 日志等级,分为Info,Error,Warning
+            /// 向控制台输出日志, 并指定日志等级和日志类型
             /// </summary>
-            public enum LogLevel
+            public class WriteLog
             {
                 /// <summary>
-                /// 信息
+                /// 指定为信息类别的日志
                 /// </summary>
-                Info,
+                /// <param name="message"> 日志消息 </param>
+                public static void Info(string message) => WriteLog_("Info", message);
                 /// <summary>
-                /// 错误
+                /// 指定为错误类别的日志
                 /// </summary>
-                Error,
+                /// <param name="message"> 日志消息 </param>
+                public static void Error(string message) => WriteLog_("Error", message);
                 /// <summary>
-                /// 警告
+                /// 指定为警告类别的日志
                 /// </summary>
-                Warning
+                /// <param name="message"> 日志消息 </param>
+                public static void Warning(string message) => WriteLog_("Warning", message);
+                /// <summary>
+                ///  指定为调试类别的日志
+                /// </summary>
+                /// <param name="message"></param>
+                public static void Debug(string message) => WriteLog_("Debug", message);
+                /// <summary>
+                /// 指定为信息类别的日志,并指定日志类型
+                /// </summary>
+                /// <param name="kind"> 日志类型 </param>
+                /// <param name="message"> 日志消息 </param>
+                public static void Info(LogKind kind, string message) => WriteLog_("Info", kind, message);
+                /// <summary>
+                /// 指定为错误类别的日志,并指定日志类型
+                /// </summary>
+                /// <param name="kind"> 日志类型 </param>
+                /// <param name="message"> 日志消息 </param>
+                public static void Error(LogKind kind, string message) => WriteLog_("Error", kind, message);
+                /// <summary>
+                ///  指定为警告类别的日志,并指定日志类型
+                /// </summary>
+                /// <param name="kind"> 日志类型 </param>
+                /// <param name="message"> 日志消息 </param>
+                public static void Warning(LogKind kind, string message) => WriteLog_("Warning", kind, message);
+                /// <summary>
+                ///  指定为调试类别的日志,并指定日志类型
+                /// </summary>
+                /// <param name="kind"></param>
+                /// <param name="message"></param>
+                public static void Debug(LogKind kind, string message) => WriteLog_("Debug", kind, message);
             }
             /// <summary>
             /// 日志类型,分为Form,Thread,Process,Service,Task,System,PowerShell,Registry,Network
@@ -98,48 +130,32 @@ namespace Rox
             /// <param name="logLevel">日志等级</param>
             /// <param name="logKind">日志类型</param>
             /// <param name="message">消息</param>
-            public static void WriteLog(LogLevel logLevel, LogKind logKind, string message)
+            internal static void WriteLog_(string logLevel, LogKind logKind, string message)
             {
-                // 在写日志之前先检查并处理文件重命名
-
+                switch (logLevel)
+                {
+                    case "Info":
+                        Console.ForegroundColor = ConsoleColor.Green; // 设置绿色
+                        break;
+                    case "Error":
+                        Console.ForegroundColor = ConsoleColor.Red; // 设置红色
+                        break;
+                    case "Warning":
+                        Console.ForegroundColor = ConsoleColor.Yellow; // 设置黄色
+                        break;
+                    case "Debug":
+                        Console.ForegroundColor = ConsoleColor.Cyan; // 设置青色
+                        break;
+                }
                 // 设置颜色
-                if (logLevel == LogLevel.Info)
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;// 设置绿色
-                    Console.Write($"[{logLevel}] ");
-                    Console.ForegroundColor = ConsoleColor.DarkCyan;
-                    Console.Write($"{logKind}: ");
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.Write($"{message}\n");
-                    Console.ResetColor();
-                }
-                else if (logLevel == LogLevel.Error)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write($"[{logLevel}] ");
-                    Console.ForegroundColor = ConsoleColor.DarkCyan;
-                    Console.Write($"{logKind}: ");
-                    Console.ForegroundColor = ConsoleColor.Red; // 设置绿色
-                    Console.Write($"{message}\n");
-                    Console.ResetColor();
-                }
-                else if (logLevel == LogLevel.Warning)
-                {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.Write($"[{logLevel}] ");
-                    Console.ForegroundColor = ConsoleColor.DarkCyan;
-                    Console.Write($"{logKind}: ");
-                    Console.ForegroundColor = ConsoleColor.DarkYellow; // 设置绿色
-                    Console.Write($"{message}\n");
-                    Console.ResetColor();
-                }
-                else
-                {
-                    Console.WriteLine($"[{logLevel}] {logKind}: {message}");
-                }
-
-                // 打印日志到控制台
+                Console.ForegroundColor = ConsoleColor.Green;// 设置绿色
+                Console.Write($"[{logLevel}] ");
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.Write($"{logKind}: ");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.Write($"{message}\n");
                 Console.ResetColor();
+                // 打印日志到控制台
                 LogToUi?.Invoke(logLevel, message);
                 // 记录日志到文件
                 LogToFile(logLevel, logKind, message);
@@ -149,41 +165,31 @@ namespace Rox
             /// </summary>
             /// <param name="logLevel">日志等级</param>
             /// <param name="message">消息</param>
-            public static void WriteLog(LogLevel logLevel, string message)
+            internal static void WriteLog_(string logLevel, string message)
             {
-                // 在写日志之前先检查并处理文件
                 // 设置颜色
-                if (logLevel == LogLevel.Info)
+                // 设置控制台颜色
+                switch (logLevel)
                 {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Write($"[{logLevel}]");
-                    Console.ForegroundColor = ConsoleColor.DarkYellow; // 设置绿色
-                    Console.Write($": {message}\n");
-                    Console.ResetColor();
+                    case "Info":
+                        Console.ForegroundColor = ConsoleColor.Green; // 设置绿色
+                        break;
+                    case "Error":
+                        Console.ForegroundColor = ConsoleColor.Red; // 设置红色
+                        break;
+                    case "Warning":
+                        Console.ForegroundColor = ConsoleColor.Yellow; // 设置黄色
+                        break;
+                    case "Debug":
+                        Console.ForegroundColor = ConsoleColor.Cyan; // 设置青色
+                        break;
                 }
-                else if (logLevel == LogLevel.Error)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write($"[{logLevel}]");
-                    Console.ForegroundColor = ConsoleColor.Red; // 设置绿色
-                    Console.Write($": {message}\n");
-                    Console.ResetColor();
-                }
-                else if (logLevel == LogLevel.Warning)
-                {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.Write($"[{logLevel}] ");
-                    Console.ForegroundColor = ConsoleColor.DarkYellow; // 设置绿色
-                    Console.Write($"{message}\n");
-                    Console.ResetColor();
-                }
-                else
-                {
-                    Console.WriteLine($"[{logLevel}] {message}");
-                }
+                Console.Write($"[{logLevel}]");
+                Console.ForegroundColor = ConsoleColor.DarkYellow; // 设置绿色
+                Console.Write($": {message}\n");
+                Console.ResetColor();
 
                 // 打印日志到控制台
-                Console.ResetColor();
                 LogToUi?.Invoke(logLevel, message);
                 // 记录日志到文件
                 LogToFile(logLevel, message);
@@ -193,7 +199,7 @@ namespace Rox
             /// </summary>
             /// <param name="logLevel">日志等级</param>
             /// <param name="message">消息</param>
-            public static void LogToFile(LogLevel logLevel, string message)
+            public static void LogToFile(string logLevel, string message)
             {
                 // 创建日志信息
                 string logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{logLevel}]: {message}";
@@ -225,7 +231,7 @@ namespace Rox
             /// <param name="logLevel"></param>
             /// <param name="logkind"></param>
             /// <param name="message"></param>
-            public static void LogToFile(LogLevel logLevel, LogKind logkind, string message)
+            public static void LogToFile(string logLevel, LogKind logkind, string message)
             {
                 // 创建日志信息
                 string logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{logLevel}] [{logkind}]: {message}";
@@ -247,7 +253,7 @@ namespace Rox
                 catch (Exception ex)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    WriteLog(LogLevel.Error, $"[Error] Error writing to log file: {ex.Message}");
+                    WriteLog.Info($"[Error] Error writing to log file: {ex.Message}");
                     Console.ResetColor();
                 }
             }
@@ -265,12 +271,12 @@ namespace Rox
                         fs.SetLength(0); // 设置文件长度为0，即清空文件内容
                     }
 
-                    WriteLog(LogLevel.Info, $"{_CLEAR_LOGFILE}");
+                    WriteLog.Info($"{_CLEAR_LOGFILE}");
                     Console.ResetColor();
                 }
                 catch (Exception ex)
                 {
-                    WriteLog(LogLevel.Error, $"{_CANNOT_CLEAR_LOGFILE}: {ex.Message}");
+                    WriteLog.Error($"{_CANNOT_CLEAR_LOGFILE}: {ex.Message}");
                     Console.ResetColor();
                 }
             }

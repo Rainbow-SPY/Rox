@@ -245,14 +245,14 @@ namespace Rox
                 process.StartInfo.UseShellExecute = false;
                 process.Start();
 
-                LogLibraries.WriteLog(LogLibraries.LogLevel.Info, "已启动,请等待完成");
+                LogLibraries.WriteLog.Info("已启动,请等待完成");
                 process.WaitForExit();
                 string[] files = Directory.GetFiles(folder + "\\kgm-vpr-out", "*.mp3");
                 if (System.IO.File.Exists(files[0]))
                 {
                     process.Dispose();
                     MessageBox.Show("解密成功");
-                    LogLibraries.WriteLog(LogLibraries.LogLevel.Info, $"解密成功: {folder}kgm-vpr-out");
+                    LogLibraries.WriteLog.Info($"解密成功: {folder}kgm-vpr-out");
                     Windows.Explorer.OpenFolderInExplorer(Path.Combine(folder,"kgm-vpr-out"));
                     return;
                 }

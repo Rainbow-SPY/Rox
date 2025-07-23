@@ -21,7 +21,7 @@ namespace Rox
                     // 检查网络适配器是否有可用的
                     //if (NetworkInterface.GetIsNetworkAvailable())
                     //{
-                    //    WriteLog(LogLevel.Info, $"{_NOTAVAILABLE_NETWORK}");
+                    //    WriteLog.Info($"{_NOTAVAILABLE_NETWORK}");
                     //    return false;
                     //}
 
@@ -35,7 +35,7 @@ namespace Rox
                 catch
                 {
                     // 发生异常视为无网络
-                    WriteLog(LogLevel.Warning, $"{_NOTAVAILABLE_NETWORK}");
+                    WriteLog.Warning($"{_NOTAVAILABLE_NETWORK}");
                     return false;
                 }
             }
@@ -56,7 +56,7 @@ namespace Rox
                 }
                 catch
                 {
-                    WriteLog(LogLevel.Warning, $"{_NOTAVAILABLE_NETWORK}");
+                    WriteLog.Warning($"{_NOTAVAILABLE_NETWORK}");
                     return false;
                 }
             }

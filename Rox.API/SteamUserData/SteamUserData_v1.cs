@@ -23,7 +23,7 @@ namespace Rox
             {
                 if (string.IsNullOrEmpty(SteamID64))
                 {
-                    WriteLog(LogLevel.Error, LogKind.System, $"SteamID64为空值, 错误代码: {_String_NullOrEmpty}");
+                    WriteLog.Error(LogKind.System, $"SteamID64为空值, 错误代码: {_String_NullOrEmpty}");
                     MessageBox.Show($"SteamID64为空值, 错误代码: {_String_NullOrEmpty}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return null;
                 }
@@ -31,7 +31,7 @@ namespace Rox
                 var httpClient = new HttpClient();
                 if (!SteamID64.StartsWith("7656") || SteamID64.Length != 17) //SteamID64
                 {
-                    WriteLog(LogLevel.Info, LogKind.System, Not_Allow_17_SteamID64);
+                    WriteLog.Info(LogKind.System, Not_Allow_17_SteamID64);
                     return null;
                 }
                 return await SendQueryMessage(SteamID64, httpClient); //解析SteamID64
@@ -48,75 +48,77 @@ namespace Rox
                 {
                     var requestUrl = $"https://api.uapis.cn/api/v1/game/steam/summary?steamid={SteamID64}";
 
-                    WriteLog(LogLevel.Info, LogKind.Network, $"{_SEND_REQUEST}: {requestUrl}");
+                    WriteLog.Info(LogKind.Network, $"{_SEND_REQUEST}: {requestUrl}");
                     // 发送GET请求并获取响应
                     var response = await httpClient.GetAsync(requestUrl);
                     // 检查响应是否成功
                     if (!response.IsSuccessStatusCode)
                     {
-                        WriteLog(LogLevel.Error, $"请求失败: {response.StatusCode}, {_HttpClient_Request_Failed}");
+                        WriteLog.Error($"请求失败: {response.StatusCode}, {_HttpClient_Request_Failed}");
                         return null;
                     }
                     // 读取响应内容
                     var responseData = await response.Content.ReadAsStringAsync();
-                    WriteLog(LogLevel.Info, LogKind.Json, "获取原始 Json 内容");
+                    WriteLog.Info(LogKind.Json, "获取原始 Json 内容");
 
                     // 压缩 JSON 字符串
                     string compressedJson = CompressJson(responseData);
-                    WriteLog(LogLevel.Info, LogKind.Json, "压缩 Json");
-                    WriteLog(LogLevel.Info, LogKind.Json, $"反序列化 Json");
+                    WriteLog.Info(LogKind.Json, "压缩 Json");
+                    WriteLog.Info(LogKind.Json, $"反序列化 Json");
                     var SteamType = Rox.Text.Json.DeserializeObject<SteamType>(compressedJson);
                     switch (SteamType.code)
                     {
                         case 404: // 未找到账户 或 完全私密个人资料
-                            WriteLog(LogLevel.Error, LogKind.Network, $"API返回响应: Steam账户不存在或完全私密了个人资料, 错误代码: {_Steam_Not_Found_Account}");
+                            WriteLog.Error(LogKind.Network, $"API返回响应: Steam账户不存在或完全私密了个人资料, 错误代码: {_Steam_Not_Found_Account}");
                             MessageBox.Show($"Steam账户不存在或完全私密了个人资料, 错误代码: {_Steam_Not_Found_Account}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
                         case 400: // 错误的请求
-                            WriteLog(LogLevel.Error, LogKind.Network, $"API返回响应: 无效的输入, 错误代码: {Invaid_String_Input}");
+                            WriteLog.Error(LogKind.Network, $"API返回响应: 无效的输入, 错误代码: {Invaid_String_Input}");
                             MessageBox.Show($"无效的输入, 错误代码: {Invaid_String_Input}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
                         case 200:
-                            WriteLog(LogLevel.Info, LogKind.Network, $"API返回响应: Json解析成功");
+                            WriteLog.Info(LogKind.Network, $"API返回响应: Json解析成功");
                             break;
                         case 502: //服务器网关错误
-                            WriteLog(LogLevel.Error, LogKind.Network, $"API返回响应: 上游服务错误, 在向 Steam 的官方 API 请求数据时遇到了问题, 这可能是他们的服务暂时中断，请稍后重试, 错误代码: {_Steam_Service_Error}");
+                            WriteLog.Error(LogKind.Network, $"API返回响应: 上游服务错误, 在向 Steam 的官方 API 请求数据时遇到了问题, 这可能是他们的服务暂时中断，请稍后重试, 错误代码: {_Steam_Service_Error}");
                             MessageBox.Show($"上游服务错误, 在向 Steam 的官方 API 请求数据时遇到了问题, 这可能是他们的服务暂时中断，请稍后重试. 错误代码: {_Steam_Service_Error}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
                         case 401: //未经授权
-                            WriteLog(LogLevel.Error, LogKind.Network, $"API返回响应: 认证失败。你提供的 Steam Web API Key 无效或已过期，或者你没有提供 Key。请检查你的 Key. 错误代码: {_Steam_Server_UnAuthenticated}");
+                            WriteLog.Error(LogKind.Network, $"API返回响应: 认证失败。你提供的 Steam Web API Key 无效或已过期，或者你没有提供 Key。请检查你的 Key. 错误代码: {_Steam_Server_UnAuthenticated}");
                             MessageBox.Show($"认证失败。你提供的 Steam Web API Key 无效或已过期，或者你没有提供 Key。请检查你的 Key. 错误代码: {_Steam_Server_UnAuthenticated}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
 
                         default:
-                            WriteLog(LogLevel.Error, LogKind.Json, $"Json 反序列化过程中出现未知错误, 错误代码: {_Json_DeObject_Unknow_Exception}");
+                            WriteLog.Error(LogKind.Json, $"Json 反序列化过程中出现未知错误, 错误代码: {_Json_DeObject_Unknow_Exception}");
                             MessageBox.Show($"Json 反序列化过程中出现未知错误, 错误代码: {_Json_DeObject_Unknow_Exception}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
                     }
                     // 输出字段值
-                    WriteLog(LogLevel.Info, LogKind.Network, $"API 返回的代码: {SteamType.code}");
-                    WriteLog(LogLevel.Info, LogKind.Network, $"SteamID64: {SteamType.steamid}");
-                    WriteLog(LogLevel.Info, LogKind.Network, $"个人资料可见性: {SteamType.communityvisibilitystate}");
-                    //WriteLog(LogLevel.Info, LogKind.Network, $"Steam ID: {SteamType.steamID}");
-                    //WriteLog(LogLevel.Info, LogKind.Network, $"Steam ID3: {SteamType.steamID3}");
-                    WriteLog(LogLevel.Info, LogKind.Network, $"Steam 用户名: {SteamType.personaname}");
-                    WriteLog(LogLevel.Info, LogKind.Network, $"个人资料主页链接: {SteamType.profileurl}");
-                    WriteLog(LogLevel.Info, LogKind.Network, $"头像地址: {SteamType.avatarfull}");
-                    WriteLog(LogLevel.Info, LogKind.Network, $"在线状态: {SteamType.personastate}");
-                    WriteLog(LogLevel.Info, LogKind.Network, $"真实姓名: {SteamType.realname}");
-                    WriteLog(LogLevel.Info, LogKind.Network, $"主要社区组ID: {SteamType.primaryclanid}");
-                    WriteLog(LogLevel.Info, LogKind.Network, $"账户创建时间戳: {SteamType.timecreated}");
-                    WriteLog(LogLevel.Info, LogKind.Network, $"账户创建时间: {SteamType.timecreated_str}");
-                    //WriteLog(LogLevel.Info, LogKind.Network, $"Last Logoff: {SteamType.lastlogoff}");
-                    WriteLog(LogLevel.Info, LogKind.Network, $"账户所属国家或地区: {SteamType.loccountrycode}");
-                    //WriteLog(LogLevel.Info, LogKind.Network, $"Friend Code: {SteamType.friendcode}");
+                    WriteLog.Info(LogKind.Network, $"API 返回的代码: {SteamType.code}");
+                    WriteLog.Info(LogKind.Network, $"SteamID64: {SteamType.steamid}");
+                    WriteLog.Info(LogKind.Network, $"个人资料可见性: {SteamType.communityvisibilitystate}");
+                    //WriteLog.Info(LogKind.Network, $"Steam ID: {SteamType.steamID}");
+                    //WriteLog.Info(LogKind.Network, $"Steam ID3: {SteamType.steamID3}");
+                    WriteLog.Info(LogKind.Network, $"Steam 用户名: {SteamType.personaname}");
+                    WriteLog.Info(LogKind.Network, $"个人资料主页链接: {SteamType.profileurl}");
+                    WriteLog.Info(LogKind.Network, $"头像地址: {SteamType.avatarfull}");
+                    WriteLog.Info(LogKind.Network, $"在线状态: {SteamType.personastate}");
+                    WriteLog.Info(LogKind.Network, $"真实姓名: {SteamType.realname}");
+                    WriteLog.Info(LogKind.Network, $"主要社区组ID: {SteamType.primaryclanid}");
+                    WriteLog.Info(LogKind.Network, $"账户创建时间戳: {SteamType.timecreated}");
+                    WriteLog.Info(LogKind.Network, $"账户创建时间: {SteamType.timecreated_str}");
+                    //WriteLog.Info(LogKind.Network, $"Last Logoff: {SteamType.lastlogoff}");
+                    WriteLog.Info(LogKind.Network, $"账户所属国家或地区: {SteamType.loccountrycode}");
+                    //WriteLog.Info(LogKind.Network, $"Friend Code: {SteamType.friendcode}");
                     return SteamType;
                 }
                 catch (Exception ex)
                 {
                     // 捕获并输出异常
-                    WriteLog(LogLevel.Error, $"获取 Steam 个人信息失败，请检查网络连接或API服务状态: {ex.Message}, 错误代码: {_Steam_Unknow_Exception}");
+                    WriteLog.Error($"获取 Steam 个人信息失败，请检查网络连接或API服务状态: {ex.Message}, 错误代码: {_Steam_Unknow_Exception}");
+                    WriteLog.Info(ex.ToString());
                     return null;
+
 
                 }
             }
