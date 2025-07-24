@@ -54,8 +54,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Directory_I.cs" />
-    <Compile Include="File_I.cs" />
+    <Compile Include="Directory_I.CopyDirectory.cs" />
+    <Compile Include="File_I.CalculateMD5.cs" />
+    <Compile Include="File_I.FileProperties.cs" />
+    <Compile Include="File_I.CheckFileHash.cs" />
     <Compile Include="LocalizedString.cs" />
     <Compile Include="LogLibraries.cs" />
     <Compile Include="Network_I.cs" />
