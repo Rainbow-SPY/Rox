@@ -4,16 +4,30 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox", "Rox\Rox.csproj", "{1A93B989-729D-429D-8848-5C8EC38B9F8A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4F55481F-3CF2-489F-9153-156E7E2637BC} = {4F55481F-3CF2-489F-9153-156E7E2637BC}
+		{7E46025E-C375-44F9-ADF4-404438C9383E} = {7E46025E-C375-44F9-ADF4-404438C9383E}
+		{BA4C591E-3D2A-491B-BCCB-1F995545A26C} = {BA4C591E-3D2A-491B-BCCB-1F995545A26C}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.Audio", "Rox.Audio\Rox.Audio.csproj", "{3FC9C513-ADE0-408A-8319-985A1BC2906A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.Runtimes", "Rox.Runtimes\Rox.Runtimes.csproj", "{BA4C591E-3D2A-491B-BCCB-1F995545A26C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.DownloadAssistant", "Rox.DownloadAssistant\Rox.DownloadAssistant.csproj", "{7E46025E-C375-44F9-ADF4-404438C9383E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BA4C591E-3D2A-491B-BCCB-1F995545A26C} = {BA4C591E-3D2A-491B-BCCB-1F995545A26C}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.ArtificialIntelligence", "Rox.ArtificialIntelligence\Rox.ArtificialIntelligence.csproj", "{A0FEE4A7-A29E-4C1B-86C4-9813DC559C12}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BA4C591E-3D2A-491B-BCCB-1F995545A26C} = {BA4C591E-3D2A-491B-BCCB-1F995545A26C}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.Text", "Rox.Text\Rox.Text.csproj", "{4F55481F-3CF2-489F-9153-156E7E2637BC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BA4C591E-3D2A-491B-BCCB-1F995545A26C} = {BA4C591E-3D2A-491B-BCCB-1F995545A26C}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.API", "Rox.API\Rox.API.csproj", "{8B2D3FCF-8EFC-4E19-9DD0-F074C92F3222}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -22,6 +36,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.API", "Rox.API\Rox.API.
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.GameExpansionFeatures", "Rox.GameExpansionFeatures\Rox.GameExpansionFeatures.csproj", "{970D6D33-5E08-44DD-BB66-C6BEFCEE071C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BA4C591E-3D2A-491B-BCCB-1F995545A26C} = {BA4C591E-3D2A-491B-BCCB-1F995545A26C}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

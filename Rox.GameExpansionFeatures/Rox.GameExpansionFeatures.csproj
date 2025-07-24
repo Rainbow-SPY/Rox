@@ -60,7 +60,7 @@
   <ItemGroup>
     <Compile Include="Minecraft\Minecraft.Command.cs" />
     <Compile Include="Minecraft\Minecraft.cs" />
-    <Compile Include="Minecraft\Minecraft.Version.cs" />
+    <Compile Include="Minecraft\Minecraft.Version.VersionCheck.cs" />
     <Compile Include="Steam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

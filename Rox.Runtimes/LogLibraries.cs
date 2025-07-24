@@ -181,7 +181,11 @@ namespace Rox
                         Console.ForegroundColor = ConsoleColor.Yellow; // 设置黄色
                         break;
                     case "Debug":
+#if DEBUG
                         Console.ForegroundColor = ConsoleColor.Cyan; // 设置青色
+#elif RELEASE            
+                        return; 
+#endif
                         break;
                 }
                 Console.Write($"[{logLevel}]");
