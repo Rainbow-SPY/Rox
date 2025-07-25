@@ -2,8 +2,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Resources;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
@@ -105,10 +103,8 @@ namespace Rox
                         {
                             WriteLog.Error(LogKind.Downloader, $"{_DOWNLOADING_FAILED}: EasiNote5");
                         }
-
                         break;
                     }
-
                 case App.EasiCamera:
                     {
                         const string targetPrefix = "EasiCameraSetup_";
@@ -147,10 +143,8 @@ namespace Rox
                         {
                             WriteLog.Error(LogKind.Downloader, $"{_DOWNLOADING_FAILED}: EasiCamera");
                         }
-
                         break;
                     }
-
                 case App.WeChat:
                     {
                         const string targetFile = "WeChatSetup.exe";
@@ -196,32 +190,24 @@ namespace Rox
                                     WriteLog.Info(LogKind.System, $"{_GET_FILE}: {files.First()}");
                                     var newFile = files.First();
                                     downloadSuccess = true;
-                                    Process process = new Process();
-                                    process.StartInfo.FileName = newFile;
-                                    process.Start();
-                                    WriteLog.Info($"{_PROCESS_STARTED}: {process.Id}");
-                                    process.WaitForExit();
-                                    WriteLog.Info($"{_PROCESS_EXITED}: {process.ExitCode}");
-                                    process.Close();
+                                    Install(newFile);
                                     break;
                                 }
-                                WriteLog.Info($"{_WAIT_DOWNLOADING}... waiting {checkTimer.ElapsedMilliseconds / 1000} second");
+                                WriteLog.Info(LogKind.Downloader, $"{_WAIT_DOWNLOADING}... waiting {checkTimer.ElapsedMilliseconds / 1000} second");
                                 Thread.Sleep(checkInterval);
                             }
                             if (!downloadSuccess)
                             {
                                 retryCount++;
-                                WriteLog.Warning($"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
+                                WriteLog.Warning(LogKind.Downloader, $"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
                             }
                         }
                         if (!downloadSuccess)
                         {
-                            WriteLog.Error($"{_DOWNLOADING_FAILED}: {retryCount}/{maxRetries}");
+                            WriteLog.Error(LogKind.Downloader, $"{_DOWNLOADING_FAILED}: {retryCount}/{maxRetries}");
                         }
-
                         break;
                     }
-
                 case App.SeewoService:
                     {
                         const string targetPrefix = "SeewoServiceSetup_";
@@ -239,26 +225,26 @@ namespace Rox
                             while (checkTimer.ElapsedMilliseconds < timeout)
                             {
                                 var files = Directory.GetFiles(folderPath, $"{targetPrefix}*.exe");
-                                WriteLog.Info($"{_GET_DIRECTORY}: {folderPath}");
+                                WriteLog.Info(LogKind.System, $"{_GET_DIRECTORY}: {folderPath}");
                                 if (files.Any())
                                 {
-                                    WriteLog.Info($"{_GET_FILE}: {Path.GetFileName(files.First())}");
+                                    WriteLog.Info(LogKind.System, $"{_GET_FILE}: {Path.GetFileName(files.First())}");
                                     downloadSuccess = true;
                                     break;
                                 }
-                                WriteLog.Info($"{_WAIT_DOWNLOADING}... {checkTimer.ElapsedMilliseconds / 1000}s");
+                                WriteLog.Info(LogKind.Downloader, $"{_WAIT_DOWNLOADING}... {checkTimer.ElapsedMilliseconds / 1000}s");
                                 Thread.Sleep(checkInterval);
                             }
                             if (!downloadSuccess)
                             {
                                 retryCount++;
-                                WriteLog.Warning($"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
+                                WriteLog.Warning(LogKind.Downloader, $"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
                                 Directory.GetFiles(folderPath).ToList().ForEach(File.Delete);
                             }
                         }
                         if (!downloadSuccess)
                         {
-                            WriteLog.Error($"{_DOWNLOADING_FAILED}: SeewoService");
+                            WriteLog.Error(LogKind.Downloader, $"{_DOWNLOADING_FAILED}: SeewoService");
                         }
 
                         break;
@@ -287,37 +273,49 @@ namespace Rox
                             while (checkTimer.ElapsedMilliseconds < timeout)
                             {
                                 var files = Directory.GetFiles(folderPath, targetFile);
-                                WriteLog.Info($"{_GET_FILES_IN_DIRECTORY}: {folderPath}");
+                                WriteLog.Info(LogKind.System, $"{_GET_FILES_IN_DIRECTORY}: {folderPath}");
                                 if (files.Any())
                                 {
-                                    WriteLog.Info($"{_GET_FILE}: {files.First()}");
+                                    WriteLog.Info(LogKind.System, $"{_GET_FILE}: {files.First()}");
                                     var newFile = files.First();
                                     downloadSuccess = true;
-                                    Process process = new Process();
-                                    process.StartInfo.FileName = newFile;
-                                    process.Start();
-                                    WriteLog.Info($"{_PROCESS_STARTED}: {process.Id}");
-                                    process.WaitForExit();
-                                    WriteLog.Info($"{_PROCESS_EXITED}: {process.ExitCode}");
-                                    process.Close();
+                                    Install(newFile);
                                     break;
                                 }
-                                WriteLog.Info($"{_WAIT_DOWNLOADING}... waiting {checkTimer.ElapsedMilliseconds / 1000} second");
+                                WriteLog.Info(LogKind.Downloader, $"{_WAIT_DOWNLOADING}... waiting {checkTimer.ElapsedMilliseconds / 1000} second");
                                 Thread.Sleep(checkInterval);
                             }
                             if (!downloadSuccess)
                             {
                                 retryCount++;
-                                WriteLog.Warning($"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
+                                WriteLog.Warning(LogKind.Downloader, $"{_RETRY_DOWNLOAD}: {retryCount}/{maxRetries}");
                             }
                         }
                         if (!downloadSuccess)
                         {
-                            WriteLog.Error($"{_DOWNLOADING_FAILED}: {retryCount}/{maxRetries}");
+                            WriteLog.Error(LogKind.Downloader, $"{_DOWNLOADING_FAILED}: {retryCount}/{maxRetries}");
                         }
-
                         break;
                     }
+            }
+        }
+        internal static void Install(string FileName)
+        {
+            Process install = new Process();
+            install.StartInfo.FileName = FileName;
+            install.Start();
+            WriteLog.Info(LogKind.Process, $"{_PROCESS_STARTED}: {install.Id}");
+            install.WaitForExit();
+            if (install.ExitCode != 0)
+            {
+                WriteLog.Error(LogKind.Process, $"{_PROCESS_EXITED}: {install.ExitCode}");
+                WriteLog.Error(LogKind.Downloader, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {install.ExitCode}");
+                MessageBox.Show($"安装程序发生错误, 进程结束代码: {install.ExitCode}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                WriteLog.Info(LogKind.Process, $"{_PROCESS_EXITED}: {install.ExitCode}");
+                WriteLog.Info(LogKind.Downloader, $"{_DOWNLOADING_COMPLETE}");
             }
         }
         /// <summary>
