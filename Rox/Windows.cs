@@ -757,20 +757,6 @@ namespace Rox
         public class WindowsUpdate//Windows更新服务
         {
             /// <summary>
-            /// 启用 Windows 更新服务
-            /// </summary>
-            public static void Enable()
-            {
-                Switch("/E");
-            }
-            /// <summary>
-            /// 禁用 Windows 更新服务
-            /// </summary>
-            public static void Disable()
-            {
-                Switch("/D");
-            }
-            /// <summary>
             /// 检查 Windows 更新服务的状态
             /// </summary>
             public static bool CheckStatus()
@@ -810,173 +796,18 @@ namespace Rox
                 }
 
             }
-            /// <summary>
-            /// 用于启用或禁用 Windows 更新服务
-            /// </summary>
-            /// <param name="value"> 指定启用或禁用 Windows 更新服务的值</param>
-            /// <returns> 返回启用或禁用 Windows 更新服务的字符串</returns>
-            private static string IsEnable(string value)
-            {
-                if (value == "/D")
-                {
-                    return _DISABLE_WINDOWS_UPDATER;
-                }
-                if (value == "/E")
-                {
-                    return _ENABLE_WINDOWS_UPDATER;
-                }
-                return null;
-            }
-            /// <summary>
-            /// 用于处理启用或禁用 Windows 更新服务的错误
-            /// </summary>
-            /// <param name="value"></param>
-            /// <returns></returns>
-            private static string ErrorEnable(string value)
-            {
-                if (value == "/D")
-                {
-                    return _CANNOT_DISABLE_WINDOWS_UPDATER;
-                }
-                if (value == "/E")
-                {
-                    return _CANNOT_ENABLE_WINDOWS_UPDATER;
-                }
-                return null;
-            }
-            /// <summary>
-            /// 用于启用或禁用 Windows 更新服务
-            /// </summary>
-            /// <param name="value"> 指定启用或禁用 Windows 更新服务的值</param>
-            static void Switch(string value)
-            {
-                if (Security.Is360SafeRunning() || Security.IsHuorongSecurityRunning())
-                {
-                    DialogResult dialogResult = MessageBox.Show($"{_NOTAVAILABLE_NETWORK_TIPS}", $"{_WARNING}", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                    if (dialogResult != DialogResult.OK)
-                    {
-                        return;
-                    }
-                }
-                try
-                {
-                    string modulePath = $"{AppDomain.CurrentDomain.BaseDirectory}\\bin";
-                    bool is64Bit = Environment.Is64BitOperatingSystem;
-                    string fileName;
-                    if (is64Bit)
-                    {
-                        fileName = "Wub_x64.exe";
-                    }
-                    else
-                    {
-                        fileName = "Wubx32.exe";
-                    }
-                    DownloadAssistant.ModuleDownloader(DownloadAssistant.Module.Wub);
-                    Process p = new Process();
-                    p.StartInfo.FileName = Path.Combine(modulePath, fileName);
-                    p.StartInfo.Arguments = value;
-                    p.Start();
-                    WriteLog.Info($"{_PROCESS_STARTED}: {p.Id}");
-                    p.WaitForExit();
-                    WriteLog.Info($"{_PROCESS_EXITED}: {p.ExitCode}");
-                    if (p.ExitCode != 0)
-                    {
-                        WriteLog.Warning($"{ErrorEnable(value)}: ExitCode= {p.ExitCode}");
-                    }
-                    else
-                    {
-                        WriteLog.Info($"{IsEnable(value)}");
-                    }
-                    p.Close();
-                }
-                catch (Exception e)
-                {
-                    WriteLog.Error($"{ErrorEnable(value)}: {e}");
-                }
-            }//开关
         }
         /// <summary>
         /// 用于激活 Windows 系统，首先检查安全软件的状态，然后启动指定的激活程序。
         /// </summary>
         public static void ActiveWindows()//Windows激活
         {
-            if (Security.Is360SafeRunning() || Security.IsHuorongSecurityRunning())
-            {
-                DialogResult dialogResult = MessageBox.Show($"{_NOTAVAILABLE_NETWORK_TIPS}", $"{_WARNING}", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                if (dialogResult != DialogResult.OK)
-                {
-                    return;
-                }
-            }
-            DownloadAssistant.ModuleDownloader(DownloadAssistant.Module.Activator);
-            try
-            {
-                Process process12 = new Process();
-                process12.StartInfo.FileName = $"{AppDomain.CurrentDomain.BaseDirectory}\\bin\\HEU_KMS_Activator_v19.6.0.exe";
-                process12.StartInfo.Arguments = "/kms38";
-                process12.Start();
-                WriteLog.Info($"{_PROCESS_STARTED}: {process12.Id}");
-                WriteLog.Info(LogKind.Process, "process started");
-                WriteLog.Info(LogKind.Process, $"Args: {AppDomain.CurrentDomain.BaseDirectory}\\bin\\HEU_KMS_Activator_v19.6.0.exe /kms38");
-                process12.WaitForExit();
-                WriteLog.Info($"{_PROCESS_EXITED}: {process12.ExitCode}");
-                if (process12.ExitCode != 0)
-                {
-                    WriteLog.Error($"{_CANNOT_ACTIVE_WINDOWS}: {process12.ExitCode}");
-                }
-                else
-                {
-                    WriteLog.Info($"{_ACTIVE_WINDOWS}");
-                }
-                process12.Close();
-            }
-            catch (Exception exception)
-            {
-                WriteLog.Error($"{_CANNOT_ACTIVE_WINDOWS}: {exception}");
-            }
-        }
-        /// <summary>
-        /// 激活 Windows 系统，首先检查安全软件的状态，然后启动指定的激活程序，并返回激活结果。
-        /// </summary>
-        /// <returns></returns>
-        public static bool BoolActiveWindows()//Windows激活
-        {
-            if (Security.Is360SafeRunning() || Security.IsHuorongSecurityRunning())
-            {
-                DialogResult dialogResult = MessageBox.Show($"{_NOTAVAILABLE_NETWORK_TIPS}", $"{_WARNING}", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                if (dialogResult != DialogResult.OK)
-                {
-                    return false;
-                }
-            }
-            DownloadAssistant.ModuleDownloader(DownloadAssistant.Module.Activator);
-            try
-            {
-                Process process12 = new Process();
-                process12.StartInfo.FileName = $"{AppDomain.CurrentDomain.BaseDirectory}\\bin\\HEU_KMS_Activator_v19.6.0.exe";
-                process12.StartInfo.Arguments = "/kms38";
-                process12.Start();
-                WriteLog.Info($"{_PROCESS_STARTED}: {process12.Id}");
-                WriteLog.Info(LogKind.Process, "process started");
-                WriteLog.Info(LogKind.Process, $"Args: {AppDomain.CurrentDomain.BaseDirectory}\\bin\\HEU_KMS_Activator_v19.6.0.exe /kms38");
-                process12.WaitForExit();
-                WriteLog.Info($"{_PROCESS_EXITED}: {process12.ExitCode}");
-                if (process12.ExitCode != 0)
-                {
-                    WriteLog.Error($"{_CANNOT_ACTIVE_WINDOWS}: {process12.ExitCode}");
-                    return false;
-                }
-                else
-                {
-                    WriteLog.Info($"{_ACTIVE_WINDOWS}");
-                    return true;
-                }
-            }
-            catch (Exception exception)
-            {
-                WriteLog.Error($"{_CANNOT_ACTIVE_WINDOWS}: {exception}");
-                return false;
-            }
+            Process powerShell = new Process();
+            powerShell.StartInfo.FileName = "powershell.exe";
+            powerShell.StartInfo.Arguments = "irm https://get.activated.win | iex";
+            powerShell.Start();
+            WriteLog.Info(LogKind.Process,$"{_PROCESS_STARTED}: {powerShell.Id}");
+            powerShell.WaitForExit();
         }
         #region Windows身份验证
 

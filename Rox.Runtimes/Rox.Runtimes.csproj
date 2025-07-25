@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="only logo.ico" />
+    <None Include="Resources\aria2c.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

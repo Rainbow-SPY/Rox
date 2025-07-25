@@ -17,12 +17,6 @@ namespace Rox
             if (System.IO.File.Exists(filePath))
             {
                 WriteLog.Info(LogKind.Downloader, $"{_GET_ARIA2C_PATH}: {filePath}");
-                Assembly assembly = Assembly.GetExecutingAssembly();
-                foreach (var resource in assembly.GetManifestResourceNames())
-                {
-                    WriteLog.Info($"{_GET_RM_NAME}: {resource}");
-                }
-                return;
             }
             else
             {
@@ -31,7 +25,7 @@ namespace Rox
 
                 // 假设aria2c.exe是嵌入在"Namespace.Resources"命名空间中的
 
-                string resourceName = "Rox.DownloadAssistant.Properties.Resources"; // 替换为你的资源路径
+                string resourceName = "Rox.Runtimes.Properties.Resources"; // 替换为你的资源路径
 
                 // 创建 ResourceManager 实例
                 ResourceManager rm = new ResourceManager(resourceName, assembly);

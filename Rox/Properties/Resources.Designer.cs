@@ -61,16 +61,6 @@ namespace Rox.Properties {
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
-        /// </summary>
-        public static byte[] aria2c {
-            get {
-                object obj = ResourceManager.GetObject("aria2c", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 Rainbow SPY 的本地化字符串。
         /// </summary>
         public static string Author {
