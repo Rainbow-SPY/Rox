@@ -51,7 +51,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DownloadAssistant.cs" />
+    <Compile Include="DownloadAssistant.Core.cs" />
+    <Compile Include="DownloadAssistant.ApplicationDownloader.cs" />
+    <Compile Include="DownloadAssistant.Downloader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

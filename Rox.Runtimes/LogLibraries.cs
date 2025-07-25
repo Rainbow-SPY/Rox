@@ -99,7 +99,7 @@ namespace Rox
                 /// </summary>
                 PowerShell,
                 /// <summary>
-                /// 注册表
+                /// 注册表 <see cref="Microsoft.Win32.Registry"/>
                 /// </summary>
                 Registry,
                 /// <summary>
@@ -114,6 +114,10 @@ namespace Rox
                 /// 正则表达式 <see cref="System.Text.RegularExpressions.Regex"/>
                 /// </summary>
                 Regex,
+                /// <summary>
+                /// 下载器
+                /// </summary>
+                Downloader,
             }
             // 定义日志文件名和路径（当前目录下的 Assistant.log 文件）
             /// <summary>
