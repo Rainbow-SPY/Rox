@@ -38,7 +38,7 @@ namespace Rox
                 {
                     if (string.IsNullOrEmpty(city_Or_adcode))
                     {
-                        MessageBox.Show($"城市名称不能为空, 错误代码: {_String_NullOrEmpty}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show($"{_value_Not_Is_NullOrEmpty(city_Or_adcode)}, 错误代码: {_String_NullOrEmpty}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return null;
                     }
                     var httpClient = new HttpClient();
@@ -57,8 +57,8 @@ namespace Rox
                     switch ((int)response.StatusCode) // 修改为通过实例访问 code 属性
                     {
                         case 400:
-                            WriteLog.Error(LogKind.Network, $"城市名称不能为空, 错误代码: {_String_NullOrEmpty}, 错误信息: {weatherType.code} - {weatherType.message}");
-                            MessageBox.Show($"城市名称不能为空, 错误代码: {_String_NullOrEmpty}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            WriteLog.Error(LogKind.Network, $"{_value_Not_Is_NullOrEmpty(city_Or_adcode)}, 错误代码: {_String_NullOrEmpty}, 错误信息: {weatherType.code} - {weatherType.message}");
+                            MessageBox.Show($"{_value_Not_Is_NullOrEmpty(city_Or_adcode)}, 错误代码: {_String_NullOrEmpty}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return null;
                         case 410:
                             WriteLog.Error(LogKind.Network, $"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}, 错误信息: {weatherType.code} - {weatherType.message}");

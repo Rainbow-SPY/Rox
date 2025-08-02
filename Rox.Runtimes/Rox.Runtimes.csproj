@@ -60,6 +60,8 @@
     <Compile Include="File_I.CheckFileHash.cs" />
     <Compile Include="LocalizedString.cs" />
     <Compile Include="LogLibraries.cs" />
+    <Compile Include="LogLibraries.MessageBox_I.cs" />
+    <Compile Include="LogLibraries.WriteLog.cs" />
     <Compile Include="Network_I.cs" />
     <Compile Include="NodeJs.cs" />
     <Compile Include="Properties\Resource1.Designer.cs">

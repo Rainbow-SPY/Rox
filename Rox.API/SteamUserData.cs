@@ -27,8 +27,8 @@ namespace Rox
             {
                 if (string.IsNullOrEmpty(SteamID))
                 {
-                    WriteLog.Error(LogKind.System, $"SteamID64为空值, 错误代码: {_String_NullOrEmpty}");
-                    MessageBox.Show($"SteamID64为空值, 错误代码: {_String_NullOrEmpty}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    WriteLog.Error(LogKind.System, $"{_value_Not_Is_NullOrEmpty(SteamID)}, 错误代码: {_String_NullOrEmpty}");
+                    MessageBox.Show($"{_value_Not_Is_NullOrEmpty(SteamID)}, 错误代码: {_String_NullOrEmpty}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return null;
                 }
                 // 创建HttpClient实例
@@ -147,7 +147,7 @@ namespace Rox
                             MessageBox.Show($"SteamID64不满足17位唯一标识符!, 错误代码: {Not_Allow_17_SteamID64}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return Not_Allow_17_SteamID64;
                         }
-                        WriteLog.Info(LogKind.Regex, $"返回正则表达式匹配值: {numericIdMatch.Groups[1].Value} ");
+                        WriteLog.Info(LogKind.Regex, _Return_xKind_value("正则表达式", numericIdMatch.Groups[1].Value));
                         return numericIdMatch.Groups[1].Value; // 返回 17 位数字 ID
                     }
 
@@ -157,8 +157,8 @@ namespace Rox
                 }
                 catch (Exception e)
                 {
-                    WriteLog.Error(LogKind.Regex, $"正则表达式 遭遇未知的异常: {e}, 错误代码: {_Regex_Match_Unknow_Exception}");
-                    MessageBox.Show($"正则表达式 遭遇未知的异常: {e} , 错误代码: {_Regex_Match_Unknow_Exception}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    WriteLog.Error(LogKind.Regex, $"{_Exception_With_xKind("正则表达式")}: {e}, 错误代码: {_Regex_Match_Unknow_Exception}");
+                    MessageBox.Show($"{_Exception_With_xKind("正则表达式")}: {e} , 错误代码: {_Regex_Match_Unknow_Exception}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                     return _Regex_Match_Unknow_Exception;
                 }
             }
@@ -174,7 +174,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamID, new HttpClient());
                 }
-                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.communitystate}");
+                WriteLog.Info(LogKind.Json, _Return_xKind_value("Json", _lastSteamData?.communitystate));
                 return _lastSteamData?.communitystate;
             }
             /// <summary>
@@ -188,7 +188,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamID, new HttpClient());
                 }
-                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.steamID}");
+                WriteLog.Info(LogKind.Json, _Return_xKind_value("Json", _lastSteamData?.steamID));
                 return _lastSteamData?.steamID;
             }
             /// <summary>
@@ -202,7 +202,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamID, new HttpClient());
                 }
-                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.steamID3}");
+                WriteLog.Info(LogKind.Json, _Return_xKind_value("Json", _lastSteamData?.steamID3));
                 return _lastSteamData?.steamID3;
             }
             /// <summary>
@@ -216,7 +216,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamID, new HttpClient());
                 }
-                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.username}");
+                WriteLog.Info(LogKind.Json, _Return_xKind_value("Json", _lastSteamData?.username));
                 return _lastSteamData?.username;
             }
             /// <summary>
@@ -230,7 +230,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
-                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.steamID64}");
+                WriteLog.Info(LogKind.Json, _Return_xKind_value("Json", _lastSteamData?.steamID64));
                 return _lastSteamData?.steamID64;
             }
             /// <summary>
@@ -244,7 +244,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
-                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.profileurl_1}");
+                WriteLog.Info(LogKind.Json, _Return_xKind_value("Json", _lastSteamData?.profileurl_1));
                 return _lastSteamData?.profileurl_1;
             }
             /// <summary>
@@ -258,7 +258,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
-                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.avatar_1}");
+                WriteLog.Info(LogKind.Json, _Return_xKind_value("Json", _lastSteamData?.avatar_1));
                 return _lastSteamData?.avatar_1;
             }
             /// <summary>
@@ -272,7 +272,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
-                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.accountcreationdate}");
+                WriteLog.Info(LogKind.Json, _Return_xKind_value("Json", _lastSteamData?.accountcreationdate));
                 return _lastSteamData?.accountcreationdate;
             }
             /// <summary>
@@ -286,7 +286,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
-                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.lastlogoff}");
+                WriteLog.Info(LogKind.Json, _Return_xKind_value("Json", _lastSteamData?.lastlogoff));
                 return _lastSteamData?.lastlogoff;
             }
             /// <summary>
@@ -300,7 +300,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
-                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.location}");
+                WriteLog.Info(LogKind.Json, _Return_xKind_value("Json", _lastSteamData?.location));
                 return _lastSteamData?.location;
             }
             /// <summary>
@@ -314,7 +314,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
-                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.onlinestatus}");
+                WriteLog.Info(LogKind.Json, _Return_xKind_value("Json", _lastSteamData?.onlinestatus));
                 return _lastSteamData?.onlinestatus;
             }
             /// <summary>
@@ -328,7 +328,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
-                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.friendcode}");
+                WriteLog.Info(LogKind.Json, _Return_xKind_value("Json", _lastSteamData?.friendcode));
                 return _lastSteamData?.friendcode;
             }
             /// <summary>
@@ -342,7 +342,7 @@ namespace Rox
                 {
                     _lastSteamData = await SendQueryMessage(SteamId, new HttpClient());
                 }
-                WriteLog.Info(LogKind.Json, $"return Json value: {_lastSteamData?.realname}");
+                WriteLog.Info(LogKind.Json, _Return_xKind_value("Json", _lastSteamData?.realname));
                 return _lastSteamData?.realname;
             }
             #endregion

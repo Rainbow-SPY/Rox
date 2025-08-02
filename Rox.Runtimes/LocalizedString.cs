@@ -445,12 +445,34 @@ namespace Rox
             /// </summary>
             public static readonly string _Weather_Service_Error = "_Weather_Service_Error (1203)";
             #endregion
+
+            /// <param name="_void"> 方法名 </param>
+            /// <param name="_type"> 类型名 </param>
+            /// <returns> 方法 <see langword="%s"/> 传入的 <see langword="%s"/> 类型的值为 <see langword="null"/> </returns>
+            public static string _void_value_null(string _void, string _type) => $"方法 {_void} 传入的 {_type} 类型的值为 null";
+            /// <param name="value"> 方法名 </param>
+            /// <returns>传递的参数 <see langword="%s"/> 不能为 <see langword="null"/> 或 <see langword="Empty"/> </returns>
+            public static string _value_Not_Is_NullOrEmpty(string value) => $"传递的参数 {value} 不能为 null 或空白。";
+            /// <param name="value"> 输入的值 </param>
+            /// <param name="type"> 类型 </param>
+            /// <returns> 输入的值 <see langword="%s"/> 不是 <see langword="%s"/> 类型 </returns>
+            public static string _input_value_Not_Is_xType(string value, string type) => $"输入的值 {value} 不是 {type} 类型";
+            /// <param name="kind1"> 转换前的类型 </param>
+            /// <param name="kind2"> 转换后的类型 </param>
+            /// <returns> 转换 <see langword="%s"/> 到 <see langword="%s"/> 时发生错误 </returns>
+            public static string _Convert_Kind_To_Kind(string kind1, string kind2) => $"转换 {kind1} 到 {kind2} 时发生错误";
+            /// <param name="kind"> 返回值的类型 </param>
+            /// <param name="value"> 返回值 </param>
+            /// <returns> 返回 <see langword="%s"/> 值: <see langword="%s"/> </returns>
+            public static string _Return_xKind_value(string kind, string value) => $"返回 {kind} 值: {value}";
+            /// <param name="kind"> 异常的类型 </param>
+            /// <returns> <see langword="%s"/> 遭遇未知的异常 </returns>
+            public static string _Exception_With_xKind(string kind) => $"{kind} 遭遇未知的异常";
             /// <summary>
             /// 获取本地化字符串
             /// </summary>
             /// <param name="key">字符串常量</param>
             /// <returns>指定语言文件中的字符串</returns>
-
             public static string GetLocalizedString(string key)
             {
                 return ResourceHelper.GetString(key, System.Globalization.CultureInfo.InstalledUICulture.Name.ToString());

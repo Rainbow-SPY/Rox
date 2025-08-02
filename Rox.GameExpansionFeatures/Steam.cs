@@ -1,37 +1,36 @@
-﻿using Rox.Text;
-using System.Threading.Tasks;
-using static Rox.API;
+﻿using static Rox.GameExpansionFeatures.Steam.Converter.SteamID;
+using static Rox.GameExpansionFeatures.Steam.SteamID;
 
 namespace Rox.GameExpansionFeatures
 {
     /// <summary>
     /// Steam 游戏平台相关扩展功能库
     /// </summary>
-    public class Steam
+    public partial class Steam
     {
         /// <summary>
-        /// Steam 相关数据查询器
+        /// 从任意 SteamID 格式获取好友代码（SteamID32）
         /// </summary>
-        public class Querier
+        /// <param name="AnySteamID"> 任意格式的 <see cref="Rox.GameExpansionFeatures.Steam.Converter.SteamID"/></param>
+        /// <returns> 好友代码（SteamID32）</returns>
+        public static string GetFriendCode(string AnySteamID)
         {
-            /// <summary>
-            /// 新版请求Steam Web API Json的方法
-            /// </summary>
-            /// <param name="SteamID64">SteamID64</param>
-            /// <returns><see cref="SteamUserData_v1.SteamType"/> 格式的 <see cref="Json"/> 文本</returns>
-            public static async Task<SteamUserData_v1.SteamType> UserData_v1(string SteamID64)
+            switch (Identifier(AnySteamID))
             {
-                return await SteamUserData_v1.GetDataJson_v1(SteamID64);
+                case SteamIDType.SteamID64:
+                    return SteamID64orSteamID3ToSteamID32(AnySteamID);
+                case SteamIDType.SteamID32:
+                    return AnySteamID;
+                case SteamIDType.SteamID3:
+                    return SteamID64orSteamID3ToSteamID32(AnySteamID);
+                case SteamIDType.SteamID:
+                    break;
+                case SteamIDType.Invalid:
+                    break;
+                default:
+                    break;
             }
-            /// <summary>
-            /// 请求Steam Web API Json的方法
-            /// </summary>
-            /// <param name="SteamID64">SteamID64</param>
-            /// <returns><see cref="SteamUserData.SteamType"/> 格式的 <see cref="Json"/> 文本</returns>
-            public static async Task<API.SteamUserData.SteamType> UserData(string SteamID64)
-            {
-                return await SteamUserData.GetDataJson(SteamID64);
-            }
+            return null;
         }
     }
 }

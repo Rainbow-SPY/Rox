@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Windows.Forms;
+using static Rox.Runtimes.LocalizedString;
 namespace Rox
 {
     namespace Runtimes
@@ -7,64 +9,31 @@ namespace Rox
         /// <summary>
         /// 日志类库,在控制台输出日志并记录到文件
         /// </summary>
-        public class LogLibraries
+        public partial class LogLibraries
         {
-            private static readonly string _CLEAR_LOGFILE = "清空日志文件成功";
-            private static readonly string _CANNOT_CLEAR_LOGFILE = "清空日志文件失败";
             /// <summary>
             /// 日志输出到 UI 的委托,用于在 UI 上显示日志
             /// </summary>
             public static Action<string, string> LogToUi { get; set; }
-            /// <summary>
-            /// 向控制台输出日志, 并指定日志等级和日志类型
-            /// </summary>
-            public class WriteLog
+            internal static void MessageBox_Core(string logLevel, string message)
             {
-                /// <summary>
-                /// 指定为信息类别的日志
-                /// </summary>
-                /// <param name="message"> 日志消息 </param>
-                public static void Info(string message) => WriteLog_("Info", message);
-                /// <summary>
-                /// 指定为错误类别的日志
-                /// </summary>
-                /// <param name="message"> 日志消息 </param>
-                public static void Error(string message) => WriteLog_("Error", message);
-                /// <summary>
-                /// 指定为警告类别的日志
-                /// </summary>
-                /// <param name="message"> 日志消息 </param>
-                public static void Warning(string message) => WriteLog_("Warning", message);
-                /// <summary>
-                ///  指定为调试类别的日志
-                /// </summary>
-                /// <param name="message"></param>
-                public static void Debug(string message) => WriteLog_("Debug", message);
-                /// <summary>
-                /// 指定为信息类别的日志,并指定日志类型
-                /// </summary>
-                /// <param name="kind"> 日志类型 </param>
-                /// <param name="message"> 日志消息 </param>
-                public static void Info(LogKind kind, string message) => WriteLog_("Info", kind, message);
-                /// <summary>
-                /// 指定为错误类别的日志,并指定日志类型
-                /// </summary>
-                /// <param name="kind"> 日志类型 </param>
-                /// <param name="message"> 日志消息 </param>
-                public static void Error(LogKind kind, string message) => WriteLog_("Error", kind, message);
-                /// <summary>
-                ///  指定为警告类别的日志,并指定日志类型
-                /// </summary>
-                /// <param name="kind"> 日志类型 </param>
-                /// <param name="message"> 日志消息 </param>
-                public static void Warning(LogKind kind, string message) => WriteLog_("Warning", kind, message);
-                /// <summary>
-                ///  指定为调试类别的日志,并指定日志类型
-                /// </summary>
-                /// <param name="kind"></param>
-                /// <param name="message"></param>
-                public static void Debug(LogKind kind, string message) => WriteLog_("Debug", kind, message);
+                switch (logLevel)
+                {
+                    case "Info":
+                        MessageBox.Show(message, "信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        break;
+                    case "Error":
+                        MessageBox.Show(message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        break;
+                    case "Warning":
+                        MessageBox.Show(message, "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        break;
+                    case "Common":
+                        MessageBox.Show(message, "提示", MessageBoxButtons.OK);
+                        break;
+                }
             }
+
             /// <summary>
             /// 日志类型,分为Form,Thread,Process,Service,Task,System,PowerShell,Registry,Network
             /// </summary>
@@ -118,6 +87,10 @@ namespace Rox
                 /// 下载器
                 /// </summary>
                 Downloader,
+                /// <summary>
+                /// 数学计算 <see cref="System.Math"/>
+                /// </summary>
+                Math,
             }
             // 定义日志文件名和路径（当前目录下的 Assistant.log 文件）
             /// <summary>
@@ -127,7 +100,7 @@ namespace Rox
             /// <summary>
             /// 日志文件路径
             /// </summary>
-            private static readonly string logFilePath = Path.Combine(Directory.GetCurrentDirectory(), logFileName);
+            private static readonly string logFilePath = Path.Combine(Application.StartupPath, logFileName);
             /// <summary>
             /// 根据日志等级和日志类型向文件写入日志,并在控制台输出日志,并记录到文件
             /// </summary>

@@ -23,8 +23,8 @@ namespace Rox
             {
                 if (string.IsNullOrEmpty(SteamID64))
                 {
-                    WriteLog.Error(LogKind.System, $"SteamID64为空值, 错误代码: {_String_NullOrEmpty}");
-                    MessageBox.Show($"SteamID64为空值, 错误代码: {_String_NullOrEmpty}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    WriteLog.Error(LogKind.System, $"{_value_Not_Is_NullOrEmpty(SteamID64)}, 错误代码: {_String_NullOrEmpty}");
+                    MessageBox.Show($"{_value_Not_Is_NullOrEmpty(SteamID64)}, 错误代码: {_String_NullOrEmpty}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return null;
                 }
                 // 创建HttpClient实例
@@ -97,8 +97,7 @@ namespace Rox
                     WriteLog.Info(LogKind.Network, $"API 返回的代码: {SteamType.code}");
                     WriteLog.Info(LogKind.Network, $"SteamID64: {SteamType.steamid}");
                     WriteLog.Info(LogKind.Network, $"个人资料可见性: {SteamType.communityvisibilitystate}");
-                    //WriteLog.Info(LogKind.Network, $"Steam ID: {SteamType.steamID}");
-                    //WriteLog.Info(LogKind.Network, $"Steam ID3: {SteamType.steamID3}");
+                    WriteLog.Info(LogKind.Network, $"Steam ID3: {SteamType.steamID3}");
                     WriteLog.Info(LogKind.Network, $"Steam 用户名: {SteamType.personaname}");
                     WriteLog.Info(LogKind.Network, $"个人资料主页链接: {SteamType.profileurl}");
                     WriteLog.Info(LogKind.Network, $"头像地址: {SteamType.avatarfull}");
@@ -109,7 +108,7 @@ namespace Rox
                     WriteLog.Info(LogKind.Network, $"账户创建时间: {SteamType.timecreated_str}");
                     //WriteLog.Info(LogKind.Network, $"Last Logoff: {SteamType.lastlogoff}");
                     WriteLog.Info(LogKind.Network, $"账户所属国家或地区: {SteamType.loccountrycode}");
-                    //WriteLog.Info(LogKind.Network, $"Friend Code: {SteamType.friendcode}");
+                    WriteLog.Info(LogKind.Network, $"好友代码: {SteamType.friendcode}");
                     return SteamType;
                 }
                 catch (Exception ex)
@@ -204,14 +203,14 @@ namespace Rox
                 /// Steam账号绑定区域
                 /// </summary>
                 public string loccountrycode { get; set; }
-                ///// <summary>
-                ///// SteamID3
-                ///// </summary>
-                //public string steamID { get; set; }
-                ///// <summary>
-                ///// SteamID3
-                ///// </summary>
-                //public string steamID3 { get; set; }
+                /// <summary>
+                /// 好友代码 （SteamID32）
+                /// </summary>
+                public string friendcode => Rox.GameExpansionFeatures.Steam.Converter.SteamID.SteamID64orSteamID3ToSteamID32(steamid);
+                /// <summary>
+                /// SteamID3
+                /// </summary>
+                public string steamID3 => Rox.GameExpansionFeatures.Steam.Converter.SteamID.Steam64OrSteamID32ToSteamID3(steamid);
                 ///// <summary>
                 ///// Steam最后登出日期
                 ///// </summary>

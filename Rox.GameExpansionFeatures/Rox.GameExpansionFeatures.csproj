@@ -61,8 +61,11 @@
     <Compile Include="Minecraft.Command.cs" />
     <Compile Include="Minecraft.cs" />
     <Compile Include="Minecraft.Version.VersionCheck.cs" />
+    <Compile Include="Steam.SteamID.SteamIDType.cs" />
     <Compile Include="Steam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Steam.Converter.cs" />
+    <Compile Include="Steam.Querier.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="only logo.ico" />
