@@ -1,10 +1,10 @@
 ﻿using Rox.Runtimes;
 using System;
-using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Rox.GameExpansionFeatures.Steam.SteamID;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
 
@@ -38,21 +38,27 @@ namespace Rox
                 bool ID3Steam = false;
                 bool FriendCodeSteam = false;
                 bool CustomSteam = false;
-                if (SteamID.StartsWith("http")) //个人主页
+
+                switch (Identifier(SteamID))
+                {
+                    case SteamIDType.SteamID:
+                        ID3Steam = true; //STEAM_x_xxxx
+                        break;
+                    case SteamIDType.SteamID3:
+                        ID3Steam = true; // [U:1:1xxxx]
+                        break;
+                    case SteamIDType.SteamID32:
+                        FriendCodeSteam = true; // 1xxxxxx
+                        break;
+                    case SteamIDType.SteamID64:
+                        ID64Steam = true; // 7656xxxxxxxxxx
+                        break;
+                    case SteamIDType.Invalid:
+                        break;
+                }
+                if (SteamID.StartsWith("http")) //个人主页链接
                 {
                     httpSteam = true;
-                }
-                else if (SteamID.StartsWith("7656")) //SteamID64
-                {
-                    ID64Steam = true;
-                }
-                else if (SteamID.StartsWith("[U:")) //SteamID3
-                {
-                    ID3Steam = true;
-                }
-                else if (SteamID.All(char.IsDigit)) //好友代码
-                {
-                    FriendCodeSteam = true;
                 }
                 else //自定义ID
                 {
@@ -71,7 +77,7 @@ namespace Rox
                     }
                     else if (SteamID64 == _Regex_Match_Unknow_Exception)
                     {
-                        WriteLog.Error(LogKind.Regex, $"处理 正则表达式 时发生未知异常 , 返回的错误代码: {_Regex_Match_Unknow_Exception} ");
+                        WriteLog.Error(LogKind.Regex, $"{_Exception_With_xKind("Regex")}, 返回的错误代码: {_Regex_Match_Unknow_Exception} ");
                         return null;
                     }
                     else if (SteamID64 == _Regex_Match_Not_Found_Any)
