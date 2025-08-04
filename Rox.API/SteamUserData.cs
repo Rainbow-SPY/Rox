@@ -27,8 +27,8 @@ namespace Rox
             {
                 if (string.IsNullOrEmpty(SteamID))
                 {
-                    WriteLog.Error(LogKind.System, $"{_value_Not_Is_NullOrEmpty(SteamID)}, 错误代码: {_String_NullOrEmpty}");
-                    MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty(SteamID)}, 错误代码: {_String_NullOrEmpty}", "Error");
+                    WriteLog.Error(LogKind.System, $"{_value_Not_Is_NullOrEmpty("SteamID")}, 错误代码: {_String_NullOrEmpty}");
+                    MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty("SteamID")}, 错误代码: {_String_NullOrEmpty}", "Error");
                     return null;
                 }
                 // 创建HttpClient实例

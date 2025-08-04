@@ -151,7 +151,7 @@ namespace Rox
 
                     if (string.IsNullOrEmpty(json))
                     {
-                        WriteLog.Error(_value_Not_Is_NullOrEmpty(json));
+                        WriteLog.Error(_value_Not_Is_NullOrEmpty("json"));
                         return result;
                     }
 
@@ -230,7 +230,7 @@ namespace Rox
 
                     if (string.IsNullOrEmpty(json))
                     {
-                        WriteLog.Error(_value_Not_Is_NullOrEmpty(json));
+                        WriteLog.Error(_value_Not_Is_NullOrEmpty("json"));
                         return result;
                     }
 
@@ -452,7 +452,7 @@ namespace Rox
 
                 if (string.IsNullOrEmpty(json))
                 {
-                    WriteLog.Error(_value_Not_Is_NullOrEmpty(json));
+                    WriteLog.Error(_value_Not_Is_NullOrEmpty("json"));
                     return result;
                 }
 
@@ -513,7 +513,7 @@ namespace Rox
 
                 if (string.IsNullOrEmpty(json))
                 {
-                    WriteLog.Error(_value_Not_Is_NullOrEmpty(json));
+                    WriteLog.Error(_value_Not_Is_NullOrEmpty("json"));
                     return result;
                 }
 
@@ -705,7 +705,7 @@ namespace Rox
                 if (string.IsNullOrEmpty(str))
                 {
                     WriteLog.Error(_value_Not_Is_NullOrEmpty(str));
-                    MessageBox_I.Error(_value_Not_Is_NullOrEmpty(str), _ERROR);
+                    MessageBox_I.Error(_value_Not_Is_NullOrEmpty("str"), _ERROR);
                     return null;
                 }
                 try

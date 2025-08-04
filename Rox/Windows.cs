@@ -575,7 +575,7 @@ namespace Rox
                 {
                     if (string.IsNullOrEmpty(path))
                     {
-                        MessageBox_I.Error(_value_Not_Is_NullOrEmpty(path), _ERROR);
+                        MessageBox_I.Error(_value_Not_Is_NullOrEmpty("path"), _ERROR);
                         return;
                     }
                     // 检查路径是否存在
@@ -591,7 +591,7 @@ namespace Rox
                         string extension = Path.GetExtension(path);
                         if (string.IsNullOrEmpty(extension))
                         {
-                            MessageBox_I.Error(_value_Not_Is_NullOrEmpty(extension), _ERROR);
+                            MessageBox_I.Error(_value_Not_Is_NullOrEmpty("extension"), _ERROR);
                             return;
                         }
                     }

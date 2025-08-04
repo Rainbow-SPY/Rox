@@ -46,7 +46,7 @@ namespace Rox.GameExpansionFeatures
             {
                 if (string.IsNullOrWhiteSpace(AnySteamID))
                 {
-                    WriteLog.Error(LogKind.Regex, _value_Not_Is_NullOrEmpty(AnySteamID));
+                    WriteLog.Error(LogKind.Regex, _value_Not_Is_NullOrEmpty("AnySteamID"));
                     return SteamIDType.Invalid;
                 }
 

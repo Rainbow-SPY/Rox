@@ -31,7 +31,7 @@ namespace Rox
                 if (string.IsNullOrWhiteSpace(ExtraedFolder) || Path.GetFileName(ExtraedFolder) == string.Empty)
                 {
                     WriteLog.Error($"{ExtraedFolder}值为null或空字符串");
-                    MessageBox_I.Error(_value_Not_Is_NullOrEmpty(ExtraedFolder), "错误的路径! - Rox");
+                    MessageBox_I.Error(_value_Not_Is_NullOrEmpty("ExtraedFolder"), "错误的路径! - Rox");
                     return $"Error";
                 }
                 else
@@ -134,8 +134,8 @@ namespace Rox
                 // 替换原有判断逻辑如下：
                 if (string.IsNullOrWhiteSpace(ExtraedFolder) || Path.GetFileName(ExtraedFolder) == string.Empty)
                 {
-                    WriteLog.Error(_value_Not_Is_NullOrEmpty(ExtraedFolder));
-                    MessageBox_I.Error(_value_Not_Is_NullOrEmpty(ExtraedFolder), "错误的路径! - Rox");
+                    WriteLog.Error(_value_Not_Is_NullOrEmpty("ExtraedFolder"));
+                    MessageBox_I.Error(_value_Not_Is_NullOrEmpty("ExtraedFolder"), "错误的路径! - Rox");
                     return $"Error";
                 }
                 else

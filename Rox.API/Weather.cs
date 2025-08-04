@@ -30,7 +30,7 @@ namespace Rox
                 {
                     if (string.IsNullOrEmpty(city))
                     {
-                        MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty(city)}, 错误代码: {_String_NullOrEmpty}", _ERROR);
+                        MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty("city")}, 错误代码: {_String_NullOrEmpty}", _ERROR);
                         return null;
                     }
                     var httpClient = new HttpClient();
@@ -50,8 +50,8 @@ namespace Rox
                     switch (weatherType.code) // 修改为通过实例访问 code 属性
                     {
                         case 400:
-                            WriteLog.Error(LogKind.Network, $"{_value_Not_Is_NullOrEmpty(city)}, 错误代码: {_String_NullOrEmpty}");
-                            MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty(city)} , 错误代码: {_String_NullOrEmpty}", _ERROR);
+                            WriteLog.Error(LogKind.Network, $"{_value_Not_Is_NullOrEmpty("city")}, 错误代码: {_String_NullOrEmpty}");
+                            MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty("city")} , 错误代码: {_String_NullOrEmpty}", _ERROR);
                             return null;
                         case 500:
                             WriteLog.Error(LogKind.Network, $"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}");

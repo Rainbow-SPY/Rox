@@ -23,7 +23,7 @@ namespace Rox
                 {
                     if (string.IsNullOrWhiteSpace(a))
                     {
-                        WriteLog.Error(LogKind.Form, _value_Not_Is_NullOrEmpty(a));
+                        WriteLog.Error(LogKind.Form, _value_Not_Is_NullOrEmpty("a"));
                         return;
                     }
                 }

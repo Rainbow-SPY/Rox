@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using static Rox.GameExpansionFeatures.Steam.SteamID;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
@@ -18,14 +17,21 @@ namespace Rox
             /// <summary>
             /// 新版请求Steam Web API Json的方法
             /// </summary>
-            /// <param name="SteamID">SteamID64</param>
-            /// <returns><see cref="SteamType"/> 格式的 <see cref="Text.Json"/> 文本</returns>
-            public static async Task<SteamType> GetDataJson_v1(string SteamID)
+            /// <param name="SteamID">其中一种的 <see cref="SteamIDType"/></param>
+            /// <returns><see cref="SteamType"/> 对象</returns>
+            public static async Task<SteamType> GetDataJson_v1(string SteamID) => await GetDataJson_v1(SteamID, false);
+            /// <summary>
+            /// 新版请求Steam Web API Json的方法
+            /// </summary>
+            /// <param name="SteamID"> 其中一种的 <see cref="SteamIDType"/></param>
+            /// <param name="IsMessageBox">是否弹窗提示</param>
+            /// <returns><see cref="SteamType"/> 对象</returns>
+            public static async Task<SteamType> GetDataJson_v1(string SteamID, bool IsMessageBox)
             {
                 if (string.IsNullOrEmpty(SteamID))
                 {
-                    WriteLog.Error(LogKind.System, $"{_value_Not_Is_NullOrEmpty(SteamID)}, 错误代码: {_String_NullOrEmpty}");
-                    MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty(SteamID)}, 错误代码: {_String_NullOrEmpty}", "Error");
+                    WriteLog.Error(LogKind.System, $"{_value_Not_Is_NullOrEmpty("SteamID")}, 错误代码: {_String_NullOrEmpty}");
+                    MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty("SteamID")}, 错误代码: {_String_NullOrEmpty}", "Error");
                     return null;
                 }
 
@@ -74,11 +80,15 @@ namespace Rox
                             if (SteamID64 == _Regex_Match_Unknow_Exception)
                             {
                                 WriteLog.Error(LogKind.Regex, $"{_Exception_With_xKind("Regex")}, 返回的错误代码: {_Regex_Match_Unknow_Exception} ");
+                                if (IsMessageBox)
+                                    MessageBox_I.Error($"{_Exception_With_xKind("Regex")}, 返回的错误代码: {_Regex_Match_Unknow_Exception}", _ERROR);
                                 return null;
                             }
                             else if (SteamID64 == _Regex_Match_Not_Found_Any)
                             {
                                 WriteLog.Error(LogKind.Regex, $"未匹配到任何 正则表达式 , 返回的错误代码: {_Regex_Match_Not_Found_Any}");
+                                if (IsMessageBox)
+                                    MessageBox_I.Error($"未匹配到任何 正则表达式 , 返回的错误代码: {_Regex_Match_Not_Found_Any}", _ERROR);
                                 return null;
                             }
                             else

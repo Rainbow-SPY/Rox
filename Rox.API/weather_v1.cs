@@ -38,7 +38,8 @@ namespace Rox
                 {
                     if (string.IsNullOrEmpty(city_Or_adcode))
                     {
-                        MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty(city_Or_adcode)}, 错误代码: {_String_NullOrEmpty}", _ERROR);
+                        WriteLog.Error(LogKind.Network, $"{_value_Not_Is_NullOrEmpty("city_Or_adcode")}, 错误代码: {_String_NullOrEmpty}");
+                        MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty("city_Or_adcode")}, 错误代码: {_String_NullOrEmpty}", _ERROR);
                         return null;
                     }
                     var httpClient = new HttpClient();
@@ -57,8 +58,8 @@ namespace Rox
                     switch ((int)response.StatusCode) // 修改为通过实例访问 code 属性
                     {
                         case 400:
-                            WriteLog.Error(LogKind.Network, $"{_value_Not_Is_NullOrEmpty(city_Or_adcode)}, 错误代码: {_String_NullOrEmpty}, 错误信息: {weatherType.code} - {weatherType.message}");
-                            MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty(city_Or_adcode)}, 错误代码: {_String_NullOrEmpty}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR);
+                            WriteLog.Error(LogKind.Network, $"{_value_Not_Is_NullOrEmpty("city_Or_adcode")}, 错误代码: {_String_NullOrEmpty}, 错误信息: {weatherType.code} - {weatherType.message}");
+                            MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty("city_Or_adcode")}, 错误代码: {_String_NullOrEmpty}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR);
                             return null;
                         case 410:
                             WriteLog.Error(LogKind.Network, $"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}, 错误信息: {weatherType.code} - {weatherType.message}");

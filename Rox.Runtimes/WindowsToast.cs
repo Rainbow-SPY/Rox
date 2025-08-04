@@ -77,7 +77,7 @@ namespace Rox
                 if (string.IsNullOrWhiteSpace(path) || Path.GetFileName(path) == string.Empty)
                 {
                     WriteLog.Error($"{path}值为null或空字符串");
-                    MessageBox_I.Error(_value_Not_Is_NullOrEmpty(path), "错误的路径! - Rox");
+                    MessageBox_I.Error(_value_Not_Is_NullOrEmpty("path"), "错误的路径! - Rox");
                     return;
                 }
                 else

@@ -49,7 +49,7 @@ namespace Rox.GameExpansionFeatures
                 {
                     if (string.IsNullOrWhiteSpace(SteamID))
                     {
-                        WriteLog.Error(LogKind.Regex, _value_Not_Is_NullOrEmpty(SteamID));
+                        WriteLog.Error(LogKind.Regex, _value_Not_Is_NullOrEmpty("SteamID"));
                         return null;
                     }
 
@@ -83,7 +83,7 @@ namespace Rox.GameExpansionFeatures
                 {
                     if (string.IsNullOrWhiteSpace(SteamID))
                     {
-                        WriteLog.Error(LogKind.Regex, _value_Not_Is_NullOrEmpty(SteamID));
+                        WriteLog.Error(LogKind.Regex, _value_Not_Is_NullOrEmpty("SteamID"));
                         return null;
                     }
 
@@ -119,7 +119,7 @@ namespace Rox.GameExpansionFeatures
                 {
                     if (string.IsNullOrWhiteSpace(SteamID))
                     {
-                        WriteLog.Error(LogKind.Regex, _value_Not_Is_NullOrEmpty(SteamID));
+                        WriteLog.Error(LogKind.Regex, _value_Not_Is_NullOrEmpty("SteamID"));
                         return null;
                     }
 
@@ -149,7 +149,7 @@ namespace Rox.GameExpansionFeatures
                 {
                     if (string.IsNullOrWhiteSpace(SteamID))
                     {
-                        WriteLog.Error(LogKind.Regex, _value_Not_Is_NullOrEmpty(SteamID));
+                        WriteLog.Error(LogKind.Regex, _value_Not_Is_NullOrEmpty("SteamID"));
                         return null;
                     }
 
