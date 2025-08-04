@@ -55,8 +55,6 @@ namespace Rox
                         WriteLog.Info(LogKind.System, "输入的SteamID为: SteamID64");
                         ID64Steam = true;
                         break;
-                    case SteamIDType.Invalid:
-                        break;
                     default:
                         CustomSteam = true; //自定义ID
                         break;

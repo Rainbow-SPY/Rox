@@ -22,19 +22,19 @@ namespace Rox
                 /// </summary>
                 /// <param name="message"> 日志消息 </param>
                 /// <param name="title"> 消息标题 </param>
-                public static void Error(string message, string title) => MessageBox_Core("Info", message, title);
+                public static void Error(string message, string title) => MessageBox_Core("Error", message, title);
                 /// <summary>
                 /// 指定为警告类别的消息窗口, 此方法重定向到 <see cref="MessageBox.Show(string ,string,MessageBoxButtons,MessageBoxIcon)"/> 方法
                 /// </summary>
                 /// <param name="message"> 日志消息 </param>
                 /// <param name="title"> 消息标题 </param>
-                public static void Warning(string message, string title) => MessageBox_Core("Info", message, title);
+                public static void Warning(string message, string title) => MessageBox_Core("Warning", message, title);
                 /// <summary>
                 /// 指定为普通类别的消息窗口, 此方法重定向到 <see cref="MessageBox.Show(string ,string,MessageBoxButtons,MessageBoxIcon)"/> 方法
                 /// </summary>
                 /// <param name="message"> 日志消息 </param>
                 /// <param name="title"> 消息标题 </param>
-                public static void Common(string message, string title) => MessageBox_Core("Info", message, title);
+                public static void Common(string message, string title) => MessageBox_Core("Common", message, title);
             }
         }
     }
