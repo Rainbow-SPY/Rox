@@ -67,56 +67,58 @@ namespace Rox
 
                 if (httpSteam) //解析个人主页
                 {
+                    WriteLog.Info(LogKind.Regex, $"正在解析个人主页链接: {SteamID}");
                     string SteamID64 = ExtractSteamID(SteamID);
 
-                    if (SteamID64 == null)
+                    switch (SteamID64)
                     {
-                        WriteLog.Error(LogKind.Json, $"无法解析SteamID64, 错误代码: {_Json_Parse_SteamID64}");
-                        MessageBox.Show($"无法解析SteamID64, 错误代码: {_Json_Parse_SteamID64}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return null;
-                    }
-                    else if (SteamID64 == _Regex_Match_Unknow_Exception)
-                    {
-                        WriteLog.Error(LogKind.Regex, $"{_Exception_With_xKind("Regex")}, 返回的错误代码: {_Regex_Match_Unknow_Exception} ");
-                        return null;
-                    }
-                    else if (SteamID64 == _Regex_Match_Not_Found_Any)
-                    {
-                        WriteLog.Error(LogKind.Regex, $"未匹配到任何 正则表达式 , 返回的错误代码: {_Regex_Match_Not_Found_Any}");
-                        return null;
-                    }
-                    else
-                    {
-                        _lastSteamData = await SendQueryMessage(SteamID, new HttpClient());
-                        return await SendQueryMessage(SteamID64, httpClient); //解析SteamID64
+                        case null:
+                            WriteLog.Error(LogKind.Json, $"无法解析SteamID64, 错误代码: {_Json_Parse_SteamID64}");
+                            MessageBox.Show($"无法解析SteamID64, 错误代码: {_Json_Parse_SteamID64}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return null;
+                        default:
+                            if (SteamID64 == _Regex_Match_Unknow_Exception)
+                            {
+                                WriteLog.Error(LogKind.Regex, $"{_Exception_With_xKind("Regex")}, 返回的错误代码: {_Regex_Match_Unknow_Exception} ");
+                                return null;
+                            }
+                            else if (SteamID64 == _Regex_Match_Not_Found_Any)
+                            {
+                                WriteLog.Error(LogKind.Regex, $"未匹配到任何 正则表达式 , 返回的错误代码: {_Regex_Match_Not_Found_Any}");
+                                return null;
+                            }
+                            else
+                            {
+                                _lastSteamData = await SendQueryMessage(SteamID, new HttpClient());
+                                return await SendQueryMessage(SteamID64, httpClient); //解析SteamID64
+                            }
                     }
                 }
                 if (ID64Steam) //解析SteamID64
                 {
-                    if (SteamID.Length != 17)
-                    {
-                        WriteLog.Error(LogKind.System, $"SteamID64不满足17位唯一标识符!, 错误代码: {Not_Allow_17_SteamID64}");
-                        MessageBox.Show($"SteamID64不满足17位唯一标识符!, 错误代码: {Not_Allow_17_SteamID64}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return null;
-                    }
+                    WriteLog.Info(LogKind.Regex, $"正在解析SteamID64: {SteamID}");
                     _lastSteamData = await SendQueryMessage(SteamID, new HttpClient());
                     return await SendQueryMessage(SteamID, httpClient); //解析SteamID64
                 }
                 if (FriendCodeSteam)//解析好友代码
                 {
+                    WriteLog.Info(LogKind.Regex, $"正在解析好友代码: {SteamID}");
                     _lastSteamData = await SendQueryMessage(SteamID, new HttpClient());
                     return await SendQueryMessage($"[U:1:{SteamID}]", httpClient); //解析好友代码
                 }
                 if (ID3Steam)//解析SteamID3
                 {
+                    WriteLog.Info(LogKind.Regex, $"正在解析SteamID3: {SteamID}");
                     _lastSteamData = await SendQueryMessage(SteamID, new HttpClient());
                     return await SendQueryMessage(SteamID, httpClient); //解析SteamID3
                 }
                 if (CustomSteam)//解析自定义ID
                 {
+                    WriteLog.Info(LogKind.Regex, $"正在解析自定义ID: {SteamID}");
                     _lastSteamData = await SendQueryMessage(SteamID, new HttpClient());
                     return await SendQueryMessage(SteamID, httpClient); //解析自定义ID
                 }
+                WriteLog.Error(_input_value_Not_Is_xType(SteamID, "SteamIDType"));
                 return null;//返回空值
             }
             /// <summary>

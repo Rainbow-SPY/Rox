@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Rox.GameExpansionFeatures.Steam.SteamID;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
 
@@ -27,6 +28,47 @@ namespace Rox
                     MessageBox.Show($"{_value_Not_Is_NullOrEmpty(SteamID64)}, 错误代码: {_String_NullOrEmpty}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return null;
                 }
+
+                // 2025/8/4 支持完整的个人资料链接, 自定义URL名称, 好友代码
+
+                bool httpSteam = false;
+                bool ID64Steam = false;
+                bool ID3Steam = false;
+                bool FriendCodeSteam = false;
+                bool CustomURLSteam = false;
+
+                switch (Identifier(SteamID64))
+                {
+                    case SteamIDType.SteamID:
+                        WriteLog.Info(LogKind.System, "输入的SteamID为: SteamID");
+                        httpSteam = true;
+                        break;
+                    case SteamIDType.SteamID3:
+                        WriteLog.Info(LogKind.System, "输入的SteamID为: SteamID3");
+                        ID3Steam = true;
+                        break;
+                    case SteamIDType.SteamID32:
+                        WriteLog.Info(LogKind.System, "输入的SteamID为: 好友代码");
+                        FriendCodeSteam = true;
+                        break;
+                    case SteamIDType.SteamID64:
+                        WriteLog.Info(LogKind.System, "输入的SteamID为: SteamID64");
+                        ID64Steam = true;
+                        break;
+                    default:
+                        WriteLog.Error(LogKind.System, $"{_input_value_Not_Is_xType(SteamID64, $"{SteamIDType.SteamID} 或 {SteamIDType.SteamID3} 或 {SteamIDType.SteamID32} 或 {SteamIDType.SteamID64}")}, 错误代码: {_Input_Steam_ID_Error}");
+                        MessageBox.Show($"{_input_value_Not_Is_xType(SteamID64, $"{SteamIDType.SteamID} 或 {SteamIDType.SteamID3} 或 {SteamIDType.SteamID32} 或 {SteamIDType.SteamID64}")}, 错误代码: {_Input_Steam_ID_Error}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return null;
+                }
+
+
+
+
+
+
+
+
+
                 // 创建HttpClient实例
                 var httpClient = new HttpClient();
                 if (!SteamID64.StartsWith("7656") || SteamID64.Length != 17) //SteamID64
