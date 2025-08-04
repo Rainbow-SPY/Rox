@@ -38,7 +38,7 @@ namespace Rox
                 {
                     if (string.IsNullOrEmpty(city_Or_adcode))
                     {
-                        MessageBox.Show($"{_value_Not_Is_NullOrEmpty(city_Or_adcode)}, 错误代码: {_String_NullOrEmpty}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty(city_Or_adcode)}, 错误代码: {_String_NullOrEmpty}", _ERROR);
                         return null;
                     }
                     var httpClient = new HttpClient();
@@ -46,7 +46,7 @@ namespace Rox
                     var response = await httpClient.GetAsync(requestUrl);
                     if (!response.IsSuccessStatusCode)
                     {
-                        MessageBox.Show($"请求失败: {response.StatusCode}, 错误代码: {_HttpClient_Request_Failed}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox_I.Error($"请求失败: {response.StatusCode}, 错误代码: {_HttpClient_Request_Failed}", _ERROR);
                         return null;
                     }
                     var responseData = await response.Content.ReadAsStringAsync();
@@ -58,19 +58,19 @@ namespace Rox
                     {
                         case 400:
                             WriteLog.Error(LogKind.Network, $"{_value_Not_Is_NullOrEmpty(city_Or_adcode)}, 错误代码: {_String_NullOrEmpty}, 错误信息: {weatherType.code} - {weatherType.message}");
-                            MessageBox.Show($"{_value_Not_Is_NullOrEmpty(city_Or_adcode)}, 错误代码: {_String_NullOrEmpty}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty(city_Or_adcode)}, 错误代码: {_String_NullOrEmpty}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR);
                             return null;
                         case 410:
                             WriteLog.Error(LogKind.Network, $"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}, 错误信息: {weatherType.code} - {weatherType.message}");
-                            MessageBox.Show($"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox_I.Error($"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR);
                             return null;
                         case 502:
                             WriteLog.Error(LogKind.Network, $"上游服务错误, 天气供应商API暂时不可用或返回了错误, 错误代码: {_Weather_Service_Error}, 错误信息: {weatherType.code} - {weatherType.message}");
-                            MessageBox.Show($"上游服务错误, 天气供应商API暂时不可用或返回了错误, 错误代码: {_Weather_Service_Error}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox_I.Error($"上游服务错误, 天气供应商API暂时不可用或返回了错误, 错误代码: {_Weather_Service_Error}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR);
                             return null;
                         case 500:
                             WriteLog.Error(LogKind.Network, $"服务器内部错误。在处理天气数据时发生了未知问题, 错误代码: {_Weather_Unknow_Exception}, 错误信息: {weatherType.code} - {weatherType.message}");
-                            MessageBox.Show($"服务器内部错误。在处理天气数据时发生了未知问题, 错误代码: {_Weather_Unknow_Exception}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox_I.Error($"服务器内部错误。在处理天气数据时发生了未知问题, 错误代码: {_Weather_Unknow_Exception}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR);
                             return null;
                         case 200:
                             WriteLog.Info(LogKind.Network, $"请求成功");

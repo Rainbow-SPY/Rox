@@ -30,7 +30,7 @@ namespace Rox
                 {
                     if (string.IsNullOrEmpty(city))
                     {
-                        MessageBox.Show($"{_value_Not_Is_NullOrEmpty(city)}, 错误代码: {_String_NullOrEmpty}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty(city)}, 错误代码: {_String_NullOrEmpty}", _ERROR);
                         return null;
                     }
                     var httpClient = new HttpClient();
@@ -38,7 +38,7 @@ namespace Rox
                     var response = await httpClient.GetAsync(requestUrl);
                     if (!response.IsSuccessStatusCode)
                     {
-                        MessageBox.Show($"请求失败: {response.StatusCode}, 错误代码: {_HttpClient_Request_Failed}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox_I.Error($"请求失败: {response.StatusCode}, 错误代码: {_HttpClient_Request_Failed}", _ERROR);
                         return null;
                     }
                     var responseData = await response.Content.ReadAsStringAsync();
@@ -51,15 +51,15 @@ namespace Rox
                     {
                         case 400:
                             WriteLog.Error(LogKind.Network, $"{_value_Not_Is_NullOrEmpty(city)}, 错误代码: {_String_NullOrEmpty}");
-                            MessageBox.Show($"{_value_Not_Is_NullOrEmpty(city)} , 错误代码: {_String_NullOrEmpty}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty(city)} , 错误代码: {_String_NullOrEmpty}", _ERROR);
                             return null;
                         case 500:
                             WriteLog.Error(LogKind.Network, $"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}");
-                            MessageBox.Show($"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox_I.Error($"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}", _ERROR);
                             return null;
                         case 0:
                             WriteLog.Error(LogKind.Network, $"检测到非法/不安全的请求!访问已拒绝, 错误代码: {_HttpClient_Request_UnsafeOrIllegal_Denied}");
-                            MessageBox.Show($"检测到非法/不安全的请求!访问已拒绝, 错误代码: {_HttpClient_Request_UnsafeOrIllegal_Denied}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox_I.Error($"检测到非法/不安全的请求!访问已拒绝, 错误代码: {_HttpClient_Request_UnsafeOrIllegal_Denied}", _ERROR);
                             return null;
                     }
                     //if (jObject == null)

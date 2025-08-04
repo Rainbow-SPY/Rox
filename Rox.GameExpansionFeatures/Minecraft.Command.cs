@@ -4,7 +4,7 @@ using System.IO;
 using System.Windows.Forms;
 using static Rox.API;
 using static Rox.Runtimes.LogLibraries;
-
+using static Rox.Runtimes.LocalizedString;
 namespace Rox.GameExpansionFeatures
 {
 public partial class Minecraft
@@ -55,7 +55,7 @@ public partial class Minecraft
                     if (!System.IO.Directory.Exists(JEVerFolder))
                     {
                         WriteLog.Error(LogKind.System, "指定的文件夹不存在或不是一个有效的文件夹。");
-                        MessageBox.Show(JEVerFolder + " 不是一个有效的文件夹。", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                        MessageBox_I.Error(JEVerFolder + " 不是一个有效的文件夹。", _ERROR);
                         return null;
                     }
                     // 删除路径末尾的反斜杠
@@ -98,7 +98,7 @@ public partial class Minecraft
                     catch (Exception ex)
                     {
                         WriteLog.Error(LogKind.System, "读取文件时发生错误: " + ex.Message);
-                        MessageBox.Show("读取文件时发生错误: " + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                        MessageBox_I.Error("读取文件时发生错误: " + ex.Message, _ERROR);
                         return null;
                     }
                 }

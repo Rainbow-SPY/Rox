@@ -37,13 +37,13 @@ namespace Rox
                 aria2c.WaitForExit();
                 if (aria2c.ExitCode != 0)
                 {
-                    WriteLog.Error(LogKind.Process,$"{_PROCESS_EXITED}: {aria2c.ExitCode}");
-                    WriteLog.Error(LogKind.Downloader,$"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {aria2c.ExitCode}");
-                    MessageBox.Show($"下载器发生错误, 进程结束代码: {aria2c.ExitCode}",_ERROR,MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    WriteLog.Error(LogKind.Process, $"{_PROCESS_EXITED}: {aria2c.ExitCode}");
+                    WriteLog.Error(LogKind.Downloader, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {aria2c.ExitCode}");
+                    MessageBox_I.Error($"下载器发生错误, 进程结束代码: {aria2c.ExitCode}", _ERROR);
                 }
                 else
                 {
-                    WriteLog.Info(LogKind.Downloader,$"{_DOWNLOADING_COMPLETE}");
+                    WriteLog.Info(LogKind.Downloader, $"{_DOWNLOADING_COMPLETE}");
                 }
             }
         }

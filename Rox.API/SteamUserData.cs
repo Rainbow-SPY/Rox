@@ -28,7 +28,7 @@ namespace Rox
                 if (string.IsNullOrEmpty(SteamID))
                 {
                     WriteLog.Error(LogKind.System, $"{_value_Not_Is_NullOrEmpty(SteamID)}, 错误代码: {_String_NullOrEmpty}");
-                    MessageBox.Show($"{_value_Not_Is_NullOrEmpty(SteamID)}, 错误代码: {_String_NullOrEmpty}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty(SteamID)}, 错误代码: {_String_NullOrEmpty}", "Error");
                     return null;
                 }
                 // 创建HttpClient实例
@@ -74,7 +74,7 @@ namespace Rox
                     {
                         case null:
                             WriteLog.Error(LogKind.Json, $"无法解析SteamID64, 错误代码: {_Json_Parse_SteamID64}");
-                            MessageBox.Show($"无法解析SteamID64, 错误代码: {_Json_Parse_SteamID64}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox_I.Error($"无法解析SteamID64, 错误代码: {_Json_Parse_SteamID64}", _ERROR);
                             return null;
                         default:
                             if (SteamID64 == _Regex_Match_Unknow_Exception)
@@ -152,7 +152,7 @@ namespace Rox
                         if (numericIdMatch.Groups[1].Value.Length != 17)
                         {
                             WriteLog.Error(LogKind.System, $"SteamID64不满足17位唯一标识符!, 错误代码: {Not_Allow_17_SteamID64}");
-                            MessageBox.Show($"SteamID64不满足17位唯一标识符!, 错误代码: {Not_Allow_17_SteamID64}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox_I.Error($"SteamID64不满足17位唯一标识符!, 错误代码: {Not_Allow_17_SteamID64}", _ERROR);
                             return Not_Allow_17_SteamID64;
                         }
                         WriteLog.Info(LogKind.Regex, _Return_xKind_value("正则表达式", numericIdMatch.Groups[1].Value));
@@ -166,7 +166,7 @@ namespace Rox
                 catch (Exception e)
                 {
                     WriteLog.Error(LogKind.Regex, $"{_Exception_With_xKind("正则表达式")}: {e}, 错误代码: {_Regex_Match_Unknow_Exception}");
-                    MessageBox.Show($"{_Exception_With_xKind("正则表达式")}: {e} , 错误代码: {_Regex_Match_Unknow_Exception}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    MessageBox_I.Error($"{_Exception_With_xKind("正则表达式")}: {e} , 错误代码: {_Regex_Match_Unknow_Exception}", _ERROR);
                     return _Regex_Match_Unknow_Exception;
                 }
             }
@@ -394,18 +394,18 @@ namespace Rox
                     {
                         case 432:
                             WriteLog.Info(LogKind.Network, $"API返回响应: Steam账户不存在, 错误代码: {_Steam_Not_Found_Account}");
-                            MessageBox.Show($"Steam账户不存在, 错误代码: {_Steam_Not_Found_Account}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox_I.Error($"Steam账户不存在, 错误代码: {_Steam_Not_Found_Account}", _ERROR);
                             return null;
                         case 443:
                             WriteLog.Info(LogKind.Network, $"API返回响应: 无效的输入, 错误代码: {Invaid_String_Input}");
-                            MessageBox.Show($"无效的输入, 错误代码: {Invaid_String_Input}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox_I.Error($"无效的输入, 错误代码: {Invaid_String_Input}", _ERROR);
                             return null;
                         case 200:
                             WriteLog.Info(LogKind.Network, $"API返回响应: Json解析成功");
                             break;
                         default:
                             WriteLog.Info(LogKind.Json, $"Json 反序列化过程中出现未知错误, 错误代码: {_Json_DeObject_Unknow_Exception}");
-                            MessageBox.Show($"Json 反序列化过程中出现未知错误, 错误代码: {_Json_DeObject_Unknow_Exception}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox_I.Error($"Json 反序列化过程中出现未知错误, 错误代码: {_Json_DeObject_Unknow_Exception}", _ERROR);
                             return null;
                     }
                     // 检查 jObject 是否为空
@@ -431,7 +431,7 @@ namespace Rox
                     LogLibraries.WriteLog.Info($"Location: {SteamType.location}");
                     LogLibraries.WriteLog.Info($"Online Status: {SteamType.onlinestatus}");
                     LogLibraries.WriteLog.Info($"Friend Code: {SteamType.friendcode}");
-                    //MessageBox.Show(
+                    //MessageBox_I.(
                     //    "Steam 个人信息查询\n\n" +
                     //    $"Https 返回值: {SteamType.code}\n" +
                     //    $"SteamID: {SteamType.steamID}\n" +

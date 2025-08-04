@@ -310,7 +310,7 @@ namespace Rox
             {
                 WriteLog.Error(LogKind.Process, $"{_PROCESS_EXITED}: {install.ExitCode}");
                 WriteLog.Error(LogKind.Downloader, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {install.ExitCode}");
-                MessageBox.Show($"安装程序发生错误, 进程结束代码: {install.ExitCode}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox_I.Error($"安装程序发生错误, 进程结束代码: {install.ExitCode}", _ERROR);
             }
             else
             {

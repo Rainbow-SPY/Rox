@@ -46,7 +46,7 @@ namespace Rox.Runtimes
             else if (key == Properties.Archive) arg = $"{Switch}a";
             else
             {
-                MessageBox.Show("Unsupported property type.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox_I.Error("Unsupported property type.", _ERROR);
                 WriteLog.Error("_UNSUPPORT_PROPERTY_TYPE");
                 return;
             }

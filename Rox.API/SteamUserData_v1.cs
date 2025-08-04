@@ -25,7 +25,7 @@ namespace Rox
                 if (string.IsNullOrEmpty(SteamID))
                 {
                     WriteLog.Error(LogKind.System, $"{_value_Not_Is_NullOrEmpty(SteamID)}, 错误代码: {_String_NullOrEmpty}");
-                    MessageBox.Show($"{_value_Not_Is_NullOrEmpty(SteamID)}, 错误代码: {_String_NullOrEmpty}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty(SteamID)}, 错误代码: {_String_NullOrEmpty}", "Error");
                     return null;
                 }
 
@@ -70,7 +70,7 @@ namespace Rox
                     {
                         case null:
                             WriteLog.Error(LogKind.Json, $"无法解析SteamID64, 错误代码: {_Json_Parse_SteamID64}");
-                            MessageBox.Show($"无法解析SteamID64, 错误代码: {_Json_Parse_SteamID64}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox_I.Error($"无法解析SteamID64, 错误代码: {_Json_Parse_SteamID64}", _ERROR);
                             return null;
                         default:
                             if (SteamID64 == _Regex_Match_Unknow_Exception)
@@ -147,27 +147,27 @@ namespace Rox
                     {
                         case 404: // 未找到账户 或 完全私密个人资料
                             WriteLog.Error(LogKind.Network, $"API返回响应: Steam账户不存在或完全私密了个人资料, 错误代码: {_Steam_Not_Found_Account}");
-                            MessageBox.Show($"Steam账户不存在或完全私密了个人资料, 错误代码: {_Steam_Not_Found_Account}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox_I.Error($"Steam账户不存在或完全私密了个人资料, 错误代码: {_Steam_Not_Found_Account}", _ERROR);
                             return null;
                         case 400: // 错误的请求
                             WriteLog.Error(LogKind.Network, $"API返回响应: 无效的输入, 错误代码: {Invaid_String_Input}");
-                            MessageBox.Show($"无效的输入, 错误代码: {Invaid_String_Input}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox_I.Error($"无效的输入, 错误代码: {Invaid_String_Input}", _ERROR);
                             return null;
                         case 200:
                             WriteLog.Info(LogKind.Network, $"API返回响应: Json解析成功");
                             break;
                         case 502: //服务器网关错误
                             WriteLog.Error(LogKind.Network, $"API返回响应: 上游服务错误, 在向 Steam 的官方 API 请求数据时遇到了问题, 这可能是他们的服务暂时中断，请稍后重试, 错误代码: {_Steam_Service_Error}");
-                            MessageBox.Show($"上游服务错误, 在向 Steam 的官方 API 请求数据时遇到了问题, 这可能是他们的服务暂时中断，请稍后重试. 错误代码: {_Steam_Service_Error}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox_I.Error($"上游服务错误, 在向 Steam 的官方 API 请求数据时遇到了问题, 这可能是他们的服务暂时中断，请稍后重试. 错误代码: {_Steam_Service_Error}", _ERROR);
                             return null;
                         case 401: //未经授权
                             WriteLog.Error(LogKind.Network, $"API返回响应: 认证失败。你提供的 Steam Web API Key 无效或已过期，或者你没有提供 Key。请检查你的 Key. 错误代码: {_Steam_Server_UnAuthenticated}");
-                            MessageBox.Show($"认证失败。你提供的 Steam Web API Key 无效或已过期，或者你没有提供 Key。请检查你的 Key. 错误代码: {_Steam_Server_UnAuthenticated}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox_I.Error($"认证失败。你提供的 Steam Web API Key 无效或已过期，或者你没有提供 Key。请检查你的 Key. 错误代码: {_Steam_Server_UnAuthenticated}", _ERROR);
                             return null;
 
                         default:
                             WriteLog.Error(LogKind.Json, $"Json 反序列化过程中出现未知错误, 错误代码: {_Json_DeObject_Unknow_Exception}");
-                            MessageBox.Show($"Json 反序列化过程中出现未知错误, 错误代码: {_Json_DeObject_Unknow_Exception}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox_I.Error($"Json 反序列化过程中出现未知错误, 错误代码: {_Json_DeObject_Unknow_Exception}", _ERROR);
                             return null;
                     }
                     // 输出字段值
@@ -283,19 +283,15 @@ namespace Rox
                 /// <summary>
                 /// 好友代码 （SteamID32）
                 /// </summary>
-                public string friendcode => Rox.GameExpansionFeatures.Steam.Converter.SteamID.SteamID64orSteamID3ToSteamID32(steamid);
+                public string friendcode => Rox.GameExpansionFeatures.Steam.GetFriendCode(steamid);
                 /// <summary>
                 /// SteamID3
                 /// </summary>
-                public string steamID3 => Rox.GameExpansionFeatures.Steam.Converter.SteamID.Steam64OrSteamID32ToSteamID3(steamid);
+                public string steamID3 => Rox.GameExpansionFeatures.Steam.Converter.SteamID.ToSteamID3(steamid);
                 ///// <summary>
                 ///// Steam最后登出日期
                 ///// </summary>
                 //public string lastlogoff { get; set; }
-                ///// <summary>
-                ///// Steam好友代码
-                ///// </summary>
-                //public string friendcode => steamID3.Split(':')[2].TrimEnd(']');
             }
         }
     }

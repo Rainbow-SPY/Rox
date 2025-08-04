@@ -77,7 +77,7 @@ namespace Rox
                 if (string.IsNullOrWhiteSpace(path) || Path.GetFileName(path) == string.Empty)
                 {
                     WriteLog.Error($"{path}值为null或空字符串");
-                    MessageBox.Show($"{path}值为null或空字符串", "错误的路径! - Rox", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    MessageBox_I.Error(_value_Not_Is_NullOrEmpty(path), "错误的路径! - Rox");
                     return;
                 }
                 else
@@ -110,7 +110,7 @@ namespace Rox
                 else
                 {
                     WriteLog.Error($"WindowsToast {_RES_FILE_NOT_FIND}");
-                    MessageBox.Show($"{_RES_FILE_NOT_FIND}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    MessageBox_I.Error($"{_RES_FILE_NOT_FIND}", _ERROR);
                     return;
                 }
             }

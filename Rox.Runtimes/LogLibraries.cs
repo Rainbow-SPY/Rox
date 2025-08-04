@@ -7,7 +7,7 @@ namespace Rox
     namespace Runtimes
     {
         /// <summary>
-        /// 日志类库,在控制台输出日志并记录到文件
+        /// 日志类库,在控制台输出日志 <see cref="Console.WriteLine(string)"/> 并记录到文件或重定向 <see cref="MessageBox.Show(string, string, MessageBoxButtons, MessageBoxIcon, MessageBoxDefaultButton)"/> 消息弹窗
         /// </summary>
         public partial class LogLibraries
         {
@@ -15,21 +15,31 @@ namespace Rox
             /// 日志输出到 UI 的委托,用于在 UI 上显示日志
             /// </summary>
             public static Action<string, string> LogToUi { get; set; }
-            internal static void MessageBox_Core(string logLevel, string message)
+            internal static void MessageBox_Core(string logLevel, string message, string title)
             {
+                string[] b = { logLevel, message, title };
+
+                foreach (string a in b)
+                {
+                    if (string.IsNullOrWhiteSpace(a))
+                    {
+                        WriteLog.Error(LogKind.Form, _value_Not_Is_NullOrEmpty(a));
+                        return;
+                    }
+                }
                 switch (logLevel)
                 {
                     case "Info":
-                        MessageBox.Show(message, "信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
                         break;
                     case "Error":
-                        MessageBox.Show(message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(message, title);
                         break;
                     case "Warning":
-                        MessageBox.Show(message, "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         break;
                     case "Common":
-                        MessageBox.Show(message, "提示", MessageBoxButtons.OK);
+                        MessageBox.Show(message, title, MessageBoxButtons.OK);
                         break;
                 }
             }

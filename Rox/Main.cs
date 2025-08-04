@@ -174,7 +174,7 @@ namespace Rox
     //        }
     //        catch (Exception e)
     //        {
-    //            MessageBox.Show(e.ToString());
+    //            MessageBox_I.(e.ToString());
     //            return null;
     //        }
     //    }
@@ -354,7 +354,7 @@ namespace Rox
     //                        else
     //                        {
     //                            WriteLog.Error($"File {fileName} Failed");
-    //                            MessageBox.Show($"{_ERROR}: The file {fileName} did not pass MD5 verification.", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+    //                            MessageBox_I.($"{_ERROR}: The file {fileName} did not pass MD5 verification.", _ERROR);
     //                        }
     //                    }
     //                    BatchWriter(false, $"echo     Update successful!&pause&start {Application.ExecutablePath}");
@@ -364,7 +364,7 @@ namespace Rox
     //                else
     //                {
     //                    WriteLog.Error($"Archive Failed");
-    //                    MessageBox.Show($"{_ERROR}: The archive not passed structure verify.", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+    //                    MessageBox_I.($"{_ERROR}: The archive not passed structure verify.", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
     //                }
     //            }
     //        }

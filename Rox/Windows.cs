@@ -1,5 +1,4 @@
 ﻿using Microsoft.Win32;
-using Registry = Rox.Runtimes.Registry_I;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -7,8 +6,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using static Rox.Runtimes.LogLibraries;
 using static Rox.Runtimes.LocalizedString;
+using static Rox.Runtimes.LogLibraries;
+using Registry = Rox.Runtimes.Registry_I;
 namespace Rox
 {
     /// <summary>
@@ -302,11 +302,11 @@ namespace Rox
                         if (key != null)
                         {
                             key.SetValue("{59031a47-3f72-44a7-89c5-5595fe6b30ee}", value, RegistryValueKind.DWord);
-                            //MessageBox.Show($"已{(value == 0 ? "添加" : "移除")}“个人文件夹”图标", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            //MessageBox_I.($"已{(value == 0 ? "添加" : "移除")}“个人文件夹”图标", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         else
                         {
-                            MessageBox.Show("无法访问注册表！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox_I.Error("无法访问注册表！", _ERROR);
                         }
                     }
                 }
@@ -342,11 +342,11 @@ namespace Rox
                         // 显示输出或错误
                         //if (!string.IsNullOrEmpty(output))
                         //{
-                        //    MessageBox.Show(output, "PowerShell 输出", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        //    MessageBox_I.(output, "PowerShell 输出", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         //}
                         if (!string.IsNullOrEmpty(error))
                         {
-                            MessageBox.Show(error, "PowerShell 错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox_I.Error(error, "PowerShell 错误");
                         }
                     }
                 }
@@ -506,7 +506,7 @@ namespace Rox
                     }
                     catch (Exception e)
                     {
-                        MessageBox.Show(e.Message);
+                        MessageBox_I.Error(e.Message,_ERROR);
                     }
                 }
                 /// <summary>
@@ -521,7 +521,7 @@ namespace Rox
                     }
                     catch (Exception e)
                     {
-                        MessageBox.Show(e.Message);
+                        MessageBox_I.Error(e.Message, _ERROR);
                     }
                 }
             }
@@ -558,7 +558,7 @@ namespace Rox
                         }
                         else
                         {
-                            MessageBox.Show("无法访问注册表！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox_I.Error("无法访问注册表！", _ERROR);
                             return;
                         }
                     }
@@ -575,13 +575,13 @@ namespace Rox
                 {
                     if (string.IsNullOrEmpty(path))
                     {
-                        MessageBox.Show("路径为空", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox_I.Error(_value_Not_Is_NullOrEmpty(path), _ERROR);
                         return;
                     }
                     // 检查路径是否存在
                     if (!Directory.Exists(path) && !System.IO.File.Exists(path))
                     {
-                        MessageBox.Show($"路径不存在: {path}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox_I.Error($"路径不存在: {path}", _ERROR);
                         return;
                     }
 
@@ -591,7 +591,7 @@ namespace Rox
                         string extension = Path.GetExtension(path);
                         if (string.IsNullOrEmpty(extension))
                         {
-                            MessageBox.Show($"路径是一个没有后缀名的文件: {path}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox_I.Error(_value_Not_Is_NullOrEmpty(extension), _ERROR);
                             return;
                         }
                     }
@@ -610,7 +610,7 @@ namespace Rox
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"打开文件夹时出错: {ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox_I.Error($"打开文件夹时出错: {ex.Message}", _ERROR);
                 }
             }
         }
@@ -806,7 +806,7 @@ namespace Rox
             powerShell.StartInfo.FileName = "powershell.exe";
             powerShell.StartInfo.Arguments = "irm https://get.activated.win | iex";
             powerShell.Start();
-            WriteLog.Info(LogKind.Process,$"{_PROCESS_STARTED}: {powerShell.Id}");
+            WriteLog.Info(LogKind.Process, $"{_PROCESS_STARTED}: {powerShell.Id}");
             powerShell.WaitForExit();
         }
         #region Windows身份验证
@@ -915,7 +915,7 @@ namespace Rox
                         {
                             isAuthenticated = true;
                             CloseHandle(userToken);
-                            MessageBox.Show(_SUCCESS_VERIFY, _TIPS, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox_I.Info(_SUCCESS_VERIFY, _TIPS);
                         }
                         else
                         {
@@ -929,7 +929,7 @@ namespace Rox
                             {
                                 ExtraMessage = _UNKNOW_ERROR;
                             }
-                            MessageBox.Show($"{_LOGIN_VERIFY_ERROR}（{_ERROR_CODE}：{errorCode} {ExtraMessage}）", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox_I.Error($"{_LOGIN_VERIFY_ERROR}（{_ERROR_CODE}：{errorCode} {ExtraMessage}）", _ERROR);
                         }
                         // 调用验证方法
                     }

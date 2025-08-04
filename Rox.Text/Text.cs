@@ -151,6 +151,7 @@ namespace Rox
 
                     if (string.IsNullOrEmpty(json))
                     {
+                        WriteLog.Error(_value_Not_Is_NullOrEmpty(json));
                         return result;
                     }
 
@@ -229,6 +230,7 @@ namespace Rox
 
                     if (string.IsNullOrEmpty(json))
                     {
+                        WriteLog.Error(_value_Not_Is_NullOrEmpty(json));
                         return result;
                     }
 
@@ -450,6 +452,7 @@ namespace Rox
 
                 if (string.IsNullOrEmpty(json))
                 {
+                    WriteLog.Error(_value_Not_Is_NullOrEmpty(json));
                     return result;
                 }
 
@@ -510,6 +513,7 @@ namespace Rox
 
                 if (string.IsNullOrEmpty(json))
                 {
+                    WriteLog.Error(_value_Not_Is_NullOrEmpty(json));
                     return result;
                 }
 
@@ -700,8 +704,8 @@ namespace Rox
             {
                 if (string.IsNullOrEmpty(str))
                 {
-                    WriteLog.Error($"{_ERROR}: The string to encrypt cannot be null or empty");
-                    MessageBox.Show($"{_ERROR}: The string to encrypt cannot be null or empty", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    WriteLog.Error(_value_Not_Is_NullOrEmpty(str));
+                    MessageBox_I.Error(_value_Not_Is_NullOrEmpty(str), _ERROR);
                     return null;
                 }
                 try
@@ -719,7 +723,7 @@ namespace Rox
                     if (output == "\n")
                     {
                         WriteLog.Error($"{_ERROR}: Encryption failed");
-                        MessageBox.Show($"{_ERROR}: Encryption failed", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                        MessageBox_I.Error($"{_ERROR}: Encryption failed", _ERROR);
                         return null;
                     }
                     return output;
@@ -727,7 +731,7 @@ namespace Rox
                 catch (Exception ex)
                 {
                     WriteLog.Error($"{_ERROR}: {ex.Message}");
-                    MessageBox.Show($"{_ERROR}: {ex.Message}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    MessageBox_I.Error($"{_ERROR}: {ex.Message}", _ERROR);
                     return null;
                 }
             }
@@ -753,14 +757,14 @@ namespace Rox
                     if (output == "\n")
                     {
                         WriteLog.Error($"{_ERROR}: Decryption failed");
-                        MessageBox.Show($"{_ERROR}: Decryption failed", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                        MessageBox_I.Error($"{_ERROR}: Decryption failed", _ERROR);
                     }
                     return output;
                 }
                 catch (Exception ex)
                 {
                     WriteLog.Error($"{_ERROR}: {ex.Message}");
-                    MessageBox.Show($"{_ERROR}: {ex.Message}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    MessageBox_I.Error($"{_ERROR}: {ex.Message}", _ERROR);
                     return null;
                 }
             }
