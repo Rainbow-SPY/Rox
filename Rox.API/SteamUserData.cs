@@ -126,7 +126,7 @@ namespace Rox
             /// </summary> 
             /// <param name="url"> Steam 个人主页链接</param>
             /// <returns> <see cref="string"/> 格式的文本</returns>
-            private static string ExtractSteamID(string url)
+            internal static string ExtractSteamID(string url)
             {
                 try
                 {

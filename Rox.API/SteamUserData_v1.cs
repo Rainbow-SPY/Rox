@@ -18,26 +18,26 @@ namespace Rox
             /// <summary>
             /// 新版请求Steam Web API Json的方法
             /// </summary>
-            /// <param name="SteamID64">SteamID64</param>
+            /// <param name="SteamID">SteamID64</param>
             /// <returns><see cref="SteamType"/> 格式的 <see cref="Text.Json"/> 文本</returns>
-            public static async Task<SteamType> GetDataJson_v1(string SteamID64)
+            public static async Task<SteamType> GetDataJson_v1(string SteamID)
             {
-                if (string.IsNullOrEmpty(SteamID64))
+                if (string.IsNullOrEmpty(SteamID))
                 {
-                    WriteLog.Error(LogKind.System, $"{_value_Not_Is_NullOrEmpty(SteamID64)}, 错误代码: {_String_NullOrEmpty}");
-                    MessageBox.Show($"{_value_Not_Is_NullOrEmpty(SteamID64)}, 错误代码: {_String_NullOrEmpty}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    WriteLog.Error(LogKind.System, $"{_value_Not_Is_NullOrEmpty(SteamID)}, 错误代码: {_String_NullOrEmpty}");
+                    MessageBox.Show($"{_value_Not_Is_NullOrEmpty(SteamID)}, 错误代码: {_String_NullOrEmpty}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return null;
                 }
 
                 // 2025/8/4 支持完整的个人资料链接, 自定义URL名称, 好友代码
-
+                var httpClient = new HttpClient();
                 bool httpSteam = false;
                 bool ID64Steam = false;
                 bool ID3Steam = false;
                 bool FriendCodeSteam = false;
-                bool CustomURLSteam = false;
+                bool CustomSteam = false;
 
-                switch (Identifier(SteamID64))
+                switch (Identifier(SteamID))
                 {
                     case SteamIDType.SteamID:
                         WriteLog.Info(LogKind.System, "输入的SteamID为: SteamID");
@@ -55,28 +55,63 @@ namespace Rox
                         WriteLog.Info(LogKind.System, "输入的SteamID为: SteamID64");
                         ID64Steam = true;
                         break;
+                    case SteamIDType.Invalid:
+                        break;
                     default:
-                        WriteLog.Error(LogKind.System, $"{_input_value_Not_Is_xType(SteamID64, $"{SteamIDType.SteamID} 或 {SteamIDType.SteamID3} 或 {SteamIDType.SteamID32} 或 {SteamIDType.SteamID64}")}, 错误代码: {_Input_Steam_ID_Error}");
-                        MessageBox.Show($"{_input_value_Not_Is_xType(SteamID64, $"{SteamIDType.SteamID} 或 {SteamIDType.SteamID3} 或 {SteamIDType.SteamID32} 或 {SteamIDType.SteamID64}")}, 错误代码: {_Input_Steam_ID_Error}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return null;
+                        CustomSteam = true; //自定义ID
+                        break;
                 }
 
-
-
-
-
-
-
-
-
-                // 创建HttpClient实例
-                var httpClient = new HttpClient();
-                if (!SteamID64.StartsWith("7656") || SteamID64.Length != 17) //SteamID64
+                if (httpSteam)
                 {
-                    WriteLog.Info(LogKind.System, Not_Allow_17_SteamID64);
-                    return null;
+                    WriteLog.Info(LogKind.Regex, $"正在解析个人主页链接: {SteamID}");
+                    string SteamID64 = SteamUserData.ExtractSteamID(SteamID);
+                    switch (SteamID64)
+                    {
+                        case null:
+                            WriteLog.Error(LogKind.Json, $"无法解析SteamID64, 错误代码: {_Json_Parse_SteamID64}");
+                            MessageBox.Show($"无法解析SteamID64, 错误代码: {_Json_Parse_SteamID64}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return null;
+                        default:
+                            if (SteamID64 == _Regex_Match_Unknow_Exception)
+                            {
+                                WriteLog.Error(LogKind.Regex, $"{_Exception_With_xKind("Regex")}, 返回的错误代码: {_Regex_Match_Unknow_Exception} ");
+                                return null;
+                            }
+                            else if (SteamID64 == _Regex_Match_Not_Found_Any)
+                            {
+                                WriteLog.Error(LogKind.Regex, $"未匹配到任何 正则表达式 , 返回的错误代码: {_Regex_Match_Not_Found_Any}");
+                                return null;
+                            }
+                            else
+                            {
+                                return await SendQueryMessage(SteamID64, new HttpClient()); //解析SteamID64
+                            }
+                    }
                 }
-                return await SendQueryMessage(SteamID64, httpClient); //解析SteamID64
+
+                if (ID64Steam)
+                {
+                    WriteLog.Info(LogKind.Regex, $"正在解析SteamID64: {SteamID}");
+                    return await SendQueryMessage(SteamID, httpClient); //解析SteamID64
+                }
+                if (FriendCodeSteam)
+                {
+                    WriteLog.Info(LogKind.Regex, $"正在解析好友代码: {SteamID}");
+                    return await SendQueryMessage($"[U:1:{SteamID}]", httpClient); //解析好友代码
+                }
+                if (ID3Steam)//解析SteamID3
+                {
+                    WriteLog.Info(LogKind.Regex, $"正在解析SteamID3: {SteamID}");
+                    return await SendQueryMessage(SteamID, httpClient); //解析SteamID3
+                }
+                if (CustomSteam)//解析自定义ID
+                {
+                    WriteLog.Info(LogKind.Regex, $"正在解析自定义ID: {SteamID}");
+                    return await SendQueryMessage(SteamID, httpClient); //解析自定义ID
+                }
+                WriteLog.Error(_input_value_Not_Is_xType(SteamID, "SteamIDType"));
+                return null;//返回空值
             }
             /// <summary>
             /// 向api发送请求获取 <see cref="Text.Json"/> 文本
