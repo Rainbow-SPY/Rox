@@ -1,6 +1,5 @@
 ﻿using Rox.Text;
 using System.Threading.Tasks;
-using static Rox.API;
 
 namespace Rox.GameExpansionFeatures
 {
@@ -22,7 +21,7 @@ namespace Rox.GameExpansionFeatures
             /// </summary>
             /// <param name="SteamID64">SteamID64</param>
             /// <returns><see cref="SteamUserData.SteamType"/> 格式的 <see cref="Json"/> 文本</returns>
-            public static async Task<API.SteamUserData.SteamType> UserData(string SteamID64) => await SteamUserData.GetDataJson(SteamID64);
+            public static async Task<GameExpansionFeatures.SteamUserData.SteamType> UserData(string SteamID64) => await SteamUserData.GetDataJson(SteamID64);
         }
     }
 }

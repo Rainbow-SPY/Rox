@@ -8,6 +8,9 @@ using static Rox.Runtimes.LogLibraries;
 
 namespace Rox
 {
+    /// <summary>
+    /// API 类
+    /// </summary>
     public partial class API
     {
         /// <summary>
@@ -42,7 +45,7 @@ namespace Rox
                         return null;
                     }
                     var responseData = await response.Content.ReadAsStringAsync();
-                    string compressedJson = CompressJson(responseData);
+                    string compressedJson = Rox.Text.Json.CompressJson(responseData);
                     LogLibraries.WriteLog.Info("压缩 Json");
                     // 直接解析 JSON 字符串
                     //Text.Json.JObject jObject = Rox.Text.Json.JObject.Parse(compressedJson);

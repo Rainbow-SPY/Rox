@@ -86,7 +86,7 @@ public partial class Minecraft
                                 LogLibraries.WriteLog.Info(LogKind.Json, "获取原始 Json 内容");
                                 var data = File.ReadAllText(folder + "\\" + JsonName);
                                 LogLibraries.WriteLog.Info(LogKind.Json, "压缩 Json");
-                                string compressedJson = CompressJson(data);
+                                string compressedJson = Rox.Text.Json.CompressJson(data);
                                 LogLibraries.WriteLog.Info(LogKind.Json, "反序列化 Json 对象");
                                 var jsonObject = Rox.Text.Json.DeserializeObject<MinecraftType>(compressedJson);
                                 WriteLog.Info(LogKind.Json, jsonObject.clientVersion);
