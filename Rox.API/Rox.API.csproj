@@ -53,10 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="api.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SteamUserData.cs" />
-    <Compile Include="SteamUserData_v1.cs" />
     <Compile Include="Weather.cs" />
     <Compile Include="weather_v1.cs" />
   </ItemGroup>

@@ -51,7 +51,7 @@ namespace Rox
                         return null;
                     }
                     var responseData = await response.Content.ReadAsStringAsync();
-                    string compressedJson = CompressJson(responseData);
+                    string compressedJson = Rox.Text.Json.CompressJson(responseData);
                     LogLibraries.WriteLog.Info(LogKind.Json, "压缩 Json");
                     var weatherType = Rox.Text.Json.DeserializeObject<WeatherType>(compressedJson);
                     WriteLog.Info(LogKind.Json, "反序列化 Json 对象");
