@@ -33,7 +33,7 @@ namespace Rox
                         MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
                         break;
                     case "Error":
-                        MessageBox.Show(message, title);
+                        MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
                     case "Warning":
                         MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Warning);

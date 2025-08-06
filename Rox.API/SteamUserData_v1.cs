@@ -93,7 +93,7 @@ namespace Rox
                             }
                             else
                             {
-                                return await SendQueryMessage(SteamID64, new HttpClient()); //解析SteamID64
+                                return await SendQueryMessage(SteamID64, new HttpClient(), IsMessageBox); //解析SteamID64
                             }
                     }
                 }
@@ -101,24 +101,28 @@ namespace Rox
                 if (ID64Steam)
                 {
                     WriteLog.Info(LogKind.Regex, $"正在解析SteamID64: {SteamID}");
-                    return await SendQueryMessage(SteamID, httpClient); //解析SteamID64
+                    return await SendQueryMessage(SteamID, httpClient, IsMessageBox); //解析SteamID64
                 }
                 if (FriendCodeSteam)
                 {
                     WriteLog.Info(LogKind.Regex, $"正在解析好友代码: {SteamID}");
-                    return await SendQueryMessage($"[U:1:{SteamID}]", httpClient); //解析好友代码
+                    return await SendQueryMessage($"[U:1:{SteamID}]", httpClient, IsMessageBox); //解析好友代码
                 }
                 if (ID3Steam)//解析SteamID3
                 {
                     WriteLog.Info(LogKind.Regex, $"正在解析SteamID3: {SteamID}");
-                    return await SendQueryMessage(SteamID, httpClient); //解析SteamID3
+                    return await SendQueryMessage(SteamID, httpClient, IsMessageBox); //解析SteamID3
                 }
                 if (CustomSteam)//解析自定义ID
                 {
                     WriteLog.Info(LogKind.Regex, $"正在解析自定义ID: {SteamID}");
-                    return await SendQueryMessage(SteamID, httpClient); //解析自定义ID
+                    return await SendQueryMessage(SteamID, httpClient, IsMessageBox); //解析自定义ID
                 }
                 WriteLog.Error(_input_value_Not_Is_xType(SteamID, "SteamIDType"));
+                if (IsMessageBox)
+                {
+                    MessageBox_I.Error(_input_value_Not_Is_xType(SteamID, "SteamIDType"), _ERROR);
+                }
                 return null;//返回空值
             }
             /// <summary>
@@ -126,8 +130,10 @@ namespace Rox
             /// </summary>
             /// <param name="SteamID64">SteamID64</param>
             /// <param name="httpClient"><see cref="HttpClient"/> 实例</param>
+            /// <param name="IsMessageBox">是否启用消息窗体输出</param>
             /// <returns><see cref="SteamType"/> 格式的 <see cref="Text.Json"/> 文本</returns>
-            private static async Task<SteamType> SendQueryMessage(string SteamID64, HttpClient httpClient)
+
+            private static async Task<SteamType> SendQueryMessage(string SteamID64, HttpClient httpClient, bool IsMessageBox)
             {
                 try
                 {
@@ -140,6 +146,10 @@ namespace Rox
                     if (!response.IsSuccessStatusCode)
                     {
                         WriteLog.Error($"请求失败: {response.StatusCode}, {_HttpClient_Request_Failed}");
+                        if (IsMessageBox)
+                        {
+                            MessageBox_I.Error($"请求失败: {response.StatusCode}, {_HttpClient_Request_Failed}", _ERROR);
+                        }
                         return null;
                     }
                     // 读取响应内容
@@ -155,27 +165,32 @@ namespace Rox
                     {
                         case 404: // 未找到账户 或 完全私密个人资料
                             WriteLog.Error(LogKind.Network, $"API返回响应: Steam账户不存在或完全私密了个人资料, 错误代码: {_Steam_Not_Found_Account}");
-                            MessageBox_I.Error($"Steam账户不存在或完全私密了个人资料, 错误代码: {_Steam_Not_Found_Account}", _ERROR);
+                            if (IsMessageBox)
+                                MessageBox_I.Error($"Steam账户不存在或完全私密了个人资料, 错误代码: {_Steam_Not_Found_Account}", _ERROR);
                             return null;
                         case 400: // 错误的请求
                             WriteLog.Error(LogKind.Network, $"API返回响应: 无效的输入, 错误代码: {Invaid_String_Input}");
-                            MessageBox_I.Error($"无效的输入, 错误代码: {Invaid_String_Input}", _ERROR);
+                            if (IsMessageBox)
+                                MessageBox_I.Error($"无效的输入, 错误代码: {Invaid_String_Input}", _ERROR);
                             return null;
                         case 200:
                             WriteLog.Info(LogKind.Network, $"API返回响应: Json解析成功");
                             break;
                         case 502: //服务器网关错误
                             WriteLog.Error(LogKind.Network, $"API返回响应: 上游服务错误, 在向 Steam 的官方 API 请求数据时遇到了问题, 这可能是他们的服务暂时中断，请稍后重试, 错误代码: {_Steam_Service_Error}");
-                            MessageBox_I.Error($"上游服务错误, 在向 Steam 的官方 API 请求数据时遇到了问题, 这可能是他们的服务暂时中断，请稍后重试. 错误代码: {_Steam_Service_Error}", _ERROR);
+                            if (IsMessageBox)
+                                MessageBox_I.Error($"上游服务错误, 在向 Steam 的官方 API 请求数据时遇到了问题, 这可能是他们的服务暂时中断，请稍后重试. 错误代码: {_Steam_Service_Error}", _ERROR);
                             return null;
                         case 401: //未经授权
                             WriteLog.Error(LogKind.Network, $"API返回响应: 认证失败。你提供的 Steam Web API Key 无效或已过期，或者你没有提供 Key。请检查你的 Key. 错误代码: {_Steam_Server_UnAuthenticated}");
-                            MessageBox_I.Error($"认证失败。你提供的 Steam Web API Key 无效或已过期，或者你没有提供 Key。请检查你的 Key. 错误代码: {_Steam_Server_UnAuthenticated}", _ERROR);
+                            if (IsMessageBox)
+                                MessageBox_I.Error($"认证失败。你提供的 Steam Web API Key 无效或已过期，或者你没有提供 Key。请检查你的 Key. 错误代码: {_Steam_Server_UnAuthenticated}", _ERROR);
                             return null;
 
                         default:
                             WriteLog.Error(LogKind.Json, $"Json 反序列化过程中出现未知错误, 错误代码: {_Json_DeObject_Unknow_Exception}");
-                            MessageBox_I.Error($"Json 反序列化过程中出现未知错误, 错误代码: {_Json_DeObject_Unknow_Exception}", _ERROR);
+                            if (IsMessageBox)
+                                MessageBox_I.Error($"Json 反序列化过程中出现未知错误, 错误代码: {_Json_DeObject_Unknow_Exception}", _ERROR);
                             return null;
                     }
                     // 输出字段值
@@ -200,10 +215,9 @@ namespace Rox
                 {
                     // 捕获并输出异常
                     WriteLog.Error($"获取 Steam 个人信息失败，请检查网络连接或API服务状态: {ex.Message}, 错误代码: {_Steam_Unknow_Exception}");
-                    WriteLog.Info(ex.ToString());
+                    if (IsMessageBox)
+                        MessageBox_I.Error($"获取 Steam 个人信息失败，请检查网络连接或API服务状态: {ex.Message}, 错误代码: {_Steam_Unknow_Exception}", _ERROR);
                     return null;
-
-
                 }
             }
 
