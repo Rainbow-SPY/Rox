@@ -41,6 +41,18 @@ namespace Rox.GameExpansionFeatures
                 }
                 return "未知状态";
             }
+            /// <summary>
+            /// 获取 Steam 用户的社区可见性状态, 此方法仅限于 <see cref="SteamUserData_v1.SteamType"/> 的 <see cref="SteamUserData_v1.SteamType.communityvisibilitystate"/> 属性。
+            /// </summary>
+            /// <param name="steamType"> <see cref="SteamUserData_v1.SteamType"/> 对象, 其中包含了 Steam 用户的社区可见性状态信息</param>
+            /// <returns> Steam 用户的社区可见性状态字符串</returns>
+            public static string GetCommunityVisibilityState(SteamUserData_v1.SteamType steamType) => steamType.communityvisibilitystate == 1 ? "私密" : (steamType.communityvisibilitystate == 3 ? "公开" : "未知");
+            /// <summary>
+            /// 获取 Steam 用户的个人资料状态, 此方法仅限于 <see cref="SteamUserData_v1.SteamType"/> 的 <see cref="SteamUserData_v1.SteamType.profilestate"/> 属性。
+            /// </summary>
+            /// <param name="steamType"> <see cref="SteamUserData_v1.SteamType"/> 对象, 其中包含了 Steam 用户的个人资料状态信息</param>
+            /// <returns> Steam 用户的个人资料状态字符串</returns>
+            public static string GetProfileState(SteamUserData_v1.SteamType steamType) => steamType.profilestate == 1 ? "已填写个人资料" : "未填写个人资料";
         }
     }
 }

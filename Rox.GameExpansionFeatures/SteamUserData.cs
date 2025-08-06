@@ -162,8 +162,8 @@ namespace Rox.GameExpansionFeatures
             }
             catch (Exception e)
             {
-                WriteLog.Error(LogKind.Regex, $"{_Exception_With_xKind("正则表达式")}: {e}, 错误代码: {_Regex_Match_Unknow_Exception}");
-                MessageBox_I.Error($"{_Exception_With_xKind("正则表达式")}: {e} , 错误代码: {_Regex_Match_Unknow_Exception}", _ERROR);
+                WriteLog.Error(LogKind.Regex, $"{_Exception_With_xKind("正则表达式", e)}, 错误代码: {_Regex_Match_Unknow_Exception}");
+                MessageBox_I.Error($"{_Exception_With_xKind("正则表达式", e)}, 错误代码: {_Regex_Match_Unknow_Exception}", _ERROR);
                 return _Regex_Match_Unknow_Exception;
             }
         }

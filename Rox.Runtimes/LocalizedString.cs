@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 namespace Rox
 {
@@ -466,8 +467,12 @@ namespace Rox
             /// <returns> 返回 <see langword="%s"/> 值: <see langword="%s"/> </returns>
             public static string _Return_xKind_value(string kind, string value) => $"返回 {kind} 值: {value}";
             /// <param name="kind"> 异常的类型 </param>
-            /// <returns> <see langword="%s"/> 遭遇未知的异常 </returns>
-            public static string _Exception_With_xKind(string kind) => $"{kind} 遭遇未知的异常";
+            /// <returns> <see langword="%s"/> 遭遇未知的异常, 异常类型: <see cref="Exception.GetType"/> - <see cref="Exception.Message"/></returns>
+            public static string _Exception_With_xKind(string kind) => _Exception_With_xKind(kind, new Exception("未知异常"));
+            /// <param name="kind"> 异常的类型 </param>
+            /// <param name="ex"> 异常对象 </param>
+            /// <returns> <see langword="%s"/> 遭遇未知的异常, 异常类型: <see cref="Exception.GetType"/> - <see cref="Exception.Message"/> </returns>
+            public static string _Exception_With_xKind(string kind, Exception ex) => $"{kind} 遭遇未知的异常, 异常类型: {ex.GetType().Name ?? "Unknow"} - {ex.Message}\n{ex.StackTrace ?? "Unknow"}";
             /// <summary>
             /// 获取本地化字符串
             /// </summary>
