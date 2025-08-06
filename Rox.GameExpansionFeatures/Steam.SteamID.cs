@@ -20,7 +20,7 @@ namespace Rox.GameExpansionFeatures
             /// </summary>
             /// <param name="steamType"> <see cref="SteamUserData_v1.SteamType"/> 对象, 其中包含了 Steam 用户的在线状态信息</param>
             /// <returns> Steam 用户的在线状态字符串</returns>
-            public static string GetPersonaState(SteamUserData_v1.SteamType steamType)
+            public static string GetPersonalState(SteamUserData_v1.SteamType steamType)
             {
                 switch (steamType.personastate)
                 {
