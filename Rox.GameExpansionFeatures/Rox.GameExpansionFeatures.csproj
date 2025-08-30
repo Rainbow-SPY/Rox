@@ -58,9 +58,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CSGO.cs" />
+    <Compile Include="CSGO.mp.cs" />
     <Compile Include="Minecraft.Command.cs" />
     <Compile Include="Minecraft.cs" />
     <Compile Include="Minecraft.Version.VersionCheck.cs" />
+    <Compile Include="Steam.cs" />
     <Compile Include="Steam.SteamID.SteamIDType.cs" />
     <Compile Include="Steam.SteamID.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

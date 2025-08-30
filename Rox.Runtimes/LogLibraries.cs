@@ -135,7 +135,6 @@ namespace Rox
                         break;
                 }
                 // 设置颜色
-                Console.ForegroundColor = ConsoleColor.Green;// 设置绿色
                 Console.Write($"[{logLevel}] ");
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
                 Console.Write($"{logKind}: ");

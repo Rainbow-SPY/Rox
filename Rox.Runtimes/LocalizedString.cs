@@ -471,7 +471,7 @@ namespace Rox
             public static string _Exception_With_xKind(string kind) => _Exception_With_xKind(kind, new Exception("未知异常"));
             /// <param name="kind"> 异常的类型 </param>
             /// <param name="ex"> 异常对象 </param>
-            /// <returns> <see langword="%s"/> 遭遇未知的异常, 异常类型: <see cref="Exception.GetType"/> - <see cref="Exception.Message"/> </returns>
+            /// <returns> <see langword="%s"/> 遭遇未知的异常, 异常类型: <see cref="Exception.GetType"/> - <see cref="Exception.Message"/> - <see cref="Exception.StackTrace"/> </returns>
             public static string _Exception_With_xKind(string kind, Exception ex) => $"{kind} 遭遇未知的异常, 异常类型: {ex.GetType().Name ?? "Unknow"} - {ex.Message}\n{ex.StackTrace ?? "Unknow"}";
             /// <summary>
             /// 获取本地化字符串

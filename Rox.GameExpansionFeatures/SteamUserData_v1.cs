@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using static Rox.GameExpansionFeatures.Steam;
 using static Rox.GameExpansionFeatures.Steam.SteamID;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
