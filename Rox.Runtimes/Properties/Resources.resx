@@ -127,6 +127,12 @@
   <data name="Copyright" xml:space="preserve">
     <value>Copyright (C) Rainbow-SPY 2019-2025 , All rights reserved</value>
   </data>
+  <data name="err" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\err.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="error" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\error.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Language" xml:space="preserve">
     <value>简体中文</value>
   </data>

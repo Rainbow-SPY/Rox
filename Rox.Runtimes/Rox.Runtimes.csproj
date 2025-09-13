@@ -38,6 +38,17 @@
   <PropertyGroup>
     <ApplicationIcon>only logo.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="Microsoft.Toolkit.Uwp.Notifications, Version=7.1.0.0, Culture=neutral, PublicKeyToken=4aff67a105548ee2, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -45,6 +56,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -58,6 +71,10 @@
     <Compile Include="File_I.CalculateMD5.cs" />
     <Compile Include="File_I.FileProperties.cs" />
     <Compile Include="File_I.CheckFileHash.cs" />
+    <Compile Include="GetSystemInfo.cs" />
+    <Compile Include="InitializeReportInterface.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="LocalizedString.cs" />
     <Compile Include="LogLibraries.cs" />
     <Compile Include="LogLibraries.MessageBox_I.cs" />
@@ -75,11 +92,19 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Registry_I.cs" />
+    <Compile Include="ReportHelper.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReportHelper.Designer.cs">
+      <DependentUpon>ReportHelper.cs</DependentUpon>
+    </Compile>
     <Compile Include="ResourceHelper.cs" />
+    <Compile Include="Thread_I.cs" />
     <Compile Include="WindowsToast.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\app.manifest" />
     <None Include="Resources\Node.js.zip" />
     <None Include="Resources\WindowsToast.zip" />
   </ItemGroup>
@@ -89,12 +114,17 @@
       <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReportHelper.resx">
+      <DependentUpon>ReportHelper.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="only logo.ico" />
+    <None Include="Resources\err.ico" />
+    <None Include="Resources\error.png" />
     <None Include="Resources\aria2c.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

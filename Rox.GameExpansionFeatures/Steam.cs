@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,6 +29,17 @@ namespace Rox.GameExpansionFeatures
                 }
                 return null;
             }
+        }
+
+        /// <summary>
+        /// 获取当前Steam商店的网络延迟（Ping值）。
+        /// </summary>
+        /// <returns> 返回延迟时间，单位为毫秒。如果无法Ping通，返回null。</returns>
+        public static string SteamStoreDelay()
+        {
+            Ping store = new Ping();
+            store.Send("store.steampowered.com",120);
+            return (store.Send("store.steampowered.com").RoundtripTime.ToString()) ?? null;
         }
     }
 }

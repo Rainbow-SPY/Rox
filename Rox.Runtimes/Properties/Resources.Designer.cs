@@ -22,7 +22,7 @@ namespace Rox.Runtimes.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Rox.Runtimes.Properties {
         ///   返回此类使用的缓存的 ResourceManager 实例。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Rox.Runtimes.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace Rox.Runtimes.Properties {
         ///   使用此强类型资源类的所有资源查找执行重写。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 32位 的本地化字符串。
         /// </summary>
-        internal static string _32 {
+        public static string _32 {
             get {
                 return ResourceManager.GetString("_32", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 64位 的本地化字符串。
         /// </summary>
-        internal static string _64 {
+        public static string _64 {
             get {
                 return ResourceManager.GetString("_64", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 Windows已激活 的本地化字符串。
         /// </summary>
-        internal static string _ACTIVE_WINDOWS {
+        public static string _ACTIVE_WINDOWS {
             get {
                 return ResourceManager.GetString("_ACTIVE_WINDOWS", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 添加新行 的本地化字符串。
         /// </summary>
-        internal static string _ADD_NEW_LINE {
+        public static string _ADD_NEW_LINE {
             get {
                 return ResourceManager.GetString("_ADD_NEW_LINE", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 回答 的本地化字符串。
         /// </summary>
-        internal static string _ANSWER {
+        public static string _ANSWER {
             get {
                 return ResourceManager.GetString("_ANSWER", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 用户取消了操作 的本地化字符串。
         /// </summary>
-        internal static string _CANCEL_OP {
+        public static string _CANCEL_OP {
             get {
                 return ResourceManager.GetString("_CANCEL_OP", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 无法激活Windows 的本地化字符串。
         /// </summary>
-        internal static string _CANNOT_ACTIVE_WINDOWS {
+        public static string _CANNOT_ACTIVE_WINDOWS {
             get {
                 return ResourceManager.GetString("_CANNOT_ACTIVE_WINDOWS", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 无法清空日志文件 的本地化字符串。
         /// </summary>
-        internal static string _CANNOT_CLEAR_LOGFILE {
+        public static string _CANNOT_CLEAR_LOGFILE {
             get {
                 return ResourceManager.GetString("_CANNOT_CLEAR_LOGFILE", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 无法禁用Windows安全中心 的本地化字符串。
         /// </summary>
-        internal static string _CANNOT_DISABLE_SECURITY_CENTER {
+        public static string _CANNOT_DISABLE_SECURITY_CENTER {
             get {
                 return ResourceManager.GetString("_CANNOT_DISABLE_SECURITY_CENTER", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 无法禁用Windows更新 的本地化字符串。
         /// </summary>
-        internal static string _CANNOT_DISABLE_WINDOWS_UPDATER {
+        public static string _CANNOT_DISABLE_WINDOWS_UPDATER {
             get {
                 return ResourceManager.GetString("_CANNOT_DISABLE_WINDOWS_UPDATER", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 无法禁用/启用休眠 的本地化字符串。
         /// </summary>
-        internal static string _CANNOT_DISENABLE_HIBERNATE {
+        public static string _CANNOT_DISENABLE_HIBERNATE {
             get {
                 return ResourceManager.GetString("_CANNOT_DISENABLE_HIBERNATE", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 无法启用卓越性能 的本地化字符串。
         /// </summary>
-        internal static string _CANNOT_ENABLE_HIGHPOWERCFG {
+        public static string _CANNOT_ENABLE_HIGHPOWERCFG {
             get {
                 return ResourceManager.GetString("_CANNOT_ENABLE_HIGHPOWERCFG", resourceCulture);
             }
@@ -171,7 +171,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 无法启用Windows安全中心 的本地化字符串。
         /// </summary>
-        internal static string _CANNOT_ENABLE_SECURITY_CENTER {
+        public static string _CANNOT_ENABLE_SECURITY_CENTER {
             get {
                 return ResourceManager.GetString("_CANNOT_ENABLE_SECURITY_CENTER", resourceCulture);
             }
@@ -180,7 +180,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 无法启用Windows更新 的本地化字符串。
         /// </summary>
-        internal static string _CANNOT_ENABLE_WINDOWS_UPDATER {
+        public static string _CANNOT_ENABLE_WINDOWS_UPDATER {
             get {
                 return ResourceManager.GetString("_CANNOT_ENABLE_WINDOWS_UPDATER", resourceCulture);
             }
@@ -189,7 +189,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 无法写入日志文件 的本地化字符串。
         /// </summary>
-        internal static string _CANNOT_WRITE_LOGFILE {
+        public static string _CANNOT_WRITE_LOGFILE {
             get {
                 return ResourceManager.GetString("_CANNOT_WRITE_LOGFILE", resourceCulture);
             }
@@ -198,7 +198,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 清空日志文件 的本地化字符串。
         /// </summary>
-        internal static string _CLEAR_LOGFILE {
+        public static string _CLEAR_LOGFILE {
             get {
                 return ResourceManager.GetString("_CLEAR_LOGFILE", resourceCulture);
             }
@@ -207,7 +207,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 创建目录 的本地化字符串。
         /// </summary>
-        internal static string _CREATE_DIRECTORY {
+        public static string _CREATE_DIRECTORY {
             get {
                 return ResourceManager.GetString("_CREATE_DIRECTORY", resourceCulture);
             }
@@ -216,7 +216,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 当前版本 的本地化字符串。
         /// </summary>
-        internal static string _CURRENT_VER {
+        public static string _CURRENT_VER {
             get {
                 return ResourceManager.GetString("_CURRENT_VER", resourceCulture);
             }
@@ -225,7 +225,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 禁用aria2c日志输出 的本地化字符串。
         /// </summary>
-        internal static string _DISABLE_ARIA2C_LOG_OUTPUT {
+        public static string _DISABLE_ARIA2C_LOG_OUTPUT {
             get {
                 return ResourceManager.GetString("_DISABLE_ARIA2C_LOG_OUTPUT", resourceCulture);
             }
@@ -234,7 +234,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 已禁用Windows安全中心 的本地化字符串。
         /// </summary>
-        internal static string _DISABLE_SECURITY_CENTER {
+        public static string _DISABLE_SECURITY_CENTER {
             get {
                 return ResourceManager.GetString("_DISABLE_SECURITY_CENTER", resourceCulture);
             }
@@ -243,7 +243,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 已禁用Windows更新 的本地化字符串。
         /// </summary>
-        internal static string _DISABLE_WINDOWS_UPDATER {
+        public static string _DISABLE_WINDOWS_UPDATER {
             get {
                 return ResourceManager.GetString("_DISABLE_WINDOWS_UPDATER", resourceCulture);
             }
@@ -252,7 +252,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 已禁用/启用休眠 的本地化字符串。
         /// </summary>
-        internal static string _DISENABLE_HIBERNATE {
+        public static string _DISENABLE_HIBERNATE {
             get {
                 return ResourceManager.GetString("_DISENABLE_HIBERNATE", resourceCulture);
             }
@@ -261,7 +261,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 下载完成 的本地化字符串。
         /// </summary>
-        internal static string _DOWNLOADING_COMPLETE {
+        public static string _DOWNLOADING_COMPLETE {
             get {
                 return ResourceManager.GetString("_DOWNLOADING_COMPLETE", resourceCulture);
             }
@@ -270,7 +270,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 下载失败 的本地化字符串。
         /// </summary>
-        internal static string _DOWNLOADING_FAILED {
+        public static string _DOWNLOADING_FAILED {
             get {
                 return ResourceManager.GetString("_DOWNLOADING_FAILED", resourceCulture);
             }
@@ -279,7 +279,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 正在下载文件 的本地化字符串。
         /// </summary>
-        internal static string _DOWNLOADING_FILE {
+        public static string _DOWNLOADING_FILE {
             get {
                 return ResourceManager.GetString("_DOWNLOADING_FILE", resourceCulture);
             }
@@ -288,7 +288,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 启用aria2c日志输出 的本地化字符串。
         /// </summary>
-        internal static string _ENABLE_ARIA2C_LOG_OUTPUT {
+        public static string _ENABLE_ARIA2C_LOG_OUTPUT {
             get {
                 return ResourceManager.GetString("_ENABLE_ARIA2C_LOG_OUTPUT", resourceCulture);
             }
@@ -297,7 +297,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 已启用卓越性能 的本地化字符串。
         /// </summary>
-        internal static string _ENABLE_HIGHPOWERCFG {
+        public static string _ENABLE_HIGHPOWERCFG {
             get {
                 return ResourceManager.GetString("_ENABLE_HIGHPOWERCFG", resourceCulture);
             }
@@ -306,7 +306,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 已启用Windows安全中心 的本地化字符串。
         /// </summary>
-        internal static string _ENABLE_SECURITY_CENTER {
+        public static string _ENABLE_SECURITY_CENTER {
             get {
                 return ResourceManager.GetString("_ENABLE_SECURITY_CENTER", resourceCulture);
             }
@@ -315,7 +315,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 已启用Windows更新 的本地化字符串。
         /// </summary>
-        internal static string _ENABLE_WINDOWS_UPDATER {
+        public static string _ENABLE_WINDOWS_UPDATER {
             get {
                 return ResourceManager.GetString("_ENABLE_WINDOWS_UPDATER", resourceCulture);
             }
@@ -324,7 +324,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 请输入您的凭据 的本地化字符串。
         /// </summary>
-        internal static string _ENTER_CREDENTIALS {
+        public static string _ENTER_CREDENTIALS {
             get {
                 return ResourceManager.GetString("_ENTER_CREDENTIALS", resourceCulture);
             }
@@ -333,7 +333,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 错误 的本地化字符串。
         /// </summary>
-        internal static string _ERROR {
+        public static string _ERROR {
             get {
                 return ResourceManager.GetString("_ERROR", resourceCulture);
             }
@@ -342,7 +342,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 错误代码 的本地化字符串。
         /// </summary>
-        internal static string _ERROR_CODE {
+        public static string _ERROR_CODE {
             get {
                 return ResourceManager.GetString("_ERROR_CODE", resourceCulture);
             }
@@ -351,7 +351,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 文件存在 的本地化字符串。
         /// </summary>
-        internal static string _FILE_EXIST {
+        public static string _FILE_EXIST {
             get {
                 return ResourceManager.GetString("_FILE_EXIST", resourceCulture);
             }
@@ -360,7 +360,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 文件已保存到 的本地化字符串。
         /// </summary>
-        internal static string _FILE_EXIST_PATH {
+        public static string _FILE_EXIST_PATH {
             get {
                 return ResourceManager.GetString("_FILE_EXIST_PATH", resourceCulture);
             }
@@ -369,7 +369,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 正在写入文件 的本地化字符串。
         /// </summary>
-        internal static string _FILE_WRITING {
+        public static string _FILE_WRITING {
             get {
                 return ResourceManager.GetString("_FILE_WRITING", resourceCulture);
             }
@@ -378,7 +378,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 获取html元素 的本地化字符串。
         /// </summary>
-        internal static string _FIND_HTML_CODE {
+        public static string _FIND_HTML_CODE {
             get {
                 return ResourceManager.GetString("_FIND_HTML_CODE", resourceCulture);
             }
@@ -387,7 +387,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 解析html页面文件 的本地化字符串。
         /// </summary>
-        internal static string _FINDING_HTML_DOWNLOAD_LINK {
+        public static string _FINDING_HTML_DOWNLOAD_LINK {
             get {
                 return ResourceManager.GetString("_FINDING_HTML_DOWNLOAD_LINK", resourceCulture);
             }
@@ -396,7 +396,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 获取32位程序下载链接 的本地化字符串。
         /// </summary>
-        internal static string _GET_32_LINK {
+        public static string _GET_32_LINK {
             get {
                 return ResourceManager.GetString("_GET_32_LINK", resourceCulture);
             }
@@ -405,7 +405,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 获取64位程序下载链接 的本地化字符串。
         /// </summary>
-        internal static string _GET_64_LINK {
+        public static string _GET_64_LINK {
             get {
                 return ResourceManager.GetString("_GET_64_LINK", resourceCulture);
             }
@@ -414,7 +414,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 获取aria2c参数集 的本地化字符串。
         /// </summary>
-        internal static string _GET_ARIA2C_ARGS {
+        public static string _GET_ARIA2C_ARGS {
             get {
                 return ResourceManager.GetString("_GET_ARIA2C_ARGS", resourceCulture);
             }
@@ -423,7 +423,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 获取aria2c退出码 的本地化字符串。
         /// </summary>
-        internal static string _GET_ARIA2C_EXITCODE {
+        public static string _GET_ARIA2C_EXITCODE {
             get {
                 return ResourceManager.GetString("_GET_ARIA2C_EXITCODE", resourceCulture);
             }
@@ -432,7 +432,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 获取aria2c文件路径 的本地化字符串。
         /// </summary>
-        internal static string _GET_ARIA2C_PATH {
+        public static string _GET_ARIA2C_PATH {
             get {
                 return ResourceManager.GetString("_GET_ARIA2C_PATH", resourceCulture);
             }
@@ -441,7 +441,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 获取目录 的本地化字符串。
         /// </summary>
-        internal static string _GET_DIRECTORY {
+        public static string _GET_DIRECTORY {
             get {
                 return ResourceManager.GetString("_GET_DIRECTORY", resourceCulture);
             }
@@ -450,7 +450,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 获取文件 的本地化字符串。
         /// </summary>
-        internal static string _GET_FILE {
+        public static string _GET_FILE {
             get {
                 return ResourceManager.GetString("_GET_FILE", resourceCulture);
             }
@@ -459,7 +459,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 获取文件夹内所有文件 的本地化字符串。
         /// </summary>
-        internal static string _GET_FILES_IN_DIRECTORY {
+        public static string _GET_FILES_IN_DIRECTORY {
             get {
                 return ResourceManager.GetString("_GET_FILES_IN_DIRECTORY", resourceCulture);
             }
@@ -468,7 +468,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 获取html页面文件 的本地化字符串。
         /// </summary>
-        internal static string _GET_HTML {
+        public static string _GET_HTML {
             get {
                 return ResourceManager.GetString("_GET_HTML", resourceCulture);
             }
@@ -477,7 +477,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 获取输出目录 的本地化字符串。
         /// </summary>
-        internal static string _GET_OUTPUT_DIRECTORY {
+        public static string _GET_OUTPUT_DIRECTORY {
             get {
                 return ResourceManager.GetString("_GET_OUTPUT_DIRECTORY", resourceCulture);
             }
@@ -486,7 +486,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 获取输出文件名称 的本地化字符串。
         /// </summary>
-        internal static string _GET_OUTPUT_NAME {
+        public static string _GET_OUTPUT_NAME {
             get {
                 return ResourceManager.GetString("_GET_OUTPUT_NAME", resourceCulture);
             }
@@ -495,7 +495,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 收到响应 的本地化字符串。
         /// </summary>
-        internal static string _GET_RESPONSE {
+        public static string _GET_RESPONSE {
             get {
                 return ResourceManager.GetString("_GET_RESPONSE", resourceCulture);
             }
@@ -504,7 +504,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 获取项目资源清单 的本地化字符串。
         /// </summary>
-        internal static string _GET_RM_NAME {
+        public static string _GET_RM_NAME {
             get {
                 return ResourceManager.GetString("_GET_RM_NAME", resourceCulture);
             }
@@ -513,7 +513,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 获取资源数据 的本地化字符串。
         /// </summary>
-        internal static string _GET_RM_OBJ {
+        public static string _GET_RM_OBJ {
             get {
                 return ResourceManager.GetString("_GET_RM_OBJ", resourceCulture);
             }
@@ -522,7 +522,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 获取系统位数 的本地化字符串。
         /// </summary>
-        internal static string _GET_SYSTEM_BIT {
+        public static string _GET_SYSTEM_BIT {
             get {
                 return ResourceManager.GetString("_GET_SYSTEM_BIT", resourceCulture);
             }
@@ -531,7 +531,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 获取临时文件夹 的本地化字符串。
         /// </summary>
-        internal static string _GET_TEMP {
+        public static string _GET_TEMP {
             get {
                 return ResourceManager.GetString("_GET_TEMP", resourceCulture);
             }
@@ -540,7 +540,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 获取下载链接 的本地化字符串。
         /// </summary>
-        internal static string _GET_URL {
+        public static string _GET_URL {
             get {
                 return ResourceManager.GetString("_GET_URL", resourceCulture);
             }
@@ -549,7 +549,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 解析 Json 失败 的本地化字符串。
         /// </summary>
-        internal static string _JSON_PARSING_FAILED {
+        public static string _JSON_PARSING_FAILED {
             get {
                 return ResourceManager.GetString("_JSON_PARSING_FAILED", resourceCulture);
             }
@@ -558,7 +558,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 最新版本 的本地化字符串。
         /// </summary>
-        internal static string _LATEST_VERSION {
+        public static string _LATEST_VERSION {
             get {
                 return ResourceManager.GetString("_LATEST_VERSION", resourceCulture);
             }
@@ -567,7 +567,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 登录失败: 用户名未知或密码错误。 的本地化字符串。
         /// </summary>
-        internal static string _LOGIN_ERROR_USER_OR_PASSWORD {
+        public static string _LOGIN_ERROR_USER_OR_PASSWORD {
             get {
                 return ResourceManager.GetString("_LOGIN_ERROR_USER_OR_PASSWORD", resourceCulture);
             }
@@ -576,7 +576,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 请验证您的身份 的本地化字符串。
         /// </summary>
-        internal static string _LOGIN_VERIFY {
+        public static string _LOGIN_VERIFY {
             get {
                 return ResourceManager.GetString("_LOGIN_VERIFY", resourceCulture);
             }
@@ -585,7 +585,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 验证失败 的本地化字符串。
         /// </summary>
-        internal static string _LOGIN_VERIFY_ERROR {
+        public static string _LOGIN_VERIFY_ERROR {
             get {
                 return ResourceManager.GetString("_LOGIN_VERIFY_ERROR", resourceCulture);
             }
@@ -594,7 +594,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 创建ResourceManager实例 的本地化字符串。
         /// </summary>
-        internal static string _NEW_RM {
+        public static string _NEW_RM {
             get {
                 return ResourceManager.GetString("_NEW_RM", resourceCulture);
             }
@@ -603,7 +603,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 新版本可用 的本地化字符串。
         /// </summary>
-        internal static string _NEW_VERSION_AVAILABLE {
+        public static string _NEW_VERSION_AVAILABLE {
             get {
                 return ResourceManager.GetString("_NEW_VERSION_AVAILABLE", resourceCulture);
             }
@@ -612,7 +612,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 当前版本为最新版本 的本地化字符串。
         /// </summary>
-        internal static string _NON_NEW_VER {
+        public static string _NON_NEW_VER {
             get {
                 return ResourceManager.GetString("_NON_NEW_VER", resourceCulture);
             }
@@ -621,7 +621,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 网络不可用 的本地化字符串。
         /// </summary>
-        internal static string _NOTAVAILABLE_NETWORK {
+        public static string _NOTAVAILABLE_NETWORK {
             get {
                 return ResourceManager.GetString("_NOTAVAILABLE_NETWORK", resourceCulture);
             }
@@ -630,7 +630,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 网络不可用, 是否执行步骤? 的本地化字符串。
         /// </summary>
-        internal static string _NOTAVAILABLE_NETWORK_TIPS {
+        public static string _NOTAVAILABLE_NETWORK_TIPS {
             get {
                 return ResourceManager.GetString("_NOTAVAILABLE_NETWORK_TIPS", resourceCulture);
             }
@@ -639,7 +639,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 进程已退出 的本地化字符串。
         /// </summary>
-        internal static string _PROCESS_EXITED {
+        public static string _PROCESS_EXITED {
             get {
                 return ResourceManager.GetString("_PROCESS_EXITED", resourceCulture);
             }
@@ -648,7 +648,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 进程已启动 的本地化字符串。
         /// </summary>
-        internal static string _PROCESS_STARTED {
+        public static string _PROCESS_STARTED {
             get {
                 return ResourceManager.GetString("_PROCESS_STARTED", resourceCulture);
             }
@@ -657,7 +657,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 读取文件 的本地化字符串。
         /// </summary>
-        internal static string _READ_FILE {
+        public static string _READ_FILE {
             get {
                 return ResourceManager.GetString("_READ_FILE", resourceCulture);
             }
@@ -666,7 +666,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 读取注册表时出错 的本地化字符串。
         /// </summary>
-        internal static string _READ_REGISTRY_FAILED {
+        public static string _READ_REGISTRY_FAILED {
             get {
                 return ResourceManager.GetString("_READ_REGISTRY_FAILED", resourceCulture);
             }
@@ -675,7 +675,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 正则表达式匹配文件 的本地化字符串。
         /// </summary>
-        internal static string _REGEX_GET_FILE {
+        public static string _REGEX_GET_FILE {
             get {
                 return ResourceManager.GetString("_REGEX_GET_FILE", resourceCulture);
             }
@@ -684,7 +684,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 资源文件不存在或未嵌入 的本地化字符串。
         /// </summary>
-        internal static string _RES_FILE_NOT_FIND {
+        public static string _RES_FILE_NOT_FIND {
             get {
                 return ResourceManager.GetString("_RES_FILE_NOT_FIND", resourceCulture);
             }
@@ -693,7 +693,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 重试下载 的本地化字符串。
         /// </summary>
-        internal static string _RETRY_DOWNLOAD {
+        public static string _RETRY_DOWNLOAD {
             get {
                 return ResourceManager.GetString("_RETRY_DOWNLOAD", resourceCulture);
             }
@@ -702,7 +702,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 安全软件运行中, 请关闭 的本地化字符串。
         /// </summary>
-        internal static string _SECURITY_RUNNING {
+        public static string _SECURITY_RUNNING {
             get {
                 return ResourceManager.GetString("_SECURITY_RUNNING", resourceCulture);
             }
@@ -711,7 +711,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 发送请求 的本地化字符串。
         /// </summary>
-        internal static string _SEND_REQUEST {
+        public static string _SEND_REQUEST {
             get {
                 return ResourceManager.GetString("_SEND_REQUEST", resourceCulture);
             }
@@ -720,7 +720,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 验证成功 的本地化字符串。
         /// </summary>
-        internal static string _SUCCESS_VERIFY {
+        public static string _SUCCESS_VERIFY {
             get {
                 return ResourceManager.GetString("_SUCCESS_VERIFY", resourceCulture);
             }
@@ -729,7 +729,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 注册表已成功写入 的本地化字符串。
         /// </summary>
-        internal static string _SUCESS_WRITE_REGISTRY {
+        public static string _SUCESS_WRITE_REGISTRY {
             get {
                 return ResourceManager.GetString("_SUCESS_WRITE_REGISTRY", resourceCulture);
             }
@@ -738,7 +738,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 提示 的本地化字符串。
         /// </summary>
-        internal static string _TIPS {
+        public static string _TIPS {
             get {
                 return ResourceManager.GetString("_TIPS", resourceCulture);
             }
@@ -747,7 +747,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 未知错误 的本地化字符串。
         /// </summary>
-        internal static string _UNKNOW_ERROR {
+        public static string _UNKNOW_ERROR {
             get {
                 return ResourceManager.GetString("_UNKNOW_ERROR", resourceCulture);
             }
@@ -756,7 +756,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 不支持的平台 的本地化字符串。
         /// </summary>
-        internal static string _UNSUPPORT_PLATFORM {
+        public static string _UNSUPPORT_PLATFORM {
             get {
                 return ResourceManager.GetString("_UNSUPPORT_PLATFORM", resourceCulture);
             }
@@ -765,7 +765,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 更新行值 的本地化字符串。
         /// </summary>
-        internal static string _UPDATE_LINE {
+        public static string _UPDATE_LINE {
             get {
                 return ResourceManager.GetString("_UPDATE_LINE", resourceCulture);
             }
@@ -774,7 +774,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 等待下载完成 的本地化字符串。
         /// </summary>
-        internal static string _WAIT_DOWNLOADING {
+        public static string _WAIT_DOWNLOADING {
             get {
                 return ResourceManager.GetString("_WAIT_DOWNLOADING", resourceCulture);
             }
@@ -783,7 +783,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 警告 的本地化字符串。
         /// </summary>
-        internal static string _WARNING {
+        public static string _WARNING {
             get {
                 return ResourceManager.GetString("_WARNING", resourceCulture);
             }
@@ -792,7 +792,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 Windows 更新已被禁用 的本地化字符串。
         /// </summary>
-        internal static string _WINDOWS_UPDATER_DISABLED {
+        public static string _WINDOWS_UPDATER_DISABLED {
             get {
                 return ResourceManager.GetString("_WINDOWS_UPDATER_DISABLED", resourceCulture);
             }
@@ -801,7 +801,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 Windows 更新已启用 的本地化字符串。
         /// </summary>
-        internal static string _WINDOWS_UPDATER_ENABLED {
+        public static string _WINDOWS_UPDATER_ENABLED {
             get {
                 return ResourceManager.GetString("_WINDOWS_UPDATER_ENABLED", resourceCulture);
             }
@@ -810,7 +810,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 写入文件 的本地化字符串。
         /// </summary>
-        internal static string _WRITE_FILE {
+        public static string _WRITE_FILE {
             get {
                 return ResourceManager.GetString("_WRITE_FILE", resourceCulture);
             }
@@ -819,7 +819,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 写入注册表 的本地化字符串。
         /// </summary>
-        internal static string _WRITE_REGISTRY {
+        public static string _WRITE_REGISTRY {
             get {
                 return ResourceManager.GetString("_WRITE_REGISTRY", resourceCulture);
             }
@@ -828,7 +828,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 写入注册表时出错 的本地化字符串。
         /// </summary>
-        internal static string _WRITE_REGISTRY_FAILED {
+        public static string _WRITE_REGISTRY_FAILED {
             get {
                 return ResourceManager.GetString("_WRITE_REGISTRY_FAILED", resourceCulture);
             }
@@ -837,7 +837,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找 System.Byte[] 类型的本地化资源。
         /// </summary>
-        internal static byte[] aria2c {
+        public static byte[] aria2c {
             get {
                 object obj = ResourceManager.GetObject("aria2c", resourceCulture);
                 return ((byte[])(obj));
@@ -847,7 +847,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 Rainbow SPY 的本地化字符串。
         /// </summary>
-        internal static string Author {
+        public static string Author {
             get {
                 return ResourceManager.GetString("Author", resourceCulture);
             }
@@ -856,16 +856,36 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 Copyright (C) Rainbow-SPY 2019-2025 , All rights reserved 的本地化字符串。
         /// </summary>
-        internal static string Copyright {
+        public static string Copyright {
             get {
                 return ResourceManager.GetString("Copyright", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
+        /// </summary>
+        public static System.Drawing.Icon err {
+            get {
+                object obj = ResourceManager.GetObject("err", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        public static System.Drawing.Bitmap error {
+            get {
+                object obj = ResourceManager.GetObject("error", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 简体中文 的本地化字符串。
         /// </summary>
-        internal static string Language {
+        public static string Language {
             get {
                 return ResourceManager.GetString("Language", resourceCulture);
             }
@@ -874,7 +894,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找 System.Byte[] 类型的本地化资源。
         /// </summary>
-        internal static byte[] Node_js {
+        public static byte[] Node_js {
             get {
                 object obj = ResourceManager.GetObject("Node_js", resourceCulture);
                 return ((byte[])(obj));
@@ -884,7 +904,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 NinjaMagisk Common Interface Libraries 的本地化字符串。
         /// </summary>
-        internal static string Product {
+        public static string Product {
             get {
                 return ResourceManager.GetString("Product", resourceCulture);
             }
@@ -893,7 +913,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找类似 1.5.0 的本地化字符串。
         /// </summary>
-        internal static string Version {
+        public static string Version {
             get {
                 return ResourceManager.GetString("Version", resourceCulture);
             }
@@ -902,7 +922,7 @@ namespace Rox.Runtimes.Properties {
         /// <summary>
         ///   查找 System.Byte[] 类型的本地化资源。
         /// </summary>
-        internal static byte[] WindowsToast {
+        public static byte[] WindowsToast {
             get {
                 object obj = ResourceManager.GetObject("WindowsToast", resourceCulture);
                 return ((byte[])(obj));

@@ -82,7 +82,7 @@ namespace Rox
                 /// </summary>
                 Registry,
                 /// <summary>
-                /// 网络
+                /// 网络 <see cref="System.Net.NetworkInformation"/> "/>
                 /// </summary>
                 Network,
                 /// <summary>
@@ -101,6 +101,10 @@ namespace Rox
                 /// 数学计算 <see cref="System.Math"/>
                 /// </summary>
                 Math,
+                /// <summary>
+                /// 崩溃
+                /// </summary>
+                Crush,
             }
             // 定义日志文件名和路径（当前目录下的 Assistant.log 文件）
             /// <summary>
@@ -243,7 +247,35 @@ namespace Rox
                 catch (Exception ex)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    WriteLog.Info($"[Error] Error writing to log file: {ex.Message}");
+                    WriteLog.Error($"Error writing to log file: {ex.Message}");
+                    Console.ResetColor();
+                }
+            }
+            /// <summary>
+            /// 根据日志等级和日志类型记录崩溃日志到文件
+            /// </summary>
+            /// <param name="CrushFilePath"> 崩溃日志文件路径 </param>
+            /// <param name="message"> 消息 </param>
+            public static void LogToCrushFile(string CrushFilePath, string message)
+            {
+                // 创建日志信息
+                try
+                {
+                    // 如果日志文件不存在，则创建
+                    if (!File.Exists(CrushFilePath))
+                    {
+                        File.Create(CrushFilePath).Close();
+                        WriteLog.Info($"{_GET_FILE} {CrushFilePath}");
+                    }
+                    
+
+
+                    File.WriteAllText(CrushFilePath, message);
+                }
+                catch (Exception ex)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    WriteLog.Error($"Error writing to log file: {ex.Message}");
                     Console.ResetColor();
                 }
             }

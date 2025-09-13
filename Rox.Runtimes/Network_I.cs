@@ -1,4 +1,5 @@
-﻿using System.Net.NetworkInformation;
+﻿using System;
+using System.Net.NetworkInformation;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
 namespace Rox
@@ -18,14 +19,6 @@ namespace Rox
             {
                 try
                 {
-                    // 检查网络适配器是否有可用的
-                    //if (NetworkInterface.GetIsNetworkAvailable())
-                    //{
-                    //    WriteLog.Info($"{_NOTAVAILABLE_NETWORK}");
-                    //    return false;
-                    //}
-
-                    // 进一步通过 Ping 验证网络连接
                     using (var ping = new Ping())
                     {
                         PingReply reply = ping.Send("8.8.8.8", 2000); // 尝试 Ping Google 的公共 DNS
@@ -54,13 +47,37 @@ namespace Rox
                         return reply.Status == IPStatus.Success;
                     }
                 }
-                catch
+                catch (Exception e)
                 {
-                    WriteLog.Warning($"{_NOTAVAILABLE_NETWORK}");
+                    WriteLog.Warning(_Exception_With_xKind("Ping", e));
                     return false;
                 }
             }
 
+            /// <summary>
+            /// 获取指定IP的Ping延迟
+            /// </summary>
+            /// <param name="ip"></param>
+            /// <returns> 返回延迟时间，单位为毫秒。如果无法Ping通，返回null。</returns>
+            public string GetPingDelay(string ip)
+            {
+                try
+                {
+                    using (var ping = new Ping())
+                    {
+                        PingReply reply = ping.Send(ip, 120);
+                        if (reply.Status == IPStatus.Success)
+                            return reply.RoundtripTime.ToString();
+                        else
+                            return null;
+                    }
+                }
+                catch (Exception e)
+                {
+                    WriteLog.Warning(_Exception_With_xKind("GetPingDelay", e));
+                    return null;
+                }
+            }
         }
     }
 }
