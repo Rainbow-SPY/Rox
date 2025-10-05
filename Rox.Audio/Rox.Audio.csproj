@@ -77,10 +77,6 @@
       <Project>{ba4c591e-3d2a-491b-bccb-1f995545a26c}</Project>
       <Name>Rox.Runtimes</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Rox\Rox.csproj">
-      <Project>{1a93b989-729d-429d-8848-5c8ec38b9f8a}</Project>
-      <Name>Rox</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="only logo.ico" />

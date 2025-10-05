@@ -79,6 +79,7 @@
     <Compile Include="LogLibraries.cs" />
     <Compile Include="LogLibraries.MessageBox_I.cs" />
     <Compile Include="LogLibraries.WriteLog.cs" />
+    <Compile Include="Main.cs" />
     <Compile Include="Network_I.cs" />
     <Compile Include="NodeJs.cs" />
     <Compile Include="Properties\Resource1.Designer.cs">
@@ -100,6 +101,7 @@
     </Compile>
     <Compile Include="ResourceHelper.cs" />
     <Compile Include="Thread_I.cs" />
+    <Compile Include="Windows.cs" />
     <Compile Include="WindowsToast.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
