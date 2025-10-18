@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Management;
+using static Rox.Runtimes.Hardware.GPU.NVIDIA;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
-using static Rox.Runtimes.Hardware.GPU.NVIDIA;
 namespace Rox
 {
     internal class Program
@@ -12,15 +12,8 @@ namespace Rox
         {
             try
             {
-                string a = Runtimes.Hardware.GPU.NVIDIA.GetGPUMemory();
-                string b = Runtimes.Hardware.GPU.NVIDIA.GetGPUFullName();
-                string c = Runtimes.Hardware.GPU.NVIDIA.GetGPUDriverVersion();
-                WriteLog.Info("GPU Full Name: " + b);
-                WriteLog.Info("GPU Memory: " + a);
-                WriteLog.Info("GPU Driver Model: " + c);
-
-                Console.WriteLine($"专用显存: {GetGPUMemory()} MB");
-                Console.WriteLine($"共享内存: {GetGPUSharedMemory()} MB");
+                Console.WriteLine($"专用显存: {GetGPUMemory()} GB");
+                Console.WriteLine($"共享内存: {GetGPUSharedMemory()} GB");
                 Console.WriteLine($"显存类型: {GetGPUMemoryType()}");
                 Console.WriteLine($"显存总线宽度: {GetGPUMemoryBusWidth()} bit");
 
@@ -45,6 +38,36 @@ namespace Rox
                 {
                     WriteLog.Info("DriverVersion  -  " + obj["DriverVersion"]);
                 }
+            }
+            Console.Clear();
+            Main2();
+        }
+        static void Main2()
+        {
+            try
+            {
+                // 查询 Win32_VideoController 类
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController");
+
+                // 遍历所有显卡（可能有多个，如集成显卡+独立显卡）
+                foreach (ManagementObject mo in searcher.Get())
+                {
+                    Console.WriteLine("=== 显卡信息 ===");
+
+                    // 遍历所有可用属性并输出（包括名称、类型、驱动、分辨率等）
+                    foreach (PropertyData prop in mo.Properties)
+                    {
+                        // 属性名和值（值可能为 null，需处理）
+                        string value = prop.Value?.ToString() ?? "null";
+                        Console.WriteLine($"{prop.Name}: {value}");
+                    }
+
+                    Console.WriteLine("\n" + new string('-', 50) + "\n");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("错误: " + ex.Message);
             }
         }
     }

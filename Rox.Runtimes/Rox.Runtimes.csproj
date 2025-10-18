@@ -74,6 +74,7 @@
     <Compile Include="File_I\File_I.FileProperties.cs" />
     <Compile Include="File_I\File_I.CheckFileHash.cs" />
     <Compile Include="GetSystemInfo.cs" />
+    <Compile Include="Hardware\Hardware.GPU.General.cs" />
     <Compile Include="InitializeReportInterface.cs">
       <SubType>Form</SubType>
     </Compile>
