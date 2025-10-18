@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Threading;
-using static Rox.Runtimes.LogLibraries;
 using static Rox.Runtimes.LocalizedString;
+using static Rox.Runtimes.LogLibraries;
 
 namespace Rox.Runtimes
 {
+    /// <summary>
+    /// 线程类库,用于创建和管理线程。
+    /// </summary>
     public class Thread_I
     {
         /// <summary>
@@ -30,7 +33,7 @@ namespace Rox.Runtimes
             catch (Exception e)
             {
                 WriteLog.Error(_Exception_With_xKind(thread.ToString(), e));
-                
+
             }
         }
     }

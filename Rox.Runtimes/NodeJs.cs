@@ -2,7 +2,6 @@
 using System.IO;
 using System.Reflection;
 using System.Resources;
-using System.Windows.Forms;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
 namespace Rox

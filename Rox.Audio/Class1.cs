@@ -6,8 +6,8 @@ using System.Reflection;
 using System.Resources;
 using System.Threading;
 using System.Windows.Forms;
-using static Rox.Runtimes.LogLibraries;
 using static Rox.Runtimes.LocalizedString;
+using static Rox.Runtimes.LogLibraries;
 namespace Rox
 {
     namespace Audio
@@ -78,7 +78,7 @@ namespace Rox
 
                         if (!System.IO.File.Exists(database))
                         {
-                            MessageBox_I.Error("未能找到酷狗音乐数据库,请在单击\"确认\"后手动指定 \"KGMusicV3.db\" 文件位置 \n 如果您没有安装酷狗音乐,请在安装包内提取",_ERROR);
+                            MessageBox_I.Error("未能找到酷狗音乐数据库,请在单击\"确认\"后手动指定 \"KGMusicV3.db\" 文件位置 \n 如果您没有安装酷狗音乐,请在安装包内提取", _ERROR);
 
                         database:
                             OpenFileDialog db = new OpenFileDialog();
@@ -91,7 +91,7 @@ namespace Rox
                             string dbPath = db.FileName;
                             if (dbPath == "")
                             {
-                                MessageBox_I.Error("未能找到酷狗音乐数据库,请在单击\"确认\"后手动指定 \"KGMusicV3.db\" 文件位置",_ERROR);
+                                MessageBox_I.Error("未能找到酷狗音乐数据库,请在单击\"确认\"后手动指定 \"KGMusicV3.db\" 文件位置", _ERROR);
                                 goto database;
                             }
                             else
@@ -105,18 +105,18 @@ namespace Rox
                     }
                     catch (Exception ex)
                     {
-                        MessageBox_I.Error("解密文件失败" + ex,_ERROR);
+                        MessageBox_I.Error("解密文件失败" + ex, _ERROR);
                         return;
                     }
                 }
                 else
                 {
-                    MessageBox_I.Error("资源文件不存在",_ERROR);
+                    MessageBox_I.Error("资源文件不存在", _ERROR);
                     return;
                 }
                 if (file.Length == 0)
                 {
-                    MessageBox_I.Error("没有选择文件",_ERROR);
+                    MessageBox_I.Error("没有选择文件", _ERROR);
                     return;
                 }
 
@@ -146,12 +146,12 @@ namespace Rox
                 string decryptedFileName = Path.Combine(filePath, fileName.Substring(0, fileName.Length - 4) + ".ogg");
                 if (System.IO.File.Exists(decryptedFileName))
                 {
-                    MessageBox_I.Info("解密成功",_TIPS);
+                    MessageBox_I.Info("解密成功", _TIPS);
                     Windows.Explorer.OpenFolderInExplorer(filePath);
                 }
                 else
                 {
-                    MessageBox_I.Error("解密失败",_ERROR);
+                    MessageBox_I.Error("解密失败", _ERROR);
                 }
             }
         }
@@ -228,7 +228,7 @@ namespace Rox
                     }
                     catch (Exception ex)
                     {
-                        MessageBox_I.Error("解密文件失败" + ex,_ERROR);
+                        MessageBox_I.Error("解密文件失败" + ex, _ERROR);
                         return null;
                     }
                 }
@@ -253,9 +253,9 @@ namespace Rox
                 if (System.IO.File.Exists(files[0]))
                 {
                     process.Dispose();
-                    MessageBox_I.Info("解密成功",_TIPS);
+                    MessageBox_I.Info("解密成功", _TIPS);
                     LogLibraries.WriteLog.Info($"解密成功: {folder}kgm-vpr-out");
-                    Windows.Explorer.OpenFolderInExplorer(Path.Combine(folder,"kgm-vpr-out"));
+                    Windows.Explorer.OpenFolderInExplorer(Path.Combine(folder, "kgm-vpr-out"));
                     return;
                 }
                 process.Dispose();
@@ -294,12 +294,12 @@ namespace Rox
                 {
                     // 复制解密后的文件到原目录
                     System.IO.File.Copy(decryptedFileName, Path.Combine(Path.GetDirectoryName(file), fileName + ".mp3"), true);
-                    MessageBox_I.Info("解密成功",_TIPS);
+                    MessageBox_I.Info("解密成功", _TIPS);
                     Windows.Explorer.OpenFolderInExplorer(Path.GetDirectoryName(file));
                 }
                 else
                 {
-                    MessageBox_I.Error("解密失败",_TIPS);
+                    MessageBox_I.Error("解密失败", _TIPS);
                 }
             }
         }

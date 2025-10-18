@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.GameExpansionFeatures",
 		{BA4C591E-3D2A-491B-BCCB-1F995545A26C} = {BA4C591E-3D2A-491B-BCCB-1F995545A26C}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.Hardware.GPU.NVIDIA", "Rox.Hardware.GPU.NVIDIA\Rox.Hardware.GPU.NVIDIA.csproj", "{AA4FC610-AC82-4821-B001-8AD1F40C09E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,10 @@ Global
 		{970D6D33-5E08-44DD-BB66-C6BEFCEE071C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{970D6D33-5E08-44DD-BB66-C6BEFCEE071C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{970D6D33-5E08-44DD-BB66-C6BEFCEE071C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA4FC610-AC82-4821-B001-8AD1F40C09E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA4FC610-AC82-4821-B001-8AD1F40C09E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA4FC610-AC82-4821-B001-8AD1F40C09E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA4FC610-AC82-4821-B001-8AD1F40C09E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

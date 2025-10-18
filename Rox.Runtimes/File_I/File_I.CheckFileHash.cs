@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Windows.Forms;
-using static Rox.Runtimes.LogLibraries;
 using static Rox.Runtimes.LocalizedString;
+using static Rox.Runtimes.LogLibraries;
 namespace Rox.Runtimes
 {
     public partial class File_I
@@ -20,7 +19,7 @@ namespace Rox.Runtimes
                 // 检查文件是否存在
                 if (!System.IO.File.Exists(filePath))
                 {
-                    MessageBox_I.Error($"文件 {filePath} 不存在。",_ERROR);
+                    MessageBox_I.Error($"文件 {filePath} 不存在。", _ERROR);
                     return false;
                 }
 
@@ -30,14 +29,14 @@ namespace Rox.Runtimes
                 // 检查哈希值是否匹配
                 if (actualMD5 != expectedMD5)
                 {
-                    MessageBox_I.Error($"文件 {filePath} 的MD5哈希值不匹配。\n预期: {expectedMD5}\n实际: {actualMD5}",_ERROR);
+                    MessageBox_I.Error($"文件 {filePath} 的MD5哈希值不匹配。\n预期: {expectedMD5}\n实际: {actualMD5}", _ERROR);
                     return false;
                 }
                 return true;
             }
             catch (Exception ex)
             {
-                MessageBox_I.Error($"检查文件 {filePath} 时发生错误: {ex.Message}",_ERROR);
+                MessageBox_I.Error($"检查文件 {filePath} 时发生错误: {ex.Message}", _ERROR);
                 return false;
             }
         }

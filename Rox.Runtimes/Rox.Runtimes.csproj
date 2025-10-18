@@ -67,19 +67,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="config.cs" />
+    <Compile Include="Convert.Storage.cs" />
     <Compile Include="Directory_I.CopyDirectory.cs" />
-    <Compile Include="File_I.CalculateMD5.cs" />
-    <Compile Include="File_I.FileProperties.cs" />
-    <Compile Include="File_I.CheckFileHash.cs" />
+    <Compile Include="File_I\File_I.CalculateMD5.cs" />
+    <Compile Include="File_I\File_I.FileProperties.cs" />
+    <Compile Include="File_I\File_I.CheckFileHash.cs" />
     <Compile Include="GetSystemInfo.cs" />
     <Compile Include="InitializeReportInterface.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="LocalizedString.cs" />
-    <Compile Include="LogLibraries.cs" />
-    <Compile Include="LogLibraries.MessageBox_I.cs" />
-    <Compile Include="LogLibraries.WriteLog.cs" />
-    <Compile Include="Main.cs" />
+    <Compile Include="LogLibraries\LogLibraries.cs" />
+    <Compile Include="LogLibraries\LogLibraries.MessageBox_I.cs" />
+    <Compile Include="LogLibraries\LogLibraries.WriteLog.cs" />
+    <Compile Include="Security.cs" />
     <Compile Include="Network_I.cs" />
     <Compile Include="NodeJs.cs" />
     <Compile Include="Properties\Resource1.Designer.cs">
@@ -106,6 +108,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Hardware\Hardware.GPU.NVIDIA.cs" />
     <None Include="Properties\app.manifest" />
     <None Include="Resources\Node.js.zip" />
     <None Include="Resources\WindowsToast.zip" />
@@ -128,6 +131,11 @@
     <None Include="Resources\err.ico" />
     <None Include="Resources\error.png" />
     <None Include="Resources\aria2c.exe" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NvAPIWrapper.Net">
+      <Version>0.8.1.101</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

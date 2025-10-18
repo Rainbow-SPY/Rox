@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("Rox API support libraries")]
+[assembly: AssemblyTitle("Rox.Hardware.GPU.NVIDIA")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Rainbow SPY")]
-[assembly: AssemblyProduct("Rox")]
-[assembly: AssemblyCopyright("Copyright (C) Rainbow-SPY 2019-2025 , All rights reserved")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("Rox.Hardware.GPU.NVIDIA")]
+[assembly: AssemblyCopyright("Copyright ©  2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 如果此项目向 COM 公开，则下列 GUID 用于类型库的 ID
-[assembly: Guid("8b2d3fcf-8efc-4e19-9dd0-f074c92f3222")]
+[assembly: Guid("aa4fc610-ac82-4821-b001-8ad1f40c09e1")]
 
 // 程序集的版本信息由下列四个值组成: 
 //

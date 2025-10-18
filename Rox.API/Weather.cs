@@ -2,7 +2,6 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
 
@@ -102,7 +101,7 @@ namespace Rox
                 {
                     _lastWeatherData = await GetWeatherDataJson(city);
                 }
-                WriteLog.Info(LogKind.Json,_Return_xKind_value("Json",_lastWeatherData?.temperature_1));
+                WriteLog.Info(LogKind.Json, _Return_xKind_value("Json", _lastWeatherData?.temperature_1));
                 return _lastWeatherData?.temperature_1;
             }
             /// <summary>

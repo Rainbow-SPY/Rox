@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.IO;
 using System.Windows.Forms;
 using static Rox.Runtimes.LocalizedString;
@@ -106,15 +107,26 @@ namespace Rox
                 /// </summary>
                 Crush,
             }
-            // 定义日志文件名和路径（当前目录下的 Assistant.log 文件）
+            // 定义日志文件名和路径（当前目录下的 log.ralog 文件）
             /// <summary>
             /// 日志文件名
             /// </summary>
-            private static readonly string logFileName = "Assistant.log";
+            private static readonly string logFileName = "log.ralog";
             /// <summary>
             /// 日志文件路径
             /// </summary>
             private static readonly string logFilePath = Path.Combine(Application.StartupPath, logFileName);
+            internal static void RegisteredExt()
+            {
+                // 检测注册表 HKCR\.rxcfg / .rxtemp / .ralog 是否存在
+                if (Registry.ClassesRoot.OpenSubKey(".rxcfg") == null ||
+                    Registry.ClassesRoot.OpenSubKey(".rxtemp") == null ||
+                    Registry.ClassesRoot.OpenSubKey(".ralog") == null)
+                {
+                    WriteLog.Warning(LogKind.Registry, "正在注册Rox相关文件扩展名...");
+                    Config.RegisteredFileExt();
+                }
+            }
             /// <summary>
             /// 根据日志等级和日志类型向文件写入日志,并在控制台输出日志,并记录到文件
             /// </summary>
@@ -123,6 +135,7 @@ namespace Rox
             /// <param name="message">消息</param>
             internal static void WriteLog_(string logLevel, LogKind logKind, string message)
             {
+                RegisteredExt();
                 switch (logLevel)
                 {
                     case "Info":
@@ -157,6 +170,7 @@ namespace Rox
             /// <param name="message">消息</param>
             internal static void WriteLog_(string logLevel, string message)
             {
+                RegisteredExt();
                 // 设置颜色
                 // 设置控制台颜色
                 switch (logLevel)
@@ -195,15 +209,16 @@ namespace Rox
             /// <param name="message">消息</param>
             public static void LogToFile(string logLevel, string message)
             {
+                RegisteredExt();
                 // 创建日志信息
                 string logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{logLevel}]: {message}";
 
                 try
                 {
                     // 如果日志文件不存在，则创建
-                    if (!System.IO.File.Exists(logFilePath))
+                    if (!File.Exists(logFilePath))
                     {
-                        System.IO.File.Create(logFilePath).Close();
+                        File.Create(logFilePath).Close();
                     }
 
                     // 以追加方式写入日志内容
@@ -227,6 +242,7 @@ namespace Rox
             /// <param name="message"></param>
             public static void LogToFile(string logLevel, LogKind logkind, string message)
             {
+                RegisteredExt();
                 // 创建日志信息
                 string logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{logLevel}] [{logkind}]: {message}";
 
@@ -267,9 +283,6 @@ namespace Rox
                         File.Create(CrushFilePath).Close();
                         WriteLog.Info($"{_GET_FILE} {CrushFilePath}");
                     }
-                    
-
-
                     File.WriteAllText(CrushFilePath, message);
                 }
                 catch (Exception ex)

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
-using System.Windows.Forms;
-using static Rox.Runtimes.LocalizedString;
-using static Rox.Runtimes.LogLibraries;
 namespace Rox
 {
     namespace Runtimes

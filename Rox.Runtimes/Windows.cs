@@ -506,7 +506,7 @@ namespace Rox
                     }
                     catch (Exception e)
                     {
-                        MessageBox_I.Error(e.Message,_ERROR);
+                        MessageBox_I.Error(e.Message, _ERROR);
                     }
                 }
                 /// <summary>

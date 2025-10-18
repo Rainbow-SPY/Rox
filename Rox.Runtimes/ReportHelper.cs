@@ -18,7 +18,7 @@ namespace Rox.Runtimes
         public Reporter(Exception exception)
         {
             InitializeComponent();
-            Icon = System.Drawing.SystemIcons.Error;    
+            Icon = System.Drawing.SystemIcons.Error;
             GetSystemInfo.InitializeSystemInfo();
             string _Ex_type = exception.GetType().ToString();
             string _Ex_message = exception.Message;
@@ -46,13 +46,13 @@ namespace Rox.Runtimes
                 + $"SystemName: {osName}\n"
                 + $"SystemBuild: {osBuild}\n"
                 + $"SystemArchitecture: {architecture}\n"
-                + $"SystemLanguage: {language}\n" 
+                + $"SystemLanguage: {language}\n"
                 + $"MonitorResolution: {screenInfo}\n"
                 // 获取处理器型号
                 + $"Processor: {processor}\n"
                 + $"-------------AppInfo----------------------\n"
                 + $"AppVersion: {Application.ProductVersion}\n"
-                + $"AppExecutable: {Application.ExecutablePath}\n" 
+                + $"AppExecutable: {Application.ExecutablePath}\n"
                 ;
 
             // 获取已加载的程序集信息

@@ -11,9 +11,9 @@ namespace Rox.GameExpansionFeatures
         /// <summary>
         /// "村庄英雄"效果加持下的交易价格计算器
         /// </summary>
-        /// <param name="BasePrice"></param>
-        /// <param name="HearoOfVillage_Level"></param>
-        /// <returns></returns>
+        /// <param name="BasePrice"> 基础价格 </param>
+        /// <param name="HearoOfVillage_Level">"村庄英雄"效果等级, 范围1-5 </param>
+        /// <returns> 计算后的交易价格 </returns>
         public int TradingWithHeroOfVillage_Calculator(int BasePrice, int HearoOfVillage_Level)
         {
             // Minecraft折扣公式：1 - (0.3 + 0.0625 * (heroLevel - 1))
