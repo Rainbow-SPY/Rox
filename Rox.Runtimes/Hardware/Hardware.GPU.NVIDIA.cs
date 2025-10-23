@@ -13,12 +13,12 @@ namespace Rox.Runtimes.Hardware.GPU
     /// </summary>
     public class NVIDIA
     {
-        private static Infomation _inf;
+        private static Information _inf;
         /// <summary>
         /// 获取NVIDIA GPU的显存大小
         /// </summary>
         /// <returns> 显存大小的字符串表示，例如 "8 GB" </returns>
-        public static Infomation GetInfomation()
+        public static Information GetInformation()
         {
             try
             {
@@ -26,7 +26,7 @@ namespace Rox.Runtimes.Hardware.GPU
                 var b = a.MemoryInformation;
                 var c = a.UsageInformation;
                 var d = a.CoolerInformation;
-                Infomation infomation = new Infomation
+                Information Information = new Information
                 {
                     FullName = a.FullName ?? "N/A",
                     Memory = Math.Round(ToGB(ToBytes($"{b.DedicatedVideoMemoryInkB}KB")), 0),
@@ -46,12 +46,12 @@ namespace Rox.Runtimes.Hardware.GPU
                 {
                     foreach (var obj in searcher.Get().Cast<ManagementObject>())
                     {
-                        infomation.DriverVersion = (string)obj["DriverVersion"];
+                        Information.DriverVersion = (string)obj["DriverVersion"];
                         break;
                     }
                 }
-                _inf = infomation;
-                return infomation;
+                _inf = Information;
+                return Information;
 
             }
             catch (Exception ex)
@@ -68,7 +68,7 @@ namespace Rox.Runtimes.Hardware.GPU
         {
             if (_inf == null)
             {
-                _inf = GetInfomation();
+                _inf = GetInformation();
             }
             return _inf?.Memory;
         }
@@ -80,7 +80,7 @@ namespace Rox.Runtimes.Hardware.GPU
         {
             if (_inf == null)
             {
-                _inf = GetInfomation();
+                _inf = GetInformation();
             }
             return _inf?.FullName;
         }
@@ -92,7 +92,7 @@ namespace Rox.Runtimes.Hardware.GPU
         {
             if (_inf == null)
             {
-                _inf = GetInfomation();
+                _inf = GetInformation();
             }
             return _inf?.DriverVersion;
         }
@@ -104,7 +104,7 @@ namespace Rox.Runtimes.Hardware.GPU
         {
             if (_inf == null)
             {
-                _inf = GetInfomation();
+                _inf = GetInformation();
             }
             return _inf?.SharedMemory;
         }
@@ -116,7 +116,7 @@ namespace Rox.Runtimes.Hardware.GPU
         {
             if (_inf == null)
             {
-                _inf = GetInfomation();
+                _inf = GetInformation();
             }
             return _inf?.MemoryType;
         }
@@ -128,7 +128,7 @@ namespace Rox.Runtimes.Hardware.GPU
         {
             if (_inf == null)
             {
-                _inf = GetInfomation();
+                _inf = GetInformation();
             }
             return _inf?.MemoryBusWidth;
         }
@@ -140,7 +140,7 @@ namespace Rox.Runtimes.Hardware.GPU
         {
             if (_inf == null)
             {
-                _inf = GetInfomation();
+                _inf = GetInformation();
             }
             return _inf?.GPUUsage;
         }
@@ -152,7 +152,7 @@ namespace Rox.Runtimes.Hardware.GPU
         {
             if (_inf == null)
             {
-                _inf = GetInfomation();
+                _inf = GetInformation();
             }
             return _inf?.MemoryUsage;
         }
@@ -164,7 +164,7 @@ namespace Rox.Runtimes.Hardware.GPU
         {
             if (_inf == null)
             {
-                _inf = GetInfomation();
+                _inf = GetInformation();
             }
             return _inf?.VideoEngineUsage;
         }
@@ -176,7 +176,7 @@ namespace Rox.Runtimes.Hardware.GPU
         {
             if (_inf == null)
             {
-                _inf = GetInfomation();
+                _inf = GetInformation();
             }
             return _inf?.Temperature;
         }
@@ -188,7 +188,7 @@ namespace Rox.Runtimes.Hardware.GPU
         {
             if (_inf == null)
             {
-                _inf = GetInfomation();
+                _inf = GetInformation();
             }
             return _inf?.GPUArchitecture;
         }
@@ -200,7 +200,7 @@ namespace Rox.Runtimes.Hardware.GPU
         {
             if (_inf == null)
             {
-                _inf = GetInfomation();
+                _inf = GetInformation();
             }
             return _inf?.Cooler_1_RPM;
         }
@@ -212,7 +212,7 @@ namespace Rox.Runtimes.Hardware.GPU
         {
             if (_inf == null)
             {
-                _inf = GetInfomation();
+                _inf = GetInformation();
             }
             return _inf?.Cooler_2_RPM;
         }
@@ -224,7 +224,7 @@ namespace Rox.Runtimes.Hardware.GPU
         {
             if (_inf == null)
             {
-                _inf = GetInfomation();
+                _inf = GetInformation();
             }
             return _inf?.Cooler_3_RPM;
         }
@@ -233,7 +233,7 @@ namespace Rox.Runtimes.Hardware.GPU
         /// <summary>
         /// NVIDIA GPU信息
         /// </summary>
-        public class Infomation
+        public class Information
         {
             /// <summary>
             /// GPU完整名称

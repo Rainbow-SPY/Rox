@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
+using Convert = System.Convert;
 namespace Rox
 {
     namespace Text

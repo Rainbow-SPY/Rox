@@ -74,6 +74,7 @@
     <Compile Include="File_I\File_I.FileProperties.cs" />
     <Compile Include="File_I\File_I.CheckFileHash.cs" />
     <Compile Include="GetSystemInfo.cs" />
+    <Compile Include="Hardware\Hardware.General.Information.cs" />
     <Compile Include="Hardware\Hardware.GPU.General.cs" />
     <Compile Include="InitializeReportInterface.cs">
       <SubType>Form</SubType>
@@ -82,6 +83,7 @@
     <Compile Include="LogLibraries\LogLibraries.cs" />
     <Compile Include="LogLibraries\LogLibraries.MessageBox_I.cs" />
     <Compile Include="LogLibraries\LogLibraries.WriteLog.cs" />
+    <Compile Include="LogLibraries_v1\LogLibraries_v1.cs" />
     <Compile Include="Security.cs" />
     <Compile Include="Network_I.cs" />
     <Compile Include="NodeJs.cs" />
