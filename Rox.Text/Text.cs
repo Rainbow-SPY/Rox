@@ -773,7 +773,7 @@ namespace Rox
         /// <summary>
         /// 用于处理字符串的类
         /// </summary>
-        public class String
+        public class String_I
         {
             /// <summary>
             /// 用于加密和解密字符串的 JavaScript 代码,需要在Node.Js环境中运行
@@ -871,7 +871,30 @@ namespace Rox
                     return jsPath;
                 }
             }
-
+            /// <summary>
+            /// 字符串转Base64
+            /// </summary>
+            /// <param name="str"> 字符串</param>
+            /// <returns>返回Base64字符串</returns>
+            public static string ToBase64(string str) => Convert.ToBase64String(Encoding.UTF8.GetBytes(str));
+            /// <summary>
+            /// 字符串转16进制字符
+            /// </summary>
+            /// <param name="_str">字符串</param>
+            /// <param name="encode">编码格式</param>
+            /// <returns> 返回16进制字符串</returns>   
+            public static string ToHexString(string _str, Encoding encode)
+            {
+                // 注意：不要主动删除空格，保持原始字符（除非需求明确要过滤）
+                byte[] buffer = encode.GetBytes(_str);
+                StringBuilder result = new StringBuilder();
+                foreach (byte b in buffer)
+                {
+                    // 格式化每个字节为2位十六进制（补前导零）
+                    result.AppendFormat("{0:x2}", b);
+                }
+                return result.ToString();
+            }
         }
     }
 }

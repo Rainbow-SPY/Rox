@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Management;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -809,6 +810,40 @@ namespace Rox
             WriteLog.Info(LogKind.Process, $"{_PROCESS_STARTED}: {powerShell.Id}");
             powerShell.WaitForExit();
         }
+
+        /// <summary>
+        /// 检测Windows是否已激活
+        /// </summary>
+        /// <returns>已激活返回true，未激活返回false</returns>
+        public static bool IsWindowsActivated()
+        {
+            try
+            {
+                WriteLog.Info("正在检查Windows 许可证......");
+                // 使用WMI查询Windows许可证状态
+                using (var searcher = new ManagementObjectSearcher(
+                    "SELECT * FROM SoftwareLicensingProduct WHERE ApplicationID = '55c92734-d682-4d71-983e-d6ec3f16059f'"))
+                {
+                    foreach (var obj in searcher.Get())
+                    {
+                        // LicenseStatus为1表示已激活
+                        var licenseStatus = obj["LicenseStatus"];
+                        if (licenseStatus != null && licenseStatus.ToString() == "1")
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // 发生异常时默认返回未激活
+                return false;
+            }
+
+            return false;
+        }
+
         #region Windows身份验证
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]

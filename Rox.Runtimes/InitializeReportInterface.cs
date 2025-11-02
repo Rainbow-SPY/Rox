@@ -82,13 +82,15 @@ namespace Rox.Runtimes
             /// </summary>
             private void HandleCrash(Exception ex)
             {
-                Application.Exit();
+               
                 // 调用外部提供的崩溃处理逻辑
                 // 2. 定义崩溃处理逻辑（异常处理委托）
                 using (Form f = new Reporter(ex))
                 {
+                    f.TopMost = true;   
                     f.ShowDialog();
                 }
+                Application.Exit();
             }
         }
     }
