@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Management;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -15,7 +16,7 @@ namespace Rox
     /// <summary>
     /// Windows 相关操作
     /// </summary>
-    public class Windows
+    public partial class Windows
     {
         /// <summary>
         /// Windows 资源管理器操作 及 桌面相关操作
@@ -844,150 +845,25 @@ namespace Rox
             return false;
         }
 
-        #region Windows身份验证
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        private struct CREDUI_INFO
-        {
-            public int cbSize;
-            public IntPtr hwndParent;
-            public string pszMessageText;
-            public string pszCaptionText;
-            public IntPtr hbmBanner;
-        }
-        [DllImport("ole32.dll", CharSet = CharSet.Unicode)]
-        private static extern void CoTaskMemFree(IntPtr ptr);
-        [DllImport("credui.dll", CharSet = CharSet.Unicode)]
-        private static extern int CredUIPromptForWindowsCredentials(
-                ref CREDUI_INFO pUiInfo,
-                int dwAuthError,
-                ref uint pulAuthPackage,
-                IntPtr pvInAuthBuffer,
-                uint ulInAuthBufferSize,
-                out IntPtr ppvOutAuthBuffer,
-                out uint pulOutAuthBufferSize,
-                ref bool pfSave,
-                int dwFlags);
-        [DllImport("credui.dll", CharSet = CharSet.Unicode)]
-        private static extern bool CredUnPackAuthenticationBuffer(
-            int dwFlags,
-            IntPtr pAuthBuffer,
-            uint cbAuthBuffer,
-            StringBuilder pszUserName,
-            ref int pcchMaxUserName,
-            StringBuilder pszDomainName,
-            ref int pcchMaxDomainName,
-            StringBuilder pszPassword,
-            ref int pcchMaxPassword);
-        // 导入 LogonUser API
-        [DllImport("advapi32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        private static extern bool LogonUser(
-            string lpszUsername,
-            string lpszDomain,
-            string lpszPassword,
-            int dwLogonType,
-            int dwLogonProvider,
-            out IntPtr phToken);
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool CloseHandle(IntPtr hObject);
-        // 验证用户名和密码
-
         /// <summary>
-        /// 用于显示一个凭据提示框以验证用户身份。
+        /// 检测当前进程是否以管理员权限运行
         /// </summary>
-        /// <returns> <see langword="true"/> 表示验证成功，<see langword="false"/> 表示验证失败。</returns>
-        public static bool Authentication()
+        /// <returns>是管理员返回true，否则返回false</returns>
+        public static bool IsAdministrator()
         {
-            CREDUI_INFO credUI = new CREDUI_INFO
+            try
             {
-                cbSize = Marshal.SizeOf(typeof(CREDUI_INFO)),
-                pszCaptionText = _LOGIN_VERIFY,
-                pszMessageText = _ENTER_CREDENTIALS,
-                hwndParent = IntPtr.Zero,
-                hbmBanner = IntPtr.Zero
-            };
-            bool isAuthenticated = false;
-            bool userCancelled = false;
-            do
-            {
-                uint authPackage = 0;
-                bool save = false;
-
-                int result = CredUIPromptForWindowsCredentials(
-                    ref credUI,
-                    0,
-                    ref authPackage,
-                    IntPtr.Zero,
-                    0,
-                    out IntPtr outCredBuffer,
-                    out uint outCredBufferSize,
-                    ref save,
-                    0x1); // CREDUIWIN_GENERIC
-
-                if (result == 0)
-                {
-                    int maxUserName = 100;
-                    int maxDomainName = 100;
-                    int maxPassword = 100;
-                    StringBuilder userName = new StringBuilder(maxUserName);
-                    StringBuilder domainName = new StringBuilder(maxDomainName);
-                    StringBuilder password = new StringBuilder(maxPassword);
-
-                    if (CredUnPackAuthenticationBuffer(0, outCredBuffer, outCredBufferSize, userName, ref maxUserName, domainName, ref maxDomainName, password, ref maxPassword))
-                    {
-                        // 验证用户名和密码
-                        bool isValid = LogonUser(
-                            userName.ToString(),
-                            domainName.ToString(),
-                            password.ToString(),
-                            2, // LOGON32_LOGON_INTERACTIVE
-                            0, // LOGON32_PROVIDER_DEFAULT
-                            out IntPtr userToken);
-                        string ExtraMessage;
-                        if (isValid)
-                        {
-                            isAuthenticated = true;
-                            CloseHandle(userToken);
-                            MessageBox_I.Info(_SUCCESS_VERIFY, _TIPS);
-                        }
-                        else
-                        {
-                            // 验证失败，显示错误提示
-                            int errorCode = Marshal.GetLastWin32Error();
-                            if (errorCode == 1326)
-                            {
-                                ExtraMessage = _LOGIN_ERROR_USER_OR_PASSWORD;
-                            }
-                            else
-                            {
-                                ExtraMessage = _UNKNOW_ERROR;
-                            }
-                            MessageBox_I.Error($"{_LOGIN_VERIFY_ERROR}（{_ERROR_CODE}：{errorCode} {ExtraMessage}）", _ERROR);
-                        }
-                        // 调用验证方法
-                    }
-                    CoTaskMemFree(outCredBuffer);
-                }
-                else
-                {
-                    userCancelled = true;
-                }
+                // 获取当前Windows用户身份
+                WindowsIdentity identity = WindowsIdentity.GetCurrent();
+                WindowsPrincipal principal = new WindowsPrincipal(identity);
+                // 检查是否属于管理员组（BUILTIN\Administrators）
+                return principal.IsInRole(WindowsBuiltInRole.Administrator);
             }
-            while (!isAuthenticated && !userCancelled); // 未成功且未取消时循环
-            if (isAuthenticated)
+            catch
             {
-                // 执行后续操作（例如打开受保护的功能）
-                WriteLog.Info(_SUCCESS_VERIFY);
-                return true;
-            }
-            else
-            {
-                WriteLog.Info(_CANCEL_OP);
+                // 异常时默认返回非管理员
                 return false;
             }
-        }//Windows安全中心身份验证
-        #endregion
+        }
     }
 }

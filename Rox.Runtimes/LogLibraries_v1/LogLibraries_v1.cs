@@ -55,6 +55,8 @@ namespace Rox.Runtimes
             Network,
 
             #endregion
+
+
             #region IO
             /// <summary>
             /// 目录操作 <see cref="System.IO.Directory"/>
@@ -121,6 +123,8 @@ namespace Rox.Runtimes
             /// </summary>
             WriteConfig,
             #endregion
+
+
             /// <summary>
             /// 反射 <see cref="System.Reflection"/>
             /// </summary>
@@ -153,6 +157,24 @@ namespace Rox.Runtimes
             /// 序列化 <see cref="System.Runtime.Serialization"/>
             /// </summary>
             Serialization,
+            /// <summary>
+            /// 下载器
+            /// </summary>
+            Downloader,
+            /// <summary>
+            /// PowerShell
+            /// </summary>
+            PowerShell,
+            /// <summary>
+            /// 注册表 <see cref="Microsoft.Win32.Registry"/>
+            /// </summary>
+            Registry,
+            /// <summary>
+            /// 崩溃
+            /// </summary>
+            Crush,
+
+
             #region Form
             /// <summary>
             /// 窗体  <see cref="System.Windows.Forms"/>
@@ -171,6 +193,9 @@ namespace Rox.Runtimes
             /// </summary>
             OpenForm,
             #endregion
+
+
+            #region Thread & PRocess
             /// <summary>
             /// 线程 <see cref="System.Threading.Thread"/>
             /// </summary>
@@ -195,6 +220,9 @@ namespace Rox.Runtimes
             /// 结束进程 <see cref="System.Diagnostics.Process.Kill()"/>
             /// </summary>
             CloseProcess,
+            #endregion
+
+
             #region Service 
             /// <summary>
             /// 服务
@@ -209,6 +237,8 @@ namespace Rox.Runtimes
             /// </summary>
             CloseService,
             #endregion
+
+
             #region Task
             /// <summary>
             /// 任务 <see cref="System.Threading.Tasks.Task"/>
@@ -223,6 +253,8 @@ namespace Rox.Runtimes
             /// </summary>
             CloseTask,
             #endregion
+
+
             #region System
             /// <summary>
             /// 系统
@@ -257,14 +289,8 @@ namespace Rox.Runtimes
             /// </summary>
             GetBIOSInfo,
             #endregion
-            /// <summary>
-            /// PowerShell
-            /// </summary>
-            PowerShell,
-            /// <summary>
-            /// 注册表 <see cref="Microsoft.Win32.Registry"/>
-            /// </summary>
-            Registry,
+
+
             #region Json
             /// <summary>
             /// Json
@@ -291,6 +317,8 @@ namespace Rox.Runtimes
             /// </summary>
             JObject,
             #endregion
+
+
             #region Regex
             /// <summary>
             /// 正则表达式 <see cref="System.Text.RegularExpressions.Regex"/>
@@ -301,10 +329,8 @@ namespace Rox.Runtimes
             /// </summary>
             MatchRegex,
             #endregion
-            /// <summary>
-            /// 下载器
-            /// </summary>
-            Downloader,
+
+
             #region Math
             /// <summary>
             /// 数学计算 <see cref="System.Math"/>
@@ -335,10 +361,6 @@ namespace Rox.Runtimes
             /// </summary>
             RoundMath,
             #endregion
-            /// <summary>
-            /// 崩溃
-            /// </summary>
-            Crush,
         }
 
     }
