@@ -1,4 +1,4 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -135,7 +135,7 @@ namespace Rox
             /// <param name="message">消息</param>
             internal static void WriteLog_(string logLevel, LogKind logKind, string message)
             {
-                RegisteredExt();
+                
                 switch (logLevel)
                 {
                     case "Info":
@@ -170,7 +170,6 @@ namespace Rox
             /// <param name="message">消息</param>
             internal static void WriteLog_(string logLevel, string message)
             {
-                RegisteredExt();
                 // 设置颜色
                 // 设置控制台颜色
                 switch (logLevel)
@@ -209,7 +208,6 @@ namespace Rox
             /// <param name="message">消息</param>
             public static void LogToFile(string logLevel, string message)
             {
-                RegisteredExt();
                 // 创建日志信息
                 string logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{logLevel}]: {message}";
 
@@ -242,7 +240,6 @@ namespace Rox
             /// <param name="message"></param>
             public static void LogToFile(string logLevel, LogKind logkind, string message)
             {
-                RegisteredExt();
                 // 创建日志信息
                 string logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{logLevel}] [{logkind}]: {message}";
 
