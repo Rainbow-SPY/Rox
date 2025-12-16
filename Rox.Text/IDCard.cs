@@ -43,7 +43,7 @@ namespace Rox.Text
         /// </summary>
         /// <param name="idCard">18位身份证号</param>
         /// <returns>校验码是否合法</returns>
-        private static bool CheckIdCardCheckCode(string idCard)
+        public static bool CheckIdCardCheckCode(string idCard)
         {
             // 权重数组
             int[] weight = { 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 };

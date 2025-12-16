@@ -82,9 +82,9 @@
     </Compile>
     <Compile Include="LocalizedString.cs" />
     <Compile Include="LogLibraries\LogLibraries.cs" />
+    <Compile Include="LogLibraries\LogLibraries.LogKind.cs" />
     <Compile Include="LogLibraries\LogLibraries.MessageBox_I.cs" />
     <Compile Include="LogLibraries\LogLibraries.WriteLog.cs" />
-    <Compile Include="LogLibraries_v1\LogLibraries_v1.cs" />
     <Compile Include="Security.cs" />
     <Compile Include="Network_I.cs" />
     <Compile Include="NodeJs.cs" />
@@ -114,8 +114,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\app.manifest" />
-    <None Include="Resources\Node.js.zip" />
-    <None Include="Resources\WindowsToast.zip" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resource1.resx">

@@ -1,18 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.11.35327.3
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11222.15 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.Audio", "Rox.Audio\Rox.Audio.csproj", "{3FC9C513-ADE0-408A-8319-985A1BC2906A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.Runtimes", "Rox.Runtimes\Rox.Runtimes.csproj", "{BA4C591E-3D2A-491B-BCCB-1F995545A26C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.DownloadAssistant", "Rox.DownloadAssistant\Rox.DownloadAssistant.csproj", "{7E46025E-C375-44F9-ADF4-404438C9383E}"
-	ProjectSection(ProjectDependencies) = postProject
-		{BA4C591E-3D2A-491B-BCCB-1F995545A26C} = {BA4C591E-3D2A-491B-BCCB-1F995545A26C}
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.ArtificialIntelligence", "Rox.ArtificialIntelligence\Rox.ArtificialIntelligence.csproj", "{A0FEE4A7-A29E-4C1B-86C4-9813DC559C12}"
 	ProjectSection(ProjectDependencies) = postProject
 		{BA4C591E-3D2A-491B-BCCB-1F995545A26C} = {BA4C591E-3D2A-491B-BCCB-1F995545A26C}
 	EndProjectSection
@@ -31,10 +24,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.API", "Rox.API\Rox.API.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.GameExpansionFeatures", "Rox.GameExpansionFeatures\Rox.GameExpansionFeatures.csproj", "{970D6D33-5E08-44DD-BB66-C6BEFCEE071C}"
 	ProjectSection(ProjectDependencies) = postProject
+		{4F55481F-3CF2-489F-9153-156E7E2637BC} = {4F55481F-3CF2-489F-9153-156E7E2637BC}
 		{BA4C591E-3D2A-491B-BCCB-1F995545A26C} = {BA4C591E-3D2A-491B-BCCB-1F995545A26C}
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.Hardware.GPU.NVIDIA", "Rox.Hardware.GPU.NVIDIA\Rox.Hardware.GPU.NVIDIA.csproj", "{AA4FC610-AC82-4821-B001-8AD1F40C09E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,10 +34,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3FC9C513-ADE0-408A-8319-985A1BC2906A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3FC9C513-ADE0-408A-8319-985A1BC2906A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3FC9C513-ADE0-408A-8319-985A1BC2906A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3FC9C513-ADE0-408A-8319-985A1BC2906A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BA4C591E-3D2A-491B-BCCB-1F995545A26C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BA4C591E-3D2A-491B-BCCB-1F995545A26C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA4C591E-3D2A-491B-BCCB-1F995545A26C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -54,10 +42,6 @@ Global
 		{7E46025E-C375-44F9-ADF4-404438C9383E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E46025E-C375-44F9-ADF4-404438C9383E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E46025E-C375-44F9-ADF4-404438C9383E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A0FEE4A7-A29E-4C1B-86C4-9813DC559C12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A0FEE4A7-A29E-4C1B-86C4-9813DC559C12}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A0FEE4A7-A29E-4C1B-86C4-9813DC559C12}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A0FEE4A7-A29E-4C1B-86C4-9813DC559C12}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4F55481F-3CF2-489F-9153-156E7E2637BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4F55481F-3CF2-489F-9153-156E7E2637BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F55481F-3CF2-489F-9153-156E7E2637BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -70,10 +54,6 @@ Global
 		{970D6D33-5E08-44DD-BB66-C6BEFCEE071C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{970D6D33-5E08-44DD-BB66-C6BEFCEE071C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{970D6D33-5E08-44DD-BB66-C6BEFCEE071C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AA4FC610-AC82-4821-B001-8AD1F40C09E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AA4FC610-AC82-4821-B001-8AD1F40C09E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AA4FC610-AC82-4821-B001-8AD1F40C09E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AA4FC610-AC82-4821-B001-8AD1F40C09E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

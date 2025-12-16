@@ -33,7 +33,7 @@ namespace Rox
             const string _LOGIN_VERIFY = "Windows身份验证";
             const string _ENTER_CREDENTIALS = "请输入您的账户凭据以验证身份";
             const string _SUCCESS_VERIFY = "验证成功！";
-            const string _TIPS = "提示";
+        //    const string _TIPS = "提示";
             const string _LOGIN_VERIFY_ERROR = "验证失败";
             const string _LOGIN_ERROR_USER_OR_PASSWORD = "用户名或密码错误";
             const string _UNKNOW_ERROR = "未知错误";
@@ -41,7 +41,7 @@ namespace Rox
             const string _CANCEL_OP = "用户取消了验证操作";
             const string _LOGIN_ERROR_EMPTY_PASSWORD_POLICY = "无密码登录失败，请启用「允许空密码本地账户登录」策略";
             const string _LOGIN_ERROR_ACCOUNT_EXPIRED = "账户已过期";
-            const string _TIP_EMPTY_PASSWORD = "本地无密码账户已验证通过";
+          //  const string _TIP_EMPTY_PASSWORD = "本地无密码账户已验证通过";
             const string _TIP_EMPTY_PASSWORD_POLICY = "组策略路径：计算机配置→Windows设置→安全设置→本地策略→安全选项→账户：允许空密码的本地账户登录";
             const string _TIP_MICROSOFT_ACCOUNT = "Microsoft账户请输入完整邮箱（如xxx@outlook.com），开启两步验证需使用应用密码";
             const string _CREDENTIAL_PARSE_ERROR = "凭据解析失败，请检查账户格式";
@@ -141,7 +141,7 @@ namespace Rox
                         {
                             isAuthenticated = true;
                             CloseHandle(userToken);
-                            MessageBox.Show($"{_SUCCESS_VERIFY}\n{(_TIP_EMPTY_PASSWORD)}", _TIPS, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                       //     MessageBox.Show($"{_SUCCESS_VERIFY}\n{(_TIP_EMPTY_PASSWORD)}", _TIPS, MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         else
                         {
@@ -166,13 +166,13 @@ namespace Rox
                                     break;
                             }
 
-                            MessageBox.Show($"{_LOGIN_VERIFY_ERROR}\n错误码：{errorCode}\n原因：{extraMessage}\n{(_TIP_EMPTY_PASSWORD_POLICY)}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            WriteLog.Error(LogKind.System,$"")
+                            MessageBox.Show($"{_LOGIN_VERIFY_ERROR}\n错误码：{errorCode}\n原因：{extraMessage}\n{_TIP_EMPTY_PASSWORD_POLICY}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error,MessageBoxDefaultButton.Button1,MessageBoxOptions.DefaultDesktopOnly);
+                            WriteLog.Error(LogKind.System, $"{_LOGIN_VERIFY_ERROR}\n错误码：{errorCode}\n原因：{extraMessage}\n{_TIP_EMPTY_PASSWORD_POLICY}");
                         }
                     }
                     else
                     {
-                        MessageBox.Show($"{_CREDENTIAL_PARSE_ERROR}\n{_TIP_MICROSOFT_ACCOUNT}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show($"{_CREDENTIAL_PARSE_ERROR}\n{_TIP_MICROSOFT_ACCOUNT}", _ERROR, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                     }
 
                     CoTaskMemFree(outCredBuffer);

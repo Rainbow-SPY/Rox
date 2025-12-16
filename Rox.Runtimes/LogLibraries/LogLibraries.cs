@@ -44,69 +44,6 @@ namespace Rox
                         break;
                 }
             }
-
-            /// <summary>
-            /// 日志类型,分为Form,Thread,Process,Service,Task,System,PowerShell,Registry,Network
-            /// </summary>
-            public enum LogKind
-            {
-                /// <summary>
-                /// 窗体  <see cref="System.Windows.Forms"/>
-                /// </summary>
-                Form,
-                /// <summary>
-                /// 线程 <see cref="System.Threading.Thread"/>
-                /// </summary>
-                Thread,
-                /// <summary>
-                /// 进程 <see cref="System.Diagnostics.Process"/>
-                /// </summary>
-                Process,
-                /// <summary>
-                /// 服务
-                /// </summary>
-                Service,
-                /// <summary>
-                /// 任务 <see cref="System.Threading.Tasks.Task"/>
-                /// </summary>
-                Task,
-                /// <summary>
-                /// 系统
-                /// </summary>
-                System,
-                /// <summary>
-                /// PowerShell
-                /// </summary>
-                PowerShell,
-                /// <summary>
-                /// 注册表 <see cref="Microsoft.Win32.Registry"/>
-                /// </summary>
-                Registry,
-                /// <summary>
-                /// 网络 <see cref="System.Net.NetworkInformation"/> "/>
-                /// </summary>
-                Network,
-                /// <summary>
-                /// Json
-                /// </summary>
-                Json,
-                /// <summary>
-                /// 正则表达式 <see cref="System.Text.RegularExpressions.Regex"/>
-                /// </summary>
-                Regex,
-                /// <summary>
-                /// 下载器
-                /// </summary>
-                Downloader,
-                /// <summary>
-                /// 数学计算 <see cref="System.Math"/>
-                /// </summary>
-                Math,
-                /// <summary>
-                /// 崩溃
-                /// </summary>
-                Crush,
-            }
             // 定义日志文件名和路径（当前目录下的 log.ralog 文件）
             /// <summary>
             /// 日志文件名
@@ -133,9 +70,11 @@ namespace Rox
             /// <param name="logLevel">日志等级</param>
             /// <param name="logKind">日志类型</param>
             /// <param name="message">消息</param>
-            internal static void WriteLog_(string logLevel, LogKind logKind, string message)
+            internal static void WriteLog_(string logLevel, LogKind logKind, string message) => WriteLog_(logLevel, logKind.ToString(), message);
+
+            internal static void WriteLog_(string logLevel,string logKind,string message)
             {
-                
+
                 switch (logLevel)
                 {
                     case "Info":
@@ -154,7 +93,8 @@ namespace Rox
                 // 设置颜色
                 Console.Write($"[{logLevel}] ");
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
-                Console.Write($"{logKind}: ");
+                if (logKind != null)
+                    Console.Write($"{logKind}: ");
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.Write($"{message}\n");
                 Console.ResetColor();
@@ -162,86 +102,38 @@ namespace Rox
                 LogToUi?.Invoke(logLevel, message);
                 // 记录日志到文件
                 LogToFile(logLevel, logKind, message);
+
             }
             /// <summary>
             /// 根据日志等级向文件写入日志,并在控制台输出日志,并记录到文件
             /// </summary>
             /// <param name="logLevel">日志等级</param>
             /// <param name="message">消息</param>
-            internal static void WriteLog_(string logLevel, string message)
-            {
-                // 设置颜色
-                // 设置控制台颜色
-                switch (logLevel)
-                {
-                    case "Info":
-                        Console.ForegroundColor = ConsoleColor.Green; // 设置绿色
-                        break;
-                    case "Error":
-                        Console.ForegroundColor = ConsoleColor.Red; // 设置红色
-                        break;
-                    case "Warning":
-                        Console.ForegroundColor = ConsoleColor.Yellow; // 设置黄色
-                        break;
-                    case "Debug":
-#if DEBUG
-                        Console.ForegroundColor = ConsoleColor.Cyan; // 设置青色
-#elif RELEASE            
-                        return; 
-#endif
-                        break;
-                }
-                Console.Write($"[{logLevel}]");
-                Console.ForegroundColor = ConsoleColor.DarkYellow; // 设置绿色
-                Console.Write($": {message}\n");
-                Console.ResetColor();
-
-                // 打印日志到控制台
-                LogToUi?.Invoke(logLevel, message);
-                // 记录日志到文件
-                LogToFile(logLevel, message);
-            }
+            internal static void WriteLog_(string logLevel, string message) => WriteLog_(logLevel, null, message);
             /// <summary>
             /// 根据日志等级记录日志到文件
             /// </summary>
             /// <param name="logLevel">日志等级</param>
             /// <param name="message">消息</param>
-            public static void LogToFile(string logLevel, string message)
-            {
-                // 创建日志信息
-                string logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{logLevel}]: {message}";
-
-                try
-                {
-                    // 如果日志文件不存在，则创建
-                    if (!File.Exists(logFilePath))
-                    {
-                        File.Create(logFilePath).Close();
-                    }
-
-                    // 以追加方式写入日志内容
-                    using (StreamWriter writer = new StreamWriter(logFilePath, append: true))
-                    {
-                        writer.WriteLine(logMessage);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"[Error] Error writing to log file: {ex.Message}");
-                    Console.ResetColor();
-                }
-            }
+            public static void LogToFile(string logLevel, string message) => LogToFile(logLevel, null, message);
             /// <summary>
             /// 根据日志等级和日志类型记录日志到文件
             /// </summary>
             /// <param name="logLevel"></param>
             /// <param name="logkind"></param>
             /// <param name="message"></param>
-            public static void LogToFile(string logLevel, LogKind logkind, string message)
+            public static void LogToFile(string logLevel, LogKind logkind, string message) => LogToFile(logLevel, logkind.ToString(), message);
+            /// <summary>
+            /// 根据日志等级和日志类型记录日志到文件
+            /// </summary>
+            /// <param name="logLevel"></param>
+            /// <param name="logkind"></param>
+            /// <param name="message"></param>
+
+            public static void LogToFile(string logLevel, string logkind, string message)
             {
                 // 创建日志信息
-                string logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{logLevel}] [{logkind}]: {message}";
+                string logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{logLevel}] " + (logkind == null ? "" : $"[{logkind}]: ") + "{message}";
 
                 try
                 {

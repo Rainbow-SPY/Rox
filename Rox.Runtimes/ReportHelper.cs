@@ -10,7 +10,7 @@ namespace Rox.Runtimes
     /// <summary>
     /// 异常报告助手
     /// </summary>
-    public partial class Reporter : Form
+    public partial class Reporter : AntdUI.Window
     {
         /// <summary>
         /// 异常报告助手
