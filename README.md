@@ -1,6 +1,7 @@
 ![Icon](docs/logo+Text.png)
 
 Rox 是一个使用 C# .NET Framework 4.7.2 编写，并使用 Microsoft Visual Studio 2022 编译的跨平台动态链接库。它提供了多种功能模块，包括日志记录、文件操作、网络检查、Windows 系统配置、AI 集成,**音频解密**等。
+> 更新到 2025年12月17日 7:53 AM.
 
 ---
 ## 📜 License / 许可证  
@@ -21,56 +22,79 @@ This project is licensed under **AGPL-3.0 + Attribution + Non-Commercial terms**
 - 📂 完整条款参见 [LICENSE](LICENSE)。  
 
 ---
+## 常用功能
+- [控制台日志输出](#控制台打印彩色日志)
+- [Windows 安全中心 身份验证](#7-windows-身份验证)
+- [Steam 个人信息公开摘要查询](#Steam个人信息查询兼容v1可等待)
+- [当地天气查询](#天气查询可等待)
 
 ## 目录
-1. [日志](#2-日志)
-2. [自定义下载](#3-自定义下载)
-3. [安全软件检测](#4-安全软件检测)
-4. [网络](#5-网络)
-5. [Windows系统相关配置](#6-Windows系统相关配置)
-6. [AI](#7-AI)
-7. [文件](#8-文件)
-8. [Windows身份验证](#9-Windows身份验证)
-9. [检查更新模块](#10-检查更新模块)
-10. [文本类处理](#11-文本类处理)
-11. [API查询](#12-api查询)
-12. [音乐解密](#13-音乐解密)
-13. [Node.js](#14-nodejs)
-14. [发送Windows通知](#15-发送Windows通知)
-> 此方法要求系统版本为 Windows 10 以上
-
-## 1. 日志
-### 控制台打印彩色日志
+#### [操作手册](#操作手册)
+- [日志](#1-日志)
+-- [日志输出](#控制台打印彩色日志)
+-- [写入日志到文件](#写入日志到文件)
+-- [清空日志](#清空日志)
+- [自定义下载](#2-自定义下载)
+- [安全软件检测](#3-安全软件检测)
+- [网络](#4-网络)
+-- [网络可用性检查](#网络可用性检查)
+- [Windows系统相关配置](#5-Windows系统相关配置)
+-- [休眠](#启用禁用休眠)
+-- [卓越性能](#启用卓越性能)
+-- [启用禁用windows-安全中心与windows-defender](#启用禁用windows-安全中心与windows-defender)
+-- [检查 Windows 更新状态](#检查-windows-update状态)
+-- [写入注册表](#写入注册表)
+-- [读取注册表项值](#读取注册表项值)
+- [文件](#6-文件)
+-- [文件属性修改](#文件属性修改)
+-- [MD5哈希值对比](##md5哈希值对比)
+-- [获取文件MD5哈希值](#获取文件md5哈希值)
+- [Windows 身份验证](#7-Windows身份验证)
+- [文本类处理](#8-文本类处理)
+-- [Json反序列化](#json反序列化)
+-- [Json序列化](#json序列化)
+- [API查询](#9-api查询)
+-- [Steam 个人信息公开摘要(v1)](#steam个人信息查询兼容v1可等待)
+-- [天气查询](#天气查询可等待)
+- [游戏娱乐](#10-游戏娱乐)
+-- [获取 Steam 安装路径](#获取steam安装路径)
+-- [获取CS2安装路径](#获取cs2安装路径)
+-- [Minecraft Java版 村庄英雄Buff加成的交易价格计算](#MinecraftJava版村庄英雄Buff加成的交易价格计算)
+#### [开发环境](#开发环境)
+## 操作手册
+### 1.日志
+#### 控制台打印彩色日志
 ```csharp 
-Rox.Runtimes.LogLibries.WriteLog.Info(LogKind logkind,string message);
-Rox.Runtimes.LogLibries.WriteLog.Warning(LogKind logkind,string message);
-Rox.Runtimes.LogLibries.WriteLog.Error(string message);
-Rox.Runtimes.LogLibries.WriteLog.Debug(string message);
+Rox.Runtimes.LogLibraries.WriteLog.Info(LogKind logkind,string message);
+Rox.Runtimes.LogLibraries.WriteLog.Warning(string logkind,string message);
+Rox.Runtimes.LogLibraries.WriteLog.Error(string message);
+Rox.Runtimes.LogLibraries.WriteLog.Debug(string message);
 ```
-
-* **`LogKind` 可用枚举:** `Process`,`Task`,`Service`,`Registry`,`Network`,`PowerShell`,`Form`,`System`,`Thread`, `Json`, `Regex`, `Downloader`.
+支持3种重载, 可以自定义`LogKind`的类型, 显式使用字符串作为
+* **`LogKind`: 日志报告的类型**   可用枚举详见 `Rox.Runtimes.LogLibraries.LogKind`
 ___
-### 写入日志到文件
+#### 写入日志到文件
 
 ```csharp
-Rox.Runtimes.LogLibries.LogToFile(LogLevel loglevel,LogKind logkind, string message);
-Rox.Runtimes.LogLibries.LogToFile(LogLevel loglevel, string message);
+Rox.Runtimes.LogLibraries.LogToFile(LogLevel loglevel,LogKind logkind, string message);
+Rox.Runtimes.LogLibraries.LogToFile
+Rox.Runtimes.LogLibraries.LogToFile(LogLevel loglevel, string message);
 ```
-调用此方法时,会程序目录下创建`Assistant.log`日志文件,并会以下格式写入文件
+调用此方法时,会程序目录下创建`log.ralog`日志文件,并会以下格式写入文件
 
  ```plaintext
  $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{logLevel}] [{logkind}]: {message}";
  ```
 ___
-### 清空日志
+#### 清空日志
 
 ```csharp
-Rox.Runtimes.LogLibries.ClearFile(string filePath);
+Rox.Runtimes.LogLibraries.ClearFile(string filePath);
 ```
 
 * **`filepath`:** 日志文件路径
 
-## 2. 自定义下载
+### 2. 自定义下载
 
 ```csharp
 Rox.DownloadAssistant.Downloader(string url);
@@ -89,7 +113,7 @@ Rox.DownloadAssistant.Downloader(string url,string location,bool log);
 
 当`bool`为`true`时,日志会输出到程序目录下的`aria2c.log`文件内,反之`false`则不会.
 ___
-## 3. 安全软件检测
+### 3. 安全软件检测
 
 ```csharp
 Rox.Security.Is360SafeRunning();
@@ -97,8 +121,8 @@ Rox.Security.IsHuorongSecurityRunning();
 ```
 
 * **返回值:** `true` 表示安全软件正在运行，`false` 表示未运行。
-## 4. 网络
-### 网络可用性检查
+### 4. 网络
+#### 网络可用性检查
 
 ```csharp
 Rox.Runtimes.Network_I.IsNetworkAvailable();
@@ -106,31 +130,32 @@ Rox.Runtimes.Network_I.IsNetworkAvailable();
 
 - **返回值:** `true` 表示网络可用，`false` 表示网络不可用。
 
-## 5. Windows系统相关配置
+### 5. Windows系统相关配置
 
 > [!WARNING]
 > 此操作执行后可能会影响系统性能和安全。
-### 启用/禁用休眠
+
+#### 启用/禁用休眠
 
 ```csharp
 Rox.Windows.Hibernate.Enable(); //启用休眠
 Rox.Windows.Hibernate.Disable(); //禁用休眠
 ```
 ___
-### 启用卓越性能
+#### 启用卓越性能
 
 ```csharp
 Rox.Windows.EnableHighPowercfg(); //启用卓越性能
 ```
 ___
-### 启用/禁用Windows 安全中心与Windows Defender
+#### 启用/禁用Windows 安全中心与Windows Defender
 
 ```csharp
 Rox.Security.WindowsSecurityCenter.Enable() //启用
 Rox.Security.WindowsSecurityCenter.Disable() //禁用
 ```
 ___
-### 检查 Windows Update状态
+#### 检查 Windows Update状态
 
 ```csharp
 bool status = Rox.Windows.WindowsUpdate.CheckStatus();
@@ -138,14 +163,7 @@ bool status = Rox.Windows.WindowsUpdate.CheckStatus();
 * **返回类型:** bool
 * **返回值:** 已禁用更新返回`false`.已启用更新返回`true`,键值不存在或遇到未知错误返回`false`
 ___
-### 激活 Windows
-
-```csharp
-Rox.Windows.ActiveWindows(); //激活Windows
-```
-通过 "irmhttps://get.activated.win | iex" 下载激活脚本完成激活
-___
-### 写入注册表
+#### 写入注册表
 
 ```csharp
 Rox.Runtimes.Registry_I.Write(string keyPath,string valueName,object valueData,RegistryValueKind valueType);
@@ -161,9 +179,22 @@ Rox.Runtimes.Registry_I.Write(string keyPath,string valueName,object valueData,R
 
 * **`valueData`:设定注册表项内数据**
 <br>
-## 6. 文件
+___
+#### 读取注册表项值
 
-### 文件属性修改
+```csharp
+Rox.Runtimes.Registry_I.GetRegistryValue(string keyName, string valueName);
+```
+
+* **`keyname`: 注册表项的路径**
+
+* **`valuename`: 注册表项的名称**
+
+* **返回类型:** `string`
+
+### 6. 文件
+
+#### 文件属性修改
 
 ```csharp
 Rox.Runtimes.File_I.FileProperties(string path, Properties key, bool Enable);
@@ -174,7 +205,7 @@ Rox.Runtimes.File_I.FileProperties(string path, Properties key, bool Enable);
 * **`key`: 文件属性**
 * **`Enable`: 启用或取消属性:** 设置为`true`时,给出的命令为`+r`(示例);设置为`false`时,给出的命令为`-r`(示例).
 
-### MD5哈希值验证
+#### MD5哈希值验证
 ```csharp
 Rox.Runtimes.File_I.CheckFileHash(string filePath, string expectedMD5);
 ```
@@ -184,7 +215,7 @@ Rox.Runtimes.File_I.CheckFileHash(string filePath, string expectedMD5);
 * **返回类型: `bool`**
 * **返回值: 文件的MD5哈希值与期望的MD5哈希值相同时,返回`true`,反之则为`false`.**
 
-### 获取文件MD5哈希值
+#### 获取文件MD5哈希值
 ```csharp
 Rox.Runtimes.File_I.CalculateMD5(string filePath);
 ```
@@ -192,26 +223,16 @@ Rox.Runtimes.File_I.CalculateMD5(string filePath);
 * **`filePath`: 文件路径**
 * **返回类型: `string`**
 * **返回值: 文件的MD5哈希值**
-## 7. Windows 身份验证
+### 7. Windows 身份验证
 
 ```csharp
 Rox.Windows.Authentication();
 ```
 * **返回类型: `bool`**
 * **返回值:** `true` 表示验证成功，`false` 表示取消操作
-## 8. 文本类处理
-### 加密 / 解密字符串
-```csharp
-Rox.Text.EncryptString(string str); //加密
-Rox.Text.DecryptString(string str); //解密
-```
-* **`str`:** 要加密或解密的字符串
-* **返回类型:** `string`
-* **返回值:** 加密或解密后的字符串
-  
-在加密或解密之前, Rox会先解包 Node.js, 使用Node.js执行js脚本进行加解密
-___
-### Json反序列化
+### 8. 文本类处理
+
+#### Json反序列化
 ```csharp
 Rox.Text.Json.DeserializeObject<T>(string json);
 Rox.Text.Json.DeserializeObject(string json);
@@ -222,7 +243,8 @@ Rox.Text.Json.DeserializeObject(string json);
 * **返回值:** 返回反序列化后的对象
 > 注： `<dynamic>` 已经包含在 DeserializeObject(string json) 方法中，因为返回类型是 `<dynamic>`，所以不需要额外的方法。
 ___
-### Json序列化
+
+#### Json序列化
 ```csharp
 Rox.Text.Json.SerializeObject(object obj);
 ```
@@ -230,9 +252,9 @@ Rox.Text.Json.SerializeObject(object obj);
 * **`obj`:** 对象
 * **返回类型:** `string`
 * **返回值:** 返回序列化后的Json字符串
-## 9. API查询
+### 9. API查询
 
-### Steam个人信息查询(兼容v1)(可等待)
+#### Steam个人信息查询(兼容v1)(可等待)
 ```csharp
 Rox.API.SteamUserData.GetDataJson(string SteamID);
 Rox.API.SteamUserData_v1.GetDataJson_v1(string SteamID);
@@ -282,7 +304,7 @@ strike username = type.username; //提取用户名属性值
 | friendcode | ⚠**不兼容v1** 好友代码 |
 | profilestate| ⚠**仅v1** 如果属性返回 1 代表用户已经填写了个人资料 |
 ___
-### Steam个人信息 - 直接方法调用 (可等待)
+#### Steam个人信息 - 直接方法调用 (可等待)
 
 > **以下内容返回类型均为`string`**
 
@@ -327,7 +349,7 @@ string text = await Rox.API.SteamUserData.$void$(string SteamID);
 
 
 ___
-### 天气查询(可等待)
+#### 天气查询(可等待)
 ```csharp
 var allweather = await Rox.API.Weather.GetWeatherDataJson(string city);//获取返回的Json
 string type = allweather.$WeatherType$; //获取属性值
@@ -361,7 +383,7 @@ string temperature = allweather.temperature_1; //获取气温属性值
 | reporttime | 天气的更新时间 |
 | msg | 错误信息 |
 ___
-### 天气查询 - 直接方法调用
+#### 天气查询 - 直接方法调用
 
 > **以下内容返回类型均为`string`**
 
@@ -389,50 +411,44 @@ var weather = await Rox.API.Weather.GetWeather("黑河市"); //获取黑龙江�
 | GetWindPower | 风力 级 | 获取指定地区的风力 |
 | GetHumidity | 湿度 % | 获取SteamID64 |
 
+### 10.游戏娱乐
 
-
-## 13. 音乐解密
-
-### 裤猫音乐解密
-> [!WARNING]
-> 请勿将此项目用于商业用途, 如造成的财产和版权损失与开发者改不相关
-
+#### 获取 Steam 安装路径
 ```csharp
-Rox.Audio.ParseKGG.ChooseSigleKGGFile(); // 选择单一文件进行解密.kgg加密格式音频
-Rox.Audio.ParseKGG.ReadKGGFiles(string filepath); //选择文件夹进行识别格式解密.kgg加密格式音频
-Rox.Audio.ParseKGM.ChooseSigleKGMFile(); // 虚着呢单一文件进行解密.kgm加密格式音频
-Rox.Audio.ParseKGM.ReadKGMFiles(string filepath); //选择文件夹进行识别格式解密.kgm加密格式音频
+Rox.GameExpansionFeatures.Steam.GetSteamPath();
 ```
-
-* **`filepath`:** 文件夹
-## 14. Node.js
-
-### 提取Node.js
-```csharp
-string _return = Rox.Runtimes.NodeJs.ExtractNodeJs(string ExtarctFolder); //提取Node.js到指定文件夹
-```
-> Node.js版本为node-v22.15.1-win-x86,使用32位
-* **`ExtractFolder`:** 指定被提取的文件夹
 * **返回类型:** `string`
-* **返回值:** 参数为`null`或路径不合法返回`Error`并弹出`MessageBox`, 如果文件夹已经存在`node.exe`或提取完成返回**Node.js文件路径**, 资源未找到返回`_RES_FILE_NOT_FIND`本地化字符串, 提取失败返回PowerShell进程退出码.
+* **返回值:** Steam 安装文件夹
 
-### 检查Node.Js是否存在
+
+
+#### 获取CS2安装路径
 ```csharp
-Rox.Runtimes.NodeJs.CheckNodeJs(string ExtraedFolder); //检查文件夹内有没有提取过的Node.js
+Rox.GameExpansionFeatures.CSGO.GetCS2Path();
 ```
-* **`ExtractedFolder`:** 指定提取过的文件夹
 * **返回类型:** `string`
-* **返回值:** 参数为`null`或路径不合法返回`Error`并弹出`MessageBox`, 如果文件夹已经存在`node.exe`或提取完成返回**Node.js文件路径**, 资源未找到返回`_RES_FILE_NOT_FIND`本地化字符串, 提取失败返回PowerShell进程退出码.
+* **返回值:** CS2的存放文件夹路径
 
-## 15. 发送Windows通知
-
-> 此功能要求系统版本为Windows 10以上
-
+#### Minecraft Java版 村庄英雄Buff加成的交易价格计算
 ```csharp
-Rox.Runtimes.WindowsToast.PostToastNotification(string title, string content);
+Rox.GameExpansionFeatures.Minecraft.TradingWithHeroOfVillage_Calculator(int BasePrice, int HearoOfVillage_Level);
 ```
-* **`title`:** 发送通知的标题
-* **`content`:** 发送通知的内容
-> 暂不支持图片, 后续会加入
+* **BasePrice:** 基础价格
+* **HearoOfVillage_Level:** "村庄英雄"效果等级, 范围 1-5
+* **返回类型:** `int`
+* **返回值:** 计算后的交易价格
 
-发送通知前会在本地的 `bin` 文件夹下生成 `WindowsToast.exe` 用来发送通知
+
+## 开发环境
+[Visual Studio 2026](https://visualstudio.microsoft.com/zh-hans/vs)
+- 系统要求
+	- [Windows 11 版本 21H2 或更高版本：家庭版、专业版、专业教育版、专业工作站版、企业版和教育版](https://learn.microsoft.com/zh-cn/visualstudio/releases/2026/vs-system-requirements)
+	- Windows 10 版本 1909 或更高版本：家庭版、专业版、教育版和企业版。
+	- 64 位操作系统, 基于 x64 的处理器
+- 工作负荷
+	- 桌面应用和移动应用
+		- .NET 桌面开发
+- 编译语言
+	- C# .NET Framework 4.7.2
+- 依赖项
+	- [视觉窗体库 AntdUI](https://www.nuget.org/packages/AntdUI)
