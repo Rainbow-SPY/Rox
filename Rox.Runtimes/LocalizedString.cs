@@ -188,6 +188,38 @@ namespace Rox
             /// </summary>
             public static readonly string _ENABLE_WINDOWS_UPDATER = GetLocalizedString("_ENABLE_WINDOWS_UPDATER");
             /// <summary>
+            /// 验证窗口创建失败，请以管理员身份运行程序
+            /// </summary>
+            public static readonly string _WINDOW_CREATE_ERROR = GetLocalizedString("_WINDOW_CREATE_ERROR");
+            /// <summary>
+            /// 凭据解析失败，请检查账户格式
+            /// </summary>
+            public static readonly string _CREDENTIAL_PARSE_ERROR = GetLocalizedString("_CREDENTIAL_PARSE_ERROR");
+            /// <summary>
+            /// Microsoft账户请输入完整邮箱（如xxx@outlook.com），开启两步验证需使用应用密码
+            /// </summary>
+            public static readonly string _TIP_MICROSOFT_ACCOUNT = GetLocalizedString("_TIP_MICROSOFT_ACCOUNT");
+            /// <summary>
+            /// 组策略路径：计算机配置→Windows设置→安全设置→本地策略→安全选项→账户：允许空密码的本地账户登录
+            /// </summary>
+            public static readonly string _TIP_EMPTY_PASSWORD_POLICY = GetLocalizedString("_TIP_EMPTY_PASSWORD_POLICY");
+            /// <summary>
+            /// 账户已过期
+            /// </summary>
+            public static readonly string _LOGIN_ERROR_ACCOUNT_EXPIRED = GetLocalizedString("_LOGIN_ERROR_ACCOUNT_EXPIRED");
+            /// <summary>
+            /// 无密码登录失败，请启用「允许空密码本地账户登录」策略
+            /// </summary>
+            public static readonly string _LOGIN_ERROR_1385 = GetLocalizedString("_LOGIN_ERROR_1385");
+            /// <summary>
+            /// 密码长度不符合要求
+            /// </summary>
+            public static readonly string _LOGIN_ERROR_1382 = GetLocalizedString("_LOGIN_ERROR_1382");
+            /// <summary>
+            /// 密码不符合密码策略要求
+            /// </summary>
+            public static readonly string _LOGIN_ERROR_1383 = GetLocalizedString("_LOGIN_ERROR_1383");
+            /// <summary>
             /// Windows 已激活
             /// </summary>
             public static readonly string _ACTIVE_WINDOWS = GetLocalizedString("_ACTIVE_WINDOWS");

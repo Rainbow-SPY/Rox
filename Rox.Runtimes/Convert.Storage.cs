@@ -3,6 +3,9 @@ using System.Text.RegularExpressions;
 
 namespace Rox.Runtimes
 {
+    /// <summary>
+    /// 各种东西的互相转换
+    /// </summary>
     public class Convert
     {
 
@@ -20,7 +23,6 @@ namespace Rox.Runtimes
             if (string.IsNullOrWhiteSpace(valueWithUnit))
                 throw new ArgumentNullException(nameof(valueWithUnit));
 
-            // 匹配数值和单位（支持大小写，如2KB、3.5mb等）
             var match = Regex.Match(valueWithUnit.Trim(), @"^(\d+(\.\d+)?)\s*([BKMGTP]B?)$", RegexOptions.IgnoreCase);
             if (!match.Success)
                 throw new ArgumentException($"无效的格式: {valueWithUnit}，示例：2KB、3.5MB", nameof(valueWithUnit));

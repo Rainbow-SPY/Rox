@@ -214,6 +214,15 @@ namespace Rox.Runtimes.Properties {
         }
         
         /// <summary>
+        ///   查找类似 凭据解析失败，请检查账户格式 的本地化字符串。
+        /// </summary>
+        public static string _CREDENTIAL_PARSE_ERROR {
+            get {
+                return ResourceManager.GetString("_CREDENTIAL_PARSE_ERROR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 当前版本 的本地化字符串。
         /// </summary>
         public static string _CURRENT_VER {
@@ -565,6 +574,42 @@ namespace Rox.Runtimes.Properties {
         }
         
         /// <summary>
+        ///   查找类似 密码长度不符合要求 的本地化字符串。
+        /// </summary>
+        public static string _LOGIN_ERROR_1382 {
+            get {
+                return ResourceManager.GetString("_LOGIN_ERROR_1382", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 密码不符合密码策略要求 的本地化字符串。
+        /// </summary>
+        public static string _LOGIN_ERROR_1383 {
+            get {
+                return ResourceManager.GetString("_LOGIN_ERROR_1383", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 无密码登录失败，请启用「允许空密码本地账户登录」策略 的本地化字符串。
+        /// </summary>
+        public static string _LOGIN_ERROR_1385 {
+            get {
+                return ResourceManager.GetString("_LOGIN_ERROR_1385", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 账户已过期 的本地化字符串。
+        /// </summary>
+        public static string _LOGIN_ERROR_ACCOUNT_EXPIRED {
+            get {
+                return ResourceManager.GetString("_LOGIN_ERROR_ACCOUNT_EXPIRED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 登录失败: 用户名未知或密码错误。 的本地化字符串。
         /// </summary>
         public static string _LOGIN_ERROR_USER_OR_PASSWORD {
@@ -736,6 +781,24 @@ namespace Rox.Runtimes.Properties {
         }
         
         /// <summary>
+        ///   查找类似 组策略路径：计算机配置→Windows设置→安全设置→本地策略→安全选项→账户：允许空密码的本地账户登录 的本地化字符串。
+        /// </summary>
+        public static string _TIP_EMPTY_PASSWORD_POLICY {
+            get {
+                return ResourceManager.GetString("_TIP_EMPTY_PASSWORD_POLICY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Microsoft账户请输入完整邮箱（如xxx@outlook.com），开启两步验证需使用应用密码 的本地化字符串。
+        /// </summary>
+        public static string _TIP_MICROSOFT_ACCOUNT {
+            get {
+                return ResourceManager.GetString("_TIP_MICROSOFT_ACCOUNT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 提示 的本地化字符串。
         /// </summary>
         public static string _TIPS {
@@ -786,6 +849,15 @@ namespace Rox.Runtimes.Properties {
         public static string _WARNING {
             get {
                 return ResourceManager.GetString("_WARNING", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 验证窗口创建失败，请以管理员身份运行程序 的本地化字符串。
+        /// </summary>
+        public static string _WINDOW_CREATE_ERROR {
+            get {
+                return ResourceManager.GetString("_WINDOW_CREATE_ERROR", resourceCulture);
             }
         }
         
@@ -892,7 +964,7 @@ namespace Rox.Runtimes.Properties {
         }
         
         /// <summary>
-        ///   查找类似 NinjaMagisk Common Interface Libraries 的本地化字符串。
+        ///   查找类似 Rox Common Interface Libraries 的本地化字符串。
         /// </summary>
         public static string Product {
             get {

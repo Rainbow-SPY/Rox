@@ -13,7 +13,7 @@ namespace Rox
         /// </summary>
         public class Directory_I
         {
-            #region COM 接口定义 (修正版)
+            #region COM 接口定义
             /// <summary>
             /// 文件复制操作接口
             /// </summary>
@@ -333,7 +333,7 @@ namespace Rox
             #endregion
 
             /// <summary>
-            /// 复制目录方法（保持原始调用方式不变）
+            /// 复制目录方法
             /// </summary>
             public static bool CopyDirectory(string sourceDirectory, string destinationDirectory, IWin32Window ownerWindow = null,
                 FileOperationFlags flags = FileOperationFlags.FOF_NOCONFIRMMKDIR | FileOperationFlags.FOF_SIMPLEPROGRESS)
@@ -347,7 +347,7 @@ namespace Rox
 
                 try
                 {
-                    // 创建文件操作对象（正确方式）
+                    // 创建文件操作对象
                     var fileOperation = (IFileOperation)new FileOperation();
 
                     // 设置操作标志
@@ -360,16 +360,14 @@ namespace Rox
                     }
 
                     // 创建源目录的ShellItem
-                    IShellItem sourceItem;
-                    int hr = SHCreateItemFromParsingName(sourceDirectory, IntPtr.Zero, typeof(IShellItem).GUID, out sourceItem);
+                    int hr = SHCreateItemFromParsingName(sourceDirectory, IntPtr.Zero, typeof(IShellItem).GUID, out IShellItem sourceItem);
                     if (hr != 0) Marshal.ThrowExceptionForHR(hr);
 
                     // 创建目标父目录的ShellItem
                     string destParent = Path.GetDirectoryName(destinationDirectory);
                     string newFolderName = Path.GetFileName(destinationDirectory);
 
-                    IShellItem destParentItem;
-                    hr = SHCreateItemFromParsingName(destParent, IntPtr.Zero, typeof(IShellItem).GUID, out destParentItem);
+                    hr = SHCreateItemFromParsingName(destParent, IntPtr.Zero, typeof(IShellItem).GUID, out IShellItem destParentItem);
                     if (hr != 0)
                     {
                         Marshal.ReleaseComObject(sourceItem);

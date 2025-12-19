@@ -109,7 +109,6 @@
     <Compile Include="Thread_I.cs" />
     <Compile Include="Windows.Authentication.cs" />
     <Compile Include="Windows.cs" />
-    <Compile Include="WindowsToast.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
