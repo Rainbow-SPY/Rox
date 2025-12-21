@@ -17,9 +17,7 @@ namespace Rox.Text
         {
             // 1. 空值/长度校验：必须是18位
             if (string.IsNullOrWhiteSpace(idCard) || idCard.Length != 18)
-            {
                 return false;
-            }
 
             // 先通过正则初步验证格式
             if (!Regex.IsMatch(idCard, @"^\d{6}(18|19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])\d{3}[\dXx]$"))
@@ -55,42 +53,34 @@ namespace Rox.Text
             for (int i = 0; i < 17; i++)
             {
                 if (!int.TryParse(idCard[i].ToString(), out int num))
-                {
                     return false;
-                }
                 sum += num * weight[i];
             }
 
             // 计算余数并匹配校验码
-            int remainder = sum % 11;
-            char actualCheckCode = char.ToUpper(idCard[17]); // 统一转为大写
-            return actualCheckCode == checkCode[remainder];
+            // 统一转为大写
+            return char.ToUpper(idCard[17]) == checkCode[sum % 11];
         }
         /// <summary>
         /// 从身份证号码中提取出生日期
         /// </summary>
         /// <param name="idCard"></param>
         /// <returns> 出生日期字符串，格式为yyyyMMdd；如果身份证号码不合法则返回null </returns>
-        public static string GetBirthDate(string idCard)
-        {
-            if (!IsValidIdCard(idCard))
-                return null;
-            return idCard.Substring(6, 8); // 返回格式为yyyyMMdd
-        }
+        public static string GetBirthDate(string idCard) => IsValidIdCard(idCard) ? idCard.Substring(6, 8) : null;
         /// <summary>
         /// 计算身份证持有者的年龄
         /// </summary>
         /// <param name="idCard"></param>
-        /// <returns></returns>
+        /// <returns>年龄</returns>
         public static int GetAge(string idCard)
         {
             string birthDateStr = GetBirthDate(idCard);
             if (birthDateStr == null)
                 return -1;
             DateTime birthDate = DateTime.ParseExact(birthDateStr, "yyyyMMdd", null);
-            DateTime today = DateTime.Today;
-            int age = today.Year - birthDate.Year;
-            if (birthDate > today.AddYears(-age)) age--;
+            int age = DateTime.Today.Year - birthDate.Year;
+            if (birthDate > DateTime.Today.AddYears(-age))
+                age--;
             return age;
         }
         /// <summary>
@@ -104,13 +94,6 @@ namespace Rox.Text
         /// </summary>
         /// <param name="idCard"></param>
         /// <returns> 是男性返回true，否则返回false </returns>
-        public static bool IsMan(string idCard)
-        {
-            if (!IsValidIdCard(idCard))
-                return false;
-            // 倒数第二位奇数为男性，偶数为女性
-            return int.Parse(idCard.Substring(16, 1)) % 2 == 1;
-        }
-
+        public static bool IsMan(string idCard) => IsValidIdCard(idCard) && int.Parse(idCard.Substring(16, 1)) % 2 == 1;
     }
 }
