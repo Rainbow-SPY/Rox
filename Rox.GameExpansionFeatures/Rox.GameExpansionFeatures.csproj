@@ -60,6 +60,8 @@
   <ItemGroup>
     <Compile Include="CSGO.cs" />
     <Compile Include="CSGO.mp.cs" />
+    <Compile Include="EpicGames.GetFreeGames.cs" />
+    <Compile Include="EpicGames.GetFreeGames.EpicType.cs" />
     <Compile Include="Minecraft.Command.cs" />
     <Compile Include="Minecraft.cs" />
     <Compile Include="Minecraft.Version.VersionCheck.cs" />
@@ -74,6 +76,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="only logo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.4</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -138,7 +138,7 @@ namespace Rox.GameExpansionFeatures
                 // 检查响应是否成功
                 if (!response.IsSuccessStatusCode)
                 {
-                    WriteLog.Error($"请求失败: {response.StatusCode}, {_HttpClient_Request_Failed}");
+                    WriteLog.Error(LogKind.Network,$"请求失败: {response.StatusCode}, {_HttpClient_Request_Failed}");
                     if (IsMessageBox)
                         MessageBox_I.Error($"请求失败: {response.StatusCode}, {_HttpClient_Request_Failed}", _ERROR);
                     return null;
@@ -150,7 +150,7 @@ namespace Rox.GameExpansionFeatures
                 // 压缩 JSON 字符串
                 WriteLog.Info(LogKind.Json, "压缩 Json");
                 string compressedJson = CompressJson(responseData);
-                WriteLog.Info(LogKind.Json, $"反序列化 Json");
+                WriteLog.Info(LogKind.Json, "反序列化 Json");
                 var SteamType = DeserializeObject<SteamType>(compressedJson);
                 switch (SteamType.code)
                 {
