@@ -341,7 +341,7 @@ namespace Rox
                 if (!Directory.Exists(sourceDirectory))
                 {
                     MessageBox_I.Error("源目录不存在: " + sourceDirectory, _ERROR);
-                    WriteLog.Error($"CopyDirectory failed: Source directory does not exist: {sourceDirectory}");
+                    WriteLog.Error("Copy", $"复制失败: 源目录不存在: {sourceDirectory}");
                     return false;
                 }
 
@@ -378,19 +378,18 @@ namespace Rox
                     fileOperation.CopyItem(sourceItem, destParentItem, newFolderName, IntPtr.Zero);
                     fileOperation.PerformOperations();
 
-                    bool aborted = fileOperation.GetAnyOperationsAborted();
 
                     // 释放资源
                     Marshal.ReleaseComObject(sourceItem);
                     Marshal.ReleaseComObject(destParentItem);
                     Marshal.ReleaseComObject(fileOperation);
 
-                    return !aborted;
+                    return !fileOperation.GetAnyOperationsAborted();
                 }
                 catch (Exception ex)
                 {
                     MessageBox_I.Error($"复制目录时出错: {ex.Message}", _ERROR);
-                    WriteLog.Error($"CopyDirectory failed: {ex.Message}");
+                    WriteLog.Error($"复制目录时出错: " + _Exception_With_xKind("CopyDirectory", ex));
                     return false;
                 }
             }

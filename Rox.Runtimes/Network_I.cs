@@ -28,7 +28,7 @@ namespace Rox
                 catch
                 {
                     // 发生异常视为无网络
-                    WriteLog.Warning($"{_NOTAVAILABLE_NETWORK}");
+                    WriteLog.Warning(_NOTAVAILABLE_NETWORK);
                     return false;
                 }
             }

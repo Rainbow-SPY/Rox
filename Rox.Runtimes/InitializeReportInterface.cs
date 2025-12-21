@@ -18,11 +18,7 @@ namespace Rox.Runtimes
             /// 构造函数
             /// </summary>
             /// <param name="mainFormFactory">创建主窗体的工厂方法</param>
-            /// <param name="crashAction">崩溃处理逻辑</param>
-            public InitializeReportInterface(Func<Form> mainFormFactory)
-            {
-                _mainFormFactory = mainFormFactory ?? throw new ArgumentNullException(nameof(mainFormFactory));
-            }
+            public InitializeReportInterface(Func<Form> mainFormFactory) => _mainFormFactory = mainFormFactory ?? throw new ArgumentNullException(nameof(mainFormFactory));
 
             /// <summary>
             /// 启动应用程序
@@ -51,9 +47,7 @@ namespace Rox.Runtimes
                 AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
                 {
                     if (e.ExceptionObject is Exception ex)
-                    {
                         HandleCrash(ex);
-                    }
                 };
 
                 Application.ThreadException += (sender, e) =>
@@ -67,9 +61,7 @@ namespace Rox.Runtimes
                     Application.SetCompatibleTextRenderingDefault(false);
                     // 使用工厂方法创建主窗体
                     using (var mainForm = _mainFormFactory())
-                    {
                         Application.Run(mainForm);
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -82,9 +74,6 @@ namespace Rox.Runtimes
             /// </summary>
             private void HandleCrash(Exception ex)
             {
-               
-                // 调用外部提供的崩溃处理逻辑
-                // 2. 定义崩溃处理逻辑（异常处理委托）
                 using (Form f = new Reporter(ex))
                 {
                     f.TopMost = true;   

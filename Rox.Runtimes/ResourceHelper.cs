@@ -1,5 +1,7 @@
 ﻿using Rox.Runtimes.Properties;
+using System;
 using System.Resources;
+using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
 namespace Rox
 {
@@ -15,28 +17,13 @@ namespace Rox
             /// </summary>
             /// <param name="lang"></param>
             /// <returns>语言字符串</returns>
-            private static bool IsChineseSimple(string lang)
-            {
-                return lang == "zh-CN" || lang == "zh-CHS";
-            }
+            private static bool IsChineseSimple(string lang) => lang == "zh-CN" || lang == "zh-CHS";
             /// <summary>
             /// 获取资源管理器
             /// </summary>
             /// <param name="lang"></param>
             /// <returns>指定语言文件的资源管理器</returns>
-            private static ResourceManager GetResourceManager(string lang)
-            {
-                if (IsChineseSimple(lang))
-                {
-                    // 如果是中文（zh-CN 或 zh-Hans），返回 Resources.resx 的资源管理器
-                    return new ResourceManager("Rox.Runtimes.Properties.Resources", typeof(Resources).Assembly);
-                }
-                else
-                {
-                    // 如果是其他语言，返回 Resource1.resx 的资源管理器
-                    return new ResourceManager("Rox.Runtimes.Properties.Resource1", typeof(Resource1).Assembly);
-                }
-            }
+            private static ResourceManager GetResourceManager(string lang) => new ResourceManager($"Rox.Runtimes.Properties.Resource{(IsChineseSimple(lang) ? "s" : "1")}", typeof(Resource1).Assembly);
             /// <summary>
             /// 获取字符串资源
             /// </summary>
@@ -47,14 +34,12 @@ namespace Rox
             {
                 try
                 {
-                    ResourceManager resourceManager = GetResourceManager(lang);
-                    string value = resourceManager.GetString(key);
-                    return value;
+                    return GetResourceManager(lang).GetString(key);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    WriteLog.Error($"资源键 '{key}' 未找到，语言: {lang}");
-                    WriteLog.Info($"Error:{key} ");
+                    WriteLog.Error("ResourceManager", $"资源键 '{key}' 未找到，语言: {lang}");
+                    WriteLog.Error("ResourceManager", _Exception_With_xKind("ResourceHelper.GetString", ex));
                     return null;
                 }
             }

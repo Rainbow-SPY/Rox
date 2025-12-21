@@ -23,19 +23,18 @@ namespace Rox.Runtimes
                     return false;
                 }
 
-                // 计算文件的MD5哈希值
-                string actualMD5 = CalculateMD5(filePath);
 
                 // 检查哈希值是否匹配
-                if (actualMD5 != expectedMD5)
+                if (CalculateMD5(filePath) != expectedMD5)
                 {
-                    MessageBox_I.Error($"文件 {filePath} 的MD5哈希值不匹配。\n预期: {expectedMD5}\n实际: {actualMD5}", _ERROR);
+                    MessageBox_I.Error($"文件 {filePath} 的MD5哈希值不匹配。\n预期: {expectedMD5}\n实际: {CalculateMD5(filePath)}", _ERROR);
                     return false;
                 }
                 return true;
             }
             catch (Exception ex)
             {
+                WriteLog.Error("Hash",_Exception_With_xKind("CheckFileHash", ex));
                 MessageBox_I.Error($"检查文件 {filePath} 时发生错误: {ex.Message}", _ERROR);
                 return false;
             }

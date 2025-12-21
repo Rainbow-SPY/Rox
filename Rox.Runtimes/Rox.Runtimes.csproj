@@ -87,7 +87,6 @@
     <Compile Include="LogLibraries\LogLibraries.WriteLog.cs" />
     <Compile Include="Security.cs" />
     <Compile Include="Network_I.cs" />
-    <Compile Include="NodeJs.cs" />
     <Compile Include="Properties\Resource1.Designer.cs">
       <DependentUpon>Resource1.resx</DependentUpon>
       <AutoGen>True</AutoGen>

@@ -39,24 +39,35 @@ namespace Rox.Runtimes
         {
             string arg;
             string Switch = Enable ? "+" : "-";
-            if (key == Properties.Readonly) arg = $"{Switch}r";
-            else if (key == Properties.System) arg = $"{Switch}s";
-            else if (key == Properties.Hidden) arg = $"{Switch}h";
-            else if (key == Properties.Archive) arg = $"{Switch}a";
-            else
+            switch (key)
             {
-                MessageBox_I.Error("Unsupported property type.", _ERROR);
-                WriteLog.Error("_UNSUPPORT_PROPERTY_TYPE");
-                return;
+                case Properties.Readonly:
+                    arg = $"{Switch}r";
+                    break;
+                case Properties.System:
+                    arg = $"{Switch}s";
+                    break;
+                case Properties.Hidden:
+                    arg = $"{Switch}h";
+                    break;
+                case Properties.Archive:
+                    arg = $"{Switch}a";
+                    break;
+                default:
+                    MessageBox_I.Error("Unsupported property type.", _ERROR);
+                    WriteLog.Error("_UNSUPPORT_PROPERTY_TYPE");
+                    return;
             }
-            Process process = new Process();
-            process.StartInfo.FileName = "attrib";
-            process.StartInfo.Arguments = $"{arg} {path}";
-            process.Start();
-            WriteLog.Info($"{_PROCESS_STARTED}: {process.Id}");
-            process.WaitForExit();
-            WriteLog.Info($"{_PROCESS_EXITED}: {process.ExitCode}");
-            process.Close();
+            using (var process = new Process())
+            {
+                process.StartInfo.FileName = "attrib";
+                process.StartInfo.Arguments = $"{arg} {path}";
+                process.Start();
+                WriteLog.Info($"{_PROCESS_STARTED}: {process.Id}");
+                process.WaitForExit();
+                WriteLog.Info($"{_PROCESS_EXITED}: {process.ExitCode}");
+                process.Close();
+            }
         }
     }
 }

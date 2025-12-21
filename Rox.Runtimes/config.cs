@@ -89,7 +89,7 @@ namespace Rox.Runtimes
         /// <param name="description"> 文件类型描述 </param>
         public static void RegisteredCustomFileExt(string extension, string description)
         {
-            string ext = "";
+            string ext;
             if (!extension.StartsWith("."))
             {
                 ext = extension;
@@ -98,14 +98,19 @@ namespace Rox.Runtimes
             else
                 ext = extension.Replace(".", "");
 
-            RegistryKey a = Registry.ClassesRoot.CreateSubKey(extension);
-            a.SetValue("", ext);
-            WriteLog.Info(LogKind.Registry, $"Registered {extension} file extension");
-            a.Close();
-            RegistryKey b = Registry.ClassesRoot.CreateSubKey(ext);
-            b.SetValue("", description);
-            WriteLog.Info(LogKind.Registry, $"Registered {extension} file extension as {description}");
-            b.Close();
+            using (RegistryKey a = Registry.ClassesRoot.CreateSubKey(extension))
+            {
+                a.SetValue("", ext);
+                WriteLog.Info(LogKind.Registry, $"Registered {extension} file extension");
+                a.Close();
+            }
+
+            using (RegistryKey b = Registry.ClassesRoot.CreateSubKey(ext))
+            {
+                b.SetValue("", description);
+                WriteLog.Info(LogKind.Registry, $"Registered {extension} file extension as {description}");
+                b.Close();
+            }
         }
         /// <summary>
         /// 注册自定义文件扩展名并关联打开命令
@@ -115,7 +120,7 @@ namespace Rox.Runtimes
         /// <param name="opencommand"> 打开命令, 例如 "notepad.exe \"%1\"" </param>
         public static void RegisteredCustomFileExt(string extension, string description, string opencommand)
         {
-            string ext = "";
+            string ext;
             if (!extension.StartsWith("."))
             {
                 ext = extension;
@@ -124,10 +129,12 @@ namespace Rox.Runtimes
             else
                 ext = extension.Replace(".", "");
             RegisteredCustomFileExt(extension, description);
-            RegistryKey a = Registry.ClassesRoot.CreateSubKey($"{ext}\\shell\\open\\command");
-            a.SetValue("", opencommand);
-            WriteLog.Info(LogKind.Registry, $"Associated {extension} file extension with {opencommand}");
-            a.Close();
+            using (RegistryKey a = Registry.ClassesRoot.CreateSubKey($"{ext}\\shell\\open\\command"))
+            {
+                a.SetValue("", opencommand);
+                WriteLog.Info(LogKind.Registry, $"Associated {extension} file extension with {opencommand}");
+                a.Close();
+            }
         }
     }
 }

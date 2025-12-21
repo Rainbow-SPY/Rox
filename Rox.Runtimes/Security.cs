@@ -10,53 +10,25 @@ namespace Rox
         /// 检测360安全卫士是否在运行
         /// </summary>
         /// <returns>运行返回 <see langword="true"></see> 未运行返回 <see langword="false"></see></returns>
-        public static bool Is360SafeRunning()
-        {
-            Process[] processes = Process.GetProcessesByName("360Tray");
-            if (processes.Length > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        public static bool Is360SafeRunning() => Process.GetProcessesByName("360Tray").Length > 0;
         /// <summary>
         /// 检测火绒安全软件是否在运行
         /// </summary>
         /// <returns> 运行返回 <see langword="true"></see> 未运行返回 <see langword="false"></see></returns>
-        public static bool IsHuorongSecurityRunning()
-        {
-            Process[] processes = Process.GetProcessesByName("HipsTray");
-            if (processes.Length > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        public static bool IsHuorongSecurityRunning() => Process.GetProcessesByName("HipsTray").Length > 0;
         /// <summary>
-        /// 开启或关闭 Windows 安全中心 , 此方法重定向到 <see cref="Rox.Windows.WindowsSecurityCenter.Enable()"/>  和 <see cref="Rox.Windows.WindowsSecurityCenter.Disable()"/>
+        /// 开启或关闭 Windows 安全中心 , 此方法重定向到 <see cref="Rox.Windows.WindowsSecurityCenter"/>
         /// </summary>
         public class WindowsSecurity
         {
             /// <summary>
             /// 开启 Windows 安全中心 , 此方法重定向到 <see cref="Rox.Windows.WindowsSecurityCenter.Enable()"/>
             /// </summary>
-            public static void Enable()
-            {
-                Windows.WindowsSecurityCenter.Enable();
-            }
+            public static void Enable() => Windows.WindowsSecurityCenter.Enable();
             /// <summary>
             /// 关闭 Windows 安全中心 , 此方法重定向到 <see cref="Rox.Windows.WindowsSecurityCenter.Disable()"/>
             /// </summary>
-            public static void Disable()
-            {
-                Windows.WindowsSecurityCenter.Disable();
-            }
+            public static void Disable() => Windows.WindowsSecurityCenter.Disable();
         }
     }
     #region 此类废弃, 等我去写新代码, 精力不够 QAQ

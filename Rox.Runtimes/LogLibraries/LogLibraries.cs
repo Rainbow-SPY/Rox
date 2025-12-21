@@ -129,24 +129,22 @@ namespace Rox
             /// <param name="logLevel"></param>
             /// <param name="logkind"></param>
             /// <param name="message"></param>
-
             public static void LogToFile(string logLevel, string logkind, string message)
             {
                 // 创建日志信息
-                string logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{logLevel}] " + (logkind == null ? "" : $"[{logkind}]: ") + "{message}";
+                string logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{logLevel}] {(logkind == null ? "" : $"[{logkind}]: ")}{message}";
 
                 try
                 {
                     // 如果日志文件不存在，则创建
                     if (!File.Exists(logFilePath))
-                    {
                         File.Create(logFilePath).Close();
-                    }
 
                     // 以追加方式写入日志内容
                     using (StreamWriter writer = new StreamWriter(logFilePath, append: true))
                     {
                         writer.WriteLine(logMessage);
+                        writer.Close();
                     }
                 }
                 catch (Exception ex)

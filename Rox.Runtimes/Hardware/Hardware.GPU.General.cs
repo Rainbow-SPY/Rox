@@ -34,54 +34,32 @@ namespace Rox.Runtimes.Hardware.GPU
                 if (File.Exists(path))
                 {
                     // 只读取前2000行, 避免文件过大
-                    var lines = File.ReadLines(path).Take(200);
-                    foreach (var a in lines)
+                    foreach (var a in File.ReadLines(path).Take(200))
                     {
                         var line = a.Trim();
                         if (line.Contains("Card name:"))
-                        {
                             Information.FullName = line.Split(':')[1].Trim();
-                        }
-
                         else if (line.Contains("Manufacturer:"))
-                        {
                             Information.Manufacturer = line.Split(':')[1].Trim();
-                        }
                         else if (line.Contains("Dedicated Memory:"))
                         {
                             var memStr = line.Split(':')[1].Trim();
                             if (memStr.EndsWith("MB"))
-                            {
                                 if (double.TryParse(memStr.Replace("MB", "").Trim(), out double memMB))
-                                {
                                     Information.Memory = Math.Round(memMB / 1024, 0);
-                                }
-                            }
                             else if (memStr.EndsWith("GB"))
-                            {
                                 if (double.TryParse(memStr.Replace("GB", "").Trim(), out double memGB))
-                                {
                                     Information.Memory = Math.Round(memGB, 0);
-                                }
-                            }
                         }
                         else if (line.Contains("Shared Memory:"))
                         {
                             var sharedMemStr = line.Split(':')[1].Trim();
                             if (sharedMemStr.EndsWith("MB"))
-                            {
                                 if (double.TryParse(sharedMemStr.Replace("MB", "").Trim(), out double sharedMemMB))
-                                {
                                     Information.SharedMemory = Math.Round(sharedMemMB / 1024, 0);
-                                }
-                            }
                             else if (sharedMemStr.EndsWith("GB"))
-                            {
                                 if (double.TryParse(sharedMemStr.Replace("GB", "").Trim(), out double sharedMemGB))
-                                {
                                     Information.SharedMemory = Math.Round(sharedMemGB, 0);
-                                }
-                            }
                         }
                     }
                 }

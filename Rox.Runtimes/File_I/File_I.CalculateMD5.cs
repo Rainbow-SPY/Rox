@@ -19,10 +19,9 @@ namespace Rox
             {
                 using (MD5 md5 = MD5.Create())
                 {
-                    using (FileStream stream = System.IO.File.OpenRead(filePath))
+                    using (FileStream stream = File.OpenRead(filePath))
                     {
-                        byte[] hashBytes = md5.ComputeHash(stream);
-                        return BitConverter.ToString(hashBytes).Replace("-", "").ToUpperInvariant();
+                        return BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "").ToUpperInvariant();
                     }
                 }
             }

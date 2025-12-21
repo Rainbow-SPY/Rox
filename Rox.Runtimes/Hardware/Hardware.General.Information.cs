@@ -35,8 +35,7 @@ namespace Rox.Runtimes.Hardware
                 {
                     return info;
                 }
-                var lines = File.ReadLines(path);
-                foreach (var line in lines)
+                foreach (var line in File.ReadLines(path))
                 {
                     if (line.Contains("操作系统名称"))
                         info.System.OperatingSystemName = line.Split('\t')[1].Trim();
@@ -83,18 +82,18 @@ namespace Rox.Runtimes.Hardware
         {
             try
             {
-                Information._Sound sound = new Information._Sound();
-                ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_SoundDevice");
-                foreach (ManagementObject device in searcher.Get().Cast<ManagementObject>())
+                using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_SoundDevice"))
                 {
-                    // 设备名称
-                    string name = device["Name"]?.ToString();
-                    // 设备描述
-                    string description = device["Description"]?.ToString();
-                    sound.Name = name;
-                    sound.Description = description;
-                    return sound;
+                    foreach (ManagementObject device in searcher.Get().Cast<ManagementObject>())
+                    {
+                        return new Information._Sound
+                        {
+                            Name = (device["Name"]?.ToString()),
+                            Description = (device["Description"]?.ToString())
+                        };
+                    }
                 }
+
                 return null;
             }
             catch (Exception ex)
@@ -185,6 +184,9 @@ namespace Rox.Runtimes.Hardware
                 /// 操作系统名称
                 /// </summary>
                 public string OperatingSystemName { get; set; }
+                /// <summary>
+                /// 计算机名称
+                /// </summary>
                 public string MachineName { get; set; }
                 /// <summary>
                 /// 是否为UEFI启动
@@ -206,7 +208,6 @@ namespace Rox.Runtimes.Hardware
                 /// 系统型号
                 /// </summary>
                 public string SystemModel { get; set; }
-
                 /// <summary>
                 /// 内核DMA保护状态
                 /// </summary>
@@ -230,8 +231,6 @@ namespace Rox.Runtimes.Hardware
                 /// </summary>
                 public string Model { get; set; }
             }
-
-
         }
     }
 }

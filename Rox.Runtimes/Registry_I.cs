@@ -23,18 +23,18 @@ namespace Rox
                 try
                 {
                     // 打开注册表项
-                    using (RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(keyPath))
+                    using (RegistryKey key = Registry.CurrentUser.CreateSubKey(keyPath))
                     {
                         // 写入值
-                        WriteLog.Info($"{_WRITE_REGISTRY}");
+                        WriteLog.Info(LogKind.Registry, _WRITE_REGISTRY);
                         key.SetValue(valueName, valueData, valueType);
                         key.Close();
                     }
-                    LogLibraries.WriteLog.Info($"{_SUCESS_WRITE_REGISTRY}");
+                    WriteLog.Info(LogKind.Registry, _SUCESS_WRITE_REGISTRY);
                 }
                 catch (Exception ex)
                 {
-                    LogLibraries.WriteLog.Error($"{_WRITE_REGISTRY_FAILED}: {ex.Message}");
+                    WriteLog.Error(LogKind.Registry, $"{_WRITE_REGISTRY_FAILED}: {ex.Message}");
                 }
             }
             /// <summary>
@@ -43,10 +43,10 @@ namespace Rox
             /// <param name="keyName"> 注册表项路径</param>
             /// <param name="valueName"> 注册表项名称</param>
             /// <returns> 返回注册表项的值</returns>
-            internal static string GetRegistryValue(string keyName, string valueName)
+            public static string GetRegistryValue(string keyName, string valueName)
             {
                 string value = "";
-                using (var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(keyName))
+                using (var key = Registry.CurrentUser.OpenSubKey(keyName))
                 {
                     if (key != null)
                     {
@@ -71,10 +71,12 @@ namespace Rox
                         if (string.IsNullOrEmpty(bindKeyName))
                             return false;
 
-                        using (RegistryKey bindKey = Registry.ClassesRoot.OpenSubKey(bindKeyName, true))
+                        using (var bindKey = Registry.ClassesRoot.OpenSubKey(bindKeyName, true))
                         {
                             bindKey?.SetValue("DefaultIcon", _ico);
+                            bindKey.Close();
                         }
+
                         return true;
                     }
                     catch (Exception ex)
@@ -93,10 +95,12 @@ namespace Rox
                         if (string.IsNullOrEmpty(bindKeyName))
                             return false;
 
-                        using (RegistryKey bindKey = Registry.ClassesRoot.OpenSubKey(bindKeyName, true))
+                        using (var bindKey = Registry.ClassesRoot.OpenSubKey(bindKeyName, true))
                         {
                             bindKey?.SetValue("DefaultIcon", _ico);
+                            bindKey.Close();
                         }
+
                         return true;
                     }
                     catch (Exception ex)
@@ -111,12 +115,11 @@ namespace Rox
                     {
                         string _key = FindBindKey(_ext);
                         if (_key != null)
-                        {
-                            using (RegistryKey key = Registry.ClassesRoot.OpenSubKey(_key, writable: true))
+                            using (var key = Registry.ClassesRoot.OpenSubKey(_key, writable: true))
                             {
                                 key.SetValue("", _des);
+                                key.Close();
                             }
-                        }
                         else
                         {
                             // 创建唯一关联键名 (如 "MyApp.txtfile")
@@ -124,10 +127,13 @@ namespace Rox
                             using (RegistryKey extKey = Registry.ClassesRoot.CreateSubKey(_ext))
                             {
                                 extKey.SetValue("", newKeyName);
+                                extKey.Close();
                             }
+
                             using (RegistryKey bindKey = Registry.ClassesRoot.CreateSubKey(newKeyName))
                             {
                                 bindKey.SetValue("", _des);
+                                bindKey.Close();
                             }
                         }
                         return true;
@@ -143,12 +149,11 @@ namespace Rox
                     try
                     {
                         if (_key != null)
-                        {
                             using (RegistryKey key = Registry.ClassesRoot.OpenSubKey(_key, writable: true))
                             {
                                 key.SetValue("", _des);
+                                key.Close();
                             }
-                        }
                         else
                         {
                             // 创建唯一关联键名 (如 "MyApp.txtfile")
@@ -156,10 +161,12 @@ namespace Rox
                             using (RegistryKey extKey = Registry.ClassesRoot.CreateSubKey(_ext))
                             {
                                 extKey.SetValue("", newKeyName);
+                                extKey.Close();
                             }
                             using (RegistryKey bindKey = Registry.ClassesRoot.CreateSubKey(newKeyName))
                             {
                                 bindKey.SetValue("", _des);
+                                bindKey.Close();
                             }
                         }
                         return true;
@@ -176,9 +183,7 @@ namespace Rox
                     try
                     {
                         using (RegistryKey key = Registry.ClassesRoot.OpenSubKey(_ext))
-                        {
-                            return key?.GetValue("")?.ToString(); // 安全访问
-                        }
+                            return key?.GetValue("")?.ToString();
                     }
                     catch (Exception e)
                     {
@@ -188,10 +193,11 @@ namespace Rox
                 }
                 internal static string CreateExtKey(string _ext)
                 {
-                    RegistryKey a = Registry.ClassesRoot.CreateSubKey(_ext);
-                    var _path = a.ToString();
-                    a.Close();
-                    return _path;
+                    using (RegistryKey a = Registry.ClassesRoot.CreateSubKey(_ext))
+                    {
+                        a.Close();
+                        return a.ToString();
+                    }
                 }
 
                 /// <summary>

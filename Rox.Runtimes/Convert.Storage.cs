@@ -28,9 +28,8 @@ namespace Rox.Runtimes
                 throw new ArgumentException($"无效的格式: {valueWithUnit}，示例：2KB、3.5MB", nameof(valueWithUnit));
 
             double value = double.Parse(match.Groups[1].Value);
-            string unit = match.Groups[3].Value.ToUpperInvariant();
 
-            switch (unit)
+            switch (match.Groups[3].Value.ToUpperInvariant())
             {
                 case "B":
                     return (long)Math.Round(value);
@@ -43,7 +42,7 @@ namespace Rox.Runtimes
                 case "TB":
                     return (long)Math.Round(value * TbFactor);
                 default:
-                    throw new ArgumentException($"不支持的单位: {unit}", nameof(valueWithUnit));
+                    throw new ArgumentException($"不支持的单位: {match.Groups[3].Value.ToUpperInvariant()}", nameof(valueWithUnit));
             }
         }
 
@@ -94,8 +93,7 @@ namespace Rox.Runtimes
         public static double ConvertToUnit(string valueWithUnit, string targetUnit)
         {
             long bytes = ToBytes(valueWithUnit);
-            string upperTargetUnit = targetUnit.ToUpperInvariant();
-            switch (upperTargetUnit)
+            switch (targetUnit.ToUpperInvariant())
             {
                 case "B":
                     return bytes;
