@@ -48,8 +48,7 @@ namespace Rox
         {
             WriteLog.Info(LogKind.System, _GET_TEMP);
             string folderPath = Path.GetTempPath();
-            string filePath = $"{Application.StartupPath}\\bin\\aria2c.exe";
-            CheckFile(filePath);
+            CheckFile($"{Application.StartupPath}\\bin\\aria2c.exe");
             if (!Runtimes.Network_I.IsNetworkAvailable())
             {
                 DialogResult dialogResult = MessageBox.Show($"{_NOTAVAILABLE_NETWORK_TIPS}", $"{_TIPS}", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
@@ -62,14 +61,13 @@ namespace Rox
             {
                 case App.EasiNote5:
                     {
-                        const string pattern = @"EasiNoteSetup_\d+(\.\d+)*_seewo\.exe";
                         const int maxRetries = 3;
                         const int checkInterval = 2000;
                         const int timeout = 60000;
                         string url = "https://e.seewo.com/download/file?code=EasiNote5";
                         bool downloadSuccess = false;
                         int retryCount = 0;
-                        Regex regex = new Regex(pattern);
+                        Regex regex = new Regex(@"EasiNoteSetup_\d+(\.\d+)*_seewo\.exe");
 
                         while (!downloadSuccess && retryCount < maxRetries)
                         {
@@ -100,9 +98,7 @@ namespace Rox
                             }
                         }
                         if (!downloadSuccess)
-                        {
                             WriteLog.Error(LogKind.Downloader, $"{_DOWNLOADING_FAILED}: EasiNote5");
-                        }
                         break;
                     }
                 case App.EasiCamera:
@@ -140,9 +136,7 @@ namespace Rox
                             }
                         }
                         if (!downloadSuccess)
-                        {
                             WriteLog.Error(LogKind.Downloader, $"{_DOWNLOADING_FAILED}: EasiCamera");
-                        }
                         break;
                     }
                 case App.WeChat:
@@ -203,9 +197,7 @@ namespace Rox
                             }
                         }
                         if (!downloadSuccess)
-                        {
                             WriteLog.Error(LogKind.Downloader, $"{_DOWNLOADING_FAILED}: {retryCount}/{maxRetries}");
-                        }
                         break;
                     }
                 case App.SeewoService:
@@ -243,9 +235,7 @@ namespace Rox
                             }
                         }
                         if (!downloadSuccess)
-                        {
                             WriteLog.Error(LogKind.Downloader, $"{_DOWNLOADING_FAILED}: SeewoService");
-                        }
 
                         break;
                     }
@@ -272,8 +262,8 @@ namespace Rox
                             checkTimer.Start();
                             while (checkTimer.ElapsedMilliseconds < timeout)
                             {
-                                var files = Directory.GetFiles(folderPath, targetFile);
                                 WriteLog.Info(LogKind.System, $"{_GET_FILES_IN_DIRECTORY}: {folderPath}");
+                                var files = Directory.GetFiles(folderPath, targetFile);
                                 if (files.Any())
                                 {
                                     WriteLog.Info(LogKind.System, $"{_GET_FILE}: {files.First()}");
@@ -292,30 +282,30 @@ namespace Rox
                             }
                         }
                         if (!downloadSuccess)
-                        {
                             WriteLog.Error(LogKind.Downloader, $"{_DOWNLOADING_FAILED}: {retryCount}/{maxRetries}");
-                        }
                         break;
                     }
             }
         }
         internal static void Install(string FileName)
         {
-            Process install = new Process();
-            install.StartInfo.FileName = FileName;
-            install.Start();
-            WriteLog.Info(LogKind.Process, $"{_PROCESS_STARTED}: {install.Id}");
-            install.WaitForExit();
-            if (install.ExitCode != 0)
+            using (Process install = new Process())
             {
-                WriteLog.Error(LogKind.Process, $"{_PROCESS_EXITED}: {install.ExitCode}");
-                WriteLog.Error(LogKind.Downloader, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {install.ExitCode}");
-                MessageBox_I.Error($"安装程序发生错误, 进程结束代码: {install.ExitCode}", _ERROR);
-            }
-            else
-            {
-                WriteLog.Info(LogKind.Process, $"{_PROCESS_EXITED}: {install.ExitCode}");
-                WriteLog.Info(LogKind.Downloader, $"{_DOWNLOADING_COMPLETE}");
+                install.StartInfo.FileName = FileName;
+                install.Start();
+                WriteLog.Info(LogKind.Process, $"{_PROCESS_STARTED}: {install.Id}");
+                install.WaitForExit();
+                if (install.ExitCode != 0)
+                {
+                    WriteLog.Error(LogKind.Process, $"{_PROCESS_EXITED}: {install.ExitCode}");
+                    WriteLog.Error(LogKind.Downloader, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {install.ExitCode}");
+                    MessageBox_I.Error($"安装程序发生错误, 进程结束代码: {install.ExitCode}", _ERROR);
+                }
+                else
+                {
+                    WriteLog.Info(LogKind.Process, $"{_PROCESS_EXITED}: {install.ExitCode}");
+                    WriteLog.Info(LogKind.Downloader, $"{_DOWNLOADING_COMPLETE}");
+                }
             }
         }
         /// <summary>
@@ -324,19 +314,15 @@ namespace Rox
         /// <param name="htmlContent"> HTML 内容</param>
         /// <param name="is32Bit"> 是否选择 32 位版本</param>
         /// <returns> 返回微信下载链接</returns>
-        public static string GetWeChatDownloadLink(string htmlContent, bool is32Bit = false)
+        public static string GetWeChatDownloadLink(string htmlContent, bool is32Bit = true)
         {
             string pattern;
             if (is32Bit)
-            {
                 pattern = @"<a\s+id=""x86""\s+class=""download-item x86_tips""\s+href=""([^""]+)""";
-            }
             else
-            {
                 pattern = @"<a\s+[^>]*class=""download-button""\s+[^>]*href=""([^""]+)""";
-            }
 
-            Match match = Regex.Match(htmlContent, pattern);
+            var match = Regex.Match(htmlContent, pattern);
             if (match.Success)
             {
                 WriteLog.Info(LogKind.Regex, $"{_REGEX_GET_FILE}: {match.Groups[1].Value}");

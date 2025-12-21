@@ -53,9 +53,8 @@ namespace Rox.GameExpansionFeatures
                         return null;
                     }
 
-                    SteamIDType AnySteamID = Identifier(SteamID);
 
-                    switch (AnySteamID)
+                    switch (Identifier(SteamID))
                     {
                         case SteamIDType.SteamID:
                             string[] split = SteamID.Split(':');
@@ -87,9 +86,8 @@ namespace Rox.GameExpansionFeatures
                         return null;
                     }
 
-                    SteamIDType AnySteamID = Identifier(SteamID);
 
-                    switch (AnySteamID)
+                    switch (Identifier(SteamID))
                     {
                         case SteamIDType.SteamID:
                             string[] split = SteamID.Split(':');
@@ -123,9 +121,8 @@ namespace Rox.GameExpansionFeatures
                         return null;
                     }
 
-                    SteamIDType AnySteamID = Identifier(SteamID);
 
-                    switch (AnySteamID)
+                    switch (Identifier(SteamID))
                     {
                         case SteamIDType.SteamID:
                             return $"[U:1:{ToSteamID32(SteamID)}]";
@@ -173,9 +170,7 @@ namespace Rox.GameExpansionFeatures
                             return null;
                     }
 
-                    var authserver = (SteamID32) & 1;
-                    var authid = (SteamID32 - authserver) / 2;
-                    return $"STEAM_0:{authserver}:{authid}";
+                    return $"STEAM_0:{(SteamID32) & 1}:{(SteamID32 - ((SteamID32) & 1)) / 2}";
                 }
             }
         }

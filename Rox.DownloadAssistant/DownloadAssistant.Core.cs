@@ -42,9 +42,7 @@ namespace Rox
                     MessageBox_I.Error($"下载器发生错误, 进程结束代码: {aria2c.ExitCode}", _ERROR);
                 }
                 else
-                {
                     WriteLog.Info(LogKind.Downloader, $"{_DOWNLOADING_COMPLETE}");
-                }
             }
         }
         internal static void MutiFileCoreDownloader(string[] urls, string location, bool log)
@@ -60,6 +58,7 @@ namespace Rox
                 foreach (var arg in urls)
                 {
                     writer.WriteLine(arg);
+                    writer.Close();
                 }
             }
             CoreDownloader($"--input-file=\"{motherFilePath}\" -x 16 -s 16 --check-certificate=false {location} {logarg}");

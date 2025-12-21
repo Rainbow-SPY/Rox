@@ -14,22 +14,18 @@ namespace Rox
         /// <param name="filePath">文件路径</param>
         private static void CheckFile(string filePath)
         {
-            if (System.IO.File.Exists(filePath))
-            {
+            if (File.Exists(filePath))
                 WriteLog.Info(LogKind.Downloader, $"{_GET_ARIA2C_PATH}: {filePath}");
-            }
             else
             {
                 // 获取当前正在执行的类库的程序集
                 Assembly assembly = Assembly.GetExecutingAssembly();
 
-                // 假设aria2c.exe是嵌入在"Namespace.Resources"命名空间中的
-
-                string resourceName = "Rox.Runtimes.Properties.Resources"; // 替换为你的资源路径
+                string resourceName = "Rox.Runtimes.Properties.Resources";
 
                 // 创建 ResourceManager 实例
                 ResourceManager rm = new ResourceManager(resourceName, assembly);
-                WriteLog.Info($"{_NEW_RM}");
+                WriteLog.Info(_NEW_RM);
                 // 从资源中获取aria2c.exe文件的字节数据
                 byte[] Aria2cExeData = (byte[])rm.GetObject("aria2c");
                 WriteLog.Info(LogKind.Downloader, $"{_GET_RM_OBJ}: aria2c");
@@ -49,13 +45,11 @@ namespace Rox
                     WriteLog.Info(LogKind.System, $"{_GET_OUTPUT_NAME}: {outputDirectory}");
                     // 写入文件，确保保存为二进制数据
                     WriteLog.Info(LogKind.System, $"{_FILE_WRITING}");
-                    System.IO.File.WriteAllBytes(outputFilePath, Aria2cExeData);
+                    File.WriteAllBytes(outputFilePath, Aria2cExeData);
                     WriteLog.Info(LogKind.System, $"aria2c.exe {_FILE_EXIST_PATH} {outputFilePath}");
                 }
                 else
-                {
                     WriteLog.Error($"{_RES_FILE_NOT_FIND}");
-                }
             }
         }
         /// <summary>

@@ -5,7 +5,7 @@ using static Rox.GameExpansionFeatures.Steam;
 using static Rox.GameExpansionFeatures.Steam.SteamID;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
-
+using static Rox.Text.Json;
 namespace Rox.GameExpansionFeatures
 {
     /// <summary>
@@ -68,22 +68,21 @@ namespace Rox.GameExpansionFeatures
             if (httpSteam)
             {
                 WriteLog.Info(LogKind.Regex, $"正在解析个人主页链接: {SteamID}");
-                string SteamID64 = SteamUserData.ExtractSteamID(SteamID);
-                switch (SteamID64)
+                switch (SteamUserData.ExtractSteamID(SteamID))
                 {
                     case null:
                         WriteLog.Error(LogKind.Json, $"无法解析SteamID64, 错误代码: {_Json_Parse_SteamID64}");
                         MessageBox_I.Error($"无法解析SteamID64, 错误代码: {_Json_Parse_SteamID64}", _ERROR);
                         return null;
                     default:
-                        if (SteamID64 == _Regex_Match_Unknow_Exception)
+                        if (SteamUserData.ExtractSteamID(SteamID) == _Regex_Match_Unknow_Exception)
                         {
                             WriteLog.Error(LogKind.Regex, $"{_Exception_With_xKind("Regex")}, 返回的错误代码: {_Regex_Match_Unknow_Exception} ");
                             if (IsMessageBox)
                                 MessageBox_I.Error($"{_Exception_With_xKind("Regex")}, 返回的错误代码: {_Regex_Match_Unknow_Exception}", _ERROR);
                             return null;
                         }
-                        else if (SteamID64 == _Regex_Match_Not_Found_Any)
+                        else if (SteamUserData.ExtractSteamID(SteamID) == _Regex_Match_Not_Found_Any)
                         {
                             WriteLog.Error(LogKind.Regex, $"未匹配到任何 正则表达式 , 返回的错误代码: {_Regex_Match_Not_Found_Any}");
                             if (IsMessageBox)
@@ -91,9 +90,7 @@ namespace Rox.GameExpansionFeatures
                             return null;
                         }
                         else
-                        {
-                            return await SendQueryMessage(SteamID64, new HttpClient(), IsMessageBox); //解析SteamID64
-                        }
+                            return await SendQueryMessage(SteamUserData.ExtractSteamID(SteamID), new HttpClient(), IsMessageBox); //解析SteamID64
                 }
             }
 
@@ -119,9 +116,7 @@ namespace Rox.GameExpansionFeatures
             }
             WriteLog.Error(_input_value_Not_Is_xType(SteamID, "SteamIDType"));
             if (IsMessageBox)
-            {
                 MessageBox_I.Error(_input_value_Not_Is_xType(SteamID, "SteamIDType"), _ERROR);
-            }
             return null;//返回空值
         }
         /// <summary>
@@ -131,12 +126,11 @@ namespace Rox.GameExpansionFeatures
         /// <param name="httpClient"><see cref="HttpClient"/> 实例</param>
         /// <param name="IsMessageBox">是否启用消息窗体输出</param>
         /// <returns><see cref="SteamType"/> 格式的 <see cref="Text.Json"/> 文本</returns>
-
         private static async Task<SteamType> SendQueryMessage(string SteamID64, HttpClient httpClient, bool IsMessageBox)
         {
             try
             {
-                var requestUrl = $"https://api.uapis.cn/api/v1/game/steam/summary?steamid={SteamID64}";
+                var requestUrl = $"https://uapis.cn/api/v1/game/steam/summary?steamid={SteamID64}";
 
                 WriteLog.Info(LogKind.Network, $"{_SEND_REQUEST}: {requestUrl}");
                 // 发送GET请求并获取响应
@@ -146,9 +140,7 @@ namespace Rox.GameExpansionFeatures
                 {
                     WriteLog.Error($"请求失败: {response.StatusCode}, {_HttpClient_Request_Failed}");
                     if (IsMessageBox)
-                    {
                         MessageBox_I.Error($"请求失败: {response.StatusCode}, {_HttpClient_Request_Failed}", _ERROR);
-                    }
                     return null;
                 }
                 // 读取响应内容
@@ -156,10 +148,10 @@ namespace Rox.GameExpansionFeatures
                 WriteLog.Info(LogKind.Json, "获取原始 Json 内容");
 
                 // 压缩 JSON 字符串
-                string compressedJson = Rox.Text.Json.CompressJson(responseData);
                 WriteLog.Info(LogKind.Json, "压缩 Json");
+                string compressedJson = CompressJson(responseData);
                 WriteLog.Info(LogKind.Json, $"反序列化 Json");
-                var SteamType = Rox.Text.Json.DeserializeObject<SteamType>(compressedJson);
+                var SteamType = DeserializeObject<SteamType>(compressedJson);
                 switch (SteamType.code)
                 {
                     case 404: // 未找到账户 或 完全私密个人资料
@@ -213,7 +205,8 @@ namespace Rox.GameExpansionFeatures
             catch (Exception ex)
             {
                 // 捕获并输出异常
-                WriteLog.Error($"获取 Steam 个人信息失败，请检查网络连接或API服务状态: {ex.Message}, 错误代码: {_Steam_Unknow_Exception}");
+                WriteLog.Error($"获取 Steam 个人信息失败，请检查网络连接或API服务状态: {ex.Message}, 错误代码: {_Steam_Unknow_Exception}\n" +
+                    _Exception_With_xKind("SteamUserData_v1.SendQueryMessage", ex));
                 if (IsMessageBox)
                     MessageBox_I.Error($"获取 Steam 个人信息失败，请检查网络连接或API服务状态: {ex.Message}, 错误代码: {_Steam_Unknow_Exception}", _ERROR);
                 return null;

@@ -1,5 +1,4 @@
-﻿using Rox.Runtimes;
-using System;
+﻿using System;
 using System.IO;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
@@ -81,12 +80,12 @@ namespace Rox.GameExpansionFeatures
                             if (File.Exists($"{folder}\\{JsonName}"))
                             {
                                 // 读取文件
-                                LogLibraries.WriteLog.Info(LogKind.Json, "获取原始 Json 内容");
+                                WriteLog.Info(LogKind.Json, "获取原始 Json 内容");
                                 var data = File.ReadAllText(folder + "\\" + JsonName);
-                                LogLibraries.WriteLog.Info(LogKind.Json, "压缩 Json");
-                                string compressedJson = Rox.Text.Json.CompressJson(data);
-                                LogLibraries.WriteLog.Info(LogKind.Json, "反序列化 Json 对象");
-                                var jsonObject = Rox.Text.Json.DeserializeObject<MinecraftType>(compressedJson);
+                                WriteLog.Info(LogKind.Json, "压缩 Json");
+                                string compressedJson = Text.Json.CompressJson(data);
+                                WriteLog.Info(LogKind.Json, "反序列化 Json 对象");
+                                var jsonObject = Text.Json.DeserializeObject<MinecraftType>(compressedJson);
                                 WriteLog.Info(LogKind.Json, jsonObject.clientVersion);
                                 return jsonObject.clientVersion; // 返回版本号
                             }
@@ -95,7 +94,7 @@ namespace Rox.GameExpansionFeatures
                     }
                     catch (Exception ex)
                     {
-                        WriteLog.Error(LogKind.System, "读取文件时发生错误: " + ex.Message);
+                        WriteLog.Error(LogKind.System, _Exception_With_xKind("GetItemID", ex));
                         MessageBox_I.Error("读取文件时发生错误: " + ex.Message, _ERROR);
                         return null;
                     }

@@ -15,15 +15,11 @@ namespace Rox.GameExpansionFeatures
         {
             using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\WOW6432Node\Valve\cs2"))
             {
-                if (key != null)
-                {
-                    object value = key.GetValue("installpath");
-                    if (value != null)
-                    {
-                        return value.ToString();
-                    }
+                if (key == null)
                     return null;
-                }
+                object value = key.GetValue("installpath");
+                if (value != null)
+                    return value.ToString();
                 return null;
             }
         }

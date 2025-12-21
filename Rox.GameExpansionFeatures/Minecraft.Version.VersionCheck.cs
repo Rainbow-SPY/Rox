@@ -77,7 +77,7 @@ namespace Rox.GameExpansionFeatures
                     return "Unknow"; // 返回未知结果
                 }
 #if DEBUG
-                WriteLog.Debug($"当前参数: version 的值为: {version.ToString()}, 他的前缀为 {version.Substring(0,1)}");
+                WriteLog.Debug($"当前参数: version 的值为: {version}, 他的前缀为 {version.Substring(0, 1)}");
 #endif
                 // 这个条件的意思是：如果字符串不以"1"开头，或者字符串不以"2"开头，就执行if块中的代码。
                 // 如果字符串以"1"开头，那么 !version.StartsWith("2") 为true
@@ -90,9 +90,7 @@ namespace Rox.GameExpansionFeatures
                     return "Unknow"; // 返回未知结果
                 }
                 if (version.EndsWith("."))
-                {
                     version = version.TrimEnd('.'); // 去除末尾的点
-                }
                 WriteLog.Info(LogKind.System, $"正在检查版本: {version}");
                 // 检查版本长度是否小于3
                 if (version.Length < 3)
@@ -107,17 +105,15 @@ namespace Rox.GameExpansionFeatures
                     return "Unsupport"; // 返回未知结果
                 }
 
-                Regex regex = new Regex(@"(?:(?<release>\d+\.\d+(?:\.\d+)?)|(?<snapshot>\d{2}w\d{2}[a-z](?:_[a-z]+)?)|(?<pre_release>\d\.\d+(?:\.\d)?-pre\d+)|(?<rc>\d\.\d+(?:\.\d)?-rc\d+)|(?<experimental>(?:Experimental )?Snapshot \d{2}w\d{2}[a-z]?))");
-                Match match = regex.Match(version);
                 string limitVer = null; // 初始化 limitVer 为 null
-                switch (GetMatchGroup(match))
+                switch (GetMatchGroup(new Regex(
+                            @"(?:(?<release>\d+\.\d+(?:\.\d+)?)|(?<snapshot>\d{2}w\d{2}[a-z](?:_[a-z]+)?)|(?<pre_release>\d\.\d+(?:\.\d)?-pre\d+)|(?<rc>\d\.\d+(?:\.\d)?-rc\d+)|(?<experimental>(?:Experimental )?Snapshot \d{2}w\d{2}[a-z]?))")
+                        .Match(version)))
                 {
                     case "Release": // 正式版
                         limitVer = version.Substring(0, 3); // 获取前3个字符
                         if (limitVer == "1.0" || limitVer == "1.1" || limitVer == "1.2")// 如果版本为 1.10+ 则获取前4个字符
-                        {
                             limitVer = version.Substring(0, 4); // 获取前4个字符
-                        }
                         // 检查是否在不支持的大版本列表中
                         if (Array.Exists(UnsupportVersions, v => v == version))
                         {
@@ -132,18 +128,23 @@ namespace Rox.GameExpansionFeatures
                         }
                         WriteLog.Error(LogKind.Regex, $"版本 {version} 在 正则表达式匹配的结果为 {limitVer} 正式版(Release)，但不在支持的大版本列表中");
                         return "Unsupport"; // 返回不支持的版本
+
                     case "Experimental Snapshot": // 实验性快照版
                         WriteLog.Error(LogKind.Regex, $"版本 {version} 在 正则表达式匹配的结果为 实验性快照(Experimental Snapshot)");
                         return "Experimental Snapshot"; // 返回实验性快照
+
                     case "Release Candidate": // 候选发布版
                         WriteLog.Error(LogKind.Regex, $"版本 {version} 在 正则表达式匹配的结果为 候选发布版(Release Candidate)");
                         return "Release Candidate"; // 返回候选发布版
+
                     case "Pre-Release": // 预发布版
                         WriteLog.Error(LogKind.Regex, $"版本 {version} 在 正则表达式匹配的结果为 预发布版(Pre-release)");
                         return "Pre-release"; // 返回预发布版
+
                     case "Snapshot": // 快照版
                         WriteLog.Error(LogKind.Regex, $"版本 {version} 在 正则表达式匹配的结果为 快照(Snapshot)");
                         return "Snapshot"; // 返回快照版
+
                     default: // 未知结果
                         WriteLog.Error(LogKind.Regex, $"版本 {version} 在 正则表达式匹配的结果为 未知结果");
                         return "Unknow"; // 返回未知结果
@@ -156,12 +157,18 @@ namespace Rox.GameExpansionFeatures
             /// <returns> 版本类型字符串 </returns>
             public static string GetMatchGroup(Match match)
             {
-                if (match.Groups["release"].Success) return "Release";
-                if (match.Groups["snapshot"].Success) return "Snapshot";
-                if (match.Groups["pre_release"].Success) return "Pre-release";
-                if (match.Groups["rc"].Success) return "Release Candidate";
-                if (match.Groups["experimental"].Success) return "Experimental Snapshot";
-                return "unknow";
+                if (match.Groups["release"].Success)
+                    return "Release";
+                else if (match.Groups["snapshot"].Success)
+                    return "Snapshot";
+                else if (match.Groups["pre_release"].Success)
+                    return "Pre-release";
+                else if (match.Groups["rc"].Success)
+                    return "Release Candidate";
+                else if (match.Groups["experimental"].Success)
+                    return "Experimental Snapshot";
+                else
+                    return "unknow";
             }
         }
     }

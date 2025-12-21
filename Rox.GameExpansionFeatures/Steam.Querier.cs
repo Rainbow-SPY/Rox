@@ -21,7 +21,7 @@ namespace Rox.GameExpansionFeatures
             /// </summary>
             /// <param name="SteamID64">SteamID64</param>
             /// <returns><see cref="SteamUserData.SteamType"/> 格式的 <see cref="Json"/> 文本</returns>
-            public static async Task<GameExpansionFeatures.Steam.SteamUserData.SteamType> UserData(string SteamID64) => await SteamUserData.GetDataJson(SteamID64);
+            public static async Task<SteamUserData.SteamType> UserData(string SteamID64) => await SteamUserData.GetDataJson(SteamID64);
         }
     }
 }

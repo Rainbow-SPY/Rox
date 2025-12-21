@@ -50,11 +50,16 @@ namespace Rox.GameExpansionFeatures
                     return SteamIDType.Invalid;
                 }
 
-                if (Regex.IsMatch(AnySteamID, _Regex_ID)) return SteamIDType.SteamID;
-                if (Regex.IsMatch(AnySteamID, _Regex_ID3)) return SteamIDType.SteamID3;
-                if (Regex.IsMatch(AnySteamID, _Regex_ID32)) return SteamIDType.SteamID32;
-                if (Regex.IsMatch(AnySteamID, _Regex_ID64)) return SteamIDType.SteamID64;
-                return SteamIDType.Invalid;
+                if (Regex.IsMatch(AnySteamID, _Regex_ID))
+                    return SteamIDType.SteamID;
+                else if (Regex.IsMatch(AnySteamID, _Regex_ID3))
+                    return SteamIDType.SteamID3;
+                else if (Regex.IsMatch(AnySteamID, _Regex_ID32))
+                    return SteamIDType.SteamID32;
+                else if (Regex.IsMatch(AnySteamID, _Regex_ID64))
+                    return SteamIDType.SteamID64;
+                else
+                    return SteamIDType.Invalid;
             }
 
         }

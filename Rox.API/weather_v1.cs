@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
+using static Rox.Text.Json;
 namespace Rox
 {
     public partial class API
@@ -42,7 +43,7 @@ namespace Rox
                         return null;
                     }
                     var httpClient = new HttpClient();
-                    var requestUrl = $"https://api.uapis.cn/api/v1/misc/weather?{param}={city_Or_adcode}";
+                    var requestUrl = $"https://uapis.cn/api/v1/misc/weather?{param}={city_Or_adcode}";
                     var response = await httpClient.GetAsync(requestUrl);
                     if (!response.IsSuccessStatusCode)
                     {
@@ -50,9 +51,9 @@ namespace Rox
                         return null;
                     }
                     var responseData = await response.Content.ReadAsStringAsync();
-                    string compressedJson = Rox.Text.Json.CompressJson(responseData);
-                    LogLibraries.WriteLog.Info(LogKind.Json, "压缩 Json");
-                    var weatherType = Rox.Text.Json.DeserializeObject<WeatherType>(compressedJson);
+                    string compressedJson = CompressJson(responseData);
+                    WriteLog.Info(LogKind.Json, "压缩 Json");
+                    var weatherType = DeserializeObject<WeatherType>(compressedJson);
                     WriteLog.Info(LogKind.Json, "反序列化 Json 对象");
                     switch ((int)response.StatusCode) // 修改为通过实例访问 code 属性
                     {
