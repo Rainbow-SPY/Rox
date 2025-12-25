@@ -23,8 +23,6 @@ namespace Rox.Runtimes
             GetSystemInfo.InitializeSystemInfo();
             string _Ex_type = exception.GetType().ToString();
             string _Ex_message = exception.Message;
-            string _Ex_Description = "";
-            string _Title = "";
             string _Ex_stacktrace = exception.StackTrace;
             string NowTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             string Date = DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss");
@@ -78,6 +76,7 @@ namespace Rox.Runtimes
             _Crush_Path.Text = _Crush_File_Path;
             LogToCrushFile(_Crush_File_Path, log);
             richTextBox1.Text += log;
+            string _Ex_Description;
             switch (exception.GetType().FullName)
             {
                 case "System.NullReferenceException":
@@ -447,12 +446,18 @@ namespace Rox.Runtimes
                 case "Rox.Runtimes.IException.EpicGames.EpicGamesServerError":
                     _Ex_Description = "Epic Games 免费游戏服务不可用, 无法访问 Epic Games 相关服务, 可以访问 https://status.epicgames.com/ 查看 Epic Online Services 当前情况";
                     break;
+                case "Rox.Runtimes.IException.Weather.WeatherAPIServerError":
+                    _Ex_Description = "UAPI 服务器内部错误, 在处理天气数据时发生了未知问题";
+                    break;
+                case "Rox.Runtimes.IException.Weather.WeatherServiceError":
+                    _Ex_Description = "天气供应商API不可用, 无法访问天气供应商提供的API";
+                    break;
                 default:
                     _Ex_Description = "发生未识别的异常，建议查看异常详细信息排查问题。";
                     break;
 
             }
-            _Title = (_Ex_Description != "" ? "已" : "未") + $"识别的异常类型: {exception.GetType().FullName}";
+            string _Title = (_Ex_Description != "" ? "已" : "未") + $"识别的异常类型: {exception.GetType().FullName}";
             AntdUI.Modal.open(new AntdUI.Modal.Config(this, _Title, $"错误类型: {exception.GetType().FullName}\n\n {_Ex_Description}", AntdUI.TType.Error)
             {
                 Font = new Font("微软雅黑", 10, FontStyle.Regular),
