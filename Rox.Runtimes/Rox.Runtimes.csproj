@@ -71,6 +71,9 @@
     <Compile Include="Console\Console_I.cs" />
     <Compile Include="Convert.Storage.cs" />
     <Compile Include="Directory_I.CopyDirectory.cs" />
+    <Compile Include="Exception\Exception.EpicGames.cs" />
+    <Compile Include="Exception\Exception.Steam.cs" />
+    <Compile Include="Exception\Exception.Weather.cs" />
     <Compile Include="File_I\File_I.CalculateMD5.cs" />
     <Compile Include="File_I\File_I.FileProperties.cs" />
     <Compile Include="File_I\File_I.CheckFileHash.cs" />

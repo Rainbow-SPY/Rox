@@ -19,19 +19,13 @@ namespace Rox
             /// </summary>
             /// <param name="city">城市名称</param>
             /// <returns><see cref="WeatherType"/> 类型的 <see cref="Text.Json"/> 对象</returns>
-            public static async Task<WeatherType> GetWeatherDataJson(string city)
-            {
-                return await SendMessageRequest(city, "city");
-            }
+            public static async Task<WeatherType> GetWeatherDataJson(string city) => await SendMessageRequest(city, "city");
             /// <summary>
             /// 获取天气信息
             /// </summary>
             /// <param name="adcode">高德地图的6位数字城市编码</param>
             /// <returns><see cref="WeatherType"/> 类型的 <see cref="Text.Json"/> 对象</returns>
-            public static async Task<WeatherType> GetWeatherDataJson(int adcode)
-            {
-                return await SendMessageRequest(adcode.ToString(), "adcode");
-            }
+            public static async Task<WeatherType> GetWeatherDataJson(int adcode) => await SendMessageRequest(adcode.ToString(), "adcode");
             private static async Task<WeatherType> SendMessageRequest(string city_Or_adcode, string param)
             {
                 try
@@ -42,44 +36,48 @@ namespace Rox
                         MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty("city_Or_adcode")}, 错误代码: {_String_NullOrEmpty}", _ERROR);
                         return null;
                     }
-                    var httpClient = new HttpClient();
-                    var requestUrl = $"https://uapis.cn/api/v1/misc/weather?{param}={city_Or_adcode}";
-                    var response = await httpClient.GetAsync(requestUrl);
-                    if (!response.IsSuccessStatusCode)
+                    using (var httpClient = new HttpClient())
                     {
-                        MessageBox_I.Error($"请求失败: {response.StatusCode}, 错误代码: {_HttpClient_Request_Failed}", _ERROR);
-                        return null;
+                        var requestUrl = $"https://uapis.cn/api/v1/misc/weather?{param}={city_Or_adcode}";
+                        using (var response = await httpClient.GetAsync(requestUrl))
+                        {
+                            if (!response.IsSuccessStatusCode)
+                            {
+                                MessageBox_I.Error($"请求失败: {response.StatusCode}, 错误代码: {_HttpClient_Request_Failed}", _ERROR);
+                                return null;
+                            }
+                            var responseData = await response.Content.ReadAsStringAsync();
+                            WriteLog.Info(LogKind.Json, "压缩 Json");
+                            string compressedJson = CompressJson(responseData);
+                            WriteLog.Info(LogKind.Json, "反序列化 Json 对象");
+                            var weatherType = DeserializeObject<WeatherType>(compressedJson);
+                            switch ((int)response.StatusCode) // 修改为通过实例访问 code 属性
+                            {
+                                case 400:
+                                    WriteLog.Error(LogKind.Network, $"{_value_Not_Is_NullOrEmpty("city_Or_adcode")}, 错误代码: {_String_NullOrEmpty}, 错误信息: {weatherType.code} - {weatherType.message}");
+                                    MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty("city_Or_adcode")}, 错误代码: {_String_NullOrEmpty}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR);
+                                    return null;
+                                case 410:
+                                    WriteLog.Error(LogKind.Network, $"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}, 错误信息: {weatherType.code} - {weatherType.message}");
+                                    MessageBox_I.Error($"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR);
+                                    return null;
+                                case 502:
+                                    WriteLog.Error(LogKind.Network, $"上游服务错误, 天气供应商API暂时不可用或返回了错误, 错误代码: {_Weather_Service_Error}, 错误信息: {weatherType.code} - {weatherType.message}");
+                                    MessageBox_I.Error($"上游服务错误, 天气供应商API暂时不可用或返回了错误, 错误代码: {_Weather_Service_Error}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR);
+                                    throw new Rox.Runtimes.IException.Weather.WeatherServiceError();
+                                case 500:
+                                    WriteLog.Error(LogKind.Network, $"服务器内部错误。在处理天气数据时发生了未知问题, 错误代码: {_Weather_Unknow_Exception}, 错误信息: {weatherType.code} - {weatherType.message}");
+                                    MessageBox_I.Error($"服务器内部错误。在处理天气数据时发生了未知问题, 错误代码: {_Weather_Unknow_Exception}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR);
+                                    throw new Rox.Runtimes.IException.Weather.WeatherAPIServerError();
+                                case 200:
+                                    WriteLog.Info(LogKind.Network, $"请求成功");
+                                    break;
+                            }
+                            if (weatherType.weather == "" || weatherType.weather == string.Empty || string.IsNullOrWhiteSpace(weatherType.weather))
+                                return null;
+                            return weatherType;
+                        }
                     }
-                    var responseData = await response.Content.ReadAsStringAsync();
-                    string compressedJson = CompressJson(responseData);
-                    WriteLog.Info(LogKind.Json, "压缩 Json");
-                    var weatherType = DeserializeObject<WeatherType>(compressedJson);
-                    WriteLog.Info(LogKind.Json, "反序列化 Json 对象");
-                    switch ((int)response.StatusCode) // 修改为通过实例访问 code 属性
-                    {
-                        case 400:
-                            WriteLog.Error(LogKind.Network, $"{_value_Not_Is_NullOrEmpty("city_Or_adcode")}, 错误代码: {_String_NullOrEmpty}, 错误信息: {weatherType.code} - {weatherType.message}");
-                            MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty("city_Or_adcode")}, 错误代码: {_String_NullOrEmpty}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR);
-                            return null;
-                        case 410:
-                            WriteLog.Error(LogKind.Network, $"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}, 错误信息: {weatherType.code} - {weatherType.message}");
-                            MessageBox_I.Error($"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR);
-                            return null;
-                        case 502:
-                            WriteLog.Error(LogKind.Network, $"上游服务错误, 天气供应商API暂时不可用或返回了错误, 错误代码: {_Weather_Service_Error}, 错误信息: {weatherType.code} - {weatherType.message}");
-                            MessageBox_I.Error($"上游服务错误, 天气供应商API暂时不可用或返回了错误, 错误代码: {_Weather_Service_Error}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR);
-                            return null;
-                        case 500:
-                            WriteLog.Error(LogKind.Network, $"服务器内部错误。在处理天气数据时发生了未知问题, 错误代码: {_Weather_Unknow_Exception}, 错误信息: {weatherType.code} - {weatherType.message}");
-                            MessageBox_I.Error($"服务器内部错误。在处理天气数据时发生了未知问题, 错误代码: {_Weather_Unknow_Exception}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR);
-                            return null;
-                        case 200:
-                            WriteLog.Info(LogKind.Network, $"请求成功");
-                            break;
-                    }
-                    if (weatherType.weather == "" || weatherType.weather == string.Empty || string.IsNullOrWhiteSpace(weatherType.weather))
-                        return null;
-                    return weatherType;
                 }
                 catch (Exception ex)
                 {

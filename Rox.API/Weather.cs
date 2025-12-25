@@ -35,53 +35,57 @@ namespace Rox
                         MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty("city")}, 错误代码: {_String_NullOrEmpty}", _ERROR);
                         return null;
                     }
-                    var httpClient = new HttpClient();
-                    var requestUrl = $"https://uapis.cn/api/weather?name={city}";
-                    var response = await httpClient.GetAsync(requestUrl);
-                    if (!response.IsSuccessStatusCode)
+                    using (var httpClient = new HttpClient())
                     {
-                        MessageBox_I.Error($"请求失败: {response.StatusCode}, 错误代码: {_HttpClient_Request_Failed}", _ERROR);
-                        return null;
+                        var requestUrl = $"https://uapis.cn/api/weather?name={city}";
+                        using (var response = await httpClient.GetAsync(requestUrl))
+                        {
+                            if (!response.IsSuccessStatusCode)
+                            {
+                                MessageBox_I.Error($"请求失败: {response.StatusCode}, 错误代码: {_HttpClient_Request_Failed}", _ERROR);
+                                return null;
+                            }
+                            var responseData = await response.Content.ReadAsStringAsync();
+                            LogLibraries.WriteLog.Info("压缩 Json");
+                            string compressedJson = Rox.Text.Json.CompressJson(responseData);
+                            // 直接解析 JSON 字符串
+                            //Text.Json.JObject jObject = Rox.Text.Json.JObject.Parse(compressedJson);
+                            var weatherType = Rox.Text.Json.DeserializeObject<WeatherType>(compressedJson);
+                            switch (weatherType.code) // 修改为通过实例访问 code 属性
+                            {
+                                case 400:
+                                    WriteLog.Error(LogKind.Network, $"{_value_Not_Is_NullOrEmpty("city")}, 错误代码: {_String_NullOrEmpty}");
+                                    MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty("city")} , 错误代码: {_String_NullOrEmpty}", _ERROR);
+                                    return null;
+                                case 500:
+                                    WriteLog.Error(LogKind.Network, $"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}");
+                                    MessageBox_I.Error($"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}", _ERROR);
+                                    return null;
+                                case 0:
+                                    WriteLog.Error(LogKind.Network, $"检测到非法/不安全的请求!访问已拒绝, 错误代码: {_HttpClient_Request_UnsafeOrIllegal_Denied}");
+                                    MessageBox_I.Error($"检测到非法/不安全的请求!访问已拒绝, 错误代码: {_HttpClient_Request_UnsafeOrIllegal_Denied}", _ERROR);
+                                    return null;
+                            }
+                            //if (jObject == null)
+                            //{
+                            //    LogLibraries.WriteLog.Error("Failed to parse JSON object.");
+                            //    return null;
+                            //}
+                            // 检测是否传入null
+                            if (weatherType.temperature == "" || weatherType.temperature == string.Empty || string.IsNullOrWhiteSpace(weatherType.temperature))
+                                return null;
+                            WriteLog.Info($"Code: {weatherType.code}");
+                            WriteLog.Info($"获取省份名称: {weatherType.province}");
+                            WriteLog.Info($"获取城市名称: {weatherType.city}");
+                            WriteLog.Info($"获取温度: {weatherType.temperature_1}");
+                            WriteLog.Info($"获取天气状况: {weatherType.weather}");
+                            WriteLog.Info($"获取风向: {weatherType.wind_direction_1}");
+                            WriteLog.Info($"获取风力等级: {weatherType.wind_power_1}");
+                            WriteLog.Info($"获取湿度: {weatherType.humidity_1}");
+                            WriteLog.Info($"数据更新时间: {weatherType.reporttime}");
+                            return weatherType;
+                        }
                     }
-                    var responseData = await response.Content.ReadAsStringAsync();
-                    string compressedJson = Rox.Text.Json.CompressJson(responseData);
-                    LogLibraries.WriteLog.Info("压缩 Json");
-                    // 直接解析 JSON 字符串
-                    //Text.Json.JObject jObject = Rox.Text.Json.JObject.Parse(compressedJson);
-                    var weatherType = Rox.Text.Json.DeserializeObject<WeatherType>(compressedJson);
-                    switch (weatherType.code) // 修改为通过实例访问 code 属性
-                    {
-                        case 400:
-                            WriteLog.Error(LogKind.Network, $"{_value_Not_Is_NullOrEmpty("city")}, 错误代码: {_String_NullOrEmpty}");
-                            MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty("city")} , 错误代码: {_String_NullOrEmpty}", _ERROR);
-                            return null;
-                        case 500:
-                            WriteLog.Error(LogKind.Network, $"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}");
-                            MessageBox_I.Error($"请求的城市不存在或未找到, 错误代码: {_Weather_City_Not_Found}", _ERROR);
-                            return null;
-                        case 0:
-                            WriteLog.Error(LogKind.Network, $"检测到非法/不安全的请求!访问已拒绝, 错误代码: {_HttpClient_Request_UnsafeOrIllegal_Denied}");
-                            MessageBox_I.Error($"检测到非法/不安全的请求!访问已拒绝, 错误代码: {_HttpClient_Request_UnsafeOrIllegal_Denied}", _ERROR);
-                            return null;
-                    }
-                    //if (jObject == null)
-                    //{
-                    //    LogLibraries.WriteLog.Error("Failed to parse JSON object.");
-                    //    return null;
-                    //}
-                    // 检测是否传入null
-                    if (weatherType.temperature == "" || weatherType.temperature == string.Empty || string.IsNullOrWhiteSpace(weatherType.temperature))
-                        return null;
-                    WriteLog.Info($"Code: {weatherType.code}");
-                    WriteLog.Info($"获取省份名称: {weatherType.province}");
-                    WriteLog.Info($"获取城市名称: {weatherType.city}");
-                    WriteLog.Info($"获取温度: {weatherType.temperature_1}");
-                    WriteLog.Info($"获取天气状况: {weatherType.weather}");
-                    WriteLog.Info($"获取风向: {weatherType.wind_direction_1}");
-                    WriteLog.Info($"获取风力等级: {weatherType.wind_power_1}");
-                    WriteLog.Info($"获取湿度: {weatherType.humidity_1}");
-                    WriteLog.Info($"数据更新时间: {weatherType.reporttime}");
-                    return weatherType;
                 }
                 catch (Exception ex)
                 {

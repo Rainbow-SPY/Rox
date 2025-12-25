@@ -69,7 +69,7 @@ namespace Rox.Runtimes
                 }
                 catch
                 {
-                    // 忽略无��获取名称的程序集
+                    // 忽略无??获取名称的程序集
                 }
             }
 
@@ -438,19 +438,21 @@ namespace Rox.Runtimes
                 case "System.Numerics.BigIntegerParseException":
                     _Ex_Description = "大整数解析异常，将字符串转换为BigInteger时格式错误（如包含非数字字符）。";
                     break;
+                case "Rox.Runtimes.IException.Steam.SteamServiceError":
+                    _Ex_Description = "Steam 服务不可用, 无法访问 Steam 相关服务, 可以访问 https://steamstat.us/ 查看 Steam 服务当前情况";
+                    break;
+                case "Rox.Runtimes.IException.Steam.UnAuthenticatedSteamKey":
+                    _Ex_Description = "提供的Steam Web API Key 无效或已过期";
+                    break;
+                case "Rox.Runtimes.IException.EpicGames.EpicGamesServerError":
+                    _Ex_Description = "Epic Games 免费游戏服务不可用, 无法访问 Epic Games 相关服务, 可以访问 https://status.epicgames.com/ 查看 Epic Online Services 当前情况";
+                    break;
                 default:
                     _Ex_Description = "发生未识别的异常，建议查看异常详细信息排查问题。";
                     break;
 
             }
-            if (_Ex_Description != "")
-            {
-                _Title = $"已识别的异常类型: {exception.GetType().FullName}";
-            }
-            else
-            {
-                _Title = $"未识别的异常类型: {exception.GetType().FullName}";
-            }
+            _Title = (_Ex_Description != "" ? "已" : "未") + $"识别的异常类型: {exception.GetType().FullName}";
             AntdUI.Modal.open(new AntdUI.Modal.Config(this, _Title, $"错误类型: {exception.GetType().FullName}\n\n {_Ex_Description}", AntdUI.TType.Error)
             {
                 Font = new Font("微软雅黑", 10, FontStyle.Regular),
@@ -468,9 +470,6 @@ namespace Rox.Runtimes
             Application.Exit();
         }
 
-        private void _Crush_Path_Click(object sender, EventArgs e)
-        {
-            Process.Start("explorer.exe", Application.StartupPath);
-        }
+        private void _Crush_Path_Click(object sender, EventArgs e) => Process.Start("explorer.exe", Application.StartupPath);
     }
 }

@@ -64,7 +64,7 @@ namespace Rox
                     flags);
 
                 // 打印API返回值（用于调试：正常弹出窗口并点击取消返回1223，窗口创建失败返回其他值）
-                WriteLog.Info($"CredUIPromptForWindowsCredentials 返回值：{result}");
+                WriteLog.Info(_au, $"CredUIPromptForWindowsCredentials 返回值：{result}");
 
                 if (result == 0) // 用户点击确定
                 {
@@ -76,7 +76,7 @@ namespace Rox
                     StringBuilder passwordSb = new StringBuilder(maxPassword);
 
                     bool unpackSuccess = CredUnPackAuthenticationBuffer(
-                        0, 
+                        0,
                         outCredBuffer,
                         outCredBufferSize,
                         userNameSb,
