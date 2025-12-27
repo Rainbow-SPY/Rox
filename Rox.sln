@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.0.11222.15 d18.0
+VisualStudioVersion = 18.0.11222.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.Runtimes", "Rox.Runtimes\Rox.Runtimes.csproj", "{BA4C591E-3D2A-491B-BCCB-1F995545A26C}"
 EndProject
@@ -25,6 +25,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.GameExpansionFeatures", "Rox.GameExpansionFeatures\Rox.GameExpansionFeatures.csproj", "{970D6D33-5E08-44DD-BB66-C6BEFCEE071C}"
 	ProjectSection(ProjectDependencies) = postProject
 		{4F55481F-3CF2-489F-9153-156E7E2637BC} = {4F55481F-3CF2-489F-9153-156E7E2637BC}
+		{BA4C591E-3D2A-491B-BCCB-1F995545A26C} = {BA4C591E-3D2A-491B-BCCB-1F995545A26C}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.SocialMedia", "Rox.SocialMedia\Rox.SocialMedia.csproj", "{EA0CA2CC-FD79-43BE-AD8B-E79E95AF2659}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4F55481F-3CF2-489F-9153-156E7E2637BC} = {4F55481F-3CF2-489F-9153-156E7E2637BC}
+		{8B2D3FCF-8EFC-4E19-9DD0-F074C92F3222} = {8B2D3FCF-8EFC-4E19-9DD0-F074C92F3222}
 		{BA4C591E-3D2A-491B-BCCB-1F995545A26C} = {BA4C591E-3D2A-491B-BCCB-1F995545A26C}
 	EndProjectSection
 EndProject
@@ -54,6 +61,10 @@ Global
 		{970D6D33-5E08-44DD-BB66-C6BEFCEE071C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{970D6D33-5E08-44DD-BB66-C6BEFCEE071C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{970D6D33-5E08-44DD-BB66-C6BEFCEE071C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA0CA2CC-FD79-43BE-AD8B-E79E95AF2659}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA0CA2CC-FD79-43BE-AD8B-E79E95AF2659}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA0CA2CC-FD79-43BE-AD8B-E79E95AF2659}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA0CA2CC-FD79-43BE-AD8B-E79E95AF2659}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
