@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AntiCheatExpert.cs" />
     <Compile Include="CSGO.cs" />
     <Compile Include="CSGO.mp.cs" />
     <Compile Include="EpicGames.GetFreeGames.cs" />

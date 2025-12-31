@@ -33,9 +33,7 @@ namespace Rox.Runtimes
             string language = GetSystemInfo.SystemLanguage;
             string _Crush_File_Path = Path.Combine(Application.StartupPath, $"crush_{Date}.log");
             // 获取显示屏分辨率
-            string width = Screen.PrimaryScreen.Bounds.Width.ToString();
-            string height = Screen.PrimaryScreen.Bounds.Height.ToString();
-            string screenInfo = $"{width}x{height}";
+            string screenInfo = $"{Screen.PrimaryScreen.Bounds.Width}x{Screen.PrimaryScreen.Bounds.Height}";
             richTextBox1.Clear();
             string log =
                 "-------------Exception--------------------\n"
