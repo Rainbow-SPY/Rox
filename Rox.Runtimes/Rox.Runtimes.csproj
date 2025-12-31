@@ -88,6 +88,7 @@
     <Compile Include="LogLibraries\LogLibraries.LogKind.cs" />
     <Compile Include="LogLibraries\LogLibraries.MessageBox_I.cs" />
     <Compile Include="LogLibraries\LogLibraries.WriteLog.cs" />
+    <Compile Include="Process.cs" />
     <Compile Include="Security.cs" />
     <Compile Include="Network_I.cs" />
     <Compile Include="Properties\Resource1.Designer.cs">
