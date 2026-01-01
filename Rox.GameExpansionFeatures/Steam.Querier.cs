@@ -1,7 +1,7 @@
 ﻿using Rox.Text;
 using System.Threading.Tasks;
 
-namespace Rox.GameExpansionFeatures
+namespace Rox.Entertainment
 {
     public partial class Steam
     {

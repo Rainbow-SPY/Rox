@@ -1,6 +1,6 @@
-﻿using static Rox.GameExpansionFeatures.Steam.Converter.SteamID;
+﻿using static Rox.Entertainment.Steam.Converter.SteamID;
 
-namespace Rox.GameExpansionFeatures
+namespace Rox.Entertainment
 {
     /// <summary>
     /// Steam 游戏平台相关扩展功能库

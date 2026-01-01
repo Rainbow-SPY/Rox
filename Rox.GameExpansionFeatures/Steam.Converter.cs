@@ -1,8 +1,8 @@
 ﻿using System.Text.RegularExpressions;
-using static Rox.GameExpansionFeatures.Steam.SteamID;
+using static Rox.Entertainment.Steam.SteamID;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
-namespace Rox.GameExpansionFeatures
+namespace Rox.Entertainment
 {
     public partial class Steam
     {

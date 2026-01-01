@@ -4,7 +4,7 @@ using System.Linq;
 using static Rox.Runtimes.LogLibraries;
 using static Rox.Runtimes.IProcess;
 
-namespace Rox.GameExpansionFeatures
+namespace Rox.Entertainment
 {
     /// <summary>
     /// 针对 AntiCheatExpert（ACE）客户端的优化功能

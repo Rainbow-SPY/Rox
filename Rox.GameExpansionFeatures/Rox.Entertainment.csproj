@@ -7,8 +7,8 @@
     <ProjectGuid>{970D6D33-5E08-44DD-BB66-C6BEFCEE071C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Rox.GameExpansionFeatures</RootNamespace>
-    <AssemblyName>Rox.GameExpansionFeatures</AssemblyName>
+    <RootNamespace>Rox.Entertainment</RootNamespace>
+    <AssemblyName>Rox.Entertainment</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -21,7 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\%24Release\Rox\Rox.GameExpansionFeatures.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\%24Release\Rox\Rox.Entertainment.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>embedded</DebugType>
@@ -30,7 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\%24Release\Rox\Rox.GameExpansionFeatures.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\%24Release\Rox\Rox.Entertainment.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup>

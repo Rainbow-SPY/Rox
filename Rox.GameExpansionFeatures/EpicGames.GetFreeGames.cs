@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
 using static Rox.Text.Json;
-namespace Rox.GameExpansionFeatures.EpicGames
+namespace Rox.Entertainment.EpicGames
 {
     /// <summary>
     /// 获取当前Epic Games的免费游戏

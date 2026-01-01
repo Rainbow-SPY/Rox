@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using static Rox.Runtimes.LogLibraries;
 
-namespace Rox.GameExpansionFeatures
+namespace Rox.Entertainment
 {
     public partial class Minecraft
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Win32;
 using System.Net.NetworkInformation;
 
-namespace Rox.GameExpansionFeatures
+namespace Rox.Entertainment
 {
     public partial class Steam
     {

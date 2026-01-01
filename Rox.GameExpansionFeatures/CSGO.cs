@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
 
-namespace Rox.GameExpansionFeatures
+namespace Rox.Entertainment
 {
     /// <summary>
     /// CSGO / CS2相关功能类。

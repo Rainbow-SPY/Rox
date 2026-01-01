@@ -2,7 +2,7 @@
 using System.IO;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
-namespace Rox.GameExpansionFeatures
+namespace Rox.Entertainment
 {
     public partial class Minecraft
     {

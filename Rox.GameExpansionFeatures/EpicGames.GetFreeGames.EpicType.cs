@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Rox.GameExpansionFeatures.EpicGames
+namespace Rox.Entertainment.EpicGames
 {
     public partial class GetFreeGames
     {

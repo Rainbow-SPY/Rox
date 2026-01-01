@@ -1,7 +1,7 @@
 ﻿using System;
 using static Rox.Runtimes.LogLibraries;
 
-namespace Rox.GameExpansionFeatures
+namespace Rox.Entertainment
 {
     /// <summary>
     /// 我的世界 JE 相关扩展功能库

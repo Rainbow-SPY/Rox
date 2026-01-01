@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Rox.SocialMedia
 {
+    /// <summary>
+    /// 获取QQ用户的公开摘要
+    /// </summary>
     public class GetQQUserData
     {
         /// <summary>

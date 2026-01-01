@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using static Rox.GameExpansionFeatures.Steam;
-using static Rox.GameExpansionFeatures.Steam.SteamID;
+using static Rox.Entertainment.Steam;
+using static Rox.Entertainment.Steam.SteamID;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
 using static Rox.Text.Json;
-namespace Rox.GameExpansionFeatures
+namespace Rox.Entertainment
 {
     /// <summary>
     /// Steam用户信息查询, 但是新版本
@@ -297,11 +297,11 @@ namespace Rox.GameExpansionFeatures
             /// <summary>
             /// 好友代码 （SteamID32）
             /// </summary>
-            public string friendcode => Rox.GameExpansionFeatures.Steam.SteamID.GetFriendCode(steamid);
+            public string friendcode => Rox.Entertainment.Steam.SteamID.GetFriendCode(steamid);
             /// <summary>
             /// SteamID3
             /// </summary>
-            public string steamID3 => Rox.GameExpansionFeatures.Steam.Converter.SteamID.ToSteamID3(steamid);
+            public string steamID3 => Rox.Entertainment.Steam.Converter.SteamID.ToSteamID3(steamid);
             ///// <summary>
             ///// Steam最后登出日期
             ///// </summary>
