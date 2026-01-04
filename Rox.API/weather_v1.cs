@@ -64,14 +64,18 @@ namespace Rox
                                 case 502:
                                     WriteLog.Error(LogKind.Network, $"上游服务错误, 天气供应商API暂时不可用或返回了错误, 错误代码: {_Weather_Service_Error}, 错误信息: {weatherType.code} - {weatherType.message}");
                                     MessageBox_I.Error($"上游服务错误, 天气供应商API暂时不可用或返回了错误, 错误代码: {_Weather_Service_Error}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR);
-                                    throw new Rox.Runtimes.IException.Weather.WeatherServiceError();
+                                    throw new Rox.Runtimes.IException.UAPI.Weather.WeatherServiceError();
                                 case 500:
                                     WriteLog.Error(LogKind.Network, $"服务器内部错误。在处理天气数据时发生了未知问题, 错误代码: {_Weather_Unknow_Exception}, 错误信息: {weatherType.code} - {weatherType.message}");
                                     MessageBox_I.Error($"服务器内部错误。在处理天气数据时发生了未知问题, 错误代码: {_Weather_Unknow_Exception}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR);
-                                    throw new Rox.Runtimes.IException.Weather.WeatherAPIServerError();
+                                    throw new Rox.Runtimes.IException.UAPI.Weather.WeatherAPIServerError();
                                 case 200:
                                     WriteLog.Info(LogKind.Network, $"请求成功");
                                     break;
+                                default:
+                                    WriteLog.Error(LogKind.Network, $"未知异常, 请联系管理员, 错误代码: {_UNKNOW_ERROR}");
+                                    throw new IException.UAPI.General.UnknowUAPIException();
+
                             }
                             if (weatherType.weather == "" || weatherType.weather == string.Empty || string.IsNullOrWhiteSpace(weatherType.weather))
                                 return null;

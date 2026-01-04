@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rox.Runtimes;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using static Rox.GameExpansionFeatures.Steam;
@@ -171,18 +172,16 @@ namespace Rox.GameExpansionFeatures
                         WriteLog.Error(LogKind.Network, $"API返回响应: 上游服务错误, 在向 Steam 的官方 API 请求数据时遇到了问题, 这可能是他们的服务暂时中断，请稍后重试, 错误代码: {_Steam_Service_Error}");
                         if (IsMessageBox)
                             MessageBox_I.Error($"上游服务错误, 在向 Steam 的官方 API 请求数据时遇到了问题, 这可能是他们的服务暂时中断，请稍后重试. 错误代码: {_Steam_Service_Error}", _ERROR);
-                        return null;
+                        throw new IException.UAPI.Steam.SteamServiceError();
                     case 401: //未经授权
                         WriteLog.Error(LogKind.Network, $"API返回响应: 认证失败。你提供的 Steam Web API Key 无效或已过期，或者你没有提供 Key。请检查你的 Key. 错误代码: {_Steam_Server_UnAuthenticated}");
                         if (IsMessageBox)
                             MessageBox_I.Error($"认证失败。你提供的 Steam Web API Key 无效或已过期，或者你没有提供 Key。请检查你的 Key. 错误代码: {_Steam_Server_UnAuthenticated}", _ERROR);
-                        return null;
+                        throw new IException.UAPI.Steam.UnAuthenticatedSteamKey();
 
                     default:
-                        WriteLog.Error(LogKind.Json, $"Json 反序列化过程中出现未知错误, 错误代码: {_Json_DeObject_Unknow_Exception}");
-                        if (IsMessageBox)
-                            MessageBox_I.Error($"Json 反序列化过程中出现未知错误, 错误代码: {_Json_DeObject_Unknow_Exception}", _ERROR);
-                        return null;
+                        WriteLog.Error(LogKind.Network, $"未知异常, 请联系管理员, 错误代码: {_UNKNOW_ERROR}");
+                        throw new IException.UAPI.General.UnknowUAPIException();
                 }
                 // 输出字段值
                 WriteLog.Info(LogKind.Network, $"API 返回的代码: {SteamType.code}");
