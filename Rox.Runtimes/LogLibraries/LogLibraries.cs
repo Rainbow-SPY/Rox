@@ -72,7 +72,7 @@ namespace Rox
             /// <param name="message">消息</param>
             internal static void WriteLog_(string logLevel, LogKind logKind, string message) => WriteLog_(logLevel, logKind.ToString(), message);
 
-            internal static void WriteLog_(string logLevel,string logKind,string message)
+            internal static void WriteLog_(string logLevel, string logKind, string message)
             {
 
                 switch (logLevel)

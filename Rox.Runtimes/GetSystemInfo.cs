@@ -62,7 +62,7 @@ namespace Rox.Runtimes
                     }
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
                 OSName = "获取系统型号失败";
                 OSBuildNumber = "获取版本号失败";
@@ -78,7 +78,7 @@ namespace Rox.Runtimes
             {
                 SystemLanguage = CultureInfo.CurrentUICulture.Name;
             }
-            catch(Exception)
+            catch (Exception)
             {
                 SystemLanguage = "获取语言失败";
             }

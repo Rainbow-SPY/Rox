@@ -41,7 +41,7 @@ namespace Rox
                             if (!response.IsSuccessStatusCode)
                             {
                                 WriteLog.Error(LogKind.Network, $"请求失败: {response.StatusCode}, 错误代码: {_HttpClient_Request_Failed}");
-                                MessageBox_I.Error($"请求失败: {response.StatusCode}, 错误代码: {_HttpClient_Request_Failed}",_ERROR);
+                                MessageBox_I.Error($"请求失败: {response.StatusCode}, 错误代码: {_HttpClient_Request_Failed}", _ERROR);
                                 return null;
                             }
                             var responseData = await response.Content.ReadAsStringAsync();

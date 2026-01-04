@@ -33,14 +33,14 @@ namespace Rox.Runtimes
                 WriteLog.Info(LogKind.Process, $"处理器相关性已成功修改为（十进制）：{cpuMask}");
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 WriteLog.Error(LogKind.Process, _Exception_With_xKind("ChangeProcessorAffinity", ex));
                 return false;
             }
-            
-            
-            }
+
+
+        }
         /// <summary>
         /// 调整进程优先级
         /// </summary>

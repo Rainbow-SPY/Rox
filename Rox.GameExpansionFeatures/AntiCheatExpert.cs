@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
-using static Rox.Runtimes.LogLibraries;
 using static Rox.Runtimes.IProcess;
+using static Rox.Runtimes.LogLibraries;
 
 namespace Rox.GameExpansionFeatures
 {

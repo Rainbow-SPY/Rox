@@ -139,7 +139,7 @@ namespace Rox.GameExpansionFeatures
                 // 检查响应是否成功
                 if (!response.IsSuccessStatusCode)
                 {
-                    WriteLog.Error(LogKind.Network,$"请求失败: {response.StatusCode}, {_HttpClient_Request_Failed}");
+                    WriteLog.Error(LogKind.Network, $"请求失败: {response.StatusCode}, {_HttpClient_Request_Failed}");
                     if (IsMessageBox)
                         MessageBox_I.Error($"请求失败: {response.StatusCode}, {_HttpClient_Request_Failed}", _ERROR);
                     return null;
@@ -153,7 +153,7 @@ namespace Rox.GameExpansionFeatures
                 string compressedJson = CompressJson(responseData);
                 WriteLog.Info(LogKind.Json, "反序列化 Json");
                 var SteamType = DeserializeObject<SteamType>(compressedJson);
-                switch (SteamType.code)
+                switch ((int)response.StatusCode)
                 {
                     case 404: // 未找到账户 或 完全私密个人资料
                         WriteLog.Error(LogKind.Network, $"API返回响应: Steam账户不存在或完全私密了个人资料, 错误代码: {_Steam_Not_Found_Account}");
@@ -220,7 +220,7 @@ namespace Rox.GameExpansionFeatures
             /// <summary>
             /// 返回值
             /// </summary>
-            public int code { get; set; }
+            public string code { get; set; }
             /// <summary>
             /// SteamID64
             /// </summary>

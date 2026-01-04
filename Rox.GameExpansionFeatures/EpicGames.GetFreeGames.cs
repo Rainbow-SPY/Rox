@@ -44,7 +44,7 @@ namespace Rox.GameExpansionFeatures.EpicGames
                     WriteLog.Info(LogKind.Json, $"反序列化 Json");
                     WriteLog.Info("开始解析Json");
                     var type = Newtonsoft.Json.JsonConvert.DeserializeObject<EpicType>(compressedJson);
-                    switch (type.code)
+                    switch ((int)response.StatusCode)
                     {
                         case 200:
                             WriteLog.Info(LogKind.Network, $"API返回响应: Json解析成功");

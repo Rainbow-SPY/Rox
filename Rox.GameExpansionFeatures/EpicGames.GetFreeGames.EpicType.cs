@@ -12,7 +12,7 @@ namespace Rox.GameExpansionFeatures.EpicGames
             /// <summary>
             /// 返回值
             /// </summary>
-            public int code { get; set; }
+            public string code { get; set; }
             /// <summary>
             /// 信息
             /// </summary>

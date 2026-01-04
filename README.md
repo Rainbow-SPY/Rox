@@ -1,7 +1,7 @@
 ![Icon](docs/logo+Text.png)
 
-Rox 是一个使用 C# .NET Framework 4.7.2 编写，并使用 Microsoft Visual Studio 2022 编译的跨平台动态链接库。它提供了多种功能模块，包括日志记录、文件操作、网络检查、Windows 系统配置、AI 集成,**音频解密**等。
-> 更新到 2025年12月17日 7:53 AM.
+Rox 是一个使用 C# .NET Framework 4.7.2 编写，并使用 Microsoft Visual Studio 2026 编译的跨平台动态链接库。它提供了多种功能模块，包括日志记录、文件操作、网络检查、API请求多种功能、Windows 系统配置等。
+> 更新到 2026年1月4日 6:53 PM.
 
 ---
 ## 📜 License / 许可证  
@@ -29,7 +29,7 @@ This project is licensed under **AGPL-3.0 + Attribution + Non-Commercial terms**
 - [当地天气查询](#天气查询可等待)
 
 ## 目录
-#### [操作手册](#操作手册-1)
+### [操作手册](#操作手册-1)
 - [日志](#1-日志)
 	- [日志输出](#控制台打印彩色日志)
 	- [写入日志到文件](#写入日志到文件)
@@ -60,8 +60,9 @@ This project is licensed under **AGPL-3.0 + Attribution + Non-Commercial terms**
 	- [获取 Steam 安装路径](#获取-steam-安装路径)
 	- [获取CS2安装路径](#获取cs2安装路径)
 	- [Minecraft Java版 村庄英雄Buff加成的交易价格计算](#minecraft-java版-村庄英雄buff加成的交易价格计算)
+	- [Epic Games 拉取免费游戏](
 
-#### [开发环境](#开发环境-1)
+### [开发环境](#开发环境-1)
 
 ## 操作手册
 ### 1.日志
@@ -256,12 +257,11 @@ Rox.Text.Json.SerializeObject(object obj);
 * **返回值:** 返回序列化后的Json字符串
 ### 9. API查询
 
-#### Steam个人信息查询(兼容v1)(可等待)
+#### Steam个人信息查询_v1(可等待)
 ```csharp
-Rox.API.SteamUserData.GetDataJson(string SteamID);
-Rox.API.SteamUserData_v1.GetDataJson_v1(string SteamID);
+await Rox.GameExpansionFeatures.SteamUserData_v1.GetDataJson_v1(string SteamID);
 
-var type = await Rox.API.SteamUserData.GetDataJson(SteamID);
+var type = await Rox.GameExpansionFeatures.SteamUserData_v1.GetDataJson_v1(SteamID);
 var info = type.$SteamType$;
 ```
 
@@ -269,100 +269,42 @@ var info = type.$SteamType$;
 * **`$SteamType$`:** 实际的 **SteamType** 属性
 * **返回类型:** `Json`
 * **返回值:** 返回Steam用户信息
-<br><br>
-举个例子: 获取好友代码及多个数值
-
-```csharp
-var type = await Rox.API.SteamUserData.GetDataJson("7656xxxxxxxx"); // 先获取返回的Json
-
-string FriendCode = type.friendcode; // 提取好友代码属性值
-strike username = type.username; //提取用户名属性值
-...
-```
-
 
 **附: SteamType类属性**
-
-| 属性  | 注释 | 返回类型 |
-| :------------: |:------------: | :------------: |
-| code | HttpClient返回值 (200成功,432无玩家信息,443无效的输入) | int |
-| communityvisibilitystate | ⚠**仅v1** 社区隐私状态 | int |
-| communitystate | ⚠**不兼容v1** 社区隐私状态 | string |
-| steamID | ⚠**不兼容v1** SteamID ( STEAM_0:1:xxxxxxxx ) | string |
-| steamID3 | ⚠**不兼容v1** SteamID3 ( [U:1:xxxxxxx] ) | string |
-| steamID64 | ⚠**不兼容v1** SteamID64 ( 7656xxxxxxxx ) | string |
-| steamid | ⚠**仅v1** SteamID64 ( 7656xxxxxxxx ) | string |
-| username | ⚠**不兼容v1** 用户名 | string |
-| personaname | ⚠**仅v1** 用户名 | string |
-| realname | 真实姓名 | string |
-| profileurl | ⚠️个人主页链接, 原生属性使用会**带有转义字符**(https:\\/\\/) |
-| profileurl_1 | ✔️个人主页链接, 使用此属性可输出**无转义符的网址** | 
-| avator | ⚠️头像链接, 原生属性使用会**带有转义字符**(https:\\/\\/) |
-| avator_1 | ✔️个人主页链接, 使用此属性可输出**无转义符的网址** | 
+<!----| code | 返回值 |---->
+| 属性  | 注释 |
+| :------------: |:------------: |
+| **`int`** communityvisibilitystate | 社区隐私状态, 1 为可见 3为隐藏 |
+| steamID3 | SteamID3 ( [U:1:xxxxxxx] ) |
+| steamid | SteamID64 ( 7656xxxxxxxx ) |
+| personaname | 用户名 |
+| realname | 真实姓名 |
+| profileurl | **带有转义符**的个人主页链接(https:\\/\\/) |
+| profileurl_1 | **无转义符**的个人主页链接 |
+| avator | **带有转义字符**的头像链接(https:\\/\\/) |
+| avator_1 | **无转义符**的头像链接 |
 | accountcreationdate | 账号创建时间 |
-| lastlogoff | ⚠**不兼容v1** 上次登出时间 |
-| location | 账号绑定区域 |
-| onlinestatus | 在线状态 |
+| loccountrycode | 账号绑定区域 |
+| personastate | 在线状态, 0-离线, 1-在线<br> 2-忙碌, 3-离开, 4-打盹, 5-想交易, 6-想玩。 |
 | friendcode | ⚠**不兼容v1** 好友代码 |
 | profilestate| ⚠**仅v1** 如果属性返回 1 代表用户已经填写了个人资料 |
-___
-#### Steam个人信息 - 直接方法调用 (可等待)
-
-> **以下内容返回类型均为`string`**
-
-```csharp
-string text = await Rox.API.SteamUserData.$void$(string SteamID);
-
-举个例子:
- string name = await Rox.API.SteamUserData.GetUserNameString("7656xxxxxxxx"); // 获取用户名
- string avator = await Rox.API.SteamUserData.GetAvatarString("7656xxxxxxxx"); // 获取头像链接
- ...
-```
-* **`$void$`:** 实际的直接调用方法  
-* **`steamID`:** SteamID,支持SteamID3,ID64,个人主页链接,自定义URL,好友代码
-  
-  
-通过对此类方法组的调用可以直接获取到字符串, 不用进一步解析Json
-
-**附: 直接调用方法列表**
-
-| 方法  |  返回值 | 注释 |
-| :------------: | :------------: |:------------: |
-| GetCommunityState | 目前状态 | 获取社区状态 |
-| GetSteamIDString | SteamID | 获取SteamID |
-| GetSteamID3String | SteamID3 | 获取SteamID3 |
-| GetUserNameString | 用户名 | 获取Steam用户名 |
-| GetSteamID64String | SteamID64 | 获取SteamID64 |
-| GetSteamProfileUrlString | URL | 获取Steam个人主页链接地址 |
-| GetAvatarString | URL | 获取Steam头像链接地址 |
-| GetAccountCreationDateString | 日期 | 获取账号创建日期 |
-| GetLastLogoffString | 日期 | 获取账号最后登出时间 |
-| GetLocationString | 国家或地区 | 获取账号绑定区域 |
-| GetOnlineStatusString | 目前状态 | 获取在线状态 |
-| GetFriendCodeString | 好友代码 | 获取好友代码 |
-| GetRealNameString | 真实姓名 | 获取真实姓名 |
-
-
-
-
-
-
-
-
 
 ___
-#### 天气查询(可等待)
+#### 天气查询_v1(可等待)
 ```csharp
-var allweather = await Rox.API.Weather.GetWeatherDataJson(string city);//获取返回的Json
+var allweather = await Rox.API.Weather_v1.GetWeatherDataJson(string city);//获取返回的Json
+var allweather = await Rox.API.Weather_v1.GetWeatherDataJson(int adcode);//获取返回的Json
 string type = allweather.$WeatherType$; //获取属性值
 
 举个例子:
-var allweather = await Rox.API.Weather.GetWeatherDataJson("东城区");
+var allweather = await Rox.API.Weather_v1.GetWeatherDataJson("东城区");
+var allweather = await Rox.API.Weather_v1.GetWeatherDataJson(101101);
 string temperature = allweather.temperature_1; //获取气温属性值
 ```
 
 * **`$WeatherType$`:** 实际的 **WeatherType** 属性
 * **`city`:** 指定的地区
+* **`adcode`:** 高德地图的6位数字城市编码
 * **返回类型:** `Json`
 * **返回值:** 天气信息
 
@@ -370,49 +312,21 @@ string temperature = allweather.temperature_1; //获取气温属性值
 
 | 属性  | 注释 |
 | :------------: |:------------: |
-| code | ⚠️**此属性为int类型** HttpClient返回值 (200成功,500未查询到城市,400空输入,0非法/不安全的请求) |
-| province | 省份名称 |
+| code | 错误代码 |
 | city | 城市名称 |
-| temperature | 气温⚠️**此属性不输出单位** 请使用`temperature_1`获取更好体验 |
-| temperature_1 | 气温 ✔️ **此属性输出带有单位的字符串** |
+| **`int`** humidty | 湿度 |
+| humidty_1 | 带有单位的湿度字符串 |
+| province | 省份名称 |
+| report_time | 天气的更新时间 |
+| **`int`** temperature | 气温 |
+| temperature_1 | 带有单位的气温字符串 |
 | weather | 天气状况 |
-| wind_direction | 风向 ⚠️**此属性不输出单位** 请使用`wind_direction_1`获取更好体验 |
-| wind_direction_1 | 风向 ✔️**此属性输出带有单位的字符串** |
-| wind_power | 风力等级 ⚠️**此属性不输出单位** 请使用`wind_power_1`获取更好体验|
-| wind_power_1 | 风力等级 ✔️**此属性输出带有单位的字符串** |
-| humidty | 湿度 ⚠️**此属性不输出单位** 请使用`humidty_1`获取更好体验|
-| humidty_1 | 湿度 ✔️**此属性输出带有单位的字符串** |
-| reporttime | 天气的更新时间 |
+| **`int`** wind_direction | 风向 |
+| wind_direction_1 | 带有单位的风向字符串 |
+| **`int`** wind_power | 风力等级 |
+| wind_power_1 | 带有单位的风力等级字符串 |
 | msg | 错误信息 |
 ___
-#### 天气查询 - 直接方法调用
-
-> **以下内容返回类型均为`string`**
-
-```csharp
-var text = await Rox.API.Weather.$void$(string city);
-
-举个例子:
-var temperature = await Rox.API.Weather.GetTemperature("东城区"); // 获取北京市东城区的气温
-var weather = await Rox.API.Weather.GetWeather("黑河市"); //获取黑龙江省黑河市的天气状况
-...
-```
-* **`$void$`:** 实际的直接调用方法
-* **`city`:** 指定的地区  
-  
-  
-通过对此类方法组的调用可以直接获取到字符串, 不用进一步解析Json
-
-**附: 直接调用方法列表**
-
-| 方法  |  返回值 | 注释 |
-| :------------: | :------------: |:------------: |
-| GetTemperature | 温度 ℃ | 获取指定地区的温度 |
-| GetWeather | 天气 | 获取指定地区的天气 |
-| GetWindDirection | 风向 风 | 获取指定地区的风向 |
-| GetWindPower | 风力 级 | 获取指定地区的风力 |
-| GetHumidity | 湿度 % | 获取SteamID64 |
-
 ### 10.游戏娱乐
 
 #### 获取 Steam 安装路径
@@ -440,6 +354,29 @@ Rox.GameExpansionFeatures.Minecraft.TradingWithHeroOfVillage_Calculator(int Base
 * **返回类型:** `int`
 * **返回值:** 计算后的交易价格
 
+#### 获取 Epic Games 免费游戏列表
+``` csharp
+await Rox.GameExpansionFeatures.EpicGames.GetFreeGames.GetDataJson()
+```
+* **返回类型:** `Json`
+* **返回值:** 一个或多个免费游戏的详细列表
+
+**附: WeatherType属性**
+
+| 属性  | 注释 |
+| :------------: |:------------: |
+| id | Epic游戏的唯一标识符 |
+| title | 游戏的完整标题名称 |
+| cover | 封面图片的URL地址 |
+| **`int`** original_price |  游戏原价 单位 CNY¥ |
+| original_price_desc | 格式化后的原价描述字符串 |
+| description | 游戏的简介描述 |
+| seller | 发行商 |
+| **`bool`** is_free_now | 当前是否免费 |
+| free_start | 免费开始时间的可读字符串格式 |
+| free_end | 免费结束时间的可读字符串格式 |
+| link | 游戏在Epic Games商店的详情页链接 |
+| message | 错误信息 |
 
 ## 开发环境
 [Visual Studio 2026](https://visualstudio.microsoft.com/zh-hans/vs)
@@ -454,3 +391,13 @@ Rox.GameExpansionFeatures.Minecraft.TradingWithHeroOfVillage_Calculator(int Base
 	- C# .NET Framework 4.7.2
 - 依赖项
 	- [视觉窗体库 AntdUI](https://www.nuget.org/packages/AntdUI)
+	- [Json处理 Newtonsoft.Json ](https://www.nuget.org/packages/newtonsoft.json)
+    	> (部分使用, 大部分使用项目内的 `Rox.Text.Json` 进行简单反/序列化)
+- 扩展
+	> 以下扩展均为 Visual Studio 2026 版本适用的扩展
+    - [ClaudiaIDE **(视觉 更改文本编辑器的背景)**](https://marketplace.visualstudio.com/items?itemName=kbuchi.ClaudiaIDE)
+    - [Hide Main Menu, Title Bar, and Tabs 2026 **(视觉 隐藏Tab栏,主菜单)**](https://marketplace.visualstudio.com/items?itemName=ChrisTorng.MinimalisticView)
+    - [IntelliSense Extender 2022 **(代码辅助 IntelliSense增强版)**](https://marketplace.visualstudio.com/items?itemName=Dreamescaper.IntelliSenseExtender2022)
+    - [IntelliSense汉语拼音拓展 **(代码辅助 支持汉语拼音拓展)**](https://marketplace.visualstudio.com/items?itemName=stratos.ChinesePinyinIntelliSenseExtender)
+    - [Markdown Editor v2 **(编辑器 支持编辑和实时显示Markdown)**](https://marketplace.visualstudio.com/items?itemName=MadsKristensen.MarkdownEditor2)
+    - [One Dark Pro 2026 **(视觉 主题)**](https://marketplace.visualstudio.com/items?itemName=Bayaraa.OneDarkPro2026)
