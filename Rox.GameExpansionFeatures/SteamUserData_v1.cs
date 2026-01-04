@@ -91,29 +91,29 @@ namespace Rox.GameExpansionFeatures
                             return null;
                         }
                         else
-                            return await SendQueryMessage(SteamUserData.ExtractSteamID(SteamID), new HttpClient(), IsMessageBox); //解析SteamID64
+                            return await SendQueryMessage("steamid",SteamUserData.ExtractSteamID(SteamID), new HttpClient(), IsMessageBox); //解析SteamID64
                 }
             }
 
             if (ID64Steam)
             {
                 WriteLog.Info(LogKind.Regex, $"正在解析SteamID64: {SteamID}");
-                return await SendQueryMessage(SteamID, httpClient, IsMessageBox); //解析SteamID64
+                return await SendQueryMessage("steamid",SteamID, httpClient, IsMessageBox); //解析SteamID64
             }
             if (FriendCodeSteam)
             {
                 WriteLog.Info(LogKind.Regex, $"正在解析好友代码: {SteamID}");
-                return await SendQueryMessage($"[U:1:{SteamID}]", httpClient, IsMessageBox); //解析好友代码
+                return await SendQueryMessage("steamid",$"[U:1:{SteamID}]", httpClient, IsMessageBox); //解析好友代码
             }
             if (ID3Steam)//解析SteamID3
             {
                 WriteLog.Info(LogKind.Regex, $"正在解析SteamID3: {SteamID}");
-                return await SendQueryMessage(SteamID, httpClient, IsMessageBox); //解析SteamID3
+                return await SendQueryMessage("id3",SteamID, httpClient, IsMessageBox); //解析SteamID3
             }
             if (CustomSteam)//解析自定义ID
             {
                 WriteLog.Info(LogKind.Regex, $"正在解析自定义ID: {SteamID}");
-                return await SendQueryMessage(SteamID, httpClient, IsMessageBox); //解析自定义ID
+                return await SendQueryMessage("steamid",SteamID, httpClient, IsMessageBox); //解析自定义ID
             }
             WriteLog.Error(_input_value_Not_Is_xType(SteamID, "SteamIDType"));
             if (IsMessageBox)
@@ -123,15 +123,16 @@ namespace Rox.GameExpansionFeatures
         /// <summary>
         /// 向api发送请求获取 <see cref="Text.Json"/> 文本
         /// </summary>
+        /// <param name="Type">指定为steamid, id, ,id3 </param>
         /// <param name="SteamID64">SteamID64</param>
         /// <param name="httpClient"><see cref="HttpClient"/> 实例</param>
         /// <param name="IsMessageBox">是否启用消息窗体输出</param>
         /// <returns><see cref="SteamType"/> 格式的 <see cref="Text.Json"/> 文本</returns>
-        private static async Task<SteamType> SendQueryMessage(string SteamID64, HttpClient httpClient, bool IsMessageBox)
+        private static async Task<SteamType> SendQueryMessage(string Type,string SteamID64, HttpClient httpClient, bool IsMessageBox)
         {
             try
             {
-                var requestUrl = $"https://uapis.cn/api/v1/game/steam/summary?steamid={SteamID64}";
+                var requestUrl = $"https://uapis.cn/api/v1/game/steam/summary?{Type}={SteamID64}";
 
                 WriteLog.Info(LogKind.Network, $"{_SEND_REQUEST}: {requestUrl}");
                 // 发送GET请求并获取响应
@@ -224,7 +225,7 @@ namespace Rox.GameExpansionFeatures
             /// <summary>
             /// SteamID64
             /// </summary>
-            public string steamid { get; set; }
+            public long steamid { get; set; }
             /// <summary>
             /// Steam社区状态, 1 为可见 3为隐藏
             /// </summary>
@@ -296,11 +297,11 @@ namespace Rox.GameExpansionFeatures
             /// <summary>
             /// 好友代码 （SteamID32）
             /// </summary>
-            public string friendcode => Rox.GameExpansionFeatures.Steam.SteamID.GetFriendCode(steamid);
+            public string friendcode => Rox.GameExpansionFeatures.Steam.SteamID.GetFriendCode(steamid.ToString());
             /// <summary>
             /// SteamID3
             /// </summary>
-            public string steamID3 => Rox.GameExpansionFeatures.Steam.Converter.SteamID.ToSteamID3(steamid);
+            public string steamID3 => Rox.GameExpansionFeatures.Steam.Converter.SteamID.ToSteamID3(steamid.ToString());
             ///// <summary>
             ///// Steam最后登出日期
             ///// </summary>
