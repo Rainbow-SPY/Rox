@@ -95,21 +95,26 @@ namespace Rox
                                     throw new IException.UAPI.General.UnknowUAPIException();
 
                             }
-                            WriteLog.Info("Weather",$"请求位置: {weatherType.province} {weatherType.city} Adcode: {weatherType.adcode}\n" +
+                            WriteLog.Info("Weather", $"请求位置: {weatherType.province} {weatherType.city} Adcode: {weatherType.adcode}\n" +
                                 $"今日天气: {weatherType.weather}, 气温:{weatherType.temperature}, 最高气温: {weatherType.temp_max}, 最低气温: {weatherType.temp_min}\n" +
-                                $"" +
-                                $"" +
-                                $"" +
-                                $"" +
-                                $"" +
-                                $"" +
-                                $"" +
-                                $"" +
-                                $"" +
-                                $"" +
-                                $"\n" +
-                                "")
-
+                                $"风向: {weatherType.wind_direction} 风, 风力 {weatherType.wind_power} 级, 湿度 {weatherType.humidity}%\n" +
+                                "\n");
+                            if (forecast)
+                            {
+                                WriteLog.Info("Weather", $"未来三天的天气预报");
+                                foreach (var _data in weatherType.ForcastData)
+                                {
+                                    WriteLog.Info("Weather Forcast", $"{_data.date} 的天气预报:\n" +
+                                        $"白天天气: {_data.weather_day}, 夜间天气: {_data.weather_night}\n" +
+                                        $"最高温度: {_data.temp_max} ℃, 最低温度: {_data.temp_min} ℃\n" +
+                                        $"降水量: {_data.precip} mm, 能见度: {_data.visibility} km, 紫外线指数: {_data.uv_index}");
+                                }
+                            }
+                            if (extended)
+                            {
+                                WriteLog.Info("Weather", $"体感温度: {weatherType.feels_like} ℃, 能见度: {weatherType.visibility} km, 紫外线指数: {weatherType.uv}\n" +
+                                    $"空气质量指数: {weatherType.aqi}, 降水量: {weatherType.precipitation} mm, 云量: {weatherType.cloud} %, 气压: {weatherType.pressure} hPa");
+                            }
                             if (weatherType.weather == "" || weatherType.weather == string.Empty || string.IsNullOrWhiteSpace(weatherType.weather))
                                 return null;
                             return weatherType;

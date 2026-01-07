@@ -69,7 +69,7 @@ namespace Rox
                 /// </summary>
                 public List<Forcast> ForcastData { get; set; }
                 /// <summary>
-                /// 未来三天的天气预报
+                /// 未来3天天气预报（forecast=true 时返回）
                 /// </summary>
                 public class Forcast
                 {
@@ -102,16 +102,16 @@ namespace Rox
                     /// </summary>
                     public int precip { get; set; }
                     /// <summary>
-                    /// 能见度 km（extended=true 时返回）
+                    /// 能见度 km
                     /// </summary>
                     public int visibility { get; set; }
                     /// <summary>
-                    /// 紫外线指数 0-11+（extended=true 时返回）
+                    /// 紫外线指数 0-11+
                     /// </summary>
                     public double uv_index { get; set; }
                 }
                 /// <summary>
-                /// 体感温度
+                /// 体感温度 °C（extended=true 时返回）
                 /// </summary>
                 public double feels_like { get; set; }
                 /// <summary>
@@ -123,7 +123,7 @@ namespace Rox
                 /// </summary>
                 public int pressure { get; set; }
                 /// <summary>
-                /// 紫外线指数
+                /// 紫外线指数 0-11+（extended=true 时返回）
                 /// </summary>
                 public double uv { get; set; }
                 /// <summary>
@@ -139,11 +139,11 @@ namespace Rox
                 /// </summary>
                 public int cloud { get; set; }
                 /// <summary>
-                /// 生活指数
+                /// 生活指数（indices=true 时返回）
                 /// </summary>
                 public List<Life_Indices> Life_IndicesData { get; set; }
                 /// <summary>
-                /// 生活指数
+                /// 生活指数（indices=true 时返回）
                 /// </summary>
                 public class Life_Indices
                 {
