@@ -274,20 +274,24 @@ var info = type.$SteamType$;
 <!----| code | 返回值 |---->
 | 属性  | 注释 |
 | :------------: |:------------: |
+| **`long`** steamid | SteamID64 ( 7656xxxxxxxx ) |
 | **`int`** communityvisibilitystate | 社区隐私状态, 1 为可见 3为隐藏 |
-| steamID3 | SteamID3 ( [U:1:xxxxxxx] ) |
-| steamid | SteamID64 ( 7656xxxxxxxx ) |
+| profilestate| 如果属性返回 1 代表用户已经填写了个人资料 |
 | personaname | 用户名 |
-| realname | 真实姓名 |
 | profileurl | **带有转义符**的个人主页链接(https:\\/\\/) |
 | profileurl_1 | **无转义符**的个人主页链接 |
 | avator | **带有转义字符**的头像链接(https:\\/\\/) |
 | avator_1 | **无转义符**的头像链接 |
-| accountcreationdate | 账号创建时间 |
-| loccountrycode | 账号绑定区域 |
 | personastate | 在线状态, 0-离线, 1-在线<br> 2-忙碌, 3-离开, 4-打盹, 5-想交易, 6-想玩。 |
+| realname | 真实姓名 |
+| primaryclanid | 主要组ID |
+| timecreated_str | 创建账号时间 |
+| loccountrycode | 账号绑定区域 (US/CN/HK)|
+
+
+| steamID3 | SteamID3 ( [U:1:xxxxxxx] ) |
+| accountcreationdate | 账号创建时间 |
 | friendcode | ⚠**不兼容v1** 好友代码 |
-| profilestate| ⚠**仅v1** 如果属性返回 1 代表用户已经填写了个人资料 |
 
 ___
 #### 天气查询_v1(可等待)
