@@ -12,21 +12,36 @@ namespace Rox
         /// <summary>
         /// 天气查询, 但是新版本
         /// </summary>
-        public class Weather_v1
+        public partial class Weather_v1
         {
             /// <summary>
             /// 获取天气信息
             /// </summary>
             /// <param name="city">城市名称</param>
+            /// <param name="extended">是否返回扩展气象字段（体感温度、能见度、气压、紫外线指数、空气质量、降水量、云量）。</param>
+            /// <param name="indices">是否返回生活指数（穿衣、紫外线、洗车、晾晒、空调、感冒、运动、舒适度）。</param>
+            /// <param name="forecast">是否返回预报数据（当日最高/最低气温及未来3天天气预报）。</param>
             /// <returns><see cref="WeatherType"/> 类型的 <see cref="Text.Json"/> 对象</returns>
-            public static async Task<WeatherType> GetWeatherDataJson(string city) => await SendMessageRequest(city, "city");
+            public static async Task<WeatherType> GetWeatherDataJson(string city, bool extended = false, bool indices = false, bool forecast = false) => await SendMessageRequest(city, "city", extended, indices, forecast);
             /// <summary>
             /// 获取天气信息
             /// </summary>
             /// <param name="adcode">高德地图的6位数字城市编码</param>
+            /// <param name="extended">是否返回扩展气象字段（体感温度、能见度、气压、紫外线指数、空气质量、降水量、云量）。</param>
+            /// <param name="indices">是否返回生活指数（穿衣、紫外线、洗车、晾晒、空调、感冒、运动、舒适度）。</param>
+            /// <param name="forecast">是否返回预报数据（当日最高/最低气温及未来3天天气预报）。</param>
             /// <returns><see cref="WeatherType"/> 类型的 <see cref="Text.Json"/> 对象</returns>
-            public static async Task<WeatherType> GetWeatherDataJson(int adcode) => await SendMessageRequest(adcode.ToString(), "adcode");
-            private static async Task<WeatherType> SendMessageRequest(string city_Or_adcode, string param)
+            public static async Task<WeatherType> GetWeatherDataJson(int adcode, bool extended = false, bool indices = false, bool forecast = false) => await SendMessageRequest(adcode.ToString(), "adcode", extended, indices, forecast);
+            /// <summary>
+            /// 获取天气信息
+            /// </summary>
+            /// <param name="city_Or_adcode">城市名称或<br/>高德地图的6位数字城市编码</param>
+            /// <param name="param">方法</param>
+            /// <param name="extended">是否返回扩展气象字段（体感温度、能见度、气压、紫外线指数、空气质量、降水量、云量）。</param>
+            /// <param name="indices">是否返回生活指数（穿衣、紫外线、洗车、晾晒、空调、感冒、运动、舒适度）。</param>
+            /// <param name="forecast">是否返回预报数据（当日最高/最低气温及未来3天天气预报）。</param>
+            /// <returns><see cref="WeatherType"/> 类型的 <see cref="Text.Json"/> 对象</returns>
+            private static async Task<WeatherType> SendMessageRequest(string city_Or_adcode, string param, bool extended = false, bool indices = false, bool forecast = false)
             {
                 try
                 {
@@ -36,9 +51,12 @@ namespace Rox
                         MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty("city_Or_adcode")}, 错误代码: {_String_NullOrEmpty}", _ERROR);
                         return null;
                     }
-                    using (var httpClient = new HttpClient())
+                    using (HttpClient httpClient = new HttpClient())
                     {
-                        var requestUrl = $"https://uapis.cn/api/v1/misc/weather?{param}={city_Or_adcode}";
+                        var requestUrl = $"https://uapis.cn/api/v1/misc/weather?{param}={city_Or_adcode}" +
+                            (extended ? "&extended=true" : "") +
+                            (indices ? "&indices=true" : "") +
+                            (forecast ? "&forecast=true" : "");
                         using (var response = await httpClient.GetAsync(requestUrl))
                         {
                             if (!response.IsSuccessStatusCode)
@@ -50,7 +68,7 @@ namespace Rox
                             WriteLog.Info(LogKind.Json, "压缩 Json");
                             string compressedJson = CompressJson(responseData);
                             WriteLog.Info(LogKind.Json, "反序列化 Json 对象");
-                            var weatherType = DeserializeObject<WeatherType>(compressedJson);
+                            var weatherType = Newtonsoft.Json.JsonConvert.DeserializeObject<WeatherType>(compressedJson);
                             switch ((int)response.StatusCode) // 修改为通过实例访问 code 属性
                             {
                                 case 400:
@@ -77,83 +95,38 @@ namespace Rox
                                     throw new IException.UAPI.General.UnknowUAPIException();
 
                             }
+                            WriteLog.Info("Weather",$"请求位置: {weatherType.province} {weatherType.city} Adcode: {weatherType.adcode}\n" +
+                                $"今日天气: {weatherType.weather}, 气温:{weatherType.temperature}, 最高气温: {weatherType.temp_max}, 最低气温: {weatherType.temp_min}\n" +
+                                $"" +
+                                $"" +
+                                $"" +
+                                $"" +
+                                $"" +
+                                $"" +
+                                $"" +
+                                $"" +
+                                $"" +
+                                $"" +
+                                $"\n" +
+                                "")
+
                             if (weatherType.weather == "" || weatherType.weather == string.Empty || string.IsNullOrWhiteSpace(weatherType.weather))
                                 return null;
                             return weatherType;
                         }
                     }
                 }
+                catch (HttpRequestException ex)
+                {
+                    WriteLog.Error(LogKind.Network, $"HttpClient 请求失败, 请检查网络连接或API服务状态: {ex.Message}, 错误代码: {_HttpClient_Request_Failed}");
+                    return null;
+                }
                 catch (Exception ex)
                 {
                     WriteLog.Error(LogKind.Network, $"获取天气信息失败，请检查网络连接或API服务状态: {ex.Message}, 错误代码:  {_Weather_Unknow_Exception}");
                     return null;
                 }
-            }
-            /// <summary>
-            /// 获取指定城市的数据更新时间信息属性
-            /// </summary>
-            public class WeatherType
-            {
-                /// <summary>
-                /// 错误的返回值
-                /// </summary>
-                public string code { get; set; }
-                /// <summary>
-                /// 省份名称
-                /// </summary>
-                public string province { get; set; }
-                /// <summary>
-                /// 城市名称
-                /// </summary>
-                public string city { get; set; }
-                /// <summary>
-                /// 高德地图的6位数字城市编码
-                /// </summary>
-                public string adcode { get; set; }
-                /// <summary>
-                /// 天气状况
-                /// </summary>
-                public string weather { get; set; }
-                /// <summary>
-                /// 温度,带单位
-                /// </summary>
-                public string temperature_1 => temperature.ToString() + "℃"; // 20℃ 30℃
-                /// <summary>   
-                /// 温度
-                /// </summary>
-                public int temperature { get; set; }
-                ///// <summary>
-                ///// 风向,带单位
-                ///// </summary>
-                //public string wind_direction_1 => wind_direction + "风"; // 东南风 西北风
-                /// <summary>
-                /// 风向
-                /// </summary>
-                public string wind_direction { get; set; }
-                /// <summary>
-                /// 风力等级,带单位
-                /// </summary>
-                public string wind_power_1 => wind_power + "级"; // 1级 2级
-                /// <summary>
-                /// 风力等级
-                /// </summary>
-                public string wind_power { get; set; }
-                /// <summary>
-                /// 湿度,带单位
-                /// </summary>
-                public string humidity_1 => humidity.ToString() + "%";
-                /// <summary>
-                /// 湿度
-                /// </summary>
-                public int humidity { get; set; }
-                /// <summary>
-                /// 数据更新时间	
-                /// </summary>
-                public string report_time { get; set; }
-                /// <summary>
-                /// 错误信息
-                /// </summary>
-                public string message { get; set; }
+
             }
         }
     }
