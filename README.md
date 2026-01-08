@@ -38,7 +38,7 @@ This project is licensed under **AGPL-3.0 + Attribution + Non-Commercial terms**
 - [安全软件检测](#3-安全软件检测)
 - [网络](#4-网络)
 	- [网络可用性检查](#网络可用性检查)
-- [Windows系统相关配置](#5-Windows系统相关配置)
+- [Windows系统相关配置](#5-windows系统相关配置)
 	- [休眠](#启用禁用休眠)
 	- [卓越性能](#启用卓越性能)
 	- [启用禁用 Windows 安全中心 与 Windows Defender](#启用禁用windows-安全中心与windows-defender)
@@ -47,20 +47,20 @@ This project is licensed under **AGPL-3.0 + Attribution + Non-Commercial terms**
 	- [读取注册表项值](#读取注册表项值)
 - [文件](#6-文件)
 	- [文件属性修改](#文件属性修改)
-	- [MD5哈希值对比](##md5哈希值对比)
+	- [MD5哈希值对比](#md5哈希值对比)
 	- [获取文件MD5哈希值](#获取文件md5哈希值)
 - [Windows 身份验证](#7-windows-身份验证)
 - [文本类处理](#8-文本类处理)
 	- [Json反序列化](#json反序列化)
 	- [Json序列化](#json序列化)
 - [API查询](#9-api查询)
-	- [Steam 个人信息公开摘要(v1)](#steam个人信息查询兼容v1可等待)
-	- [天气查询(v2)](#天气查询v2可等待)
+	- [Steam 个人信息公开摘要(v1)](#steam个人信息查询_v1可等待)
+	- [天气查询(v2)](#天气查询_v2可等待)
 - [游戏娱乐](#10-游戏娱乐)
 	- [获取 Steam 安装路径](#获取-steam-安装路径)
 	- [获取CS2安装路径](#获取cs2安装路径)
 	- [Minecraft Java版 村庄英雄Buff加成的交易价格计算](#minecraft-java版-村庄英雄buff加成的交易价格计算)
-	- [Epic Games 拉取免费游戏](#获取-Epic-免费游戏列表)
+	- [Epic Games 拉取免费游戏](#获取-epic-games-免费游戏列表)
 
 ### [开发环境](#开发环境-1)
 
@@ -410,7 +410,7 @@ string advice = allweather.life_indices.uv.advice;
 * **返回类型:** `JObject`
 * **返回值:** 天气信息
 ___
-### 10.游戏娱乐
+### 10. 游戏娱乐
 
 #### 获取 Steam 安装路径
 ```csharp
