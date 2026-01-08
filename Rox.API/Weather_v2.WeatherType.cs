@@ -67,7 +67,7 @@ namespace Rox
                 /// <summary>
                 /// <see cref="List{Forcast}"/> 未来三天的天气预报
                 /// </summary>
-                public List<Forcast> ForcastData { get; set; }
+                public List<Forcast> forecast { get; set; }
                 /// <summary>
                 /// 未来3天天气预报（forecast=true 时返回）
                 /// </summary>
@@ -139,64 +139,64 @@ namespace Rox
                 /// </summary>
                 public int cloud { get; set; }
                 /// <summary>
-                /// 生活指数（indices=true 时返回）
+                /// 
                 /// </summary>
-                public List<Life_Indices> Life_IndicesData { get; set; }
+                public class IndicesLevel
+                {
+                    /// <summary>
+                    /// 等级
+                    /// </summary>
+                    public string level { get; set; }
+                    /// <summary>
+                    /// 简述
+                    /// </summary>
+                    public string brief { get; set; }
+                    /// <summary>
+                    /// 建议
+                    /// </summary>
+                    public string advice { get; set; }
+                }
+                /// <summary>
+                /// 生活指数
+                /// </summary>
+                public Life_Indices life_indices { get; set; }
                 /// <summary>
                 /// 生活指数（indices=true 时返回）
                 /// </summary>
                 public class Life_Indices
                 {
                     /// <summary>
-                    /// 
-                    /// </summary>
-                    public class IndicesLevel
-                    {
-                        /// <summary>
-                        /// 
-                        /// </summary>
-                        public string level { get; set; }
-                        /// <summary>
-                        /// 
-                        /// </summary>
-                        public string brief { get; set; }
-                        /// <summary>
-                        /// 
-                        /// </summary>
-                        public string advice { get; set; }
-                    }
-                    /// <summary>
                     /// 穿衣指数
                     /// </summary>
-                    public List<IndicesLevel> clothing {  get; set; }
+                    public IndicesLevel clothing { get; set; }
                     /// <summary>
                     /// 紫外线指数
                     /// </summary>
-                    public List<IndicesLevel> uv { get; set; }
+                    public IndicesLevel uv { get; set; }
                     /// <summary>
                     /// 洗车指数
                     /// </summary>
-                    public List<IndicesLevel> car_wash { get; set; }
+                    public IndicesLevel car_wash { get; set; }
                     /// <summary>
                     /// 晾晒指数
                     /// </summary>
-                    public List<IndicesLevel> drying { get; set; }
+                    public IndicesLevel drying { get; set; }
                     /// <summary>
                     /// 空调指数
                     /// </summary>
-                    public List<IndicesLevel> air_conditioner { get; set; }
+                    public IndicesLevel air_conditioner { get; set; }
                     /// <summary>
                     /// 感冒指数
                     /// </summary>
-                    public List<IndicesLevel> cold_risk { get; set; }
+                    public IndicesLevel cold_risk { get; set; }
                     /// <summary>
                     /// 运动指数
                     /// </summary>
-                    public List<IndicesLevel> exercise { get; set; }
+                    public IndicesLevel exercise { get; set; }
                     /// <summary>
                     /// 舒适度指数
                     /// </summary>
-                    public List<IndicesLevel> comfort { get; set; }
+                    public IndicesLevel comfort { get; set; }
                 }
             }
         }

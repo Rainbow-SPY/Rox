@@ -55,12 +55,12 @@ This project is licensed under **AGPL-3.0 + Attribution + Non-Commercial terms**
 	- [Json序列化](#json序列化)
 - [API查询](#9-api查询)
 	- [Steam 个人信息公开摘要(v1)](#steam个人信息查询兼容v1可等待)
-	- [天气查询](#天气查询可等待)
+	- [天气查询(v2)](#天气查询v2可等待)
 - [游戏娱乐](#10-游戏娱乐)
 	- [获取 Steam 安装路径](#获取-steam-安装路径)
 	- [获取CS2安装路径](#获取cs2安装路径)
 	- [Minecraft Java版 村庄英雄Buff加成的交易价格计算](#minecraft-java版-村庄英雄buff加成的交易价格计算)
-	- [Epic Games 拉取免费游戏](
+	- [Epic Games 拉取免费游戏](#获取-Epic-免费游戏列表)
 
 ### [开发环境](#开发环境-1)
 
@@ -114,13 +114,13 @@ Rox.DownloadAssistant.Downloader(string url,string location,bool log);
 
 * **`log`** : 是否启用日志输出
 
-当`bool`为`true`时,日志会输出到程序目录下的`aria2c.log`文件内,反之`false`则不会.
+当`log`为`true`时,日志会输出到程序目录下的`aria2c.log`文件内,反之`false`则不会.
 ___
 ### 3. 安全软件检测
 
 ```csharp
-Rox.Security.Is360SafeRunning();
-Rox.Security.IsHuorongSecurityRunning();
+bool Rox.Security.Is360SafeRunning();
+bool Rox.Security.IsHuorongSecurityRunning();
 ```
 
 * **返回值:** `true` 表示安全软件正在运行，`false` 表示未运行。
@@ -128,7 +128,7 @@ Rox.Security.IsHuorongSecurityRunning();
 #### 网络可用性检查
 
 ```csharp
-Rox.Runtimes.Network_I.IsNetworkAvailable();
+bool Rox.Runtimes.Network_I.IsNetworkAvailable();
 ```
 
 - **返回值:** `true` 表示网络可用，`false` 表示网络不可用。
@@ -161,9 +161,9 @@ ___
 #### 检查 Windows Update状态
 
 ```csharp
-bool status = Rox.Windows.WindowsUpdate.CheckStatus();
+bool Rox.Windows.WindowsUpdate.CheckStatus();
 ```
-* **返回类型:** bool
+* **返回类型:** `bool`
 * **返回值:** 已禁用更新返回`false`.已启用更新返回`true`,键值不存在或遇到未知错误返回`false`
 ___
 #### 写入注册表
@@ -210,7 +210,7 @@ Rox.Runtimes.File_I.FileProperties(string path, Properties key, bool Enable);
 
 #### MD5哈希值验证
 ```csharp
-Rox.Runtimes.File_I.CheckFileHash(string filePath, string expectedMD5);
+bool Rox.Runtimes.File_I.CheckFileHash(string filePath, string expectedMD5);
 ```
 
 * **`filePath`: 文件路径**
@@ -229,7 +229,7 @@ Rox.Runtimes.File_I.CalculateMD5(string filePath);
 ### 7. Windows 身份验证
 
 ```csharp
-Rox.Windows.Authentication();
+bool Rox.Windows.Authentication();
 ```
 * **返回类型: `bool`**
 * **返回值:** `true` 表示验证成功，`false` 表示取消操作
@@ -241,8 +241,8 @@ Rox.Text.Json.DeserializeObject<T>(string json);
 Rox.Text.Json.DeserializeObject(string json);
 ```
 
-* **`json`:** Json字符串*
-* **返回类型:** `<T>`  `<dynamic>`
+* **`json`:** Json字符串
+* **返回类型:** `<T> JObject`
 * **返回值:** 返回反序列化后的对象
 > 注： `<dynamic>` 已经包含在 DeserializeObject(string json) 方法中，因为返回类型是 `<dynamic>`，所以不需要额外的方法。
 ___
@@ -266,70 +266,149 @@ var info = type.$SteamType$;
 ```
 
 * **`steamID`:** SteamID,支持SteamID3,ID64,个人主页链接,自定义URL,好友代码
-* **`$SteamType$`:** 实际的 **SteamType** 属性
+<details><summary><code>$SteamType$</code>:</strong> 实际的 SteamType 属性</summary>
+
+> | 属性  | 注释 |
+> | :------------: |:------------: |
+> | **`long`** steamid | SteamID64 ( 7656xxxxxxxx ) |
+> | **`int`** communityvisibilitystate | 社区隐私状态, 1 为可见 3为隐藏 |
+> | **`int`** profilestate| 如果属性返回 1 代表用户已经填写了个人资料 |
+> | personaname | 用户名 |
+> | profileurl | **带有转义符**的个人主页链接(https:\\/\\/) |
+> | profileurl_1 | **无转义符**的个人主页链接 |
+> | avator | **带有转义字符**的头像链接(https:\\/\\/) |
+> | avator_1 | **无转义符**的头像链接 |
+> | **`int`** personastate | 在线状态, 0-离线, 1-在线<br> 2-忙碌, 3-离开, 4-打盹, 5-想交易, 6-想玩。 |
+> | realname | 真实姓名 |
+> | primaryclanid | 主要组ID |
+> | timecreated_str | 创建账号时间 |
+> | loccountrycode | 账号绑定区域 (US/CN/HK)|
+> | friendcode | 好友代码 |
+> | steamID3 | SteamID3 ( [U:1:xxxxxxx] ) |
+
+</details> 
+
 * **返回类型:** `Json`
 * **返回值:** 返回Steam用户信息
 
 **附: SteamType类属性**
 <!----| code | 返回值 |---->
-| 属性  | 注释 |
-| :------------: |:------------: |
-| **`long`** steamid | SteamID64 ( 7656xxxxxxxx ) |
-| **`int`** communityvisibilitystate | 社区隐私状态, 1 为可见 3为隐藏 |
-| profilestate| 如果属性返回 1 代表用户已经填写了个人资料 |
-| personaname | 用户名 |
-| profileurl | **带有转义符**的个人主页链接(https:\\/\\/) |
-| profileurl_1 | **无转义符**的个人主页链接 |
-| avator | **带有转义字符**的头像链接(https:\\/\\/) |
-| avator_1 | **无转义符**的头像链接 |
-| personastate | 在线状态, 0-离线, 1-在线<br> 2-忙碌, 3-离开, 4-打盹, 5-想交易, 6-想玩。 |
-| realname | 真实姓名 |
-| primaryclanid | 主要组ID |
-| timecreated_str | 创建账号时间 |
-| loccountrycode | 账号绑定区域 (US/CN/HK)|
-
-
-| steamID3 | SteamID3 ( [U:1:xxxxxxx] ) |
-| accountcreationdate | 账号创建时间 |
-| friendcode | ⚠**不兼容v1** 好友代码 |
 
 ___
-#### 天气查询_v1(可等待)
+#### 天气查询_v2(可等待)
 ```csharp
-var allweather = await Rox.API.Weather_v1.GetWeatherDataJson(string city);//获取返回的Json
-var allweather = await Rox.API.Weather_v1.GetWeatherDataJson(int adcode);//获取返回的Json
-string type = allweather.$WeatherType$; //获取属性值
+//获取返回的Json
+await Rox.API.Weather_v1.GetWeatherDataJson(string city,bool extended = false, bool indices = false, bool forecast = false);
+await Rox.API.Weather_v1.GetWeatherDataJson(int adcode,bool extended = false, bool indices = false, bool forecast = false);
 
-举个例子:
+string advice = [$WeatherObject$].life_indices.[$Life_Indices$].[$IndicesLevel$];
+
+
+举个例子: 
 var allweather = await Rox.API.Weather_v1.GetWeatherDataJson("东城区");
 var allweather = await Rox.API.Weather_v1.GetWeatherDataJson(101101);
 string temperature = allweather.temperature_1; //获取气温属性值
+foreach (var _data in allweather.forecast)
+{
+	WriteLog.Info("Weather Forcast", $"{_data.date} 的天气预报:\n" +
+		$"白天天气: {_data.weather_day}, 夜间天气: {_data.weather_night}\n" +
+		$"最高温度: {_data.temp_max} ℃, 最低温度: {_data.temp_min} ℃\n" +
+		$"降水量: {_data.precip} mm, 能见度: {_data.visibility} km, 紫外线指数: {_data.uv_index}");
+}
+string advice = allweather.life_indices.uv.advice;
+
 ```
 
-* **`$WeatherType$`:** 实际的 **WeatherType** 属性
+> [!INFO]
+> 提示:
+>
+> 单击展开属性列表
+ <details> <summary><strong><code>$IndicesLevel$</code></strong>: 实际的 <strong>IndicesLevel</strong> 属性</summary>
+
+> | 属性 | 注释 |
+> | :--: | :--: |
+> | level | 指数等级 |
+> | brief | 指数简述 |
+> | advice   | 指数建议 |
+> 
+</details>
+
+
+<details><summary><strong><code>$WeatherType$</code>: </strong>实际的 <strong>WeatherType</strong> 属性</summary>
+
+> | 属性  | 注释 |
+> | :------------: |:------------: |
+> | code | 错误代码 |
+> | province | 省份名称 |
+> | city | 城市名称 |
+> | **`int`** adcode | 高德6位数字城市编码 |
+> | weather | 天气状况 |
+> | **`double`** temperature | 气温 |
+> |  wind_direction | 风向 |
+> |  wind_power | 风力等级 |
+> | **`int`** humidty | 湿度 % |
+> | report_time | 天气的更新时间 |
+> | message | 错误信息 |
+> | **`double`** temp_max | 最高气温 |
+> | **`double`** temp_min | 最低气温 |
+
+</details>
+
+
+<details><summary><strong><code>extended</code>: 是否返回扩展气象字段（体感温度、能见度、气压、紫外线指数、空气质量、降水量、云量）</strong>: </summary>
+
+> | 属性  | 注释 |
+> | :------------: |:------------: |
+> | **`double`** feels_like | 体感温度 |
+> | **`int`** visibility | 能见度 km |
+> | **`int`** pressure | 气压 hPa |
+> | **`double`** uv | 紫外线指数 |
+> | **`int`** aqi | 空气质量指数 |
+> | **`int`** precipitation | 降水量 mm |
+> | **`int`** cloud | 云量 % |
+> 
+</details>
+
+<details><summary><strong><code>indices</code>: 是否返回生活指数（穿衣、紫外线、洗车、晾晒、空调、感冒、运动、舒适度）</strong></summary>
+
+> [!INFO]
+> 提示: 位于 `Life_Indices` 的所有属性均为 `<IndicesLevel>`类, 请参考README的Json反序列化步骤
+> | 属性 | 注释 |
+> | :--: | :--:|
+> | clothing | 穿衣指数
+> | uv | 紫外线指数 |
+> | car_wash | 洗车指数 |
+> | drying | 晾晒指数 |
+> | air_conditioner | 空调指数 |
+> | cold_risk | 感冒指数 |
+> | exercise | 运动指数 |
+> | comfort | 舒适度指数 |
+
+</details>
+
+<details><summary><strong><code>forecast</code>: 是否返回预报数据（当日最高/最低气温及未来3天天气预报）</strong></summary>
+
+> | 属性 | 注释 |
+> | :---------------: | :-----------------------:|
+> | **`List<Forcast>`** forcast | 未来三天的天气预报 |
+> | date | 预告日期|
+> | **`double`** temp_max | 最高气温 |
+> | **`double`** temp_mix | 最低气温 |
+> | weather_day | 白天天气 |
+> | weather_night | 夜间天气 |
+> | **`int`** humidity | 湿度 % |
+> | **`int`** precip | 降水量 mm |
+> | **`int`** visibility | 能见度 km |
+> | **`double`** uv_index | 紫外线指数 0-11+ |
+
+</details>
+
+* **`$WeatherObject$`:** 实际的 **WeatherType** Jobject 对象
+* **`$Life_Indices$`:** 实际的 **life_indices** 属性
 * **`city`:** 指定的地区
 * **`adcode`:** 高德地图的6位数字城市编码
-* **返回类型:** `Json`
+* **返回类型:** `JObject`
 * **返回值:** 天气信息
-
-**附: WeatherType属性**
-
-| 属性  | 注释 |
-| :------------: |:------------: |
-| code | 错误代码 |
-| city | 城市名称 |
-| **`int`** humidty | 湿度 |
-| humidty_1 | 带有单位的湿度字符串 |
-| province | 省份名称 |
-| report_time | 天气的更新时间 |
-| **`int`** temperature | 气温 |
-| temperature_1 | 带有单位的气温字符串 |
-| weather | 天气状况 |
-| **`int`** wind_direction | 风向 |
-| wind_direction_1 | 带有单位的风向字符串 |
-| **`int`** wind_power | 风力等级 |
-| wind_power_1 | 带有单位的风力等级字符串 |
-| msg | 错误信息 |
 ___
 ### 10.游戏娱乐
 
@@ -365,22 +444,24 @@ await Rox.GameExpansionFeatures.EpicGames.GetFreeGames.GetDataJson()
 * **返回类型:** `Json`
 * **返回值:** 一个或多个免费游戏的详细列表
 
-**附: WeatherType属性**
+<details><summary><strong>附: EpicType属性</strong></summary>
 
-| 属性  | 注释 |
-| :------------: |:------------: |
-| id | Epic游戏的唯一标识符 |
-| title | 游戏的完整标题名称 |
-| cover | 封面图片的URL地址 |
-| **`int`** original_price |  游戏原价 单位 CNY¥ |
-| original_price_desc | 格式化后的原价描述字符串 |
-| description | 游戏的简介描述 |
-| seller | 发行商 |
-| **`bool`** is_free_now | 当前是否免费 |
-| free_start | 免费开始时间的可读字符串格式 |
-| free_end | 免费结束时间的可读字符串格式 |
-| link | 游戏在Epic Games商店的详情页链接 |
-| message | 错误信息 |
+> | 属性  | 注释 |
+> | :------------: |:------------: |
+> | id | Epic游戏的唯一标识符 |
+> | title | 游戏的完整标题名称 |
+> | cover | 封面图片的URL地址 |
+> | **`int`** original_price |  游戏原价 单位 CNY¥ |
+> | original_price_desc | 格式化后的原价描述字符串 |
+> | description | 游戏的简介描述 |
+> | seller | 发行商 |
+> | **`bool`** is_free_now | 当前是否免费 |
+> | free_start | 免费开始时间的可读字符串格式 |
+> | free_end | 免费结束时间的可读字符串格式 |
+> | link | 游戏在Epic Games商店的详情页链接 |
+> | message | 错误信息 |
+
+</details>
 
 ## 开发环境
 [Visual Studio 2026](https://visualstudio.microsoft.com/zh-hans/vs)
