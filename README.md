@@ -291,9 +291,6 @@ var info = type.$SteamType$;
 * **返回类型:** `Json`
 * **返回值:** 返回Steam用户信息
 
-**附: SteamType类属性**
-<!----| code | 返回值 |---->
-
 ___
 #### 天气查询_v2(可等待)
 ```csharp
@@ -471,9 +468,9 @@ await Rox.GameExpansionFeatures.EpicGames.GetFreeGames.GetDataJson()
 	- 64 位操作系统, 基于 x64 的处理器
 - 工作负荷
 	- 桌面应用和移动应用
-		- .NET 桌面开发
+	- [x] .NET 桌面开发
 - 编译语言
-	- C# .NET Framework 4.7.2
+    - C# .NET Framework 4.7.2
 - 依赖项
 	- [视觉窗体库 AntdUI](https://www.nuget.org/packages/AntdUI)
 	- [Json处理 Newtonsoft.Json ](https://www.nuget.org/packages/newtonsoft.json)
