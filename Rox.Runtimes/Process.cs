@@ -12,15 +12,18 @@ namespace Rox.Runtimes
     public class IProcess
     {
         /// <summary>
-        /// 获取目标进程
+        /// 获取目标进程的进程对象
         /// </summary>
         /// <param name="processName"> 进程名称 </param>
         /// <returns> 目标进程对象 </returns>
         public static Process GetTargetProcess(string processName) => Process.GetProcessesByName(processName).FirstOrDefault();
 
         /// <summary>
-        /// 调整处理器相关性
+        /// 调整指定进程对象的处理器相关性
         /// </summary>
+        /// <param name="process"> 目标进程 </param>
+        /// <param name="cpuMask"> CPU掩码（十进制） </param>
+        /// <returns> 是否修改成功 </returns>
         public static bool ChangeProcessorAffinity(Process process, int cpuMask)
         {
             if (process == null) throw new ArgumentNullException(nameof(process));
@@ -33,19 +36,18 @@ namespace Rox.Runtimes
                 WriteLog.Info(LogKind.Process, $"处理器相关性已成功修改为（十进制）：{cpuMask}");
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 WriteLog.Error(LogKind.Process, _Exception_With_xKind("ChangeProcessorAffinity", ex));
                 return false;
             }
-            
-            
-            }
+        }
         /// <summary>
-        /// 调整进程优先级
+        /// 调整指定进程对象的进程优先级
         /// </summary>
         /// <param name="process"> 目标进程 </param>
         /// <param name="targetPriority"> 目标优先级 </param>
+        /// <returns> 是否修改成功 </returns>
         public static bool ChangeProcessPriority(Process process, ProcessPriorityClass targetPriority)
         {
             if (process == null) throw new ArgumentNullException(nameof(process));
