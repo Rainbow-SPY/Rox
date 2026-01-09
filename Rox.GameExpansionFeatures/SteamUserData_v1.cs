@@ -297,11 +297,11 @@ namespace Rox.Entertainment
             /// <summary>
             /// 好友代码 （SteamID32）
             /// </summary>
-            public string friendcode => Rox.GameExpansionFeatures.Steam.SteamID.GetFriendCode(steamid.ToString());
+            public string friendcode => Rox.Entertainment.Steam.SteamID.GetFriendCode(steamid.ToString());
             /// <summary>
             /// SteamID3
             /// </summary>
-            public string steamID3 => Rox.GameExpansionFeatures.Steam.Converter.SteamID.ToSteamID3(steamid.ToString());
+            public string steamID3 => Rox.Entertainment.Steam.Converter.SteamID.ToSteamID3(steamid.ToString());
             ///// <summary>
             ///// Steam最后登出日期
             ///// </summary>
