@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rox.Runtimes;
+using System;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -370,9 +371,8 @@ namespace Rox.Entertainment
                             WriteLog.Info(LogKind.Network, $"API返回响应: Json解析成功");
                             break;
                         default:
-                            WriteLog.Error(LogKind.Json, $"Json 反序列化过程中出现未知错误, 错误代码: {_Json_DeObject_Unknow_Exception}");
-                            MessageBox_I.Error($"Json 反序列化过程中出现未知错误, 错误代码: {_Json_DeObject_Unknow_Exception}", _ERROR);
-                            return null;
+                            WriteLog.Error(LogKind.Network, $"未知异常, 请联系管理员, 错误代码: {_UNKNOW_ERROR}");
+                            throw new IException.UAPI.General.UnknowUAPIException();
                     }
                     // 输出字段值
                     WriteLog.Info($"Code: {SteamType.code}");

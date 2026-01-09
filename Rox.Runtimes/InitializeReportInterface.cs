@@ -76,7 +76,7 @@ namespace Rox.Runtimes
             {
                 using (Form f = new Reporter(ex))
                 {
-                    f.TopMost = true;   
+                    f.TopMost = true;
                     f.ShowDialog();
                 }
                 Application.Exit();

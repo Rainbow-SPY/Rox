@@ -34,7 +34,7 @@ namespace Rox.Runtimes
             }
             catch (Exception ex)
             {
-                WriteLog.Error("Hash",_Exception_With_xKind("CheckFileHash", ex));
+                WriteLog.Error("Hash", _Exception_With_xKind("CheckFileHash", ex));
                 MessageBox_I.Error($"检查文件 {filePath} 时发生错误: {ex.Message}", _ERROR);
                 return false;
             }

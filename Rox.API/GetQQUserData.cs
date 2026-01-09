@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rox.Runtimes;
+using System;
 using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -10,12 +11,12 @@ namespace Rox
     public partial class API
     {
         /// <summary>
-        /// 获取QQ用户信息
+        /// 获取QQ用户公开摘要
         /// </summary>
         public class GetQQUserData
         {
             /// <summary>
-            /// 获取QQ用户信息
+            /// 获取QQ用户公开摘要
             /// </summary>
             /// <param name="QQ"> QQ号</param>
             /// <returns> <see cref="QQType"/> 对象</returns> 
@@ -57,6 +58,9 @@ namespace Rox
                                 case 404:
                                     WriteLog.Error(LogKind.Network, $"获取QQ用户信息失败或用户不存在");
                                     break;
+                                default:
+                                    WriteLog.Error(LogKind.Network, $"未知异常, 请联系管理员, 错误代码: {_UNKNOW_ERROR}");
+                                    throw new IException.UAPI.General.UnknowUAPIException();
                             }
                             if (QQType.qq == "" || QQType.qq_level == string.Empty || string.IsNullOrWhiteSpace(QQType.qq))
                                 return null;
@@ -66,7 +70,7 @@ namespace Rox
                 }
                 catch (Exception ex)
                 {
-                    WriteLog.Info("GetQQUserData", _Exception_With_xKind("GGetQQUserDatJson", ex));
+                    WriteLog.Error("GetQQUserData", _Exception_With_xKind("GetQQUserDataJson", ex));
                     return null;
                 }
             }

@@ -49,9 +49,8 @@ namespace Rox
                             LogLibraries.WriteLog.Info("压缩 Json");
                             string compressedJson = Rox.Text.Json.CompressJson(responseData);
                             // 直接解析 JSON 字符串
-                            //Text.Json.JObject jObject = Rox.Text.Json.JObject.Parse(compressedJson);
                             var weatherType = Rox.Text.Json.DeserializeObject<WeatherType>(compressedJson);
-                            switch (weatherType.code) // 修改为通过实例访问 code 属性
+                            switch ((int)response.StatusCode) // 修改为通过实例访问 code 属性
                             {
                                 case 400:
                                     WriteLog.Error(LogKind.Network, $"{_value_Not_Is_NullOrEmpty("city")}, 错误代码: {_String_NullOrEmpty}");
@@ -66,12 +65,6 @@ namespace Rox
                                     MessageBox_I.Error($"检测到非法/不安全的请求!访问已拒绝, 错误代码: {_HttpClient_Request_UnsafeOrIllegal_Denied}", _ERROR);
                                     return null;
                             }
-                            //if (jObject == null)
-                            //{
-                            //    LogLibraries.WriteLog.Error("Failed to parse JSON object.");
-                            //    return null;
-                            //}
-                            // 检测是否传入null
                             if (weatherType.temperature == "" || weatherType.temperature == string.Empty || string.IsNullOrWhiteSpace(weatherType.temperature))
                                 return null;
                             WriteLog.Info($"Code: {weatherType.code}");
@@ -173,7 +166,7 @@ namespace Rox
                 /// <summary>
                 /// 返回值
                 /// </summary>
-                public int code { get; set; }
+                public string code { get; set; }
                 /// <summary>
                 /// 省份名称
                 /// </summary>

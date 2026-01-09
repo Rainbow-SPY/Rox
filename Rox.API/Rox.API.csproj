@@ -53,10 +53,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Weather_v2.WeatherType.cs" />
+    <Compile Include="GetQQGroupData.cs" />
     <Compile Include="GetQQUserData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Weather.cs" />
-    <Compile Include="weather_v1.cs" />
+    <Compile Include="Weather_v2.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="only logo.ico" />
@@ -70,6 +72,11 @@
       <Project>{4f55481f-3cf2-489f-9153-156e7e2637bc}</Project>
       <Name>Rox.Text</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.4</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

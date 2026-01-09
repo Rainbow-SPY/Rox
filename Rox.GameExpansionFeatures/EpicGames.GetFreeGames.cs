@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rox.Runtimes;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using static Rox.Runtimes.LocalizedString;
@@ -43,14 +44,18 @@ namespace Rox.Entertainment.EpicGames
                     WriteLog.Info(LogKind.Json, $"反序列化 Json");
                     WriteLog.Info("开始解析Json");
                     var type = Newtonsoft.Json.JsonConvert.DeserializeObject<EpicType>(compressedJson);
-                    switch (type.code)
+                    switch ((int)response.StatusCode)
                     {
                         case 200:
                             WriteLog.Info(LogKind.Network, $"API返回响应: Json解析成功");
                             break;
                         case 500:
                             WriteLog.Error(LogKind.Network, $"Epic Games 免费游戏服务暂时不可用，请稍后再试");
-                            throw new Rox.Runtimes.IException.EpicGames.EpicGamesServerError("Epic Online Services 免费游戏服务器不可用");
+                            throw new Rox.Runtimes.IException.UAPI.EpicGames.EpicGamesServerError("Epic Online Services 免费游戏服务器不可用");
+                        default:
+                            WriteLog.Error(LogKind.Network, $"未知异常, 请联系管理员, 错误代码: {_UNKNOW_ERROR}");
+                            throw new IException.UAPI.General.UnknowUAPIException();
+
                     }
                     foreach (var game in type.data)
                     {
