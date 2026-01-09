@@ -259,9 +259,9 @@ Rox.Text.Json.SerializeObject(object obj);
 
 #### Steam个人信息查询_v1(可等待)
 ```csharp
-await Rox.GameExpansionFeatures.SteamUserData_v1.GetDataJson_v1(string SteamID);
+await Rox.Entertainment.SteamUserData_v1.GetDataJson_v1(string SteamID);
 
-var type = await Rox.GameExpansionFeatures.SteamUserData_v1.GetDataJson_v1(SteamID);
+var type = await Rox.Entertainment.SteamUserData_v1.GetDataJson_v1(SteamID);
 var info = type.$SteamType$;
 ```
 
@@ -411,7 +411,7 @@ ___
 
 #### 获取 Steam 安装路径
 ```csharp
-Rox.GameExpansionFeatures.Steam.GetSteamPath();
+Rox.Entertainment.Steam.GetSteamPath();
 ```
 * **返回类型:** `string`
 * **返回值:** Steam 安装文件夹
@@ -420,14 +420,14 @@ Rox.GameExpansionFeatures.Steam.GetSteamPath();
 
 #### 获取CS2安装路径
 ```csharp
-Rox.GameExpansionFeatures.CSGO.GetCS2Path();
+Rox.Entertainment.CSGO.GetCS2Path();
 ```
 * **返回类型:** `string`
 * **返回值:** CS2的存放文件夹路径
 
 #### Minecraft Java版 村庄英雄Buff加成的交易价格计算
 ```csharp
-Rox.GameExpansionFeatures.Minecraft.TradingWithHeroOfVillage_Calculator(int BasePrice, int HearoOfVillage_Level);
+Rox.Entertainment.Minecraft.TradingWithHeroOfVillage_Calculator(int BasePrice, int HearoOfVillage_Level);
 ```
 * **BasePrice:** 基础价格
 * **HearoOfVillage_Level:** "村庄英雄"效果等级, 范围 1-5
@@ -436,7 +436,7 @@ Rox.GameExpansionFeatures.Minecraft.TradingWithHeroOfVillage_Calculator(int Base
 
 #### 获取 Epic Games 免费游戏列表
 ``` csharp
-await Rox.GameExpansionFeatures.EpicGames.GetFreeGames.GetDataJson()
+await Rox.Entertainment.EpicGames.GetFreeGames.GetDataJson()
 ```
 * **返回类型:** `Json`
 * **返回值:** 一个或多个免费游戏的详细列表
