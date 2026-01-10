@@ -137,14 +137,14 @@ namespace Rox.Entertainment
                 WriteLog.Info(LogKind.Network, $"{_SEND_REQUEST}: {requestUrl}");
                 // 发送GET请求并获取响应
                 var response = await httpClient.GetAsync(requestUrl);
-                // 检查响应是否成功
-                if (!response.IsSuccessStatusCode)
-                {
-                    WriteLog.Error(LogKind.Network, $"请求失败: {response.StatusCode}, {_HttpClient_Request_Failed}");
-                    if (IsMessageBox)
-                        MessageBox_I.Error($"请求失败: {response.StatusCode}, {_HttpClient_Request_Failed}", _ERROR);
-                    return null;
-                }
+                //// 检查响应是否成功
+                //if (!response.IsSuccessStatusCode)
+                //{
+                //    WriteLog.Error(LogKind.Network, $"请求失败: {response.StatusCode}, {_HttpClient_Request_Failed}");
+                //    if (IsMessageBox)
+                //        MessageBox_I.Error($"请求失败: {response.StatusCode}, {_HttpClient_Request_Failed}", _ERROR);
+                //    return null;
+                //}
                 // 读取响应内容
                 var responseData = await response.Content.ReadAsStringAsync();
                 WriteLog.Info(LogKind.Json, "获取原始 Json 内容");
@@ -227,7 +227,7 @@ namespace Rox.Entertainment
             /// </summary>
             public long steamid { get; set; }
             /// <summary>
-            /// Steam社区状态, 1 为可见 3为隐藏
+            /// Steam社区状态, 1 为隐藏 3为可见
             /// </summary>
             public int communityvisibilitystate { get; set; }
             /// <summary>
