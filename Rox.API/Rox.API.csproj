@@ -38,9 +38,9 @@
     <ApplicationIcon>only logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Rox.GameExpansionFeatures, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Rox.Entertainment, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\$Release\Rox\Rox.GameExpansionFeatures.dll</HintPath>
+      <HintPath>..\..\$Release\Rox\Rox.Entertainment.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
