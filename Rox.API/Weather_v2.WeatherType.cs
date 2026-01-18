@@ -100,7 +100,7 @@ namespace Rox
                     /// <summary>
                     /// 降水量 mm
                     /// </summary>
-                    public int precip { get; set; }
+                    public double precip { get; set; }
                     /// <summary>
                     /// 能见度 km
                     /// </summary>
@@ -133,7 +133,7 @@ namespace Rox
                 /// <summary>
                 /// 降水量 mm（extended=true 时返回）
                 /// </summary>
-                public int precipitation { get; set; }
+                public double precipitation { get; set; }
                 /// <summary>
                 /// 云量 %（extended=true 时返回）
                 /// </summary>
