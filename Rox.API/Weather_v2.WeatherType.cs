@@ -90,6 +90,22 @@ namespace Rox
                     /// </summary>
                     public string weather_day { get; set; }
                     /// <summary>
+                    /// 白天风向
+                    /// </summary>
+                    public string wind_dir_day { get; set; }
+                    /// <summary>
+                    /// 夜间风向
+                    /// </summary>
+                    public string wind_dir_night { get; set; }
+                    /// <summary>
+                    /// 白天风力
+                    /// </summary>
+                    public string wind_scale_day { get; set; }
+                    /// <summary>
+                    /// 夜间风力
+                    /// </summary>
+                    public string wind_scale_night { get; set; }
+                    /// <summary>
                     /// 夜间天气
                     /// </summary>
                     public string weather_night { get; set; }
