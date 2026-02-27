@@ -39,6 +39,12 @@
   <PropertyGroup>
     <ApplicationIcon>only logo.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>uapi-sdk-csharp-key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -70,6 +76,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="only logo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="uapi-sdk-csharp-key.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
