@@ -6,8 +6,7 @@ using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
-
-namespace Rox.Runtimes
+namespace Rox
 {
     /// <summary>
     /// 高性能网络 Ping 操作类
