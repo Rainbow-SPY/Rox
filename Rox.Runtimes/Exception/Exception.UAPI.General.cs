@@ -22,7 +22,7 @@ namespace Rox.Runtimes
                     /// <summary>
                     /// 来自UAPI的未知异常
                     /// </summary>
-                    public UnknowUAPIException() : base()
+                    public UnknowUAPIException()
                     {
                     }
                     /// <summary>

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
+
 namespace Rox.Runtimes
 {
     /// <summary>
@@ -112,10 +114,10 @@ namespace Rox.Runtimes
                 ? domain
                 // 异步解析域名（优先 IPv4）
                 : (await Dns.GetHostAddressesAsync(domain))?.FirstOrDefault(ip =>
-                    ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork) == null
+                    ip.AddressFamily == AddressFamily.InterNetwork) == null
                     ? throw new WebException("未解析到 IPv4 地址")
                     : (await Dns.GetHostAddressesAsync(domain))
-                    .FirstOrDefault(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    .FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork)
                     ?.ToString();
 
         /// <summary>

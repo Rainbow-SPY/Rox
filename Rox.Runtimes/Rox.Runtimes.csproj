@@ -135,7 +135,6 @@
     <Content Include="only logo.ico" />
     <None Include="Resources\err.ico" />
     <None Include="Resources\error.png" />
-    <None Include="Resources\aria2c.exe" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AntdUI">

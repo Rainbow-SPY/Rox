@@ -22,22 +22,22 @@ namespace Rox.Entertainment
                 // 支持的正式版大版本列表
                 string[] AllMasterVersions =
                 {
-                        "1.7",
-                        "1.8",
-                        "1.9",
-                        "1.10",
-                        "1.11",
-                        "1.12",
-                        "1.13",
-                        "1.14",
-                        "1.15",
-                        "1.16",
-                        "1.17",
-                        "1.18",
-                        "1.19",
-                        "1.20",
-                        "1.21"
-                 };
+                    "1.7",
+                    "1.8",
+                    "1.9",
+                    "1.10",
+                    "1.11",
+                    "1.12",
+                    "1.13",
+                    "1.14",
+                    "1.15",
+                    "1.16",
+                    "1.17",
+                    "1.18",
+                    "1.19",
+                    "1.20",
+                    "1.21"
+                };
                 // 不支持的正式版大版本列表
                 string[] UnsupportVersions =
                 {
@@ -51,7 +51,7 @@ namespace Rox.Entertainment
                 };
 
                 version = version.Trim(); // 去除前后空格
-                string a = version.Substring(0, 1); // 获取前1个字符
+                var a = version.Substring(0, 1); // 获取前1个字符
 #if DEBUG
                 WriteLog.Debug(LogKind.Regex, $"正在检查版本: {version}，前缀: {a}");
 #endif
@@ -60,20 +60,25 @@ namespace Rox.Entertainment
                 {
                     WriteLog.Error(LogKind.Regex, $"版本 {version} 检测到为 " + (
                         a == "rd-"
-                            ? "最初开发版 (Pre-Classic)" : (
+                            ? "最初开发版 (Pre-Classic)"
+                            : (
                                 a == "c0"
-                                    ? "第一个长期开发版(Classic)" : (
+                                    ? "第一个长期开发版(Classic)"
+                                    : (
                                         a == "inf-"
-                                            ? "无限开发版 (Infdev)" : (
+                                            ? "无限开发版 (Infdev)"
+                                            : (
                                                 a == "a1"
-                                                    ? "Alpha版" : (
+                                                    ? "Alpha版"
+                                                    : (
                                                         a == "b1"
-                                                        ? "Beta版" : "未知版本"
-                                                      )
-                                              )
-                                      )
-                              )
-                          ) + " ，可能不是一个正常的版本");
+                                                            ? "Beta版"
+                                                            : "未知版本"
+                                                    )
+                                            )
+                                    )
+                            )
+                    ) + " ，可能不是一个正常的版本");
                     return "Unknow"; // 返回未知结果
                 }
 #if DEBUG
@@ -89,6 +94,7 @@ namespace Rox.Entertainment
                     WriteLog.Error(LogKind.Regex, $"版本 {version} 不以 1 或 2 开头，可能不是一个正常的版本");
                     return "Unknow"; // 返回未知结果
                 }
+
                 if (version.EndsWith("."))
                     version = version.TrimEnd('.'); // 去除末尾的点
                 WriteLog.Info(LogKind.System, $"正在检查版本: {version}");
@@ -98,6 +104,7 @@ namespace Rox.Entertainment
                     WriteLog.Error(LogKind.Regex, $"版本 {version} 长度小于3，无法进行正则表达式匹配, 可能不是一个正常的版本");
                     return "Unknow"; // 返回未知结果
                 }
+
                 // 检查是否在不支持的大版本列表中
                 if (Array.Exists(UnsupportVersions, v => v == version))
                 {
@@ -107,12 +114,12 @@ namespace Rox.Entertainment
 
                 string limitVer = null; // 初始化 limitVer 为 null
                 switch (GetMatchGroup(new Regex(
-                            @"(?:(?<release>\d+\.\d+(?:\.\d+)?)|(?<snapshot>\d{2}w\d{2}[a-z](?:_[a-z]+)?)|(?<pre_release>\d\.\d+(?:\.\d)?-pre\d+)|(?<rc>\d\.\d+(?:\.\d)?-rc\d+)|(?<experimental>(?:Experimental )?Snapshot \d{2}w\d{2}[a-z]?))")
-                        .Match(version)))
+                                @"(?:(?<release>\d+\.\d+(?:\.\d+)?)|(?<snapshot>\d{2}w\d{2}[a-z](?:_[a-z]+)?)|(?<pre_release>\d\.\d+(?:\.\d)?-pre\d+)|(?<rc>\d\.\d+(?:\.\d)?-rc\d+)|(?<experimental>(?:Experimental )?Snapshot \d{2}w\d{2}[a-z]?))")
+                            .Match(version)))
                 {
                     case "Release": // 正式版
                         limitVer = version.Substring(0, 3); // 获取前3个字符
-                        if (limitVer == "1.0" || limitVer == "1.1" || limitVer == "1.2")// 如果版本为 1.10+ 则获取前4个字符
+                        if (limitVer == "1.0" || limitVer == "1.1" || limitVer == "1.2") // 如果版本为 1.10+ 则获取前4个字符
                             limitVer = version.Substring(0, 4); // 获取前4个字符
                         // 检查是否在不支持的大版本列表中
                         if (Array.Exists(UnsupportVersions, v => v == version))
@@ -120,13 +127,16 @@ namespace Rox.Entertainment
                             WriteLog.Error(LogKind.Regex, $"版本 {version} 不在支持的大版本列表中");
                             return "Unsupport"; // 返回未知结果
                         }
+
                         // 检查是否在支持的大版本列表中
                         if (Array.Exists(AllMasterVersions, v => v == limitVer))
                         {
                             WriteLog.Info(LogKind.Regex, $"版本 {version} 在 正则表达式匹配的结果为 {limitVer} 正式版(Release)");
                             return limitVer; // 返回大版本号
                         }
-                        WriteLog.Error(LogKind.Regex, $"版本 {version} 在 正则表达式匹配的结果为 {limitVer} 正式版(Release)，但不在支持的大版本列表中");
+
+                        WriteLog.Error(LogKind.Regex,
+                            $"版本 {version} 在 正则表达式匹配的结果为 {limitVer} 正式版(Release)，但不在支持的大版本列表中");
                         return "Unsupport"; // 返回不支持的版本
 
                     case "Experimental Snapshot": // 实验性快照版
@@ -150,6 +160,7 @@ namespace Rox.Entertainment
                         return "Unknow"; // 返回未知结果
                 }
             }
+
             /// <summary>
             /// 对正则表达式匹配结果进行分组，获取版本类型
             /// </summary>
@@ -159,16 +170,13 @@ namespace Rox.Entertainment
             {
                 if (match.Groups["release"].Success)
                     return "Release";
-                else if (match.Groups["snapshot"].Success)
+                if (match.Groups["snapshot"].Success)
                     return "Snapshot";
-                else if (match.Groups["pre_release"].Success)
+                if (match.Groups["pre_release"].Success)
                     return "Pre-release";
-                else if (match.Groups["rc"].Success)
+                if (match.Groups["rc"].Success)
                     return "Release Candidate";
-                else if (match.Groups["experimental"].Success)
-                    return "Experimental Snapshot";
-                else
-                    return "unknow";
+                return match.Groups["experimental"].Success ? "Experimental Snapshot" : "unknow";
             }
         }
     }

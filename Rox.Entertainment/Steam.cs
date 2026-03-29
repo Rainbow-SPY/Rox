@@ -1,5 +1,5 @@
 ﻿using Microsoft.Win32;
-using System.Net.NetworkInformation;
+using Rox.Runtimes;
 
 namespace Rox.Entertainment
 {
@@ -11,17 +11,13 @@ namespace Rox.Entertainment
         /// <returns> Steam的安装路径，如果未找到则返回null。</returns>
         public static string GetSteamPath()
         {
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Valve\Steam"))
+            using (var key = Registry.CurrentUser.OpenSubKey(@"Software\Valve\Steam"))
             {
-                if (key == null)
-                    return null;
-
-                object value = key.GetValue("SteamPath");
-                if (value != null)
-                    return value.ToString();
-                return null;
+                var value = key?.GetValue("SteamPath");
+                return value?.ToString();
             }
         }
+
         /// <summary>
         /// 获取Steam相关的网络延迟（Ping值）。
         /// </summary>
@@ -33,24 +29,20 @@ namespace Rox.Entertainment
             /// <returns> 返回延迟时间，单位为毫秒。如果无法Ping通，返回null。</returns>
             public static string GetSteamStoreDelay()
             {
-                using (var store = new Ping())
-                {
-                    store.Send("store.steampowered.com", 120);
-                    return (store.Send("store.steampowered.com").RoundtripTime.ToString()) ?? null;
-                }
+                var resultDelayMs = Network_I.PingAsync("steampowered.com").Result.DelayMs;
+                return resultDelayMs != null ? resultDelayMs.ToString() : null;
             }
+
             /// <summary>
             /// 获取当前Steam社区的网络延迟（Ping值）。
             /// </summary>
             /// <returns> 返回延迟时间，单位为毫秒。如果无法Ping通，返回null。</returns>
             public static string GetSteamCommunityDelay()
             {
-                using (var community = new Ping())
-                {
-                    community.Send("steamcommunity.com", 120);
-                    return (community.Send("steamcommunity.com").RoundtripTime.ToString()) ?? null;
-                }
+                var _0x1 = Network_I.PingAsync("steamcommunity.com").Result.DelayMs;
+                return _0x1 != null ? _0x1.ToString() : null;
             }
+
             /// <summary>
             /// 获取当前Steam内容服务器的网络延迟（Ping值）。
             /// </summary>
@@ -62,12 +54,10 @@ namespace Rox.Entertainment
                 /// <returns> 返回延迟时间，单位为毫秒。如果无法Ping通，返回null。</returns>
                 public static string GetXinLiuCloudAddress()
                 {
-                    using (var xinliu = new Ping())
-                    {
-                        xinliu.Send("dl.steam.clngaa.com", 120);
-                        return (xinliu.Send("dl.steam.clngaa.com").RoundtripTime.ToString()) ?? null;
-                    }
+                    var _0x1 = Network_I.PingAsync("dl.steam.clngaa.com").Result.DelayMs;
+                    return _0x1 != null ? _0x1.ToString() : null;
                 }
+
                 /// <summary>
                 /// 获取Steam白山云下载地址的网络延迟（Ping值）。
                 /// </summary>
@@ -79,49 +69,41 @@ namespace Rox.Entertainment
                     /// <returns> 返回延迟时间，单位为毫秒。如果无法Ping通，返回null。</returns>
                     public static string GetBaiShanCloud_1_Address()
                     {
-                        using (var baishan1 = new Ping())
-                        {
-                            baishan1.Send("st.dl.eccdnx.com", 120);
-                            return (baishan1.Send("st.dl.eccdnx.com").RoundtripTime.ToString()) ?? null;
-                        }
+                        var _0x1 = Network_I.PingAsync("st.dl.eccdnx.com").Result.DelayMs;
+                        return _0x1 != null ? _0x1.ToString() : null;
                     }
+
                     /// <summary>
                     /// 获取Steam白山云下载地址2的网络延迟（Ping值）。
                     /// </summary>
                     /// <returns> 返回延迟时间，单位为毫秒。如果无法Ping通，返回null。</returns>
                     public static string GetBaiShanCloud_2_Address()
                     {
-                        using (var baishan2 = new Ping())
-                        {
-                            baishan2.Send("st.dl.bscstorage.net", 120);
-                            return (baishan2.Send("st.dl.bscstorage.net").RoundtripTime.ToString()) ?? null;
-                        }
+                        var _0x1 = Network_I.PingAsync("st.dl.bscstorage.net").Result.DelayMs;
+                        return _0x1 != null ? _0x1.ToString() : null;
                     }
+
                     /// <summary>
                     /// 获取Steam白山云下载地址3的网络延迟（Ping值）。
                     /// </summary>
                     /// <returns> 返回延迟时间，单位为毫秒。如果无法Ping通，返回null。</returns>
                     public static string GetBaiShanCloud_3_Address()
                     {
-                        using (var baishan3 = new Ping())
-                        {
-                            baishan3.Send("trts.baishancdnx.com", 120);
-                            return (baishan3.Send("trts.baishancdnx.com").RoundtripTime.ToString()) ?? null;
-                        }
+                        var _0x1 = Network_I.PingAsync("trts.baishancdnx.com").Result.DelayMs;
+                        return _0x1 != null ? _0x1.ToString() : null;
                     }
+
                     /// <summary>
                     /// 获取Steam白山云下载地址4的网络延迟（Ping值）。
                     /// </summary>
                     /// <returns> 返回延迟时间，单位为毫秒。如果无法Ping通，返回null。</returns>
                     public static string GetBaiShanCloud_4_Address()
                     {
-                        using (var baishan4 = new Ping())
-                        {
-                            baishan4.Send("st-bak.viv.wanwang.space", 120);
-                            return (baishan4.Send("dl.bscstorage.net").RoundtripTime.ToString()) ?? null;
-                        }
+                        var _0x1 = Network_I.PingAsync("st-bak.viv.wanwang.space").Result.DelayMs;
+                        return _0x1 != null ? _0x1.ToString() : null;
                     }
                 }
+
                 /// <summary>
                 /// 获取Steam阿里云下载地址的网络延迟（Ping值）。
                 /// </summary>
@@ -133,39 +115,32 @@ namespace Rox.Entertainment
                     /// <returns> 返回延迟时间，单位为毫秒。如果无法Ping通，返回null。</returns>
                     public static string GetAliCloud_1_Address()
                     {
-                        using (var alicloud1 = new Ping())
-                        {
-                            alicloud1.Send("lv.queniujq.cn", 120);
-                            return (alicloud1.Send("lv.queniujq.cn").RoundtripTime.ToString()) ?? null;
-                        }
+                        var _0x1 = Network_I.PingAsync("lv.queniujq.cn").Result.DelayMs;
+                        return _0x1 != null ? _0x1.ToString() : null;
                     }
+
                     /// <summary>
                     /// 获取Steam阿里云下载地址2的网络延迟（Ping值）。
                     /// </summary>
                     /// <returns> 返回延迟时间，单位为毫秒。如果无法Ping通，返回null。</returns>
                     public static string GetAliCloud_2_Address()
                     {
-                        using (var alicloud2 = new Ping())
-                        {
-                            alicloud2.Send("alibaba.cdn.steampipe.steamcontent.com", 120);
-                            return (alicloud2.Send("alibaba.cdn.steampipe.steamcontent.com").RoundtripTime.ToString()) ?? null;
-                        }
+                        var _0x1 = Network_I.PingAsync("alibaba.cdn.steampipe.steamcontent.com").Result.DelayMs;
+                        return _0x1 != null ? _0x1.ToString() : null;
                     }
+
+
                     /// <summary>
                     /// 获取Steam阿里云下载地址3的网络延迟（Ping值）。
                     /// </summary>
                     /// <returns> 返回延迟时间，单位为毫秒。如果无法Ping通，返回null。</returns>
                     public static string GetAliCloud_3_Address()
                     {
-                        using (var alicloud3 = new Ping())
-                        {
-                            alicloud3.Send("xz.pphimalayanrt.com", 120);
-                            return (alicloud3.Send("xz.pphimalayanrt.com").RoundtripTime.ToString()) ?? null;
-                        }
+                        var _0x1 = Network_I.PingAsync("xz.pphimalayanrt.com").Result.DelayMs;
+                        return _0x1 != null ? _0x1.ToString() : null;
                     }
                 }
             }
-
         }
     }
 }

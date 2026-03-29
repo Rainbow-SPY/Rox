@@ -1,14 +1,15 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Management;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Windows.Forms;
+using Microsoft.Win32;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
 using Registry = Rox.Runtimes.Registry_I;
+
 namespace Rox
 {
     /// <summary>
@@ -27,32 +28,32 @@ namespace Rox
             /// <param name="Switch">显示/隐藏文件拓展名</param>
             public static void ShowFileExtension(bool Switch)
             {
-                string keyPath = @"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced";
-                using (RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(keyPath))
+                const string keyPath = @"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced";
+                using (var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(keyPath))
                 {
-                    key.SetValue("HideFileExt", Switch ? 0 : 1, RegistryValueKind.DWord); // 显示扩展名
-                    key.Close();
+                    key?.SetValue("HideFileExt", Switch ? 0 : 1, RegistryValueKind.DWord); // 显示扩展名
+                    key?.Close();
                     WriteLog.Info(_SUCESS_WRITE_REGISTRY + keyPath);
                     RefreshExplorer();
-                    return;
                 }
             } //0显示 1隐藏
+
             /// <summary>
             /// 显示/隐藏被隐藏的文件和系统文件
             /// </summary>
             /// <param name="Switch">显示/隐藏被隐藏的文件和系统文件</param>
             public static void ShowHiddenFile(bool Switch)
             {
-                string keyPath = @"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced";
+                const string keyPath = @"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced";
                 using (var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(keyPath))
                 {
-                    key.SetValue("Hidden", Switch ? 1 : 0, RegistryValueKind.DWord); // 显示隐藏文件
-                    key.Close();
+                    key?.SetValue("Hidden", Switch ? 1 : 0, RegistryValueKind.DWord); // 显示隐藏文件
+                    key?.Close();
                     WriteLog.Info(_SUCESS_WRITE_REGISTRY + keyPath);
                     RefreshExplorer();
-                    return;
                 }
             } //0隐藏 1显示
+
             /// <summary>
             /// 设置文件夹的可见性
             /// </summary>
@@ -70,7 +71,9 @@ namespace Rox
                     WriteLog.Error($"设置 {registryPath} 的可见性时出错: " + _Exception_With_xKind("SetFolderVisibility", ex));
                 }
             }
+
             #region 刷新资源管理器
+
             // 导入 Windows API
             [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
             private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
@@ -115,7 +118,7 @@ namespace Rox
                 }
                 catch (Exception ex)
                 {
-                    WriteLog.Error($"刷新过程中出错:" + _Exception_With_xKind("RefreshExplorer", ex));
+                    WriteLog.Error("刷新过程中出错:" + _Exception_With_xKind("RefreshExplorer", ex));
                 }
             }
 
@@ -126,11 +129,10 @@ namespace Rox
             {
                 try
                 {
-
                     // 查找所有 Explorer 窗口
                     foreach (var process in Process.GetProcessesByName("explorer"))
                     {
-                        IntPtr hWnd = process.MainWindowHandle;
+                        var hWnd = process.MainWindowHandle;
                         if (hWnd != IntPtr.Zero)
                             // 发送刷新命令
                             SendMessage(hWnd, WM_COMMAND, (IntPtr)SC_REFRESH, IntPtr.Zero);
@@ -152,7 +154,7 @@ namespace Rox
                 try
                 {
                     // 查找桌面窗口
-                    IntPtr hWnd = FindWindow("Progman", null);
+                    var hWnd = FindWindow("Progman", null);
                     if (hWnd != IntPtr.Zero)
                     {
                         // 发送刷新命令
@@ -164,7 +166,7 @@ namespace Rox
                 }
                 catch (Exception ex)
                 {
-                    WriteLog.Error($"刷新桌面时出错:" + _Exception_With_xKind("RefreshDesktop", ex));
+                    WriteLog.Error("刷新桌面时出错:" + _Exception_With_xKind("RefreshDesktop", ex));
                 }
             }
 
@@ -178,12 +180,12 @@ namespace Rox
                     // 发送 WM_SETTINGCHANGE 消息
                     SendMessageTimeout(
                         (IntPtr)HWND_BROADCAST, // 广播到所有窗口
-                        WM_SETTINGCHANGE,      // 消息类型
-                        IntPtr.Zero,           // 未使用
-                        "Environment",         // 表示环境变量或设置已更改
-                        SMTO_ABORTIFHUNG,      // 超时标志
-                        5000,                  // 超时时间（毫秒）
-                        out IntPtr result);           // 返回值
+                        WM_SETTINGCHANGE, // 消息类型
+                        IntPtr.Zero, // 未使用
+                        "Environment", // 表示环境变量或设置已更改
+                        SMTO_ABORTIFHUNG, // 超时标志
+                        5000, // 超时时间（毫秒）
+                        out var result); // 返回值
 
                     WriteLog.Info("已通知系统设置更改。");
                 }
@@ -192,15 +194,19 @@ namespace Rox
                     WriteLog.Error($"通知系统设置更改时出错: {ex.Message}");
                 }
             }
+
             #endregion
+
             /// <summary>
             /// 用于安装和卸载 Windows 11 的小部件
             /// </summary>
             public static void UninstallWindows11Widgets()
             {
-                using (var process = Process.Start("winget", "uninstall MicrosoftWindows.Client.WebExperience_cw5n1h2txyewy"))
+                using (var process = Process.Start("winget",
+                           "uninstall MicrosoftWindows.Client.WebExperience_cw5n1h2txyewy"))
                     process?.WaitForExit();
             }
+
             /// <summary>
             /// 向桌面添加系统位置快捷方式
             /// </summary>
@@ -214,46 +220,56 @@ namespace Rox
                     // 执行 PowerShell 脚本
                     RunPowerShellScript($@"
                     $keyPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel'{(Switch
-                             ? @"if (-not (Test-Path $keyPath)) {New-Item -Path $keyPath -Force}"
-                             : "")} Set-ItemProperty -Path $keyPath -Name '{{20D04FE0-3AEA-1069-A2D8-08002B30309D}}' -Value {(Switch
-                             ? "0"
-                             : "1")}");
+                        ? @"if (-not (Test-Path $keyPath)) {New-Item -Path $keyPath -Force}"
+                        : "")} Set-ItemProperty -Path $keyPath -Name '{{20D04FE0-3AEA-1069-A2D8-08002B30309D}}' -Value {(Switch
+                        ? "0"
+                        : "1")}");
+
                 /// <summary>
                 /// 添加/移除"网络"图标
                 /// </summary>
                 /// <param name="Switch">指定添加或移除的开关</param>
                 public static void AddInternet(bool Switch)
                 {
-                    using (var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel"))
+                    using (var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(
+                               @"Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel"))
                     {
-                        key.SetValue("{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}", Switch ? 0 : 1, RegistryValueKind.DWord);
-                        key.Close();
+                        key?.SetValue("{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}", Switch ? 0 : 1,
+                            RegistryValueKind.DWord);
+                        key?.Close();
                     }
                 }
+
                 /// <summary>
                 /// 添加/移除"控制面板"图标
                 /// </summary>
                 /// <param name="Switch">指定添加或移除的开关</param>
                 public static void AddControlPan(bool Switch)
                 {
-                    using (var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel"))
+                    using (var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(
+                               @"Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel"))
                     {
-                        key.SetValue("{5399E694-6CE5-4D6C-8FCE-1D8870FDCBA0}", Switch ? 0 : 1, RegistryValueKind.DWord);
-                        key.Close();
+                        key?.SetValue("{5399E694-6CE5-4D6C-8FCE-1D8870FDCBA0}", Switch ? 0 : 1,
+                            RegistryValueKind.DWord);
+                        key?.Close();
                     }
                 }
+
                 /// <summary>
                 /// 添加/移除"个人文件夹"图标
                 /// </summary>
                 /// <param name="Switch">指定添加或移除的开关</param>
                 public static void AddUserFolder(bool Switch)
                 {
-                    using (RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel"))
+                    using (var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(
+                               @"Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel"))
                     {
-                        key.SetValue("{59031a47-3f72-44a7-89c5-5595fe6b30ee}", Switch ? 0 : 1, RegistryValueKind.DWord);
-                        key.Close();
+                        key?.SetValue("{59031a47-3f72-44a7-89c5-5595fe6b30ee}", Switch ? 0 : 1,
+                            RegistryValueKind.DWord);
+                        key?.Close();
                     }
                 }
+
                 /// <summary>
                 /// 运行PowerShell脚本
                 /// </summary>
@@ -261,7 +277,7 @@ namespace Rox
                 private static void RunPowerShellScript(string script)
                 {
                     // 创建一个 ProcessStartInfo 对象
-                    ProcessStartInfo psi = new ProcessStartInfo
+                    var psi = new ProcessStartInfo
                     {
                         FileName = "powershell.exe", // 指定启动 PowerShell
                         Arguments = $"-NoProfile -ExecutionPolicy unrestricted -Command \"{script}\"", // 传递脚本
@@ -272,7 +288,7 @@ namespace Rox
                     };
 
                     // 创建并启动进程
-                    using (Process p = new Process())
+                    using (var p = new Process())
                     {
                         p.StartInfo = psi;
                         p.Start();
@@ -285,6 +301,7 @@ namespace Rox
                     }
                 }
             }
+
             /// <summary>
             /// 用于修改桌面图标小箭头的类
             /// </summary>
@@ -297,10 +314,11 @@ namespace Rox
                 public static void HideDesktopIconArrow()
                 {
                     // 隐藏桌面图标小箭头
-                    Registry.Write(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons", "29", @"%systemroot%\system32\imageres.dll,197", RegistryValueKind.String);
+                    Registry.Write(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons",
+                        "29", @"%systemroot%\system32\imageres.dll,197", RegistryValueKind.String);
                     RefreshExplorer();
-                    return;
                 }
+
                 // 显示桌面图标小箭头
                 /// <summary>
                 /// 显示桌面图标小箭头
@@ -308,11 +326,12 @@ namespace Rox
                 public static void ShowDesktopIconArrow()
                 {
                     // 显示桌面图标小箭头
-                    Microsoft.Win32.Registry.LocalMachine.DeleteSubKeyTree(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons");
+                    Microsoft.Win32.Registry.LocalMachine.DeleteSubKeyTree(
+                        @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons");
                     RefreshExplorer();
-                    return;
                 }
             }
+
             /// <summary>
             /// 用于修改桌面系统图标是否在桌面上显示的类
             /// </summary>
@@ -327,15 +346,16 @@ namespace Rox
                     {
                         // 使用 rundll32.exe 打开“桌面图标设置”窗口
                         using (var p = Process.Start("rundll32", "shell32.dll,Control_RunDLL desk.cpl,,0"))
-                            p.WaitForExit();
+                            p?.WaitForExit();
                         WriteLog.Info("已打开“桌面图标设置”窗口。");
                     }
                     catch (Exception ex)
                     {
-                        WriteLog.Info($"打开“桌面图标设置”窗口时出错: " + _Exception_With_xKind("OpenDesktopIconSettings", ex));
+                        WriteLog.Info("打开“桌面图标设置”窗口时出错: " + _Exception_With_xKind("OpenDesktopIconSettings", ex));
                     }
                 }
             }
+
             /// <summary>
             /// 用于管理此电脑中系统文件夹的可见性的类
             /// </summary>
@@ -346,64 +366,106 @@ namespace Rox
                 /// </summary>
                 public static void _3DObject(bool visibility)
                 {
-                    Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}", true).CreateSubKey("PropertyBag").Close();
-                    SetFolderVisibility(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}", visibility ? "Show" : "Hide");
+                    Microsoft.Win32.Registry.LocalMachine
+                        .OpenSubKey(
+                            @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}",
+                            true)?.CreateSubKey("PropertyBag")?.Close();
+                    SetFolderVisibility(
+                        @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}",
+                        visibility ? "Show" : "Hide");
                 }
+
                 /// <summary>
                 /// 设置在此电脑中的“桌面”文件夹可见性
                 /// </summary>
                 /// <param name="visibility"> 可见性</param>
                 public static void Desktop(bool visibility)
                 {
-                    Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}", true).CreateSubKey("PropertyBag").Close();
-                    SetFolderVisibility(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}", visibility ? "Show" : "Hide");
+                    Microsoft.Win32.Registry.LocalMachine
+                        .OpenSubKey(
+                            @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}",
+                            true)?.CreateSubKey("PropertyBag")?.Close();
+                    SetFolderVisibility(
+                        @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}",
+                        visibility ? "Show" : "Hide");
                 }
+
                 /// <summary>
                 /// 设置在此电脑中的“文档”文件夹可见性
                 /// </summary>
                 /// <param name="visibility"> 可见性</param>
                 public static void Documents(bool visibility)
                 {
-                    Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{f42ee2d3-909f-4907-8871-4c22fc0bf756}", true).CreateSubKey("PropertyBag").Close();
-                    SetFolderVisibility(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{f42ee2d3-909f-4907-8871-4c22fc0bf756}", visibility ? "Show" : "Hide");
+                    Microsoft.Win32.Registry.LocalMachine
+                        .OpenSubKey(
+                            @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{f42ee2d3-909f-4907-8871-4c22fc0bf756}",
+                            true)?.CreateSubKey("PropertyBag")?.Close();
+                    SetFolderVisibility(
+                        @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{f42ee2d3-909f-4907-8871-4c22fc0bf756}",
+                        visibility ? "Show" : "Hide");
                 }
+
                 /// <summary>
                 /// 设置在此电脑中的“下载”文件夹可见性
                 /// </summary>
                 /// <param name="visibility"> 可见性</param>
                 public static void Downloads(bool visibility)
                 {
-                    Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{7d83ee9b-2244-4e70-b1f5-5393042af1e4}", true).CreateSubKey("PropertyBag").Close();
-                    SetFolderVisibility(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{7d83ee9b-2244-4e70-b1f5-5393042af1e4}", visibility ? "Show" : "Hide");
+                    Microsoft.Win32.Registry.LocalMachine
+                        .OpenSubKey(
+                            @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{7d83ee9b-2244-4e70-b1f5-5393042af1e4}",
+                            true)?.CreateSubKey("PropertyBag")?.Close();
+                    SetFolderVisibility(
+                        @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{7d83ee9b-2244-4e70-b1f5-5393042af1e4}",
+                        visibility ? "Show" : "Hide");
                 }
+
                 /// <summary>
                 /// 设置在此电脑中的“音乐”文件夹可见性
                 /// </summary>
                 /// <param name="visibility"> 可见性</param>
                 public static void Music(bool visibility)
                 {
-                    Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{a0c69a99-21c8-4671-8703-7934162fcf1d}", true).CreateSubKey("PropertyBag").Close();
-                    SetFolderVisibility(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{a0c69a99-21c8-4671-8703-7934162fcf1d}", visibility ? "Show" : "Hide");
+                    Microsoft.Win32.Registry.LocalMachine
+                        .OpenSubKey(
+                            @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{a0c69a99-21c8-4671-8703-7934162fcf1d}",
+                            true)?.CreateSubKey("PropertyBag")?.Close();
+                    SetFolderVisibility(
+                        @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{a0c69a99-21c8-4671-8703-7934162fcf1d}",
+                        visibility ? "Show" : "Hide");
                 }
+
                 /// <summary>
                 /// 设置在此电脑中的“图片”文件夹可见性
                 /// </summary>
                 /// <param name="visibility"></param>
                 public static void Pictures(bool visibility)
                 {
-                    Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{0ddd015d-b06c-45d5-8c4c-f59713854639}", true).CreateSubKey("PropertyBag").Close();
-                    SetFolderVisibility(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{0ddd015d-b06c-45d5-8c4c-f59713854639}", visibility ? "Show" : "Hide");
+                    Microsoft.Win32.Registry.LocalMachine
+                        .OpenSubKey(
+                            @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{0ddd015d-b06c-45d5-8c4c-f59713854639}",
+                            true)?.CreateSubKey("PropertyBag")?.Close();
+                    SetFolderVisibility(
+                        @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{0ddd015d-b06c-45d5-8c4c-f59713854639}",
+                        visibility ? "Show" : "Hide");
                 }
+
                 /// <summary>
                 /// 设置在此电脑中的“视频”文件夹可见性
                 /// </summary>
                 /// <param name="visibility"> 可见性</param>
                 public static void Videos(bool visibility)
                 {
-                    Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{35286a68-3c57-41a1-bbb1-0eae73d76c95}", true).CreateSubKey("PropertyBag").Close();
-                    SetFolderVisibility(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{35286a68-3c57-41a1-bbb1-0eae73d76c95}", visibility ? "Show" : "Hide");
+                    Microsoft.Win32.Registry.LocalMachine
+                        .OpenSubKey(
+                            @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{35286a68-3c57-41a1-bbb1-0eae73d76c95}",
+                            true)?.CreateSubKey("PropertyBag")?.Close();
+                    SetFolderVisibility(
+                        @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{35286a68-3c57-41a1-bbb1-0eae73d76c95}",
+                        visibility ? "Show" : "Hide");
                 }
             }
+
             /// <summary>
             /// 一个用于修改右键菜单的类，提供了静态方法 <see cref="Windows10Menu"/>和<see cref="Windows11Menu"/>来控制右键菜单。
             /// </summary>
@@ -417,13 +479,16 @@ namespace Rox
                     try
                     {
                         // 切换 Windows 10 右键菜单
-                        Registry.Write(@"HKEY_CURRENT_USER\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32", "", "", RegistryValueKind.String);
+                        Registry.Write(
+                            @"HKEY_CURRENT_USER\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32",
+                            "", "", RegistryValueKind.String);
                     }
                     catch (Exception e)
                     {
                         WriteLog.Error(LogKind.Registry, _Exception_With_xKind("Windows10Menu", e));
                     }
                 }
+
                 /// <summary>
                 /// 恢复 Windows 11 右键菜单
                 /// </summary>
@@ -432,7 +497,8 @@ namespace Rox
                     try
                     {
                         // 恢复 Windows 11 右键菜单
-                        Microsoft.Win32.Registry.CurrentUser.DeleteSubKeyTree(@"Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}");
+                        Microsoft.Win32.Registry.CurrentUser.DeleteSubKeyTree(
+                            @"Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}");
                     }
                     catch (Exception e)
                     {
@@ -440,8 +506,9 @@ namespace Rox
                     }
                 }
             }
+
             /// <summary>
-            /// 一个用于修改默认访问位置的类，提供了静态方法 <see cref="SetThisPC"/> 和<see cref="SetQuickAcess"/> 来控制默认打开的文件夹。
+            /// 一个用于修改默认访问位置的类，提供了静态方法 <see cref="SetThisPC"/> 和<see cref="SetQuickAccess"/> 来控制默认打开的文件夹。
             /// </summary>
             public class ExplorerLaunchTo
             {
@@ -449,14 +516,16 @@ namespace Rox
                 /// 设置资源管理器默认打开位置为此电脑
                 /// </summary>
                 public static void SetThisPC() => Switch(1);
+
                 /// <summary>
                 /// 设置资源管理器默认打开位置为快速访问
                 /// </summary>
-                public static void SetQuickAcess() => Switch(2);
+                public static void SetQuickAccess() => Switch(2);
+
                 private static void Switch(int value)
                 {
-                    string keyPath = @"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced";
-                    using (RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(keyPath))
+                    const string keyPath = @"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced";
+                    using (var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(keyPath))
                     {
                         if (key != null)
                         {
@@ -464,16 +533,15 @@ namespace Rox
                             key.Close();
                             WriteLog.Info(_SUCESS_WRITE_REGISTRY + keyPath);
                             RefreshExplorer();
-                            return;
                         }
                         else
                         {
                             WriteLog.Error(LogKind.Registry, _READ_REGISTRY_FAILED);
-                            return;
                         }
                     }
                 }
             }
+
             /// <summary>
             /// 在资源管理器中打开指定路径的文件夹
             /// </summary>
@@ -488,6 +556,7 @@ namespace Rox
                         MessageBox_I.Error(_value_Not_Is_NullOrEmpty("path"), _ERROR);
                         return;
                     }
+
                     // 检查路径是否存在
                     if (!Directory.Exists(path) && !File.Exists(path))
                     {
@@ -509,17 +578,17 @@ namespace Rox
                     else
                     {
                         // 如果是文件，打开其所在文件夹并选中文件
-                        string folderPath = Path.GetDirectoryName(path);
+                        var folderPath = Path.GetDirectoryName(path);
                         Process.Start("explorer.exe", $"/select,{path}");
                     }
                 }
                 catch (Exception ex)
                 {
                     WriteLog.Error(_Exception_With_xKind("OpenFolderInExplorer", ex));
-                    return;
                 }
             }
         }
+
         /// <summary>
         /// 一个用于启用和禁用系统休眠功能的类，提供了静态方法 <see cref="Enable"/>和<see cref="Disable"/>来控制休眠状态。
         /// </summary>
@@ -529,17 +598,19 @@ namespace Rox
             /// 启用系统休眠功能。
             /// </summary>
             public static void Enable() => Switch("on");
+
             /// <summary>
             /// 禁用系统休眠功能。
             /// </summary>
             public static void Disable() => Switch("off");
+
             /// <summary>
             /// 用于启用或禁用系统休眠功能。
             /// </summary>
             /// <param name="key"> 指定启用或禁用休眠功能的关键字。</param>
             private static void Switch(string key)
             {
-                Process Sleep = new Process();
+                var Sleep = new Process();
                 Sleep.StartInfo.FileName = "powercfg.exe";
                 Sleep.StartInfo.Arguments = "/hibernate " + key;
                 Sleep.Start();
@@ -551,11 +622,12 @@ namespace Rox
                 else
                     WriteLog.Info(LogKind.System, $"{_DISENABLE_HIBERNATE}");
             }
-        }//休眠
+        } //休眠
+
         /// <summary>
         /// 用于通过调用 <see langword="powercfg"/> 命令来启用卓越性能电源配置方案，并记录相关的进程信息和执行结果。
         /// </summary>
-        public static void EnableHighPowercfg()
+        public static void EnableHighPowerCfg()
         {
             using (var p = new Process())
             {
@@ -570,80 +642,83 @@ namespace Rox
                 else
                     WriteLog.Info(LogKind.Process, $"{_ENABLE_HIGHPOWERCFG}");
             }
-        }//卓越性能电源方案
+        } //卓越性能电源方案
+
         /// <summary>
         /// 用于启用或禁用 Windows 安全中心的功能，并在操作过程中处理与安全软件的冲突
         /// </summary>
-        public class WindowsSecurityCenter//Windows安全中心
+        public class WindowsSecurityCenter //Windows安全中心
         {
             /// <summary>
             /// 启用 Windows 安全中心
             /// </summary>
             public static void Enable() => Switch(0);
+
             /// <summary>
             /// 禁用 Windows 安全中心
             /// </summary>
             public static void Disable() => Switch(1);
+
             /// <summary>
             /// 用于启用或禁用 Windows 安全中心的功能
             /// </summary>
             /// <param name="value"> 指定启用或禁用 Windows 安全中心的值</param>
             private static void Switch(int value)
             {
-                if (Security.Is360SafeRunning() || Security.IsHuorongSecurityRunning())
-                {
-                    DialogResult dialogResult = MessageBox.Show($"{_SECURITY_RUNNING}", $"{_WARNING}", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                    if (dialogResult != DialogResult.OK)
-                    {
-                        return;
-                    }
-                }
+                if ((Security.Is360SafeRunning() || Security.IsHuorongSecurityRunning()) && MessageBox.Show(
+                        $"{_SECURITY_RUNNING}", $"{_WARNING}", MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1,
+                        MessageBoxOptions.DefaultDesktopOnly) != DialogResult.OK)
+                    return;
 
                 try
                 {
                     // 修改 HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender
-                    RegistryKey key = Microsoft.Win32.Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Policies\Microsoft\Windows Defender");
+                    var key = Microsoft.Win32.Registry.LocalMachine.CreateSubKey(
+                        @"SOFTWARE\Policies\Microsoft\Windows Defender");
                     WriteLog.Info(LogKind.Registry, $"{_WRITE_REGISTRY}");
-                    key.SetValue("DisableAntiSpyware", value, RegistryValueKind.DWord);  // 禁用防间谍软件
+                    key?.SetValue("DisableAntiSpyware", value, RegistryValueKind.DWord); // 禁用防间谍软件
                     WriteLog.Info(LogKind.Registry, $"{_SUCESS_WRITE_REGISTRY}");
-                    key.Close();  // 关闭注册表项
+                    key?.Close(); // 关闭注册表项
 
                     // 修改 HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection
-                    key = Microsoft.Win32.Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection");
+                    key = Microsoft.Win32.Registry.LocalMachine.CreateSubKey(
+                        @"SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection");
                     WriteLog.Info(LogKind.Registry, $"{_WRITE_REGISTRY}");
-                    key.SetValue("DisableBehaviorMonitoring", value, RegistryValueKind.DWord);  // 禁用行为监控
+                    key?.SetValue("DisableBehaviorMonitoring", value, RegistryValueKind.DWord); // 禁用行为监控
                     WriteLog.Info(LogKind.Registry, $"{_SUCESS_WRITE_REGISTRY}");
                     WriteLog.Info(LogKind.Registry, $"{_WRITE_REGISTRY}");
-                    key.SetValue("DisableIOAVProtection", value, RegistryValueKind.DWord);  // 禁用文件扫描
+                    key?.SetValue("DisableIOAVProtection", value, RegistryValueKind.DWord); // 禁用文件扫描
                     WriteLog.Info(LogKind.Registry, $"{_SUCESS_WRITE_REGISTRY}");
                     WriteLog.Info(LogKind.Registry, $"{_WRITE_REGISTRY}");
-                    key.SetValue("DisableOnAccessProtection", value, RegistryValueKind.DWord);  // 禁用访问保护
+                    key?.SetValue("DisableOnAccessProtection", value, RegistryValueKind.DWord); // 禁用访问保护
                     WriteLog.Info(LogKind.Registry, $"{_SUCESS_WRITE_REGISTRY}");
                     WriteLog.Info(LogKind.Registry, $"{_WRITE_REGISTRY}");
-                    key.SetValue("DisableRealtimeMonitoring", value, RegistryValueKind.DWord);  // 禁用实时监控
+                    key?.SetValue("DisableRealtimeMonitoring", value, RegistryValueKind.DWord); // 禁用实时监控
                     WriteLog.Info(LogKind.Registry, $"{_SUCESS_WRITE_REGISTRY}");
-                    key.Close();  // 关闭注册表项
+                    key?.Close(); // 关闭注册表项
 
                     // 修改 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SecurityHealthService
-                    key = Microsoft.Win32.Registry.LocalMachine.CreateSubKey(@"SYSTEM\CurrentControlSet\Services\SecurityHealthService");
+                    key = Microsoft.Win32.Registry.LocalMachine.CreateSubKey(
+                        @"SYSTEM\CurrentControlSet\Services\SecurityHealthService");
                     WriteLog.Info(LogKind.Registry, $"{_WRITE_REGISTRY}");
-                    key.SetValue("Start", value + 2, RegistryValueKind.DWord);  // 设置服务启动类型为2自动 3手动 
+                    key?.SetValue("Start", value + 2, RegistryValueKind.DWord); // 设置服务启动类型为2自动 3手动 
                     WriteLog.Info(LogKind.Registry, $"{_SUCESS_WRITE_REGISTRY}");
-                    key.Close();
+                    key?.Close();
                     // 关闭注册表项
-                    return;
                 }
                 catch (Exception ex)
                 {
-                    WriteLog.Error(LogKind.Registry, $"{_WRITE_REGISTRY_FAILED}" + _Exception_With_xKind("WindowsSecurityCenter.Switch", ex));
-                    return;
+                    WriteLog.Error(LogKind.Registry,
+                        $"{_WRITE_REGISTRY_FAILED}" + _Exception_With_xKind("WindowsSecurityCenter.Switch", ex));
                 }
-            }//开关
+            } //开关
         }
+
         /// <summary>
         /// 用于启用或禁用 Windows 更新服务，并在操作过程中处理与安全软件的冲突
         /// </summary>
-        public class WindowsUpdate//Windows更新服务
+        public class WindowsUpdate //Windows更新服务
         {
             /// <summary>
             /// 检查 Windows 更新服务的状态
@@ -653,34 +728,33 @@ namespace Rox
                 try
                 {
                     // 读取 HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU
-                    RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU");
+                    var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
+                        @"SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU");
                     if (key != null)
                     {
-                        int value = (int)key.GetValue("NoAutoUpdate", 0);
+                        var value = (int)key.GetValue("NoAutoUpdate", 0);
                         WriteLog.Info(value == 1 ? _WINDOWS_UPDATER_DISABLED : _WINDOWS_UPDATER_ENABLED);
                         key.Close();
                         return value != 1;
                     }
-                    else
-                    {
-                        WriteLog.Info($"{_WINDOWS_UPDATER_ENABLED}");
-                        return false;
-                    }
+
+                    WriteLog.Info($"{_WINDOWS_UPDATER_ENABLED}");
+                    return false;
                 }
                 catch (Exception ex)
                 {
                     WriteLog.Error(_READ_REGISTRY_FAILED + _Exception_With_xKind("CheckStatus", ex));
                     return false;
                 }
-
             }
         }
+
         /// <summary>
         /// 用于激活 Windows 系统，首先检查安全软件的状态，然后启动指定的激活程序。
         /// </summary>
-        public static void ActiveWindows()//Windows激活
+        public static void ActiveWindows() //Windows激活
         {
-            using (Process powerShell = new Process())
+            using (var powerShell = new Process())
             {
                 powerShell.StartInfo.FileName = "powershell.exe";
                 powerShell.StartInfo.Arguments = "irm https://get.activated.win | iex";
@@ -701,16 +775,14 @@ namespace Rox
             {
                 WriteLog.Info("正在检查Windows 许可证......");
                 // 使用WMI查询Windows许可证状态
-                using (var searcher = new ManagementObjectSearcher("SELECT * FROM SoftwareLicensingProduct WHERE ApplicationID = '55c92734-d682-4d71-983e-d6ec3f16059f'"))
-                {
+                using (var searcher = new ManagementObjectSearcher(
+                           "SELECT * FROM SoftwareLicensingProduct WHERE ApplicationID = '55c92734-d682-4d71-983e-d6ec3f16059f'"))
                     foreach (var obj in searcher.Get()) // LicenseStatus为1表示已激活
                         if (obj["LicenseStatus"] != null && obj["LicenseStatus"].ToString() == "1")
                             return true;
-                }
             }
             catch (Exception)
             {
-                // 发生异常时默认返回未激活
                 return false;
             }
             return false;
@@ -724,8 +796,9 @@ namespace Rox
         {
             try
             {
-                using (WindowsIdentity identity = WindowsIdentity.GetCurrent()) // 获取当前Windows用户身份
-                    return new WindowsPrincipal(identity).IsInRole(WindowsBuiltInRole.Administrator); // 检查是否属于管理员组（BUILTIN\Administrators）
+                using (var identity = WindowsIdentity.GetCurrent()) // 获取当前Windows用户身份
+                    return new WindowsPrincipal(identity).IsInRole(WindowsBuiltInRole
+                        .Administrator); // 检查是否属于管理员组（BUILTIN\Administrators）
             }
             catch
             {

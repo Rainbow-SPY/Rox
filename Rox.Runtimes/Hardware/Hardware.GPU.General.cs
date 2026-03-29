@@ -13,7 +13,8 @@ namespace Rox.Runtimes.Hardware.GPU
     public class General
     {
         private static Information _inf;
-        private static string path = $"{Path.GetTempPath()}dxdiag_output.ralog";
+        private static readonly string path = $"{Path.GetTempPath()}dxdiag_output.ralog";
+
         /// <summary>
         /// 获取GPU信息
         /// </summary>
@@ -22,7 +23,7 @@ namespace Rox.Runtimes.Hardware.GPU
         {
             try
             {
-                using (Process p = new Process())
+                using (var p = new Process())
                 {
                     p.StartInfo.FileName = "dxdiag";
                     p.StartInfo.Arguments = $"/t \"{path}\"";
@@ -30,7 +31,8 @@ namespace Rox.Runtimes.Hardware.GPU
                     p.Start();
                     p.WaitForExit();
                 }
-                Information Information = new Information();
+
+                var Information = new Information();
                 if (File.Exists(path))
                 {
                     // 只读取前2000行, 避免文件过大
@@ -44,25 +46,26 @@ namespace Rox.Runtimes.Hardware.GPU
                         else if (line.Contains("Dedicated Memory:"))
                         {
                             var memStr = line.Split(':')[1].Trim();
-                            if (memStr.EndsWith("MB"))
-                                if (double.TryParse(memStr.Replace("MB", "").Trim(), out double memMB))
-                                    Information.Memory = Math.Round(memMB / 1024, 0);
+                            if (!memStr.EndsWith("MB")) continue;
+                            if (double.TryParse(memStr.Replace("MB", "").Trim(), out var memMB))
+                                Information.Memory = Math.Round(memMB / 1024, 0);
                             else if (memStr.EndsWith("GB"))
-                                if (double.TryParse(memStr.Replace("GB", "").Trim(), out double memGB))
+                                if (double.TryParse(memStr.Replace("GB", "").Trim(), out var memGB))
                                     Information.Memory = Math.Round(memGB, 0);
                         }
                         else if (line.Contains("Shared Memory:"))
                         {
                             var sharedMemStr = line.Split(':')[1].Trim();
-                            if (sharedMemStr.EndsWith("MB"))
-                                if (double.TryParse(sharedMemStr.Replace("MB", "").Trim(), out double sharedMemMB))
-                                    Information.SharedMemory = Math.Round(sharedMemMB / 1024, 0);
+                            if (!sharedMemStr.EndsWith("MB")) continue;
+                            if (double.TryParse(sharedMemStr.Replace("MB", "").Trim(), out var sharedMemMB))
+                                Information.SharedMemory = Math.Round(sharedMemMB / 1024, 0);
                             else if (sharedMemStr.EndsWith("GB"))
-                                if (double.TryParse(sharedMemStr.Replace("GB", "").Trim(), out double sharedMemGB))
+                                if (double.TryParse(sharedMemStr.Replace("GB", "").Trim(), out var sharedMemGB))
                                     Information.SharedMemory = Math.Round(sharedMemGB, 0);
                         }
                     }
                 }
+
                 _inf = Information;
                 return Information;
             }
@@ -74,7 +77,6 @@ namespace Rox.Runtimes.Hardware.GPU
         }
 
 
-
         /// <summary>
         /// GPU信息类
         /// </summary>
@@ -84,14 +86,17 @@ namespace Rox.Runtimes.Hardware.GPU
             /// GPU完整名称
             /// </summary>
             public string FullName { get; set; }
+
             /// <summary>
             /// 制造商
             /// </summary>
             public string Manufacturer { get; set; }
+
             /// <summary>
             /// 显存大小 (GB)
             /// </summary>
             public double Memory { get; set; }
+
             /// <summary>
             /// 共享显存大小 (GB)
             /// </summary>

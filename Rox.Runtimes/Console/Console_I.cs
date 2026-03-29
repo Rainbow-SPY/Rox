@@ -10,7 +10,7 @@ namespace Rox.Runtimes
     public class Console_I
     {
         // 记录上一次输出的数字长度，用于清空残留位数
-        private static int _lastNumberLength = 0;
+        private static int _lastNumberLength;
 
         /// <summary>
         /// 动态覆盖输出数字（固定前缀+动态数字+固定后缀）
@@ -32,11 +32,11 @@ namespace Rox.Runtimes
                 suffixText = suffixText ?? string.Empty;
 
                 // 转换数字为字符串，获取当前数字长度
-                string numberStr = dynamicNumber.ToString();
-                int currentNumberLength = numberStr.Length;
+                var numberStr = dynamicNumber.ToString();
+                var currentNumberLength = numberStr.Length;
 
                 // 确定输出行：固定行或当前光标行
-                int outputLine = fixedLine >= 0 ? fixedLine : Console.CursorTop;
+                var outputLine = fixedLine >= 0 ? fixedLine : Console.CursorTop;
                 // 光标定位到前缀后的位置（动态数字的起始列）
                 Console.SetCursorPosition(prefixLength, outputLine);
 
@@ -47,7 +47,7 @@ namespace Rox.Runtimes
                 if (currentNumberLength < _lastNumberLength)
                 {
                     // 计算需要清空的残留位数，用空格填充
-                    int residualLength = _lastNumberLength - currentNumberLength;
+                    var residualLength = _lastNumberLength - currentNumberLength;
                     Console.Write(new string(' ', residualLength));
                     // 填充空格后，将光标回退到后缀文本开头（可选，不影响视觉）
                     Console.SetCursorPosition(prefixLength + currentNumberLength, outputLine);
@@ -62,7 +62,7 @@ namespace Rox.Runtimes
             catch (Exception ex)
             {
                 // 异常输出到新行，避免覆盖原有内容
-                WriteLog.Error(_Exception_With_xKind($"\n[动态输出异常]", ex));
+                WriteLog.Error(_Exception_With_xKind("\n[动态输出异常]", ex));
             }
         }
     }

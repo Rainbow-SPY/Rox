@@ -1,7 +1,7 @@
-﻿using Rox.Runtimes;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Rox.Runtimes;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
 using static Rox.Text.Json;
@@ -46,7 +46,7 @@ namespace Rox
                             }
                             var responseData = await response.Content.ReadAsStringAsync();
                             WriteLog.Info(LogKind.Json, "压缩 Json");
-                            string compressedJson = CompressJson(responseData);
+                            var compressedJson = CompressJson(responseData);
                             WriteLog.Info(LogKind.Json, "反序列化 Json 对象");
                             var qGroupType = DeserializeObject<QGroupType>(compressedJson);
                             switch ((int)response.StatusCode)

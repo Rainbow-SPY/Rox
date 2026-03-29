@@ -1,7 +1,8 @@
-﻿using Rox.Runtimes;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Rox.Runtimes;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
 using static Rox.Text.Json;
@@ -51,7 +52,7 @@ namespace Rox
                         MessageBox_I.Error($"{_value_Not_Is_NullOrEmpty("city_Or_adcode")}, 错误代码: {_String_NullOrEmpty}", _ERROR);
                         return null;
                     }
-                    using (HttpClient httpClient = new HttpClient())
+                    using (var httpClient = new HttpClient())
                     {
                         var requestUrl = $"https://uapis.cn/api/v1/misc/weather?{param}={city_Or_adcode}" +
                             (extended ? "&extended=true" : "") +
@@ -66,9 +67,9 @@ namespace Rox
                             }
                             var responseData = await response.Content.ReadAsStringAsync();
                             WriteLog.Info(LogKind.Json, "压缩 Json");
-                            string compressedJson = CompressJson(responseData);
+                            var compressedJson = CompressJson(responseData);
                             WriteLog.Info(LogKind.Json, "反序列化 Json 对象");
-                            var weatherType = Newtonsoft.Json.JsonConvert.DeserializeObject<WeatherType>(compressedJson);
+                            var weatherType = JsonConvert.DeserializeObject<WeatherType>(compressedJson);
                             switch ((int)response.StatusCode) // 修改为通过实例访问 code 属性
                             {
                                 case 400:
@@ -82,13 +83,13 @@ namespace Rox
                                 case 502:
                                     WriteLog.Error(LogKind.Network, $"上游服务错误, 天气供应商API暂时不可用或返回了错误, 错误代码: {_Weather_Service_Error}, 错误信息: {weatherType.code} - {weatherType.message}");
                                     MessageBox_I.Error($"上游服务错误, 天气供应商API暂时不可用或返回了错误, 错误代码: {_Weather_Service_Error}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR);
-                                    throw new Rox.Runtimes.IException.UAPI.Weather.WeatherServiceError();
+                                    throw new IException.UAPI.Weather.WeatherServiceError();
                                 case 500:
                                     WriteLog.Error(LogKind.Network, $"服务器内部错误。在处理天气数据时发生了未知问题, 错误代码: {_Weather_Unknow_Exception}, 错误信息: {weatherType.code} - {weatherType.message}");
                                     MessageBox_I.Error($"服务器内部错误。在处理天气数据时发生了未知问题, 错误代码: {_Weather_Unknow_Exception}, 错误信息: {weatherType.code} - {weatherType.message}", _ERROR);
-                                    throw new Rox.Runtimes.IException.UAPI.Weather.WeatherAPIServerError();
+                                    throw new IException.UAPI.Weather.WeatherAPIServerError();
                                 case 200:
-                                    WriteLog.Info(LogKind.Network, $"请求成功");
+                                    WriteLog.Info(LogKind.Network, "请求成功");
                                     break;
                                 default:
                                     WriteLog.Error(LogKind.Network, $"未知异常, 请联系管理员, 错误代码: {_UNKNOW_ERROR}");
@@ -108,7 +109,7 @@ namespace Rox
                                 }
                                 else
                                 {
-                                    WriteLog.Info("Weather", $"未来三天的天气预报");
+                                    WriteLog.Info("Weather", "未来三天的天气预报");
                                     foreach (var _data in weatherType.forecast)
                                     {
                                         WriteLog.Info("Weather Forcast", $"{_data.date} 的天气预报:\n" +

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using AntdUI;
 using static Rox.Runtimes.LogLibraries;
 
 namespace Rox.Runtimes
@@ -10,7 +11,7 @@ namespace Rox.Runtimes
     /// <summary>
     /// 异常报告助手
     /// </summary>
-    public partial class Reporter : AntdUI.Window
+    public partial class Reporter : Window
     {
         /// <summary>
         /// 异常报告助手
@@ -19,39 +20,39 @@ namespace Rox.Runtimes
         public Reporter(Exception exception)
         {
             InitializeComponent();
-            Icon = System.Drawing.SystemIcons.Error;
+            Icon = SystemIcons.Error;
             GetSystemInfo.InitializeSystemInfo();
-            string _Ex_type = exception.GetType().ToString();
-            string _Ex_message = exception.Message;
-            string _Ex_stacktrace = exception.StackTrace;
-            string NowTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            string Date = DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss");
-            string osName = GetSystemInfo.OSName;
-            string osBuild = GetSystemInfo.OSBuildNumber;
-            string architecture = GetSystemInfo.OSArchitecture;
-            string processor = GetSystemInfo.ProcessorName;
-            string language = GetSystemInfo.SystemLanguage;
-            string _Crush_File_Path = Path.Combine(Application.StartupPath, $"crush_{Date}.log");
+            var _Ex_type = exception.GetType().ToString();
+            var _Ex_message = exception.Message;
+            var _Ex_stacktrace = exception.StackTrace;
+            var NowTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            var Date = DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss");
+            var osName = GetSystemInfo.OSName;
+            var osBuild = GetSystemInfo.OSBuildNumber;
+            var architecture = GetSystemInfo.OSArchitecture;
+            var processor = GetSystemInfo.ProcessorName;
+            var language = GetSystemInfo.SystemLanguage;
+            var _Crush_File_Path = Path.Combine(Application.StartupPath, $"crush_{Date}.log");
             // 获取显示屏分辨率
-            string screenInfo = $"{Screen.PrimaryScreen.Bounds.Width}x{Screen.PrimaryScreen.Bounds.Height}";
+            var screenInfo = $"{Screen.PrimaryScreen.Bounds.Width}x{Screen.PrimaryScreen.Bounds.Height}";
             richTextBox1.Clear();
-            string log =
-                "-------------Exception--------------------\n"
-                + $"Exception Type: {_Ex_type}\n"
-                + $"Exception Message: {_Ex_message}\n"
-                + $"Exception StackTrance: \n{_Ex_stacktrace}\n"
-                + $"Now Time: {NowTime}\n"
-                + "-------------SystemInfo-------------------\n"
-                + $"SystemName: {osName}\n"
-                + $"SystemBuild: {osBuild}\n"
-                + $"SystemArchitecture: {architecture}\n"
-                + $"SystemLanguage: {language}\n"
-                + $"MonitorResolution: {screenInfo}\n"
-                // 获取处理器型号
-                + $"Processor: {processor}\n"
-                + $"-------------AppInfo----------------------\n"
-                + $"AppVersion: {Application.ProductVersion}\n"
-                + $"AppExecutable: {Application.ExecutablePath}\n"
+            var log =
+                    "-------------Exception--------------------\n"
+                    + $"Exception Type: {_Ex_type}\n"
+                    + $"Exception Message: {_Ex_message}\n"
+                    + $"Exception StackTrance: \n{_Ex_stacktrace}\n"
+                    + $"Now Time: {NowTime}\n"
+                    + "-------------SystemInfo-------------------\n"
+                    + $"SystemName: {osName}\n"
+                    + $"SystemBuild: {osBuild}\n"
+                    + $"SystemArchitecture: {architecture}\n"
+                    + $"SystemLanguage: {language}\n"
+                    + $"MonitorResolution: {screenInfo}\n"
+                    // 获取处理器型号
+                    + $"Processor: {processor}\n"
+                    + "-------------AppInfo----------------------\n"
+                    + $"AppVersion: {Application.ProductVersion}\n"
+                    + $"AppExecutable: {Application.ExecutablePath}\n"
                 ;
 
             // 获取已加载的程序集信息
@@ -81,7 +82,8 @@ namespace Rox.Runtimes
                     _Ex_Description = "未将对象引用设置到对象的实例。通常是因为访问了值为null的对象的成员（如属性、方法），例如调用string s = null; s.Length;时会触发。";
                     break;
                 case "System.IndexOutOfRangeException":
-                    _Ex_Description = "索引超出了数组界限。当访问数组、集合时使用的索引值小于 0 或大于等于集合长度时发生，例如int[] arr = new int[3]; arr[3] = 1;。";
+                    _Ex_Description =
+                        "索引超出了数组界限。当访问数组、集合时使用的索引值小于 0 或大于等于集合长度时发生，例如int[] arr = new int[3]; arr[3] = 1;。";
                     break;
                 case "System.ArgumentNullException":
                     _Ex_Description = "传递给方法的参数为null，但该参数不允许为null。例如方法要求传入非空字符串，却传入null时触发。";
@@ -138,7 +140,8 @@ namespace Rox.Runtimes
                     _Ex_Description = "COM 操作失败。在调用 COM 组件（如 Office 插件、系统 API）时，因组件错误返回失败代码触发。";
                     break;
                 case "Newtonsoft.Json.JsonException":
-                    _Ex_Description = "Json.NET的通用基类异常，所有Json.NET专属错误都继承自此。通常表示 JSON 处理过程中发生了未分类的通用错误，如序列化 / 反序列化的核心流程异常。";
+                    _Ex_Description =
+                        "Json.NET的通用基类异常，所有Json.NET专属错误都继承自此。通常表示 JSON 处理过程中发生了未分类的通用错误，如序列化 / 反序列化的核心流程异常。";
                     break;
                 case "Newtonsoft.Json.SerializationException":
                     _Ex_Description = "序列化或反序列化过程中发生的序列化逻辑错误。不同于格式错误，该异常通常是对象结构与序列化配置不兼容导致（如循环引用、无法访问的私有成员、类型映射失败）。";
@@ -147,43 +150,52 @@ namespace Rox.Runtimes
                     _Ex_Description = "JSON 读取器在解析 JSON 字符串时遇到无效的语法格式。";
                     break;
                 case "Newtonsoft.Json.JsonWriterException":
-                    _Ex_Description = "JSON 写入器在序列化生成 JSON 字符串时的格式错误。常见场景包括：手动使用JsonWriter时写入了不符合规范的 JSON 节点（如重复的键、未闭合的数组）、向写入器写入无效的字符（如控制字符）。";
+                    _Ex_Description =
+                        "JSON 写入器在序列化生成 JSON 字符串时的格式错误。常见场景包括：手动使用JsonWriter时写入了不符合规范的 JSON 节点（如重复的键、未闭合的数组）、向写入器写入无效的字符（如控制字符）。";
                     break;
                 case "Newtonsoft.Json.JsonSerializationException":
                     _Ex_Description = "JSON 值类型与目标属性类型不兼容/ 缺少必需的属性/ 未知的枚举值";
                     break;
                 case "Newtonsoft.Json.JsonConverterException":
-                    _Ex_Description = "自定义JsonConverter（JSON 转换器）执行过程中出错。常见场景包括：自定义转换器的ReadJson/WriteJson方法实现逻辑错误、转换器返回的类型与目标类型不匹配、转换器处理空值时未做判空。";
+                    _Ex_Description =
+                        "自定义JsonConverter（JSON 转换器）执行过程中出错。常见场景包括：自定义转换器的ReadJson/WriteJson方法实现逻辑错误、转换器返回的类型与目标类型不匹配、转换器处理空值时未做判空。";
                     break;
                 case "Newtonsoft.Json.MissingMemberException":
-                    _Ex_Description = "反序列化时 JSON 中包含目标 C# 类不存在的成员（属性 / 字段），且配置了MissingMemberHandling.Error（默认是MissingMemberHandling.Ignore，不会抛异常）。";
+                    _Ex_Description =
+                        "反序列化时 JSON 中包含目标 C# 类不存在的成员（属性 / 字段），且配置了MissingMemberHandling.Error（默认是MissingMemberHandling.Ignore，不会抛异常）。";
                     break;
                 case "Newtonsoft.Json.InvalidCastException":
-                    _Ex_Description = "Json.NET在处理多态类型、接口 / 抽象类反序列化时的类型转换错误。例如将 JSON 反序列化为接口类型（如IList<string>）但未配置TypeNameHandling，或多态类型的子类型无法转换为父类型。";
+                    _Ex_Description =
+                        "Json.NET在处理多态类型、接口 / 抽象类反序列化时的类型转换错误。例如将 JSON 反序列化为接口类型（如IList<string>）但未配置TypeNameHandling，或多态类型的子类型无法转换为父类型。";
                     break;
                 case "System.Data.SqlClient.SqlException":
-                    _Ex_Description = "SQL Server 操作失败，包含多种子场景：SQL 语法错误（如字段名写错、表不存在）、主键 / 唯一键冲突（插入重复数据）、外键约束失败（删除被关联的主表数据）、数据库连接超时、权限不足（账户无查询 / 写入权限）、死锁（多个事务互相占用资源）。";
+                    _Ex_Description =
+                        "SQL Server 操作失败，包含多种子场景：SQL 语法错误（如字段名写错、表不存在）、主键 / 唯一键冲突（插入重复数据）、外键约束失败（删除被关联的主表数据）、数据库连接超时、权限不足（账户无查询 / 写入权限）、死锁（多个事务互相占用资源）。";
                     break;
                 case "System.Data.Entity.Core.EntityException":
                     _Ex_Description = "Entity Framework（EF）核心异常，基类错误，涵盖 EF 与数据库交互的通用失败（如连接字符串配置错误、模型与数据库表结构不匹配）";
                     break;
                 case "System.Data.Entity.Core.InvalidOperationException（EF 专属）":
-                    _Ex_Description = "EF 对象状态无效时执行操作，如对已附加的实体再次调用Attach、未将实体添加到上下文就执行SaveChanges、LINQ to Entities 查询中使用不支持的本地方法（如DateTime.Now.ToString()）。";
+                    _Ex_Description =
+                        "EF 对象状态无效时执行操作，如对已附加的实体再次调用Attach、未将实体添加到上下文就执行SaveChanges、LINQ to Entities 查询中使用不支持的本地方法（如DateTime.Now.ToString()）。";
                     break;
                 case "System.Data.Entity.Core.UpdateException":
                     _Ex_Description = "EF 执行SaveChanges时更新数据失败，通常由数据库约束（主键、外键、字段长度）导致，内部会嵌套SqlException。";
                     break;
                 case "System.Data.Common.DbException":
-                    _Ex_Description = "所有ADO.NET数据库提供程序的基类异常，当使用非 SQL Server 数据库（如 MySQL/Oracle）时，会抛出该类的子类（如MySqlException），表示数据库通用操作失败。";
+                    _Ex_Description =
+                        "所有ADO.NET数据库提供程序的基类异常，当使用非 SQL Server 数据库（如 MySQL/Oracle）时，会抛出该类的子类（如MySqlException），表示数据库通用操作失败。";
                     break;
                 case "System.Net.WebException":
-                    _Ex_Description = ".NET 传统网络请求（HttpWebRequest）的核心异常，如请求超时（服务端无响应）、远程服务器返回错误状态码（404/500/403）、无法连接到服务器（域名解析失败、网络断开）、SSL 证书验证失败（访问 HTTPS 站点时证书过期 / 无效）。";
+                    _Ex_Description =
+                        ".NET 传统网络请求（HttpWebRequest）的核心异常，如请求超时（服务端无响应）、远程服务器返回错误状态码（404/500/403）、无法连接到服务器（域名解析失败、网络断开）、SSL 证书验证失败（访问 HTTPS 站点时证书过期 / 无效）。";
                     break;
                 case "System.Net.Sockets.SocketException":
                     _Ex_Description = "Socket 套接字操作失败，如端口被占用（绑定已使用的端口）、连接被拒绝（服务端未监听目标端口）、远程主机强制关闭连接（服务端主动断开）、超出最大连接数。";
                     break;
                 case "System.Net.Http.HttpRequestException":
-                    _Ex_Description = "HttpClient请求的核心异常（.NET Framework 4.5+），涵盖 HTTP 请求的通用失败（如网络中断、服务端无响应），内部会嵌套WebException或SocketException。";
+                    _Ex_Description =
+                        "HttpClient请求的核心异常（.NET Framework 4.5+），涵盖 HTTP 请求的通用失败（如网络中断、服务端无响应），内部会嵌套WebException或SocketException。";
                     break;
                 case "System.IO.EndOfStreamException":
                     _Ex_Description = "网络流读取时提前到达流末尾，如服务端返回的响应流不完整、网络传输中数据丢失，调用Stream.Read时触发。";
@@ -195,19 +207,23 @@ namespace Rox.Runtimes
                     _Ex_Description = "未获取锁的情况下执行释放锁操作，如调用Monitor.Exit(obj)但未先调用Monitor.Enter(obj)，或在lock代码块外释放锁。";
                     break;
                 case "System.Threading.Tasks.TaskCanceledException":
-                    _Ex_Description = "异步任务被取消，如调用CancellationTokenSource.Cancel()后，等待的Task触发该异常，或HttpClient请求超时导致任务取消。";
+                    _Ex_Description =
+                        "异步任务被取消，如调用CancellationTokenSource.Cancel()后，等待的Task触发该异常，或HttpClient请求超时导致任务取消。";
                     break;
                 case "System.AggregateException":
-                    _Ex_Description = "异步任务中发生的聚合异常，当Task.WhenAll/Task.WhenAny中多个任务抛出异常时，会将所有异常封装到该异常的InnerExceptions集合中（单个任务异常也可能嵌套其中）。";
+                    _Ex_Description =
+                        "异步任务中发生的聚合异常，当Task.WhenAll/Task.WhenAny中多个任务抛出异常时，会将所有异常封装到该异常的InnerExceptions集合中（单个任务异常也可能嵌套其中）。";
                     break;
                 case "System.Threading.Deadlock":
-                    _Ex_Description = "死锁（非直接抛出的异常，但会导致程序卡死），两个或多个线程互相持有对方需要的锁，导致所有线程无法继续执行（如线程 A 持有锁 1 等待锁 2，线程 B 持有锁 2 等待锁 1）。";
+                    _Ex_Description =
+                        "死锁（非直接抛出的异常，但会导致程序卡死），两个或多个线程互相持有对方需要的锁，导致所有线程无法继续执行（如线程 A 持有锁 1 等待锁 2，线程 B 持有锁 2 等待锁 1）。";
                     break;
                 case "System.Windows.Forms.InvalidEnumArgumentException":
                     _Ex_Description = "向 WinForm 控件传递无效的枚举值，如设置Button.DialogResult为不存在的枚举值、Form.WindowState传递无效的窗口状态。";
                     break;
                 case "System.ComponentModel.Win32Exception":
-                    _Ex_Description = "调用 Windows API 时的底层错误，WinForm 控件大量依赖 Win32 API，如创建窗口失败（系统资源不足）、打开文件对话框时的系统 API 调用失败，内部包含原生的 Windows 错误码。";
+                    _Ex_Description =
+                        "调用 Windows API 时的底层错误，WinForm 控件大量依赖 Win32 API，如创建窗口失败（系统资源不足）、打开文件对话框时的系统 API 调用失败，内部包含原生的 Windows 错误码。";
                     break;
                 case "System.Windows.Forms.LayoutException":
                     _Ex_Description = "WinForm 控件布局计算失败，如嵌套的Panel/GroupBox控件布局循环依赖、Anchor/Dock属性设置冲突导致布局引擎计算异常。";
@@ -240,7 +256,8 @@ namespace Rox.Runtimes
                     _Ex_Description = "加载类型失败，如引用的程序集中不存在目标类型、程序集依赖缺失、类型的访问修饰符限制（如私有类型被外部反射访问）。";
                     break;
                 case "System.Configuration.ConfigurationErrorsException":
-                    _Ex_Description = "读取app.config/web.config配置文件失败，如配置节格式错误（XML 语法错误）、配置值类型不匹配（如将字符串赋值给数值型配置）、缺失必需的配置节。";
+                    _Ex_Description =
+                        "读取app.config/web.config配置文件失败，如配置节格式错误（XML 语法错误）、配置值类型不匹配（如将字符串赋值给数值型配置）、缺失必需的配置节。";
                     break;
                 case "System.Xml.XmlException":
                     _Ex_Description = "XML 解析错误，如 XML 文件缺少闭合标签、特殊字符未转义、根节点重复，在读取 XML 配置 / 序列化时触发。";
@@ -442,7 +459,8 @@ namespace Rox.Runtimes
                     _Ex_Description = "提供的Steam Web API Key 无效或已过期";
                     break;
                 case "Rox.Runtimes.IException.EpicGames.EpicGamesServerError":
-                    _Ex_Description = "Epic Games 免费游戏服务不可用, 无法访问 Epic Games 相关服务, 可以访问 https://status.epicgames.com/ 查看 Epic Online Services 当前情况";
+                    _Ex_Description =
+                        "Epic Games 免费游戏服务不可用, 无法访问 Epic Games 相关服务, 可以访问 https://status.epicgames.com/ 查看 Epic Online Services 当前情况";
                     break;
                 case "Rox.Runtimes.IException.Weather.WeatherAPIServerError":
                     _Ex_Description = "UAPI 服务器内部错误, 在处理天气数据时发生了未知问题";
@@ -453,26 +471,27 @@ namespace Rox.Runtimes
                 default:
                     _Ex_Description = "发生未识别的异常，建议查看异常详细信息排查问题。";
                     break;
-
             }
-            string _Title = (_Ex_Description != "" ? "已" : "未") + $"识别的异常类型: {exception.GetType().FullName}";
-            AntdUI.Modal.open(new AntdUI.Modal.Config(this, _Title, $"错误类型: {exception.GetType().FullName}\n\n {_Ex_Description}", AntdUI.TType.Error)
+
+            var _Title = (_Ex_Description != "" ? "已" : "未") + $"识别的异常类型: {exception.GetType().FullName}";
+            new Modal.Config(this, _Title,
+                $"错误类型: {exception.GetType().FullName}\n\n {_Ex_Description}", TType.Error)
             {
                 Font = new Font("微软雅黑", 10, FontStyle.Regular),
                 OkFont = new Font("微软雅黑", 10, FontStyle.Regular),
                 OkText = "我知道了",
                 MaskClosable = false,
                 Draggable = false,
-            });
-
+            }.open();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
             Application.Exit();
         }
 
-        private void _Crush_Path_Click(object sender, EventArgs e) => Process.Start("explorer.exe", Application.StartupPath);
+        private void _Crush_Path_Click(object sender, EventArgs e) =>
+            Process.Start("explorer.exe", Application.StartupPath);
     }
 }
