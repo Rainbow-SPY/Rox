@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
+using Rox.Text;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
+
 namespace Rox.Entertainment
 {
     public partial class Minecraft
@@ -25,23 +27,28 @@ namespace Rox.Entertainment
                     /// 所有玩家 All Player
                     /// </summary>
                     a,
+
                     /// <summary>
                     /// 所有实体 All Entity
                     /// </summary>
                     e,
+
                     /// <summary>
                     /// 距离最近的玩家 Nearest Player
                     /// </summary>
                     p,
+
                     /// <summary>
                     /// 随机一位玩家 Random Player
                     /// </summary>
                     r,
+
                     /// <summary>
                     /// 命令的执行者 Executor Self
                     /// </summary>
                     s,
                 }
+
                 /// <summary>
                 /// 从原版 Json 里提取ItemID
                 /// </summary>
@@ -49,47 +56,44 @@ namespace Rox.Entertainment
                 public static string GetItemID(string JEVerFolder)
                 {
                     // 检测是否为文件夹
-                    if (!System.IO.Directory.Exists(JEVerFolder))
+                    if (!Directory.Exists(JEVerFolder))
                     {
                         WriteLog.Error(LogKind.System, "指定的文件夹不存在或不是一个有效的文件夹。");
                         MessageBox_I.Error(JEVerFolder + " 不是一个有效的文件夹。", _ERROR);
                         return null;
                     }
+
                     // 删除路径末尾的反斜杠
                     if (JEVerFolder.EndsWith("\\"))
-                        JEVerFolder.TrimEnd('\\');
-                    // 遍历 Version文件夹, 寻找版本
-                    string[] folders_ = Directory.GetDirectories(JEVerFolder + "\\versions");
-                    // folders 这里是 文件夹内的所有文件夹和文件的名称
+                        JEVerFolder = JEVerFolder.TrimEnd('\\');
                     try
                     {
-                        foreach (string folder in folders_)
+                        foreach (var folder in Directory.GetDirectories(JEVerFolder + "\\versions"))
                         {
                             // folder 这里是 文件夹的名称, e.g . "1.20.2" "1.19.4-forge-45.0.30"
                             // 判断是否为文件夹, 而不是文件
                             if (!Directory.Exists(folder))
                                 continue;
                             // 分割文件夹名称, 以便获取版本号
-                            string[] parts = folder.Split('\\');
+                            var parts = folder.Split('\\');
                             // 获取最后一个部分作为文件夹名称
-                            string folderName = parts[parts.Length - 1];
+                            var folderName = parts[parts.Length - 1];
                             WriteLog.Info(LogKind.Json, $"正在处理文件夹: {folderName}");
                             // 游戏版本的Json文件名称
-                            string JsonName = folderName + ".json";
+                            var JsonName = folderName + ".json";
                             WriteLog.Info(LogKind.Json, $"Json 文件名称: {JsonName}");
-                            if (File.Exists($"{folder}\\{JsonName}"))
-                            {
-                                // 读取文件
-                                WriteLog.Info(LogKind.Json, "获取原始 Json 内容");
-                                var data = File.ReadAllText(folder + "\\" + JsonName);
-                                WriteLog.Info(LogKind.Json, "压缩 Json");
-                                string compressedJson = Text.Json.CompressJson(data);
-                                WriteLog.Info(LogKind.Json, "反序列化 Json 对象");
-                                var jsonObject = Text.Json.DeserializeObject<MinecraftType>(compressedJson);
-                                WriteLog.Info(LogKind.Json, jsonObject.clientVersion);
-                                return jsonObject.clientVersion; // 返回版本号
-                            }
+                            if (!File.Exists($"{folder}\\{JsonName}")) continue;
+                            // 读取文件
+                            WriteLog.Info(LogKind.Json, "获取原始 Json 内容");
+                            var data = File.ReadAllText(folder + "\\" + JsonName);
+                            WriteLog.Info(LogKind.Json, "压缩 Json");
+                            var compressedJson = Json.CompressJson(data);
+                            WriteLog.Info(LogKind.Json, "反序列化 Json 对象");
+                            var jsonObject = Json.DeserializeObject<MinecraftType>(compressedJson);
+                            WriteLog.Info(LogKind.Json, jsonObject.clientVersion);
+                            return jsonObject.clientVersion; // 返回版本号
                         }
+
                         return null; // 如果没有找到任何有效的 Json 文件，则返回 null
                     }
                     catch (Exception ex)
@@ -99,6 +103,7 @@ namespace Rox.Entertainment
                         return null;
                     }
                 }
+
                 /// <summary>
                 /// 我的世界 JE 版本 Json 对象
                 /// </summary>

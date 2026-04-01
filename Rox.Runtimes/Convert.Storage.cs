@@ -27,7 +27,7 @@ namespace Rox.Runtimes
             if (!match.Success)
                 throw new ArgumentException($"无效的格式: {valueWithUnit}，示例：2KB、3.5MB", nameof(valueWithUnit));
 
-            double value = double.Parse(match.Groups[1].Value);
+            var value = double.Parse(match.Groups[1].Value);
 
             switch (match.Groups[3].Value.ToUpperInvariant())
             {
@@ -77,14 +77,11 @@ namespace Rox.Runtimes
             // 替换原来的 switch 表达式，使用 if-else 语句
             if (bytes >= TbFactor)
                 return $"{Math.Round(ToTB(bytes), 2)} TB";
-            else if (bytes >= GbFactor)
+            if (bytes >= GbFactor)
                 return $"{Math.Round(ToGB(bytes), 2)} GB";
-            else if (bytes >= MbFactor)
+            if (bytes >= MbFactor)
                 return $"{Math.Round(ToMB(bytes), 2)} MB";
-            else if (bytes >= KbFactor)
-                return $"{Math.Round(ToKB(bytes), 2)} KB";
-            else
-                return $"{bytes} B";
+            return bytes >= KbFactor ? $"{Math.Round(ToKB(bytes), 2)} KB" : $"{bytes} B";
         }
 
         /// <summary>
@@ -92,7 +89,7 @@ namespace Rox.Runtimes
         /// </summary>
         public static double ConvertToUnit(string valueWithUnit, string targetUnit)
         {
-            long bytes = ToBytes(valueWithUnit);
+            var bytes = ToBytes(valueWithUnit);
             switch (targetUnit.ToUpperInvariant())
             {
                 case "B":

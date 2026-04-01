@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using static Rox.Runtimes.LocalizedString;
@@ -78,11 +79,11 @@ namespace Rox.Runtimes
         /// <returns> CPU核心列表字符串 </returns>
         public static string GetCpuCoreList(IntPtr affinityMask)
         {
-            long mask = (long)affinityMask;
+            var mask = (long)affinityMask;
             if (mask == -1) return "所有CPU核心";
 
-            var coreList = new System.Collections.Generic.List<int>();
-            for (int i = 0; i < Environment.ProcessorCount; i++)
+            var coreList = new List<int>();
+            for (var i = 0; i < Environment.ProcessorCount; i++)
             {
                 // 按位与判断对应位是否为1
                 if ((mask & (1 << i)) != 0)

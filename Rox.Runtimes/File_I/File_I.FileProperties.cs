@@ -15,14 +15,17 @@ namespace Rox.Runtimes
             /// 只读属性
             /// </summary>
             Readonly,
+
             /// <summary>
             /// 系统属性
             /// </summary>
             System,
+
             /// <summary>
             /// 隐藏属性
             /// </summary>
             Hidden,
+
             /// <summary>
             /// 归档属性
             /// </summary>
@@ -38,7 +41,7 @@ namespace Rox.Runtimes
         public void FileProperties(string path, Properties key, bool Enable)
         {
             string arg;
-            string Switch = Enable ? "+" : "-";
+            var Switch = Enable ? "+" : "-";
             switch (key)
             {
                 case Properties.Readonly:
@@ -58,6 +61,7 @@ namespace Rox.Runtimes
                     WriteLog.Error("_UNSUPPORT_PROPERTY_TYPE");
                     return;
             }
+
             using (var process = new Process())
             {
                 process.StartInfo.FileName = "attrib";

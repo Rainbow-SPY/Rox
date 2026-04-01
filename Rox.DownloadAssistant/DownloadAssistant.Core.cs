@@ -1,67 +1,165 @@
-﻿using System.Diagnostics;
+﻿using System;
 using System.IO;
-using System.Text;
-using System.Windows.Forms;
-using static Rox.Runtimes.LocalizedString;
+using System.Net;
+using System.Threading;
 using static Rox.Runtimes.LogLibraries;
 
 namespace Rox
 {
     public partial class DownloadAssistant
     {
+        // 临时文件后缀（用于标记分块文件）
+        private const string TempFileSuffix = ".tmp";
+
         /// <summary>
-        /// 核心下载器，使用 aria2c 工具进行多线程下载
+        /// 多线程下载文件（基础版）
         /// </summary>
-        /// <param name="args"></param>
-        public static void CoreDownloader(string args)
+        /// <param name="downloadUrl">下载地址</param>
+        /// <param name="savePath">最终保存路径（含文件名）</param>
+        /// <param name="threadCount">线程数</param>
+        /// <param name="timeoutMs">请求超时时间（默认10秒）</param>
+        public static void Download(string downloadUrl, string savePath, int threadCount = 8, int timeoutMs = 10000)
         {
-            // 设置文件地址
-            string filePath = Path.Combine(Application.StartupPath, "bin", "aria2c.exe");
-            // 检查 aria2c.exe 是否存在
-            CheckFile(filePath);
-            // 解析参数
-            /* -x 线程数, 修改版可以上限1000线程
-             * -d, --dir=<DIR>  存储下载文件的目录。
-             * -l, --log=<LOG>  日志文件的文件名。如果指定了``-，则日志将写入``stdout。如果指定了空字符串(“”)，或者省略了此选项，则根本不会将日志写入磁盘。
-             * -o, --out=<FILE> 下载文件的文件名。它始终是相对于 --dir 选项中给定的目录。使用 --force-sequential 选项时，此选项将被忽略。
-             * -q, --quiet      静默下载
-             */
-            using (Process aria2c = new Process())
+            if (threadCount < 1) threadCount = 1; // 至少1个线程
+
+            try
             {
-                aria2c.StartInfo.FileName = filePath;
-                aria2c.StartInfo.Arguments = args;
-                WriteLog.Info(LogKind.Downloader, $"{_GET_ARIA2C_ARGS}: {args}");
-                aria2c.Start();
-                WriteLog.Info(LogKind.Downloader, $"{_PROCESS_STARTED}: {aria2c.Id}");
-                WriteLog.Info(LogKind.Downloader, $"{_DOWNLOADING_FILE}...");
-                aria2c.WaitForExit();
-                if (aria2c.ExitCode != 0)
+                // 步骤1：获取文件总大小
+                var fileTotalSize = GetFileSize(downloadUrl, timeoutMs);
+                if (fileTotalSize <= 0)
                 {
-                    WriteLog.Error(LogKind.Process, $"{_PROCESS_EXITED}: {aria2c.ExitCode}");
-                    WriteLog.Error(LogKind.Downloader, $"{_ERROR}! {_GET_ARIA2C_EXITCODE}: {aria2c.ExitCode}");
-                    MessageBox_I.Error($"下载器发生错误, 进程结束代码: {aria2c.ExitCode}", _ERROR);
+                    WriteLog.Warning("无法获取文件大小，可能服务器不支持Range请求");
+                    // 降级为单线程下载（不分块）
+                    SingleThreadDownload(downloadUrl, savePath, timeoutMs);
+                    return;
                 }
-                else
-                    WriteLog.Info(LogKind.Downloader, $"{_DOWNLOADING_COMPLETE}");
+
+                // 步骤2：计算每个线程要下载的块大小
+                var blockSize = fileTotalSize / threadCount;
+                var threads = new Thread[threadCount];
+                var tempFilePaths = new string[threadCount];
+
+                // 步骤3：启动多线程下载每个块
+                for (var i = 0; i < threadCount; i++)
+                {
+                    var threadIndex = i;
+                    // 计算当前块的起始/结束位置
+                    var start = threadIndex * blockSize;
+
+                    tempFilePaths[threadIndex] = $"{savePath}{TempFileSuffix}{threadIndex}";
+                    threads[threadIndex] = new Thread(() =>
+                    {
+                        DownloadBlock(downloadUrl, tempFilePaths[threadIndex], start,
+                            (threadIndex == threadCount - 1)
+                                ? fileTotalSize - 1
+                                : (start + blockSize - 1),
+                            timeoutMs);
+                    });
+                    threads[threadIndex].Start();
+                }
+
+                // 步骤4：等待所有线程下载完成
+                foreach (var thread in threads)
+                {
+                    thread.Join();
+                }
+
+                // 步骤5：合并临时文件为最终文件
+                MergeTempFiles(tempFilePaths, savePath);
+
+                // 步骤6：清理临时文件
+                CleanTempFiles(tempFilePaths);
+
+                WriteLog.Info(LogKind.Downloader, $"文件下载完成：{savePath}");
+            }
+            catch (Exception ex)
+            {
+                WriteLog.Warning(LogKind.Downloader, $"下载失败：{ex.Message}");
+                throw;
             }
         }
-        internal static void MutiFileCoreDownloader(string[] urls, string location, bool log)
+
+        /// <summary>
+        /// 单线程下载（降级方案，用于不支持分块的服务器）
+        /// </summary>
+        private static void SingleThreadDownload(string url, string savePath, int timeoutMs)
         {
-            string logarg = string.Empty;
-            if (log)
-                logarg = $"--log={Path.Combine(Application.StartupPath, "log", "aria2c.log")}";
-            // 设置多文件下载清单
-            string motherFilePath = Path.GetTempFileName();
-            using (StreamWriter writer = new StreamWriter(motherFilePath, true, Encoding.UTF8))
+            using (var client = new WebClient())
+                client.DownloadFile(url, savePath);
+        }
+
+        /// <summary>
+        /// 获取文件总大小（通过HEAD请求+Content-Length）
+        /// </summary>
+        private static long GetFileSize(string url, int timeoutMs)
+        {
+            var request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "HEAD";
+            request.Timeout = timeoutMs;
+
+            using (var response = (HttpWebResponse)request.GetResponse())
             {
-                // 写入每个下载链接到临时文件
-                foreach (var arg in urls)
-                {
-                    writer.WriteLine(arg);
-                    writer.Close();
-                }
+                // 检查服务器是否支持分块下载（Accept-Ranges: bytes）
+                if (response.Headers["Accept-Ranges"] != "bytes")
+                    return -1;
+
+                return response.ContentLength;
             }
-            CoreDownloader($"--input-file=\"{motherFilePath}\" -x 16 -s 16 --check-certificate=false {location} {logarg}");
+        }
+
+        /// <summary>
+        /// 下载单个文件块
+        /// </summary>
+        private static void DownloadBlock(string url, string tempSavePath, long start, long end, int timeoutMs)
+        {
+            try
+            {
+                var request = (HttpWebRequest)WebRequest.Create(url);
+                request.Method = "GET";
+                request.Timeout = timeoutMs;
+                request.AddRange(start, end);
+
+                using (var response = (HttpWebResponse)request.GetResponse())
+                using (var responseStream = response.GetResponseStream())
+                using (var fileStream = new FileStream(tempSavePath, FileMode.Create, FileAccess.Write))
+                {
+                    var buffer = new byte[4096]; // 4K缓冲区（临时用不用调大）
+                    int readSize;
+                    while (responseStream != null && (readSize = responseStream.Read(buffer, 0, buffer.Length)) > 0)
+                        fileStream.Write(buffer, 0, readSize);
+                }
+
+                WriteLog.Info(LogKind.Downloader, $"块[{start}-{end}]下载完成：{tempSavePath}");
+            }
+            catch (Exception ex)
+            {
+                WriteLog.Warning(LogKind.Downloader, $"块[{start}-{end}]下载失败：{ex.Message}");
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 合并所有临时块文件为最终文件
+        /// </summary>
+        private static void MergeTempFiles(string[] tempFilePaths, string finalSavePath)
+        {
+            using (var finalFileStream = new FileStream(finalSavePath, FileMode.Create, FileAccess.Write))
+                foreach (var tempPath in tempFilePaths)
+                {
+                    if (!File.Exists(tempPath)) continue;
+                    using (var tempFileStream = new FileStream(tempPath, FileMode.Open, FileAccess.Read))
+                        tempFileStream.CopyTo(finalFileStream);
+                }
+        }
+
+        /// <summary>
+        /// 清理临时分块文件
+        /// </summary>
+        private static void CleanTempFiles(string[] tempFilePaths)
+        {
+            foreach (var tempPath in tempFilePaths)
+                if (File.Exists(tempPath))
+                    File.Delete(tempPath);
         }
     }
 }

@@ -1,7 +1,8 @@
-﻿using Rox.Runtimes;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Rox.Runtimes;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
 using static Rox.Text.Json;
@@ -12,7 +13,8 @@ namespace Rox.Entertainment.EpicGames
     /// </summary>
     public partial class GetFreeGames
     {
-        private static readonly string _au = "Epic Games";
+        private const string _au = "Epic Games";
+
         /// <summary>
         /// 请求Epic Games 当前免费游戏的方法
         /// </summary>
@@ -23,7 +25,7 @@ namespace Rox.Entertainment.EpicGames
         {
             try
             {
-                var requestUrl = @"https://uapis.cn/api/v1/game/epic-free";
+                const string requestUrl = @"https://uapis.cn/api/v1/game/epic-free";
                 WriteLog.Info(LogKind.Network, $"{_SEND_REQUEST}: {requestUrl}");
                 // 发送GET请求并获取响应
                 using (var response = await httpClient.GetAsync(requestUrl))
@@ -40,18 +42,18 @@ namespace Rox.Entertainment.EpicGames
 
                     // 压缩 JSON 字符串
                     WriteLog.Info(LogKind.Json, "压缩 Json");
-                    string compressedJson = CompressJson(responseData);
-                    WriteLog.Info(LogKind.Json, $"反序列化 Json");
+                    var compressedJson = CompressJson(responseData);
+                    WriteLog.Info(LogKind.Json, "反序列化 Json");
                     WriteLog.Info("开始解析Json");
-                    var type = Newtonsoft.Json.JsonConvert.DeserializeObject<EpicType>(compressedJson);
+                    var type = JsonConvert.DeserializeObject<EpicType>(compressedJson);
                     switch ((int)response.StatusCode)
                     {
                         case 200:
-                            WriteLog.Info(LogKind.Network, $"API返回响应: Json解析成功");
+                            WriteLog.Info(LogKind.Network, "API返回响应: Json解析成功");
                             break;
                         case 500:
-                            WriteLog.Error(LogKind.Network, $"Epic Games 免费游戏服务暂时不可用，请稍后再试");
-                            throw new Rox.Runtimes.IException.UAPI.EpicGames.EpicGamesServerError("Epic Online Services 免费游戏服务器不可用");
+                            WriteLog.Error(LogKind.Network, "Epic Games 免费游戏服务暂时不可用，请稍后再试");
+                            throw new IException.UAPI.EpicGames.EpicGamesServerError("Epic Online Services 免费游戏服务器不可用");
                         default:
                             WriteLog.Error(LogKind.Network, $"未知异常, 请联系管理员, 错误代码: {_UNKNOW_ERROR}");
                             throw new IException.UAPI.General.UnknowUAPIException();

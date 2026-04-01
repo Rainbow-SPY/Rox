@@ -1,7 +1,7 @@
-﻿using Rox.Runtimes;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Rox.Text;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
 
@@ -46,10 +46,10 @@ namespace Rox
                                 return null;
                             }
                             var responseData = await response.Content.ReadAsStringAsync();
-                            LogLibraries.WriteLog.Info("压缩 Json");
-                            string compressedJson = Rox.Text.Json.CompressJson(responseData);
+                            WriteLog.Info("压缩 Json");
+                            var compressedJson = Json.CompressJson(responseData);
                             // 直接解析 JSON 字符串
-                            var weatherType = Rox.Text.Json.DeserializeObject<WeatherType>(compressedJson);
+                            var weatherType = Json.DeserializeObject<WeatherType>(compressedJson);
                             switch ((int)response.StatusCode) // 修改为通过实例访问 code 属性
                             {
                                 case 400:
@@ -82,7 +82,7 @@ namespace Rox
                 }
                 catch (Exception ex)
                 {
-                    LogLibraries.WriteLog.Error($"获取天气信息失败，请检查网络连接或API服务状态: {ex.Message}, 错误代码:  {_Weather_Unknow_Exception}");
+                    WriteLog.Error($"获取天气信息失败，请检查网络连接或API服务状态: {ex.Message}, 错误代码:  {_Weather_Unknow_Exception}");
                     return null;
                 }
             }

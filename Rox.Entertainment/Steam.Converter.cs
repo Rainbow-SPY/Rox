@@ -14,30 +14,30 @@ namespace Rox.Entertainment
             /// <summary>
             /// SteamID 之间的相互转换
             /// </summary>
-            public partial class SteamID
+            public class SteamID
             {
                 /// <summary>
                 /// SteamID 的 正则表达式 <see cref="System.Text.RegularExpressions.Regex"/> 
                 /// </summary>
-                internal static string _Regex_ID = @"^STEAM_[0-5]:[01]:\d+$";
+                internal const string _Regex_ID = @"^STEAM_[0-5]:[01]:\d+$";
 
 
                 /// <summary>
                 /// SteamID3 的 正则表达式 <see cref="System.Text.RegularExpressions.Regex"/> 
                 /// </summary>
-                internal static string _Regex_ID3 = @"^\[U:1:([0-9]+)\]$";
+                internal const string _Regex_ID3 = @"^\[U:1:([0-9]+)\]$";
 
 
                 /// <summary>
                 /// SteamID32 (好友代码) 的 正则表达式 <see cref="System.Text.RegularExpressions.Regex"/> 
                 /// </summary>
-                internal static string _Regex_ID32 = @"^[0-9]{1,16}$";
+                internal const string _Regex_ID32 = @"^[0-9]{1,16}$";
 
 
                 /// <summary>
                 /// SteamID64 的 正则表达式 <see cref="System.Text.RegularExpressions.Regex"/> 
                 /// </summary>
-                internal static string _Regex_ID64 = @"^7656[0-9]*$";
+                internal const string _Regex_ID64 = @"^7656[0-9]*$";
 
 
                 /// <summary>
@@ -57,10 +57,10 @@ namespace Rox.Entertainment
                     switch (Identifier(SteamID))
                     {
                         case SteamIDType.SteamID:
-                            string[] split = SteamID.Split(':');
+                            var split = SteamID.Split(':');
                             return (long.Parse(split[2]) * 2 + long.Parse(split[1])).ToString();
                         case SteamIDType.SteamID3:
-                            Match match = Regex.Match(SteamID, _Regex_ID3);
+                            var match = Regex.Match(SteamID, _Regex_ID3);
                             return match.Success ? match.Groups[1].Value : null;
                         case SteamIDType.SteamID32:
                             return SteamID;
@@ -90,13 +90,11 @@ namespace Rox.Entertainment
                     switch (Identifier(SteamID))
                     {
                         case SteamIDType.SteamID:
-                            string[] split = SteamID.Split(':');
+                            var split = SteamID.Split(':');
                             return (long.Parse(split[2]) * 2 + 76561197960265728 + long.Parse(split[1])).ToString();
                         case SteamIDType.SteamID3:
-                            Match match = Regex.Match(SteamID, _Regex_ID3);
-                            if (match.Success)
-                                return $"[U:1:{long.Parse(match.Groups[1].Value) + 76561197960265728}]";
-                            return null;
+                            var match = Regex.Match(SteamID, _Regex_ID3);
+                            return match.Success ? $"[U:1:{long.Parse(match.Groups[1].Value) + 76561197960265728}]" : null;
                         case SteamIDType.SteamID32:
                             return (long.Parse(SteamID) + 76561197960265728).ToString();
                         case SteamIDType.SteamID64:

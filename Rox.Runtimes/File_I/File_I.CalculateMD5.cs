@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Security.Cryptography;
+
 namespace Rox
 {
     namespace Runtimes
@@ -17,13 +18,9 @@ namespace Rox
             /// <returns>MD5哈希值</returns>
             public static string CalculateMD5(string filePath)
             {
-                using (MD5 md5 = MD5.Create())
-                {
-                    using (FileStream stream = File.OpenRead(filePath))
-                    {
-                        return BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "").ToUpperInvariant();
-                    }
-                }
+                using (var md5 = MD5.Create())
+                using (var stream = File.OpenRead(filePath))
+                    return BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "").ToUpperInvariant();
             }
         }
     }

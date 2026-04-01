@@ -30,10 +30,12 @@ namespace Rox.Runtimes
         /// 系统语言
         /// </summary>
         public static string SystemLanguage { get; set; }
+
         /// <summary>
         /// 处理器名称
         /// </summary>
         public static string ProcessorName { get; set; }
+
         /// <summary>
         /// 初始化所有系统信息
         /// </summary>
@@ -52,15 +54,13 @@ namespace Rox.Runtimes
             try
             {
                 // 创建 WMI 查询以获取操作系统信息
-                using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem"))
-                {
-                    foreach (ManagementObject os in searcher.Get().Cast<ManagementObject>())
+                using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem"))
+                    foreach (var os in searcher.Get().Cast<ManagementObject>())
                     {
                         OSName = os["Caption"]?.ToString() ?? "未知操作系统";
                         OSBuildNumber = os["Version"]?.ToString() ?? "未知版本号";
                         OSArchitecture = os["OSArchitecture"]?.ToString() ?? "未知架构";
                     }
-                }
             }
             catch (Exception)
             {
@@ -69,6 +69,7 @@ namespace Rox.Runtimes
                 OSArchitecture = "获取架构失败";
             }
         }
+
         /// <summary>
         /// 获取系统语言
         /// </summary>
@@ -83,6 +84,7 @@ namespace Rox.Runtimes
                 SystemLanguage = "获取语言失败";
             }
         }
+
         /// <summary>
         /// 获取处理器名称
         /// </summary>
@@ -90,16 +92,12 @@ namespace Rox.Runtimes
         public static void GetProcessorName()
         {
             using (var moc = new ManagementClass("Win32_Processor").GetInstances())
-            {
-                foreach (ManagementObject mo in moc.Cast<ManagementObject>())
+                foreach (var mo in moc.Cast<ManagementObject>())
+                foreach (var item in mo.Properties)
                 {
-                    foreach (var item in mo.Properties)
-                    {
-                        if (item.Name != "Name") continue;
-                        ProcessorName = new StringBuilder().Append($"{item.Value}\n").ToString() ?? "未知CPU型号";
-                    }
+                    if (item.Name != "Name") continue;
+                    ProcessorName = new StringBuilder().Append($"{item.Value}\n").ToString() ?? "未知CPU型号";
                 }
-            }
         }
     }
 }

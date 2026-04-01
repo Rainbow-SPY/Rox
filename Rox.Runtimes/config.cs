@@ -1,7 +1,6 @@
 ﻿using Microsoft.Win32;
 using static Rox.Runtimes.LogLibraries;
 
-// gugugaga
 // Created by Rainbow-SPY
 // Copyright (C) 2019-2025 Rainbow-SPY, All Rights Reserved.
 namespace Rox.Runtimes
@@ -17,69 +16,69 @@ namespace Rox.Runtimes
         public static void RegisteredFileExt()
         {
             GetSystemInfo.InitializeSystemInfo();
-            string getlan = GetSystemInfo.SystemLanguage;
+            var getlan = GetSystemInfo.SystemLanguage;
             WriteLog.Info($"Current System Language: {getlan}");
             // ------------------------------------------------------------------
             #region registered cfg file
-            RegistryKey key = Registry.ClassesRoot.CreateSubKey(".rxcfg");
-            key.SetValue("", "rxcfgfile");
+            var key = Registry.ClassesRoot.CreateSubKey(".rxcfg");
+            key?.SetValue("", "rxcfgfile");
             WriteLog.Info(LogKind.Registry, "Registered .rxcfg file extension");
-            key.Close();
-            RegistryKey key2 = Registry.ClassesRoot.CreateSubKey("rxcfgfile");
+            key?.Close();
+            var key2 = Registry.ClassesRoot.CreateSubKey("rxcfgfile");
             if (getlan != "zh-CN")
             {
-                key2.SetValue("", "Rox Config File");
+                key2?.SetValue("", "Rox Config File");
                 WriteLog.Info(LogKind.Registry, "Registered .rxcfg file extension as Rox Config File");
             }
             else
             {
-                key2.SetValue("", "Rox 配置文件");
+                key2?.SetValue("", "Rox 配置文件");
                 WriteLog.Info(LogKind.Registry, "Registered .rxcfg 文件扩展名为 Rox 配置文件");
             }
-            key2.Close();
+            key2?.Close();
             #endregion
             // ------------------------------------------------------------------
             #region registered temp file
-            RegistryKey a = Registry.ClassesRoot.CreateSubKey(".rxtemp");
-            a.SetValue("", "rxtempfile");
+            var a = Registry.ClassesRoot.CreateSubKey(".rxtemp");
+            a?.SetValue("", "rxtempfile");
             WriteLog.Info(LogKind.Registry, "Registered .rxtemp file extension");
-            a.Close();
-            RegistryKey b = Registry.ClassesRoot.CreateSubKey("rxtempfile");
+            a?.Close();
+            var b = Registry.ClassesRoot.CreateSubKey("rxtempfile");
             if (getlan != "zh-CN")
             {
-                b.SetValue("", "Rox Temporary File");
+                b?.SetValue("", "Rox Temporary File");
                 WriteLog.Info(LogKind.Registry, "Registered .rxtemp file extension as Rox Temporary File");
             }
             else
             {
-                b.SetValue("", "Rox 缓存文件");
+                b?.SetValue("", "Rox 缓存文件");
                 WriteLog.Info(LogKind.Registry, "Registered .rxtemp 文件扩展名为 Rox 缓存文件");
             }
-            b.Close();
+            b?.Close();
             #endregion
             // ------------------------------------------------------------------
             #region registered ralog file
-            RegistryKey c = Registry.ClassesRoot.CreateSubKey(".ralog");
-            c.SetValue("", "ralogfile");
+            var c = Registry.ClassesRoot.CreateSubKey(".ralog");
+            c?.SetValue("", "ralogfile");
             WriteLog.Info(LogKind.Registry, "Registered .ralog file extension");
-            c.Close();
-            RegistryKey d = Registry.ClassesRoot.CreateSubKey("ralogfile");
+            c?.Close();
+            var d = Registry.ClassesRoot.CreateSubKey("ralogfile");
             if (getlan != "zh-CN")
             {
-                d.SetValue("", "Rox Log File");
+                d?.SetValue("", "Rox Log File");
                 WriteLog.Info(LogKind.Registry, "Registered .ralog file extension as Rox Log File");
             }
             else
             {
-                d.SetValue("", "Rox 日志文件");
+                d?.SetValue("", "Rox 日志文件");
                 WriteLog.Info(LogKind.Registry, "Registered .ralog 文件扩展名为 Rox 日志文件");
             }
-            d.Close();
+            d?.Close();
             // 将其关联到记事本
-            RegistryKey e = Registry.ClassesRoot.CreateSubKey("ralogfile\\shell\\open\\command");
-            e.SetValue("", $"notepad.exe \"%1\"");
+            var e = Registry.ClassesRoot.CreateSubKey("ralogfile\\shell\\open\\command");
+            e?.SetValue("", "notepad.exe \"%1\"");
             WriteLog.Info(LogKind.Registry, "Associated .ralog file extension with Notepad");
-            e.Close();
+            e?.Close();
             #endregion
         }
         /// <summary>
@@ -98,18 +97,18 @@ namespace Rox.Runtimes
             else
                 ext = extension.Replace(".", "");
 
-            using (RegistryKey a = Registry.ClassesRoot.CreateSubKey(extension))
+            using (var a = Registry.ClassesRoot.CreateSubKey(extension))
             {
-                a.SetValue("", ext);
+                a?.SetValue("", ext);
                 WriteLog.Info(LogKind.Registry, $"Registered {extension} file extension");
-                a.Close();
+                a?.Close();
             }
 
-            using (RegistryKey b = Registry.ClassesRoot.CreateSubKey(ext))
+            using (var b = Registry.ClassesRoot.CreateSubKey(ext))
             {
-                b.SetValue("", description);
+                b?.SetValue("", description);
                 WriteLog.Info(LogKind.Registry, $"Registered {extension} file extension as {description}");
-                b.Close();
+                b?.Close();
             }
         }
         /// <summary>
@@ -129,11 +128,11 @@ namespace Rox.Runtimes
             else
                 ext = extension.Replace(".", "");
             RegisteredCustomFileExt(extension, description);
-            using (RegistryKey a = Registry.ClassesRoot.CreateSubKey($"{ext}\\shell\\open\\command"))
+            using (var a = Registry.ClassesRoot.CreateSubKey($"{ext}\\shell\\open\\command"))
             {
-                a.SetValue("", opencommand);
+                a?.SetValue("", opencommand);
                 WriteLog.Info(LogKind.Registry, $"Associated {extension} file extension with {opencommand}");
-                a.Close();
+                a?.Close();
             }
         }
     }

@@ -25,7 +25,7 @@ namespace Rox.Runtimes
             /// </summary>
             public void Run()
             {
-                string[] args = Environment.GetCommandLineArgs();
+                var args = Environment.GetCommandLineArgs();
 
                 // 检查是否是崩溃处理进程
                 if (args.Length > 1 && args[1] == "-crash")
@@ -72,7 +72,7 @@ namespace Rox.Runtimes
             /// <summary>
             /// 处理崩溃逻辑
             /// </summary>
-            private void HandleCrash(Exception ex)
+            private static void HandleCrash(Exception ex)
             {
                 using (Form f = new Reporter(ex))
                 {

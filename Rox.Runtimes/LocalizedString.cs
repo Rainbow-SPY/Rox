@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Globalization;
 using System.Net.Http;
 using System.Text.RegularExpressions;
+
 namespace Rox
 {
     namespace Runtimes
@@ -504,7 +506,7 @@ namespace Rox
             /// <param name="kind"> 异常的类型 </param>
             /// <param name="ex"> 异常对象 </param>
             /// <returns> <see langword="%s"/> 遭遇未知的异常, 异常类型: <see cref="Exception.GetType"/> - <see cref="Exception.Message"/> - <see cref="Exception.StackTrace"/> </returns>
-            public static string _Exception_With_xKind(string kind, Exception ex) => $"{kind} 遭遇未知的异常, 异常类型: {ex.GetType().Name ?? "Unknow"} - {ex.Message}\n{ex.StackTrace ?? "Unknow"}";
+            public static string _Exception_With_xKind(string kind, Exception ex) => $"{kind} 遭遇未知的异常, 异常类型: {ex.GetType().Name} - {ex.Message}\n{ex.StackTrace ?? "Unknow"}";
             /// <summary>
             /// 获取本地化字符串
             /// </summary>
@@ -512,7 +514,7 @@ namespace Rox
             /// <returns>指定语言文件中的字符串</returns>
             public static string GetLocalizedString(string key)
             {
-                return ResourceHelper.GetString(key, System.Globalization.CultureInfo.InstalledUICulture.Name.ToString());
+                return ResourceHelper.GetString(key, CultureInfo.InstalledUICulture.Name);
             }
 
         }

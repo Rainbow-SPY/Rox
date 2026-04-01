@@ -1,8 +1,8 @@
-﻿using Rox.Runtimes;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Rox.Runtimes;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
 using static Rox.Text.Json;
@@ -44,19 +44,19 @@ namespace Rox
                             }
                             var responseData = await response.Content.ReadAsStringAsync();
                             WriteLog.Info(LogKind.Json, "压缩 Json");
-                            string compressedJson = CompressJson(responseData);
+                            var compressedJson = CompressJson(responseData);
                             WriteLog.Info(LogKind.Json, "反序列化 Json 对象");
                             var QQType = DeserializeObject<QQType>(compressedJson);
                             switch ((int)response.StatusCode)
                             {
                                 case 200:
-                                    WriteLog.Info(LogKind.Network, $"请求成功");
+                                    WriteLog.Info(LogKind.Network, "请求成功");
                                     break;
                                 case 400:
-                                    WriteLog.Error(LogKind.Network, $"无效的请求, 缺少必要的参数");
+                                    WriteLog.Error(LogKind.Network, "无效的请求, 缺少必要的参数");
                                     break;
                                 case 404:
-                                    WriteLog.Error(LogKind.Network, $"获取QQ用户信息失败或用户不存在");
+                                    WriteLog.Error(LogKind.Network, "获取QQ用户信息失败或用户不存在");
                                     break;
                                 default:
                                     WriteLog.Error(LogKind.Network, $"未知异常, 请联系管理员, 错误代码: {_UNKNOW_ERROR}");

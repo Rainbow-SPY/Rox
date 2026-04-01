@@ -1,7 +1,8 @@
-using Microsoft.Win32;
 using System;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
+using Microsoft.Win32;
 using static Rox.Runtimes.LocalizedString;
 namespace Rox
 {
@@ -20,13 +21,10 @@ namespace Rox
             {
                 string[] b = { logLevel, message, title };
 
-                foreach (string a in b)
+                if (b.Any(string.IsNullOrWhiteSpace))
                 {
-                    if (string.IsNullOrWhiteSpace(a))
-                    {
-                        WriteLog.Error(LogKind.Form, _value_Not_Is_NullOrEmpty("a"));
-                        return;
-                    }
+                    WriteLog.Error(LogKind.Form, _value_Not_Is_NullOrEmpty("a"));
+                    return;
                 }
                 switch (logLevel)
                 {
@@ -48,7 +46,8 @@ namespace Rox
             /// <summary>
             /// 日志文件名
             /// </summary>
-            private static readonly string logFileName = "log.ralog";
+            private const string logFileName = "log.ralog";
+
             /// <summary>
             /// 日志文件路径
             /// </summary>
@@ -56,13 +55,11 @@ namespace Rox
             internal static void RegisteredExt()
             {
                 // 检测注册表 HKCR\.rxcfg / .rxtemp / .ralog 是否存在
-                if (Registry.ClassesRoot.OpenSubKey(".rxcfg") == null ||
-                    Registry.ClassesRoot.OpenSubKey(".rxtemp") == null ||
-                    Registry.ClassesRoot.OpenSubKey(".ralog") == null)
-                {
-                    WriteLog.Warning(LogKind.Registry, "正在注册Rox相关文件扩展名...");
-                    Config.RegisteredFileExt();
-                }
+                if (Registry.ClassesRoot.OpenSubKey(".rxcfg") != null &&
+                    Registry.ClassesRoot.OpenSubKey(".rxtemp") != null &&
+                    Registry.ClassesRoot.OpenSubKey(".ralog") != null) return;
+                WriteLog.Warning(LogKind.Registry, "正在注册Rox相关文件扩展名...");
+                Config.RegisteredFileExt();
             }
             /// <summary>
             /// 根据日志等级和日志类型向文件写入日志,并在控制台输出日志,并记录到文件
@@ -132,7 +129,7 @@ namespace Rox
             public static void LogToFile(string logLevel, string logkind, string message)
             {
                 // 创建日志信息
-                string logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{logLevel}] {(logkind == null ? "" : $"[{logkind}]: ")}{message}";
+                var logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{logLevel}] {(logkind == null ? "" : $"[{logkind}]: ")}{message}";
 
                 try
                 {
@@ -141,7 +138,7 @@ namespace Rox
                         File.Create(logFilePath).Close();
 
                     // 以追加方式写入日志内容
-                    using (StreamWriter writer = new StreamWriter(logFilePath, append: true))
+                    using (var writer = new StreamWriter(logFilePath, append: true))
                     {
                         writer.WriteLine(logMessage);
                         writer.Close();
@@ -188,10 +185,8 @@ namespace Rox
                 try
                 {
                     // 打开文件并清空内容
-                    using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Write))
-                    {
+                    using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Write))
                         fs.SetLength(0); // 设置文件长度为0，即清空文件内容
-                    }
 
                     WriteLog.Info($"{_CLEAR_LOGFILE}");
                     Console.ResetColor();

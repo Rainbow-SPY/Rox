@@ -19,7 +19,7 @@ namespace Rox.Runtimes
                     /// <summary>
                     /// Epic Games 服务不可用, 无法访问 Epic Games 相关服务, 可以访问 <see href="https://status.epicgames.com/"/> 查看 Epic Online Services 当前情况
                     /// </summary>
-                    public EpicGamesServerError() : base()
+                    public EpicGamesServerError()
                     {
                     }
                     /// <summary>
