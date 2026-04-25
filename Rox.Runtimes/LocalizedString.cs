@@ -411,74 +411,78 @@ namespace Rox
             public static readonly string _READ_REGISTRY_FAILED = GetLocalizedString("_READ_REGISTRY_FAILED");
             #endregion
             #region 错误代码
+
             /// <summary>
             /// 不符合 17 位 SteamID64 格式
             /// </summary>
-            public static readonly string Not_Allow_17_SteamID64 = "Not_Allow_17_SteamID64 (6003)";
+            public const string Not_Allow_17_SteamID64 = "Not_Allow_17_SteamID64 (6003)";
+
             /// <summary>
             /// 未找到 Steam 账户或完全私密了个人资料
             /// </summary>
-            public static readonly string _Steam_Not_Found_Account = "_Steam_Not_Found_Account (6006)";
+            public const string _Steam_Not_Found_Account = "_Steam_Not_Found_Account (6006)";
+
             /// <summary>
             /// 查询 Steam 账户信息时发生未知异常
             /// </summary>
-            public static readonly string _Steam_Unknow_Exception = "_Steam_Unknow_Exception (6007)";
+            public const string _Steam_Unknow_Exception = "_Steam_Unknow_Exception (6007)";
+
             /// <summary>
             /// 查询 Steam 账户信息时上游服务错误, 在向 Steam 的官方 API 请求数据时遇到了问题, 这可能是他们的服务暂时中断，请稍后重试。
             /// </summary>
-            public static readonly string _Steam_Service_Error = "_Steam_Service_Error (6008)";
+            public const string _Steam_Service_Error = "_Steam_Service_Error (6008)";
             /// <summary>
             /// 查询 Steam 账户信息时认证失败, 提供的 Steam Web API Key 无效或已过期，或者没有提供 Key
             /// </summary>
-            public static readonly string _Steam_Server_UnAuthenticated = "_Steam_Server_UnAuthenticated (6009)";
+            public const string _Steam_Server_UnAuthenticated = "_Steam_Server_UnAuthenticated (6009)";
             /// <summary>
             /// 处理 Json 时发生未知异常
             /// </summary>
-            public static readonly string _Json_Unknow_Exception = "_Json_Unknow_Exception (6001)";
+            public const string _Json_Unknow_Exception = "_Json_Unknow_Exception (6001)";
             /// <summary>
             /// 解析 SteamType 对象时发生错误 或 无法解析 SteamID64
             /// </summary>
-            public static readonly string _Json_Parse_SteamID64 = "_Json_Parse_SteamID64 (6002)";
+            public const string _Json_Parse_SteamID64 = "_Json_Parse_SteamID64 (6002)";
             /// <summary>
             /// 指定的 Json 数据在反序列化过程中出现未知异常
             /// </summary>
-            public static readonly string _Json_DeObject_Unknow_Exception = "_Json_DeObject_Unknow_Exception (6201)";
+            public const string _Json_DeObject_Unknow_Exception = "_Json_DeObject_Unknow_Exception (6201)";
             /// <summary>
             /// 指定的字符串为 <see cref="string.Empty"/> 或 <see langword="null"/>
             /// </summary>
-            public static readonly string _String_NullOrEmpty = "_String_NullOrEmpty (1002)";
+            public const string _String_NullOrEmpty = "_String_NullOrEmpty (1002)";
             /// <summary>
             /// 无效的字符串输入, 通常由API返回响应时回复错误
             /// </summary>
-            public static readonly string Invaid_String_Input = "Invaid_String_Input (1001)";
+            public const string Invaid_String_Input = "Invaid_String_Input (1001)";
             /// <summary>
             /// 处理 正则表达式 时发生未知异常
             /// </summary>
-            public static readonly string _Regex_Match_Unknow_Exception = "_Regex_Match_Unknow_Exception (4002)";
+            public const string _Regex_Match_Unknow_Exception = "_Regex_Match_Unknow_Exception (4002)";
             /// <summary>
             /// 指定的 正则表达式 <see cref="Regex.Match(string)"/> 未匹配出结果而导致输出字符串为 <see cref="string.Empty"/> 或 <see langword="null"/>
             /// </summary>
-            public static readonly string _Regex_Match_Not_Found_Any = "_Regex_Match_Not_Found_Any (4001)";
+            public const string _Regex_Match_Not_Found_Any = "_Regex_Match_Not_Found_Any (4001)";
             /// <summary>
             /// 使用 <see cref="HttpClient.GetAsync(string)"/> 发送请求时出现错误
             /// </summary>
-            public static readonly string _HttpClient_Request_Failed = "_HttpClient_Request_Failed (1301)";
+            public const string _HttpClient_Request_Failed = "_HttpClient_Request_Failed (1301)";
             /// <summary>
             /// 检测到非法/不安全的请求, 服务器访问已拒绝
             /// </summary>
-            public static readonly string _HttpClient_Request_UnsafeOrIllegal_Denied = "_HttpClient_Request_UnsafeOrIllegal_Denied (1302)";
+            public const string _HttpClient_Request_UnsafeOrIllegal_Denied = "_HttpClient_Request_UnsafeOrIllegal_Denied (1302)";
             /// <summary>
             /// 请求的天气名称不存在或未找到
             /// </summary>
-            public static readonly string _Weather_City_Not_Found = "_Weather_City_Not_Found (1201)";
+            public const string _Weather_City_Not_Found = "_Weather_City_Not_Found (1201)";
             /// <summary>
             /// 查询天气时发生未知异常
             /// </summary>
-            public static readonly string _Weather_Unknow_Exception = "_Weather_Unknow_Exception (1202)";
+            public const string _Weather_Unknow_Exception = "_Weather_Unknow_Exception (1202)";
             /// <summary>
             /// 上游服务错误, 天气服务提供商的API暂时不可用或返回了错误。
             /// </summary>
-            public static readonly string _Weather_Service_Error = "_Weather_Service_Error (1203)";
+            public const string _Weather_Service_Error = "_Weather_Service_Error (1203)";
             #endregion
 
             /// <param name="_void"> 方法名 </param>
@@ -512,11 +516,7 @@ namespace Rox
             /// </summary>
             /// <param name="key">字符串常量</param>
             /// <returns>指定语言文件中的字符串</returns>
-            public static string GetLocalizedString(string key)
-            {
-                return ResourceHelper.GetString(key, CultureInfo.InstalledUICulture.Name);
-            }
-
+            public static string GetLocalizedString(string key) => ResourceHelper.GetString(key, CultureInfo.InstalledUICulture.Name);
         }
     }
 }

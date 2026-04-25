@@ -481,7 +481,7 @@ namespace Rox.Runtimes
                 OkFont = new Font("微软雅黑", 10, FontStyle.Regular),
                 OkText = "我知道了",
                 MaskClosable = false,
-                Draggable = false,
+                Draggable = false
             }.open();
         }
 

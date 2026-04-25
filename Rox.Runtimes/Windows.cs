@@ -185,7 +185,7 @@ namespace Rox
                         "Environment", // 表示环境变量或设置已更改
                         SMTO_ABORTIFHUNG, // 超时标志
                         5000, // 超时时间（毫秒）
-                        out var result); // 返回值
+                        out _); // 返回值
 
                     WriteLog.Info("已通知系统设置更改。");
                 }
@@ -573,14 +573,9 @@ namespace Rox
                         }
 
                     // 打开文件夹
-                    if (Directory.Exists(path))
-                        Process.Start("explorer.exe", path);
-                    else
-                    {
+                    Process.Start("explorer.exe",
                         // 如果是文件，打开其所在文件夹并选中文件
-                        var folderPath = Path.GetDirectoryName(path);
-                        Process.Start("explorer.exe", $"/select,{path}");
-                    }
+                        Directory.Exists(path) ? path : $"/select,{Path.GetDirectoryName(path)}");
                 }
                 catch (Exception ex)
                 {
@@ -785,6 +780,7 @@ namespace Rox
             {
                 return false;
             }
+
             return false;
         }
 

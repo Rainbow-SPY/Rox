@@ -29,7 +29,7 @@ namespace Rox.Runtimes
             /// <summary>
             /// 归档属性
             /// </summary>
-            Archive,
+            Archive
         }
 
         /// <summary>

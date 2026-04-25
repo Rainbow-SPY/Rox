@@ -67,7 +67,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="config.cs" />
-    <Compile Include="Console\Console_I.cs" />
     <Compile Include="Convert.Storage.cs" />
     <Compile Include="Directory_I.CopyDirectory.cs" />
     <Compile Include="Exception\Exception.UAPI.EpicGames.cs" />

@@ -30,7 +30,7 @@ namespace Rox
                 {
                     WriteLog.Warning("无法获取文件大小，可能服务器不支持Range请求");
                     // 降级为单线程下载（不分块）
-                    SingleThreadDownload(downloadUrl, savePath, timeoutMs);
+                    SingleThreadDownload(downloadUrl, savePath);
                     return;
                 }
 
@@ -50,9 +50,9 @@ namespace Rox
                     threads[threadIndex] = new Thread(() =>
                     {
                         DownloadBlock(downloadUrl, tempFilePaths[threadIndex], start,
-                            (threadIndex == threadCount - 1)
+                            threadIndex == threadCount - 1
                                 ? fileTotalSize - 1
-                                : (start + blockSize - 1),
+                                : start + blockSize - 1,
                             timeoutMs);
                     });
                     threads[threadIndex].Start();
@@ -82,7 +82,7 @@ namespace Rox
         /// <summary>
         /// 单线程下载（降级方案，用于不支持分块的服务器）
         /// </summary>
-        private static void SingleThreadDownload(string url, string savePath, int timeoutMs)
+        private static void SingleThreadDownload(string url, string savePath)
         {
             using (var client = new WebClient())
                 client.DownloadFile(url, savePath);

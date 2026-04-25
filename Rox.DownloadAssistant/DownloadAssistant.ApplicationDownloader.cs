@@ -44,7 +44,7 @@ namespace Rox
             /// <summary>
             /// ToDesk远程控制
             /// </summary>
-            ToDesk,
+            ToDesk
         }
 
         /// <summary>

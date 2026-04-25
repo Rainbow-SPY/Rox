@@ -1,4 +1,6 @@
-﻿namespace Rox.Entertainment
+﻿using System.Globalization;
+
+namespace Rox.Entertainment
 {
     public partial class CSGO
     {
@@ -41,7 +43,7 @@
                 /// <param name="a"> 0 = 无护甲, 1 = 仅护甲 , 2 = 头盔和护甲</param>
                 /// <returns> mp_free_armor 0 / 1 / 2</returns>
                 public static string SetStartWithArmor(int a) =>
-                    $"mp_free_armor {(a < 0 ? "2" : (a > 2 ? "2" : a.ToString()))}";
+                    $"mp_free_armor {(a < 0 ? "2" : a > 2 ? "2" : a.ToString())}";
 
                 /// <summary>
                 /// 是否允许丢弃投掷物
@@ -64,7 +66,7 @@
                 /// <param name="a"> 0 = 不分配, 1 = 随机分配, 2 = 全部分配</param>
                 /// <returns> mp_defuser_allocation 0 / 1 / 2</returns>
                 public static string SetStartWithDefuseKit(int a) =>
-                    $"mp_defuser_allocation {(a < 0 ? "2" : (a > 2 ? "2" : a.ToString()))}";
+                    $"mp_defuser_allocation {(a < 0 ? "2" : a > 2 ? "2" : a.ToString())}";
 
                 /// <summary>
                 /// 设置死亡竞赛的回合时间 (最大不超过 60 分钟)
@@ -72,7 +74,7 @@
                 /// <param name="minutes"> 回合时间（分钟）最大不超过 60 分钟</param>
                 /// <returns> mp_roundtime 0 - 60</returns>
                 public static string SetRoundTime_Deathmatch(int minutes) =>
-                    $"mp_roundtime {(minutes < 0 ? "10" : (minutes >= 60 ? "60" : minutes.ToString()))}";
+                    $"mp_roundtime {(minutes < 0 ? "10" : minutes >= 60 ? "60" : minutes.ToString())}";
 
                 /// <summary>
                 /// 设置休闲模式 / 竞技模式的回合时间 (最大不超过 60 分钟)
@@ -80,7 +82,7 @@
                 /// <param name="minutes"></param>
                 /// <returns></returns>
                 public static string SetRoundTime_Competitive_Casual(int minutes) =>
-                    $"mp_roundtime_defuse {(minutes < 0 ? "1" : (minutes > 60 ? "60" : minutes.ToString()))}";
+                    $"mp_roundtime_defuse {(minutes < 0 ? "1" : minutes > 60 ? "60" : minutes.ToString())}";
 
                 /// <summary>
                 /// 设置休闲模式 / 竞技模式的最大回合数 (最大不超过 60, 0 为无限回合)
@@ -88,7 +90,7 @@
                 /// <param name="rounds"> 最大回合数 (最大不超过 60, 0 为无限回合)</param>
                 /// <returns> mp_maxrounds 0 - 60</returns>
                 public static string SetMaxRound(int rounds) =>
-                    $"mp_maxrounds {(rounds < 0 ? "24" : (rounds > 60 ? "60" : rounds.ToString()))}";
+                    $"mp_maxrounds {(rounds < 0 ? "24" : rounds > 60 ? "60" : rounds.ToString())}";
 
                 /// <summary>
                 /// 设置休闲模式 / 竞技模式的回合开始的冻结时间 (最大不超过 60 秒)
@@ -96,7 +98,7 @@
                 /// <param name="seconds"> 冻结时间（秒）最大不超过 60 秒</param>
                 /// <returns> mp_freezetime 0 - 60</returns>
                 public static string SetFreezeTime(int seconds) =>
-                    $"mp_freezetime {(seconds < 0 ? "6" : (seconds > 60 ? "60" : seconds.ToString()))}";
+                    $"mp_freezetime {(seconds < 0 ? "6" : seconds > 60 ? "60" : seconds.ToString())}";
 
                 /// <summary>
                 /// 设置购买时间 (9999 秒为无限时间, 0 为禁用购买时间)
@@ -104,7 +106,7 @@
                 /// <param name="seconds"> 9999 秒为无限时间, 0 为禁用购买时间</param>
                 /// <returns> mp_buytime 0 - 9999</returns>
                 public static string SetBuyTime(int seconds) =>
-                    $"mp_buytime {(seconds < 0 ? "0" : (seconds > 9999 ? "9999" : seconds.ToString()))}";
+                    $"mp_buytime {(seconds < 0 ? "0" : seconds > 9999 ? "9999" : seconds.ToString())}";
 
                 /// <summary>
                 /// 设置允许在任何地方购买武器和装备
@@ -126,7 +128,7 @@
                 /// <param name="seconds"> 无敌时间（秒）最大不超过 20 秒</param>
                 /// <returns> mp_respawn_immunitytime 0 - 20</returns>
                 public static string SetImmunityTime_Deathmatch(int seconds) =>
-                    $"mp_respawn_immunitytime {(seconds < 0 ? "0" : (seconds > 20 ? "20" : seconds.ToString()))}";
+                    $"mp_respawn_immunitytime {(seconds < 0 ? "0" : seconds > 20 ? "20" : seconds.ToString())}";
 
                 /// <summary>
                 /// 启用或禁用友军伤害
@@ -148,7 +150,7 @@
                 /// <param name="seconds"> 计时器时间（秒）最大不超过 <see cref="int.MaxValue"/> = 2147483647 秒</param>
                 /// <returns> mp_c4timer 0 - 2147483647</returns>
                 public static string SetC4Time(int seconds) =>
-                    $"mp_c4timer {(seconds < 0 ? "40" : (seconds > int.MaxValue ? int.MaxValue.ToString() : seconds.ToString()))}";
+                    $"mp_c4timer {(seconds < 0 ? "40" : seconds.ToString())}";
 
                 /// <summary>
                 /// 启用或禁用在中场休息时切换队伍
@@ -163,7 +165,7 @@
                 /// <param name="seconds"> 中场休息的持续时间（秒）最大不超过 60 秒</param>
                 /// <returns> mp_halftime_duration 0 - 60</returns>
                 public static string SetHalfFreezeTime(int seconds) =>
-                    $"mp_halftime_duration {(seconds < 0 ? "15" : (seconds > 300 ? "300" : seconds.ToString()))}";
+                    $"mp_halftime_duration {(seconds < 0 ? "15" : seconds > 300 ? "300" : seconds.ToString())}";
 
                 /// <summary>
                 /// 设置服务器的最大金钱限制 (最大不超过 65535)
@@ -171,7 +173,7 @@
                 /// <param name="money"> 最大金钱限制（单位为游戏内货币）</param>
                 /// <returns> mp_maxmoney 0 - 65535</returns>
                 public static string SetMaxMoney(int money) =>
-                    $"mp_maxmoney {(money < 0 ? "16000" : (money >= int.MaxValue ? int.MaxValue.ToString() : money.ToString()))}";
+                    $"mp_maxmoney {(money < 0 ? "16000" : money >= int.MaxValue ? int.MaxValue.ToString() : money.ToString())}";
 
                 /// <summary>
                 /// 设置每回合的初始金钱 (最大不超过 65535, 小于 0 则默认为 800)
@@ -179,7 +181,7 @@
                 /// <param name="money"> 初始金钱（单位为游戏内货币）</param>
                 /// <returns> mp_startmoney 0 - 65535</returns>
                 public static string SetStartMoney(int money) =>
-                    $"mp_startmoney {(money < 0 ? "800" : (money >= int.MaxValue ? int.MaxValue.ToString() : money.ToString()))}";
+                    $"mp_startmoney {(money < 0 ? "800" : money >= int.MaxValue ? int.MaxValue.ToString() : money.ToString())}";
 
                 /// <summary>
                 /// 设置x秒后重启游戏,如果小于0则默认为1秒, 大于60则默认为60秒
@@ -187,7 +189,7 @@
                 /// <param name="seconds"> 重启游戏的秒数</param>
                 /// <returns> mp_restartgame 1 - 60</returns>
                 public static string SetRestartGameSeconds(int seconds) =>
-                    $"mp_restartgame {(seconds < 0 ? "1" : (seconds > 60 ? "60" : seconds.ToString()))}";
+                    $"mp_restartgame {(seconds < 0 ? "1" : seconds > 60 ? "60" : seconds.ToString())}";
 
                 /// <summary>
                 /// 选择直接结束热身时间
@@ -201,7 +203,7 @@
                 /// <param name="seconds"> 热身时间（秒）</param>
                 /// <returns> mp_warmuptime 0 - 600</returns>
                 public static string SetWarmupTime(int seconds) =>
-                    $"mp_warmuptime {(seconds < 0 ? "0" : (seconds > int.MaxValue ? int.MaxValue.ToString() : seconds.ToString()))}";
+                    $"mp_warmuptime {(seconds < 0 ? "0" : seconds.ToString())}";
 
                 /// <summary>
                 /// 设置是否启用无限热身时间
@@ -224,7 +226,7 @@
                 /// <param name="number"> 每个队伍的最大玩家数量</param>
                 /// <returns> mp_limitteams 0 - 20</returns>
                 public static string SetLimitTeamNumber(int number) =>
-                    $"mp_limitteams {(number < 0 ? "0" : (number > 20 ? "20" : number.ToString()))}";
+                    $"mp_limitteams {(number < 0 ? "0" : number > 20 ? "20" : number.ToString())}";
             }
 
             /// <summary>
@@ -246,7 +248,7 @@
                 /// <param name="who"></param>
                 /// <returns></returns>
                 public static string SetBuyStates(int who) =>
-                    $"sv_buy_status_override {(who < 0 ? "0" : (who > 3 ? "0" : who.ToString()))}";
+                    $"sv_buy_status_override {(who < 0 ? "0" : who > 3 ? "0" : who.ToString())}";
 
                 /// <summary>
                 /// 启用或禁用自动跳跃功能。
@@ -269,7 +271,7 @@
                 /// <param name="speed"> 最大速度限制 (小于 0 则默认为 12, 大于 1000 则默认为 1000)</param>
                 /// <returns> sv_airaccelerate 12 - 1000</returns>
                 public static string SetAirLimitMaxSpeed(int speed) =>
-                    $"sv_airaccelerate {(speed < 0 ? "12" : (speed > 1000 ? "1000" : speed.ToString()))}";
+                    $"sv_airaccelerate {(speed < 0 ? "12" : speed > 1000 ? "1000" : speed.ToString())}";
 
                 /// <summary>
                 /// 启用或禁用自动恢复生命值功能。
@@ -285,7 +287,7 @@
                 /// <param name="level"> 0 = 不显示, 1 = 显示客户端 (红色) 和服务器 (蓝色) 方块, 2 = 仅显示客户端 (红色) 子弹撞击位置, 3 = 仅显示服务器 (蓝色) 子弹撞击位置</param>
                 /// <returns> sv_showimpacts 0 / 1 / 2</returns>
                 public static string EnableShowImpacts(int level) =>
-                    $"sv_showimpacts {(level < 0 ? "0" : (level > 2 ? "2" : level.ToString()))}";
+                    $"sv_showimpacts {(level < 0 ? "0" : level > 2 ? "2" : level.ToString())}";
 
                 /// <summary>
                 /// 设置显示子弹落点的持续时间 (最大不超过 60 秒, 小于 0 则默认为 4 秒)
@@ -293,7 +295,7 @@
                 /// <param name="seconds"> 持续时间（秒）最大不超过 60 秒</param>
                 /// <returns> sv_showimpacts_time 0 - 60</returns>
                 public static string SetShowImpactsTime(int seconds) =>
-                    $"sv_showimpacts_time {(seconds < 0 ? "4" : (seconds > 60 ? "60" : seconds.ToString()))}";
+                    $"sv_showimpacts_time {(seconds < 0 ? "4" : seconds > 60 ? "60" : seconds.ToString())}";
 
                 /// <summary>
                 /// 显示额外的子弹穿透信息
@@ -309,7 +311,7 @@
                 /// <param name="level"> 0 = 禁用, 1 = 当前弹夹无限 / 投掷物无限, 2 = 备用弹夹无限 / 投掷物无限</param>
                 /// <returns> sv_infinite_ammo 0 / 1 / 2</returns>
                 public static string EnableInfiniteAmmo(int level) =>
-                    $"sv_infinite_ammo {(level < 0 ? "0" : (level >= 2 ? "2" : level.ToString()))}";
+                    $"sv_infinite_ammo {(level < 0 ? "0" : level >= 2 ? "2" : level.ToString())}";
 
                 /// <summary>
                 /// 启用或禁用投掷物轨迹显示
@@ -325,7 +327,7 @@
                 /// <param name="Thickness"> 粗细 (小于 0 则默认为 0.2, 大于 1000 则默认为 1000)</param>
                 /// <returns> sv_grenade_trajectory_thickness 0.2 - 1000</returns>
                 public static string SetShowGrenadeTrajectorysThickness(decimal Thickness) =>
-                    $"sv_grenade_trajectory_thickness  {(Thickness < 0 ? "0.2" : (Thickness >= decimal.MaxValue ? "1000" : Thickness.ToString()))}";
+                    $"sv_grenade_trajectory_thickness  {(Thickness < 0 ? "0.2" : Thickness >= decimal.MaxValue ? "1000" : Thickness.ToString(CultureInfo.CurrentCulture))}";
 
                 /// <summary>
                 /// 设置投掷物轨迹的持续时间 (最大不超过 60 秒, 小于 0 则默认为 20 秒)
@@ -333,7 +335,7 @@
                 /// <param name="seconds"> 持续时间（秒）最大不超过 60 秒</param>
                 /// <returns> sv_grenade_trajectory_time 0 - 60</returns>
                 public static string SetShowGrenadeTrajectorysTime(int seconds) =>
-                    $"sv_grenade_trajectory_time {(seconds < 0 ? "20" : (seconds > 60 ? "60" : seconds.ToString()))}";
+                    $"sv_grenade_trajectory_time {(seconds < 0 ? "20" : seconds > 60 ? "60" : seconds.ToString())}";
 
                 /// <summary>
                 /// 重新抛出上次投掷的投掷物
@@ -354,7 +356,7 @@
                 /// <param name="acceleration"> 行走加速度 (最大不超过 20, 小于 0 则默认为 5.6)</param>
                 /// <returns> sv_accelerate 0 - 20</returns>
                 public static string SetWalkingAcceleration(decimal acceleration) =>
-                    $"sv_accelerate {(acceleration < 0 ? "5.6" : (acceleration > decimal.MaxValue ? "20" : acceleration.ToString()))}";
+                    $"sv_accelerate {(acceleration < 0 ? "5.6" : acceleration.ToString(CultureInfo.CurrentCulture))}";
 
                 /// <summary>
                 /// 设置地面摩擦力 (最大不超过 20, 小于 0 则默认为 5.2)
@@ -362,7 +364,7 @@
                 /// <param name="friction"> 地面摩擦力 (最大不超过 20, 小于 0 则默认为 5.2)</param>
                 /// <returns> sv_friction 0 - 20</returns>
                 public static string SetGroundFriction(decimal friction) =>
-                    $"sv_friction {(friction < 0 ? "5.2" : (friction > decimal.MaxValue ? "20" : friction.ToString()))}";
+                    $"sv_friction {(friction < 0 ? "5.2" : friction.ToString(CultureInfo.CurrentCulture))}";
 
                 /// <summary>
                 /// 设置玩家的最大速度 (最大不超过 <see cref="int.MaxValue"/> = 2147483647, 小于 0 则默认为 320, 大于 1000 则默认为 1000)
@@ -370,7 +372,7 @@
                 /// <param name="speed"> 最大速度 (最大不超过 <see cref="int.MaxValue"/> = 2147483647, 小于 0 则默认为 320, 大于 1000 则默认为 1000)</param>
                 /// <returns> sv_maxspeed 0 - 1000</returns>
                 public static string SetMaxSpeed(int speed) =>
-                    $"sv_maxspeed {(speed < 0 ? "320" : (speed > int.MaxValue ? "1000" : speed.ToString()))}";
+                    $"sv_maxspeed {(speed < 0 ? "320" : speed.ToString())}";
 
                 /// <summary>
                 /// 设置停止速度，值越大加速越慢，急停越快
@@ -378,7 +380,7 @@
                 /// <param name="speed"> 停止速度 (小于 0 则默认为 80, 大于 <see cref="int.MaxValue"/> = 2147483647 则默认为 1000)</param>
                 /// <returns> sv_stopspeed 0 - 1000</returns>
                 public static string SetStopSpeed(int speed) =>
-                    $"sv_stopspeed {(speed < 0 ? "80" : (speed > int.MaxValue ? "1000" : speed.ToString()))}";
+                    $"sv_stopspeed {(speed < 0 ? "80" : speed.ToString())}";
             }
         }
     }

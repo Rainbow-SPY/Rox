@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
+
 namespace Rox
 {
     namespace Runtimes
@@ -30,6 +31,7 @@ namespace Rox
                         key?.SetValue(valueName, valueData, valueType);
                         key?.Close();
                     }
+
                     WriteLog.Info(LogKind.Registry, _SUCESS_WRITE_REGISTRY);
                 }
                 catch (Exception ex)
@@ -37,6 +39,7 @@ namespace Rox
                     WriteLog.Error(LogKind.Registry, $"{_WRITE_REGISTRY_FAILED}: {ex.Message}");
                 }
             }
+
             /// <summary>
             /// 用于读取注册表项的值
             /// </summary>
@@ -48,14 +51,14 @@ namespace Rox
                 var value = "";
                 using (var key = Registry.CurrentUser.OpenSubKey(keyName))
                 {
-                    if (key != null)
-                    {
-                        value = key.GetValue(valueName) as string;
-                        key.Close();
-                    }
+                    if (key == null) return value;
+                    value = key.GetValue(valueName) as string;
+                    key.Close();
                 }
+
                 return value;
             }
+
             /// <summary>
             /// 用于注册文件扩展名
             /// </summary>
@@ -85,6 +88,7 @@ namespace Rox
                         return false;
                     }
                 }
+
                 internal static bool CommonRegisteredVoidWithKey(string _ext, string _des, string _key, string _ico)
                 {
                     if (!CommonRegisteredVoidWithKey(_ext, _des, _key))
@@ -109,6 +113,7 @@ namespace Rox
                         return false;
                     }
                 }
+
                 internal static bool CommonRegisteredVoid(string _ext, string _des)
                 {
                     try
@@ -136,6 +141,7 @@ namespace Rox
                                 bindKey?.Close();
                             }
                         }
+
                         return true;
                     }
                     catch (Exception ex)
@@ -144,6 +150,7 @@ namespace Rox
                         return false;
                     }
                 }
+
                 internal static bool CommonRegisteredVoidWithKey(string _ext, string _des, string _key)
                 {
                     try
@@ -163,12 +170,14 @@ namespace Rox
                                 extKey?.SetValue("", newKeyName);
                                 extKey?.Close();
                             }
+
                             using (var bindKey = Registry.ClassesRoot.CreateSubKey(newKeyName))
                             {
                                 bindKey?.SetValue("", _des);
                                 bindKey?.Close();
                             }
                         }
+
                         return true;
                     }
                     catch (Exception ex)
@@ -191,6 +200,7 @@ namespace Rox
                         return null;
                     }
                 }
+
                 internal static string CreateExtKey(string _ext)
                 {
                     using (var a = Registry.ClassesRoot.CreateSubKey(_ext))
@@ -224,6 +234,7 @@ namespace Rox
                             return false;
                         }
                     }
+
                     /// <summary>
                     /// 注册 Adobe Dreamweaver 网页模板(.dwt)文件扩展名
                     /// </summary>
@@ -243,6 +254,7 @@ namespace Rox
                             return false;
                         }
                     }
+
                     /// <summary>
                     /// 注册 Adobe Illustrator 矢量图文件(.ai)文件扩展名
                     /// </summary>
@@ -262,6 +274,7 @@ namespace Rox
                             return false;
                         }
                     }
+
                     /// <summary>
                     /// 注册 Adobe Animate 文档(.fla)文件扩展名
                     /// </summary>
@@ -281,6 +294,7 @@ namespace Rox
                             return false;
                         }
                     }
+
                     /// <summary>
                     /// 注册 Adobe Photoshop 图像文件(.psd)文件扩展名
                     /// </summary>
@@ -300,6 +314,7 @@ namespace Rox
                             return false;
                         }
                     }
+
                     /// <summary>
                     /// 注册 Adobe Premiere Pro 项目文件(.prproj)文件扩展名
                     /// </summary>

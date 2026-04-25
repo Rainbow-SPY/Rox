@@ -2,6 +2,7 @@
 using static Rox.Entertainment.Steam.SteamID;
 using static Rox.Runtimes.LocalizedString;
 using static Rox.Runtimes.LogLibraries;
+
 namespace Rox.Entertainment
 {
     public partial class Steam
@@ -14,6 +15,7 @@ namespace Rox.Entertainment
             /// <summary>
             /// SteamID 之间的相互转换
             /// </summary>
+            // ReSharper disable once MemberHidesStaticFromOuterClass
             public class SteamID
             {
                 /// <summary>
@@ -67,8 +69,10 @@ namespace Rox.Entertainment
                         case SteamIDType.SteamID64:
                             return (long.Parse(SteamID) - 76561197960265728).ToString();
                         case SteamIDType.Invalid:
-                            return null;
+                        default:
+                            break;
                     }
+
                     return null;
                 }
 
@@ -94,14 +98,18 @@ namespace Rox.Entertainment
                             return (long.Parse(split[2]) * 2 + 76561197960265728 + long.Parse(split[1])).ToString();
                         case SteamIDType.SteamID3:
                             var match = Regex.Match(SteamID, _Regex_ID3);
-                            return match.Success ? $"[U:1:{long.Parse(match.Groups[1].Value) + 76561197960265728}]" : null;
+                            return match.Success
+                                ? $"[U:1:{long.Parse(match.Groups[1].Value) + 76561197960265728}]"
+                                : null;
                         case SteamIDType.SteamID32:
                             return (long.Parse(SteamID) + 76561197960265728).ToString();
                         case SteamIDType.SteamID64:
                             return SteamID;
                         case SteamIDType.Invalid:
-                            return null;
+                        default:
+                            break;
                     }
+
                     return null;
                 }
 
@@ -131,10 +139,13 @@ namespace Rox.Entertainment
                         case SteamIDType.SteamID32:
                             return $"[U:1:{SteamID}]";
                         case SteamIDType.Invalid:
-                            return null;
+                        default:
+                            break;
                     }
+
                     return null;
                 }
+
                 /// <summary>
                 /// 将其中一种的 <see cref="SteamIDType"/> 转换为 <see cref="SteamIDType.SteamID"/>
                 /// </summary>
@@ -148,7 +159,7 @@ namespace Rox.Entertainment
                         return null;
                     }
 
-                    long SteamID32 = 0;
+                    long SteamID32;
 
                     switch (Identifier(SteamID))
                     {
@@ -164,11 +175,13 @@ namespace Rox.Entertainment
                             SteamID32 = long.Parse(SteamID) - 76561197960265728;
                             break;
                         case SteamIDType.Invalid:
-                            WriteLog.Error(_input_value_Not_Is_xType(SteamID, $"{SteamIDType.SteamID} 或 {SteamIDType.SteamID3} 或 {SteamIDType.SteamID32} 或 {SteamIDType.SteamID64}"));
+                        default:
+                            WriteLog.Error(_input_value_Not_Is_xType(SteamID,
+                                $"{SteamIDType.SteamID} 或 {SteamIDType.SteamID3} 或 {SteamIDType.SteamID32} 或 {SteamIDType.SteamID64}"));
                             return null;
                     }
 
-                    return $"STEAM_0:{(SteamID32) & 1}:{(SteamID32 - ((SteamID32) & 1)) / 2}";
+                    return $"STEAM_0:{SteamID32 & 1}:{(SteamID32 - (SteamID32 & 1)) / 2}";
                 }
             }
         }

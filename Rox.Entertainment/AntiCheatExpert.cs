@@ -10,7 +10,7 @@ namespace Rox.Entertainment
     /// </summary>
     public class AntiCheatExpert
     {
-        private static readonly string _au = "AntiCheatExpert";
+        private const string _au = "AntiCheatExpert";
 
         /// <summary>
         /// ACE客户端进程优化

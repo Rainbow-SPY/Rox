@@ -46,7 +46,7 @@ namespace Rox.Entertainment
                     /// <summary>
                     /// 命令的执行者 Executor Self
                     /// </summary>
-                    s,
+                    s
                 }
 
                 /// <summary>

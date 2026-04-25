@@ -35,7 +35,7 @@ namespace Rox.Entertainment
                 /// <summary>
                 /// 未识别到任何 <see cref="SteamIDType"/>, 等效于 <see langword="null"/>
                 /// </summary>
-                Invalid,
+                Invalid
             }
             /// <summary>
             /// 匹配识别 <see cref="SteamIDType"/> 的类型

@@ -12,7 +12,6 @@ namespace Rox.Runtimes.Hardware.GPU
     /// </summary>
     public class General
     {
-        private static Information _inf;
         private static readonly string path = $"{Path.GetTempPath()}dxdiag_output.ralog";
 
         /// <summary>
@@ -33,40 +32,37 @@ namespace Rox.Runtimes.Hardware.GPU
                 }
 
                 var Information = new Information();
-                if (File.Exists(path))
+                if (!File.Exists(path)) return Information;
+                // 只读取前2000行, 避免文件过大
+                foreach (var a in File.ReadLines(path).Take(200))
                 {
-                    // 只读取前2000行, 避免文件过大
-                    foreach (var a in File.ReadLines(path).Take(200))
+                    var line = a.Trim();
+                    if (line.Contains("Card name:"))
+                        Information.FullName = line.Split(':')[1].Trim();
+                    else if (line.Contains("Manufacturer:"))
+                        Information.Manufacturer = line.Split(':')[1].Trim();
+                    else if (line.Contains("Dedicated Memory:"))
                     {
-                        var line = a.Trim();
-                        if (line.Contains("Card name:"))
-                            Information.FullName = line.Split(':')[1].Trim();
-                        else if (line.Contains("Manufacturer:"))
-                            Information.Manufacturer = line.Split(':')[1].Trim();
-                        else if (line.Contains("Dedicated Memory:"))
-                        {
-                            var memStr = line.Split(':')[1].Trim();
-                            if (!memStr.EndsWith("MB")) continue;
-                            if (double.TryParse(memStr.Replace("MB", "").Trim(), out var memMB))
-                                Information.Memory = Math.Round(memMB / 1024, 0);
-                            else if (memStr.EndsWith("GB"))
-                                if (double.TryParse(memStr.Replace("GB", "").Trim(), out var memGB))
-                                    Information.Memory = Math.Round(memGB, 0);
-                        }
-                        else if (line.Contains("Shared Memory:"))
-                        {
-                            var sharedMemStr = line.Split(':')[1].Trim();
-                            if (!sharedMemStr.EndsWith("MB")) continue;
-                            if (double.TryParse(sharedMemStr.Replace("MB", "").Trim(), out var sharedMemMB))
-                                Information.SharedMemory = Math.Round(sharedMemMB / 1024, 0);
-                            else if (sharedMemStr.EndsWith("GB"))
-                                if (double.TryParse(sharedMemStr.Replace("GB", "").Trim(), out var sharedMemGB))
-                                    Information.SharedMemory = Math.Round(sharedMemGB, 0);
-                        }
+                        var memStr = line.Split(':')[1].Trim();
+                        if (!memStr.EndsWith("MB")) continue;
+                        if (double.TryParse(memStr.Replace("MB", "").Trim(), out var memMB))
+                            Information.Memory = Math.Round(memMB / 1024, 0);
+                        else if (memStr.EndsWith("GB"))
+                            if (double.TryParse(memStr.Replace("GB", "").Trim(), out var memGB))
+                                Information.Memory = Math.Round(memGB, 0);
+                    }
+                    else if (line.Contains("Shared Memory:"))
+                    {
+                        var sharedMemStr = line.Split(':')[1].Trim();
+                        if (!sharedMemStr.EndsWith("MB")) continue;
+                        if (double.TryParse(sharedMemStr.Replace("MB", "").Trim(), out var sharedMemMB))
+                            Information.SharedMemory = Math.Round(sharedMemMB / 1024, 0);
+                        else if (sharedMemStr.EndsWith("GB"))
+                            if (double.TryParse(sharedMemStr.Replace("GB", "").Trim(), out var sharedMemGB))
+                                Information.SharedMemory = Math.Round(sharedMemGB, 0);
                     }
                 }
 
-                _inf = Information;
                 return Information;
             }
             catch (Exception ex)

@@ -2,7 +2,7 @@
 
 namespace Rox.Runtimes
 {
-    public partial class IException : Exception
+    public partial class IException
     {
         public partial class UAPI
         {

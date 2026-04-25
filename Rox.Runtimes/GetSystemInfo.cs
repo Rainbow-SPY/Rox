@@ -96,7 +96,7 @@ namespace Rox.Runtimes
                 foreach (var item in mo.Properties)
                 {
                     if (item.Name != "Name") continue;
-                    ProcessorName = new StringBuilder().Append($"{item.Value}\n").ToString() ?? "未知CPU型号";
+                    ProcessorName = new StringBuilder().Append($"{item.Value}\n").ToString();
                 }
         }
     }

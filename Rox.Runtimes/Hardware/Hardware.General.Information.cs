@@ -13,7 +13,6 @@ namespace Rox.Runtimes.Hardware
     /// </summary>
     public class General
     {
-        private static Information _inf;
         private static readonly string path = $"{Path.GetTempPath()}msinfo_output.ralog";
 
         /// <summary>
@@ -66,7 +65,6 @@ namespace Rox.Runtimes.Hardware
                 var a = GetSoundDevice();
                 info.Sound.Name = a?.Name;
                 info.Sound.Description = a?.Description;
-                _inf = info;
                 return info;
             }
             catch (Exception ex)
@@ -88,8 +86,8 @@ namespace Rox.Runtimes.Hardware
                     foreach (var device in searcher.Get().Cast<ManagementObject>())
                         return new Information._Sound
                         {
-                            Name = (device["Name"]?.ToString()),
-                            Description = (device["Description"]?.ToString())
+                            Name = device["Name"]?.ToString(),
+                            Description = device["Description"]?.ToString()
                         };
 
                 return null;
